@@ -46,10 +46,10 @@ export default function Entrance() {
       <div className="relative">
         <div
           className="ent-rule w-full h-px bg-sand mb-8"
-          style={{ transformOrigin: 'left center' }}
+          style={{ transformOrigin: 'left center', transform: 'scaleX(0)' }}
         />
         <span className="ent-wordmark font-mono text-muted tracking-[0.3em] uppercase"
-          style={{ fontSize: 'clamp(0.75rem, 3vw, 1.5rem)' }}>
+          style={{ fontSize: 'clamp(0.75rem, 3vw, 1.5rem)', opacity: 0 }}>
           V18
         </span>
       </div>
@@ -57,7 +57,7 @@ export default function Entrance() {
       <div className="flex-1 flex items-center">
         <h1
           className="ent-headline font-display text-fog leading-[1.0] tracking-tight"
-          style={{ fontSize: 'clamp(2.5rem, 9vw, 9vw)' }}
+          style={{ fontSize: 'clamp(2.5rem, 9vw, 9vw)', opacity: 0, transform: 'translateY(-80px)' }}
         >
           Built-in sales<br />leadership for<br />
           <em className="text-sand not-italic">
@@ -66,7 +66,7 @@ export default function Entrance() {
         </h1>
       </div>
 
-      <div className="ent-scroll flex justify-end">
+      <div className="ent-scroll flex justify-end" style={{ opacity: 0 }}>
         <span className="font-mono text-muted tracking-[0.25em] uppercase flex items-center gap-3"
           style={{ fontSize: '0.7rem' }}>
           Scroll
