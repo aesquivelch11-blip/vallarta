@@ -53,15 +53,7 @@ export default function Services() {
             >
               {s.name}
               <span
-                className="absolute bottom-0 left-0 h-px bg-sand"
-                style={{ width: '0%', transition: 'width 0.4s ease-out' }}
-                ref={(el) => {
-                  if (!el) return
-                  const row = el.closest('[data-ledger]')
-                  if (!row) return
-                  row.addEventListener('mouseenter', () => { el.style.width = '100%' })
-                  row.addEventListener('mouseleave', () => { el.style.width = '0%' })
-                }}
+                className="absolute bottom-0 left-0 h-px bg-sand w-0 group-hover:w-full transition-[width] duration-[400ms] ease-out"
               />
             </span>
 
