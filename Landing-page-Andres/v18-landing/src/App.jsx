@@ -1,21 +1,36 @@
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Features from './components/Features';
-import Philosophy from './components/Philosophy';
-import Protocol from './components/Protocol';
-import Pricing from './components/Pricing';
-import Footer from './components/Footer';
+import { useEffect } from 'react'
+import Lenis from 'lenis'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 export default function App() {
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.4,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    })
+
+    lenis.on('scroll', ScrollTrigger.update)
+
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000)
+    })
+
+    gsap.ticker.lagSmoothing(0)
+
+    return () => {
+      lenis.destroy()
+    }
+  }, [])
+
   return (
-    <div className="noise-overlay">
-      <Navbar />
-      <Hero />
-      <Features />
-      <Philosophy />
-      <Protocol />
-      <Pricing />
-      <Footer />
-    </div>
-  );
+    <main>
+      <p style={{ color: '#C9B99A', padding: '2rem', fontFamily: 'Canela, serif' }}>
+        V18 — skeleton
+      </p>
+    </main>
+  )
 }
