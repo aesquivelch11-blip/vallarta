@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import Lenis from 'lenis'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import Entrance from './components/Entrance'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -21,16 +22,12 @@ export default function App() {
 
     gsap.ticker.lagSmoothing(0)
 
-    return () => {
-      lenis.destroy()
-    }
+    return () => { lenis.destroy() }
   }, [])
 
   return (
     <main>
-      <p style={{ color: '#C9B99A', padding: '2rem', fontFamily: 'Canela, serif' }}>
-        V18 — skeleton
-      </p>
+      <Entrance />
     </main>
   )
 }
