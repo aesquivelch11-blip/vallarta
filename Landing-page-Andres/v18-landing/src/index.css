@@ -10,22 +10,24 @@
   }
 
   :root {
-    --ink: #0E1E2F;
-    --sand: #C9B99A;
-    --fog: #F2EFE9;
-    --muted: #6B7B8A;
-    --grain-opacity: 0.04;
-    --grain-size: 180px;
+    --obsidian: #0A0A0A;
+    --champagne: #E8DCC8;
+    --bone: #F5F0E8;
+    --graphite: #2A2A2A;
+    --smoke: #8A8A8A;
+    --grain-opacity: 0.03;
+    --grain-size: 200px;
   }
 
   html {
     overflow-x: hidden;
+    scroll-behavior: smooth;
   }
 
   body {
     font-family: 'DM Sans', sans-serif;
-    background-color: var(--ink);
-    color: var(--fog);
+    background-color: var(--obsidian);
+    color: var(--bone);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
@@ -46,15 +48,21 @@
   [data-ledger] {
     clip-path: inset(0 100% 0 0);
   }
+
+  ::selection {
+    background-color: var(--champagne);
+    color: var(--obsidian);
+  }
 }
 
 @layer components {
   .cta-btn {
-    transition: background-color 200ms ease, color 200ms ease;
+    transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease;
   }
 
   .cta-btn:hover {
-    background-color: var(--sand);
-    color: var(--ink);
+    background-color: var(--champagne);
+    color: var(--obsidian);
+    border-color: var(--champagne);
   }
 }

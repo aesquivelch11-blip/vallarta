@@ -7,15 +7,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        ink: '#0E1E2F',
-        sand: '#C9B99A',
-        fog: '#F2EFE9',
-        muted: '#6B7B8A',
+        obsidian: '#0A0A0A',
+        champagne: '#E8DCC8',
+        bone: '#F5F0E8',
+        graphite: '#2A2A2A',
+        smoke: '#8A8A8A',
       },
       fontFamily: {
         display: ['Canela', 'Georgia', 'serif'],
         body: ['"DM Sans"', 'sans-serif'],
-        mono: ['"IBM Plex Mono"', 'monospace'],
       },
     },
   },

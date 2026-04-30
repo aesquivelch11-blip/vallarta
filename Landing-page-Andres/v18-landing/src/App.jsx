@@ -3,9 +3,10 @@ import Lenis from 'lenis'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Entrance from './components/Entrance'
-import Problem from './components/Problem'
+import About from './components/About'
 import Services from './components/Services'
-import Partners from './components/Partners'
+import Proof from './components/Proof'
+import Process from './components/Process'
 import CTA from './components/CTA'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -32,9 +33,10 @@ export default function App() {
   return (
     <main>
       <Entrance />
-      <Problem />
+      <About />
       <Services />
-      <Partners />
+      <Proof />
+      <Process />
       <CTA />
     </main>
   )

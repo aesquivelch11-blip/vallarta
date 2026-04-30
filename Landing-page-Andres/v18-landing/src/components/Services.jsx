@@ -4,18 +4,23 @@ import gsap from 'gsap'
 const services = [
   {
     num: '01',
-    name: 'Sales Team Architecture',
-    desc: 'KPI systems, CRM setup, call coaching, script frameworks. Full infrastructure from day one.',
+    name: 'SEO Strategy',
+    desc: 'Technical audits, keyword architecture, content optimization, link building. We own the full search funnel — from crawl to conversion.',
   },
   {
     num: '02',
-    name: 'Offer & Pricing Strategy',
-    desc: 'Positioning, go-to-market sequencing, financing integration, competitive differentiation.',
+    name: 'Social Media',
+    desc: 'Platform-specific content, community management, paid social amplification. Not vanity metrics — content engineered for engagement and leads.',
   },
   {
     num: '03',
-    name: 'Lead Generation',
-    desc: 'Setter frameworks, outbound systems, content strategy, VSL scripting.',
+    name: 'Content Production',
+    desc: 'Video, photography, copywriting, design. Full creative pipeline from concept to publish. Brand stories that actually get shared.',
+  },
+  {
+    num: '04',
+    name: 'Performance Marketing',
+    desc: 'Google Ads, Meta Ads, retargeting, conversion optimization. Data-driven campaigns with transparent reporting and real ROI.',
   },
 ]
 
@@ -44,10 +49,10 @@ export default function Services() {
   }, [openIndex])
 
   return (
-    <section className="bg-ink px-[5vw] py-[8vw]">
+    <section className="bg-[#0A0A0A] px-[5vw] py-24">
       <p
-        className="font-mono text-muted tracking-[0.3em] uppercase mb-12"
-        style={{ fontSize: '0.7rem' }}
+        className="font-body tracking-wider uppercase mb-16"
+        style={{ fontSize: '0.7rem', color: '#8A8A8A' }}
       >
         What We Do
       </p>
@@ -60,11 +65,11 @@ export default function Services() {
           >
             {/* Ghost number */}
             <span
-              className="font-mono flex-shrink-0 select-none"
+              className="font-display flex-shrink-0 select-none"
               style={{
                 fontSize: 'clamp(2rem, 8vw, 8vw)',
                 lineHeight: 1,
-                color: 'var(--fog)',
+                color: '#E8DCC8',
                 opacity: i === openIndex ? 0.15 : 0.08,
                 transition: 'opacity 300ms ease',
               }}
@@ -74,16 +79,20 @@ export default function Services() {
 
             {/* Service name */}
             <span
-              className="font-display text-fog flex-1"
-              style={{ fontSize: 'clamp(1.25rem, 3.5vw, 3.5vw)', lineHeight: 1.1 }}
+              className="flex-1"
+              style={{
+                fontSize: 'clamp(1.25rem, 3.5vw, 3.5vw)',
+                lineHeight: 1.1,
+                color: '#F5F0E8',
+              }}
             >
               {s.name}
             </span>
 
             {/* Toggle indicator */}
             <span
-              className="font-mono text-muted flex-shrink-0"
-              style={{ fontSize: '1.5rem', lineHeight: 1 }}
+              className="flex-shrink-0"
+              style={{ fontSize: '1.5rem', lineHeight: 1, color: '#8A8A8A' }}
             >
               {i === openIndex ? '−' : '+'}
             </span>
@@ -95,15 +104,20 @@ export default function Services() {
             style={{ overflow: 'hidden', height: 0, opacity: 0 }}
           >
             <p
-              className="font-body text-muted pb-8"
-              style={{ fontSize: '0.875rem', maxWidth: '480px', lineHeight: 1.6 }}
+              className="pb-8"
+              style={{
+                fontSize: '0.875rem',
+                maxWidth: '480px',
+                lineHeight: 1.6,
+                color: '#8A8A8A',
+              }}
             >
               {s.desc}
             </p>
           </div>
 
           {i < services.length - 1 && (
-            <div className="w-full h-px bg-fog opacity-10" />
+            <div className="w-full h-px" style={{ backgroundColor: 'rgba(232, 220, 200, 0.1)' }} />
           )}
         </div>
       ))}
