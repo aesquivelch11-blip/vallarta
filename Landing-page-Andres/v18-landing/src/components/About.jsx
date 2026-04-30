@@ -3,14 +3,17 @@ import { useLedgerReveal } from '../hooks/useLedgerReveal'
 
 const differentiators = [
   {
+    num: '01',
     title: 'Deep-dive SEO',
     body: 'Technical audits, content strategy, link building. We own the full funnel.',
   },
   {
+    num: '02',
     title: 'Social that converts',
     body: 'Not vanity metrics. Content engineered for engagement and leads.',
   },
   {
+    num: '03',
     title: 'Embedded partnership',
     body: 'We join your team. Weekly syncs, shared dashboards, zero handoffs.',
   },
@@ -18,7 +21,7 @@ const differentiators = [
 
 export default function About() {
   const sectionRef = useRef(null)
-  useLedgerReveal(sectionRef, { stagger: 0.15, duration: 0.85 })
+  useLedgerReveal(sectionRef, { stagger: 0.12, duration: 0.85 })
 
   return (
     <section
@@ -28,8 +31,8 @@ export default function About() {
       {/* Section label */}
       <span
         data-ledger
-        className="block text-[#8A8A8A] uppercase tracking-[0.2em] text-xs mb-8 md:mb-12"
-        style={{ clipPath: 'inset(0 100% 0 0)' }}
+        className="block text-xs uppercase tracking-[0.2em] mb-10 md:mb-14"
+        style={{ color: '#8A8A8A', clipPath: 'inset(0 100% 0 0)' }}
       >
         Why V18
       </span>
@@ -37,98 +40,72 @@ export default function About() {
       {/* Editorial headline */}
       <h2
         data-ledger
-        className="font-display leading-[0.95] tracking-tight mb-16 md:mb-20 lg:mb-24"
-        style={{ fontSize: 'clamp(3rem, 8vw, 8rem)', clipPath: 'inset(0 100% 0 0)' }}
+        className="font-display leading-[0.95] tracking-tight mb-16 md:mb-24 lg:mb-32"
+        style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)', clipPath: 'inset(0 100% 0 0)' }}
       >
-        <span className="text-[#F5F0E8]">Not another agency.</span>
+        <span style={{ color: '#F5F0E8' }}>Not another agency.</span>
         <br />
-        <span className="text-[#E8DCC8]">Your growth partner.</span>
+        <span style={{ color: '#E8DCC8' }}>Your growth partner.</span>
       </h2>
 
-      {/* Full-width champagne rule */}
+      {/* Full-width rule */}
       <div
         data-ledger
-        className="w-full mb-20 md:mb-28 lg:mb-36"
+        className="w-full mb-20 md:mb-28"
         style={{ clipPath: 'inset(0 100% 0 0)' }}
       >
-        <hr className="border-t border-[#E8DCC8]/20" />
+        <div className="w-full h-px" style={{ backgroundColor: 'rgba(232,220,200,0.15)' }} />
       </div>
 
       {/* Asymmetric differentiators */}
       <div className="space-y-20 md:space-y-28 lg:space-y-36">
-        {/* Item 01 — left-aligned, large text, no card */}
-        <div data-ledger className="group" style={{ clipPath: 'inset(0 100% 0 0)' }}>
-          <span className="block text-[#8A8A8A] text-xs tracking-[0.15em] uppercase mb-4">
-            01
-          </span>
-          <h3
-            className="text-[#E8DCC8] tracking-tight mb-3"
-            style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)' }}
+        {differentiators.map((item, i) => (
+          <div
+            key={item.num}
+            data-ledger
+            className="group relative"
+            style={{ clipPath: 'inset(0 100% 0 0)' }}
           >
-            {differentiators[0].title}
-          </h3>
-          <p
-            className="text-[#8A8A8A] leading-relaxed max-w-xl"
-            style={{ fontSize: 'clamp(0.95rem, 1.3vw, 1.1rem)' }}
-          >
-            {differentiators[0].body}
-          </p>
-        </div>
+            {i === 1 && (
+              <div
+                className="absolute -inset-4 md:-inset-6 -z-10"
+                style={{ backgroundColor: 'rgba(42,42,42,0.35)' }}
+              />
+            )}
 
-        {/* Item 02 — indented with graphite background block */}
-        <div data-ledger className="group" style={{ clipPath: 'inset(0 100% 0 0)' }}>
-          <div className="ml-[10vw] relative">
-            {/* Subtle graphite background block */}
-            <div
-              className="absolute -inset-4 md:-inset-6 bg-[#2A2A2A]/40 -z-10"
-              aria-hidden="true"
-            />
-            <span className="block text-[#8A8A8A] text-xs tracking-[0.15em] uppercase mb-4">
-              02
-            </span>
-            <h3
-              className="text-[#E8DCC8] tracking-tight mb-3"
-              style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)' }}
-            >
-              {differentiators[1].title}
-            </h3>
-            <p
-              className="text-[#8A8A8A] leading-relaxed max-w-xl"
-              style={{ fontSize: 'clamp(0.95rem, 1.3vw, 1.1rem)' }}
-            >
-              {differentiators[1].body}
-            </p>
-          </div>
-        </div>
+            {i === 2 && (
+              <span
+                className="absolute right-0 top-1/2 -translate-y-1/2 font-display select-none pointer-events-none -z-10"
+                style={{
+                  fontSize: 'clamp(8rem, 20vw, 16rem)',
+                  lineHeight: 1,
+                  color: 'rgba(232,220,200,0.05)',
+                }}
+                aria-hidden="true"
+              >
+                {item.num}
+              </span>
+            )}
 
-        {/* Item 03 — right-aligned with floating number behind */}
-        <div data-ledger className="group relative" style={{ clipPath: 'inset(0 100% 0 0)' }}>
-          {/* Floating "03" behind content */}
-          <span
-            className="absolute right-0 top-1/2 -translate-y-1/2 font-display text-[#E8DCC8]/[0.06] select-none pointer-events-none -z-10"
-            style={{ fontSize: 'clamp(8rem, 20vw, 16rem)', lineHeight: 1 }}
-            aria-hidden="true"
-          >
-            03
-          </span>
-          <div className="text-right">
-            <span className="block text-[#8A8A8A] text-xs tracking-[0.15em] uppercase mb-4">
-              03
-            </span>
-            <h3
-              className="text-[#E8DCC8] tracking-tight mb-3"
-              style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)' }}
-            >
-              {differentiators[2].title}
-            </h3>
-            <p
-              className="text-[#8A8A8A] leading-relaxed max-w-xl ml-auto"
-              style={{ fontSize: 'clamp(0.95rem, 1.3vw, 1.1rem)' }}
-            >
-              {differentiators[2].body}
-            </p>
+            <div className={i === 2 ? 'text-right' : i === 1 ? 'ml-[10vw]' : ''}>
+              <span className="block text-xs uppercase tracking-[0.15em] mb-4" style={{ color: '#8A8A8A' }}>
+                {item.num}
+              </span>
+              <h3
+                className="tracking-tight mb-3"
+                style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)', color: '#E8DCC8' }}
+              >
+                {item.title}
+              </h3>
+              <p
+                className="leading-relaxed max-w-xl"
+                style={{ fontSize: 'clamp(0.95rem, 1.3vw, 1.1rem)', color: '#8A8A8A' }}
+              >
+                {item.body}
+              </p>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </section>
   )

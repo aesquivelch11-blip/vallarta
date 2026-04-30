@@ -79,29 +79,31 @@ export default function Process() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-[#0A0A0A] px-[5vw] py-32"
-      aria-labelledby="process-heading"
+      className="relative overflow-hidden px-6 md:px-12 lg:px-20 py-28 md:py-36"
+      style={{ backgroundColor: '#0A0A0A' }}
     >
+      {/* Subtle gradient bleed */}
       <div
         className="pointer-events-none absolute -right-1/4 -top-1/4 h-[80vw] w-[80vw] rounded-full"
         style={{
-          background:
-            'radial-gradient(circle, rgba(232,220,200,0.03) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(232,220,200,0.03) 0%, transparent 70%)',
         }}
         aria-hidden="true"
       />
 
       <div className="relative mx-auto max-w-7xl">
         <p
-          id="process-heading"
-          className="mb-20 text-sm uppercase tracking-widest text-[#8A8A8A]"
+          className="mb-16 md:mb-20 text-sm uppercase tracking-[0.2em]"
+          style={{ color: '#8A8A8A' }}
         >
           How We Work
         </p>
 
         <div className="relative">
+          {/* Vertical timeline line */}
           <div
-            className="absolute left-[2vw] top-0 h-full w-px bg-[#E8DCC8]/20 md:left-[3vw]"
+            className="absolute left-[2vw] top-0 h-full w-px md:left-[3vw]"
+            style={{ backgroundColor: 'rgba(232,220,200,0.15)' }}
             aria-hidden="true"
           />
 
@@ -111,26 +113,35 @@ export default function Process() {
               ref={(el) => (stepRefs.current[i] = el)}
               className={`relative mb-24 last:mb-0 ${indentClasses[i]}`}
             >
+              {/* Timeline dot */}
               <div
-                className="absolute -left-[calc(2vw+4px)] top-2 h-2 w-2 rounded-full bg-[#E8DCC8]/60 md:-left-[calc(3vw+4px)]"
+                className="absolute -left-[calc(2vw+4px)] top-2 h-2 w-2 rounded-full md:-left-[calc(3vw+4px)]"
+                style={{ backgroundColor: 'rgba(232,220,200,0.5)' }}
                 aria-hidden="true"
               />
 
               <div className="flex items-start gap-4 md:gap-8">
                 <span
                   ref={(el) => (numberRefs.current[i] = el)}
-                  className="shrink-0 text-[10vw] leading-none text-[#E8DCC8]/15 font-display md:text-[8vw] lg:text-[6vw]"
+                  className="shrink-0 font-display leading-none"
+                  style={{
+                    fontSize: 'clamp(3rem, 10vw, 8vw)',
+                    color: 'rgba(232,220,200,0.12)',
+                  }}
                   aria-hidden="true"
                 >
                   {step.number}
                 </span>
 
                 <div ref={(el) => (textRefs.current[i] = el)}>
-                  <h3 className="mb-3 text-[6vw] font-display text-[#F5F0E8] md:text-[4vw] lg:text-[3vw]">
+                  <h3
+                    className="mb-3 font-display"
+                    style={{ fontSize: 'clamp(1.5rem, 4vw, 3vw)', color: '#F5F0E8' }}
+                  >
                     {step.name}
                   </h3>
 
-                  <p className="max-w-[400px] text-[#8A8A8A]">
+                  <p className="max-w-[400px]" style={{ color: '#8A8A8A' }}>
                     {step.description}
                   </p>
                 </div>

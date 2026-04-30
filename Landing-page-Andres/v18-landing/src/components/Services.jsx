@@ -49,10 +49,10 @@ export default function Services() {
   }, [openIndex])
 
   return (
-    <section className="bg-[#0A0A0A] px-[5vw] py-24">
+    <section className="bg-[#0A0A0A] px-6 md:px-12 lg:px-20 py-24 md:py-32">
       <p
-        className="font-body tracking-wider uppercase mb-16"
-        style={{ fontSize: '0.7rem', color: '#8A8A8A' }}
+        className="text-xs uppercase tracking-[0.2em] mb-14 md:mb-20"
+        style={{ color: '#8A8A8A' }}
       >
         What We Do
       </p>
@@ -63,7 +63,6 @@ export default function Services() {
             className="flex items-baseline gap-[4vw] py-8 cursor-pointer"
             onClick={() => setOpenIndex(i === openIndex ? -1 : i)}
           >
-            {/* Ghost number */}
             <span
               className="font-display flex-shrink-0 select-none"
               style={{
@@ -77,7 +76,6 @@ export default function Services() {
               {s.num}
             </span>
 
-            {/* Service name */}
             <span
               className="flex-1"
               style={{
@@ -89,7 +87,6 @@ export default function Services() {
               {s.name}
             </span>
 
-            {/* Toggle indicator */}
             <span
               className="flex-shrink-0"
               style={{ fontSize: '1.5rem', lineHeight: 1, color: '#8A8A8A' }}
@@ -98,7 +95,6 @@ export default function Services() {
             </span>
           </div>
 
-          {/* Collapsible description */}
           <div
             ref={(el) => (descRefs.current[i] = el)}
             style={{ overflow: 'hidden', height: 0, opacity: 0 }}
@@ -117,7 +113,7 @@ export default function Services() {
           </div>
 
           {i < services.length - 1 && (
-            <div className="w-full h-px" style={{ backgroundColor: 'rgba(232, 220, 200, 0.1)' }} />
+            <div className="w-full h-px" style={{ backgroundColor: 'rgba(232,220,200,0.08)' }} />
           )}
         </div>
       ))}

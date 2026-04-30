@@ -38,25 +38,23 @@ export default function CTA() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen flex flex-col justify-between px-[5vw] py-12 overflow-hidden"
+      className="relative min-h-screen flex flex-col justify-between px-6 md:px-12 lg:px-20 py-12 overflow-hidden"
       style={{
         backgroundColor: '#0A0A0A',
-        backgroundImage: 'radial-gradient(ellipse at center, rgba(232, 220, 200, 0.05) 0%, #0A0A0A 70%)',
+        backgroundImage: 'radial-gradient(ellipse at center, rgba(232,220,200,0.04) 0%, #0A0A0A 70%)',
       }}
     >
-      {/* Top-left label */}
       <span
-        className="uppercase tracking-wider"
-        style={{ fontSize: '0.7rem', color: '#8A8A8A' }}
+        className="text-xs uppercase tracking-[0.2em]"
+        style={{ color: '#8A8A8A' }}
       >
         What&apos;s next.
       </span>
 
-      {/* Center — headline + button */}
       <div className="flex-1 flex flex-col items-start justify-center gap-12">
         <h2
-          className="leading-[1.0] tracking-tight"
-          style={{ fontSize: 'clamp(2.5rem, 8vw, 8vw)', color: '#F5F0E8', fontFamily: 'Georgia, serif' }}
+          className="leading-[1.0] tracking-tight font-display"
+          style={{ fontSize: 'clamp(2.5rem, 8vw, 7rem)', color: '#F5F0E8' }}
         >
           <span className="block">{splitWords("Ready for growth that", 'cta-word')}</span>
           <span className="block" style={{ color: '#E8DCC8' }}>
@@ -66,7 +64,7 @@ export default function CTA() {
 
         <a
           href="mailto:hello@v18.co"
-          className="cta-button uppercase tracking-wider inline-block px-10 py-4 border transition-colors duration-300"
+          className="cta-button cta-btn uppercase tracking-[0.2em] inline-block px-10 py-4 border"
           style={{
             fontSize: '0.75rem',
             opacity: 0,
@@ -74,20 +72,11 @@ export default function CTA() {
             backgroundColor: 'transparent',
             color: '#E8DCC8',
           }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#E8DCC8'
-            e.currentTarget.style.color = '#0A0A0A'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'transparent'
-            e.currentTarget.style.color = '#E8DCC8'
-          }}
         >
           Start the conversation
         </a>
       </div>
 
-      {/* Bottom */}
       <div>
         <div
           className="cta-rule w-full h-px mb-6"
@@ -100,14 +89,14 @@ export default function CTA() {
         />
         <div className="cta-footer flex justify-between" style={{ opacity: 0 }}>
           <span
-            className="uppercase tracking-wider"
-            style={{ fontSize: '0.7rem', color: '#8A8A8A' }}
+            className="text-xs uppercase tracking-[0.2em]"
+            style={{ color: '#8A8A8A' }}
           >
             V18 — 2025
           </span>
           <span
-            className="tracking-wider"
-            style={{ fontSize: '0.7rem', color: '#8A8A8A' }}
+            className="text-xs tracking-[0.2em]"
+            style={{ color: '#8A8A8A' }}
           >
             hello@v18.co
           </span>
