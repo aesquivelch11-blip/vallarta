@@ -1,5 +1,5 @@
-import { useRef } from 'react'
-import { useLedgerReveal } from '../hooks/useLedgerReveal'
+import { useEffect, useRef, useState } from 'react'
+import gsap from 'gsap'
 
 const services = [
   {
@@ -20,14 +20,32 @@ const services = [
 ]
 
 export default function Services() {
-  const sectionRef = useRef(null)
+  const [openIndex, setOpenIndex] = useState(0)
+  const descRefs = useRef([])
+  const isFirstRender = useRef(true)
 
-  useLedgerReveal(sectionRef, { stagger: 0.2, duration: 0.8, start: 'top 80%' })
+  useEffect(() => {
+    services.forEach((_, i) => {
+      const el = descRefs.current[i]
+      if (!el) return
+      const isOpen = i === openIndex
+      if (isFirstRender.current) {
+        gsap.set(el, { height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 })
+      } else {
+        gsap.to(el, {
+          height: isOpen ? 'auto' : 0,
+          opacity: isOpen ? 1 : 0,
+          duration: 0.5,
+          ease: 'power2.inOut',
+        })
+      }
+    })
+    isFirstRender.current = false
+  }, [openIndex])
 
   return (
-    <section ref={sectionRef} className="bg-ink px-[5vw] py-[8vw]">
+    <section className="bg-ink px-[5vw] py-[8vw]">
       <p
-        data-ledger
         className="font-mono text-muted tracking-[0.3em] uppercase mb-12"
         style={{ fontSize: '0.7rem' }}
       >
@@ -37,32 +55,51 @@ export default function Services() {
       {services.map((s, i) => (
         <div key={s.num}>
           <div
-            data-ledger
-            className="group flex items-baseline gap-[4vw] py-8 cursor-default"
+            className="flex items-baseline gap-[4vw] py-8 cursor-pointer"
+            onClick={() => setOpenIndex(i === openIndex ? -1 : i)}
           >
+            {/* Ghost number */}
             <span
-              className="font-mono text-muted flex-shrink-0 select-none"
-              style={{ fontSize: 'clamp(1.5rem, 6vw, 6vw)', lineHeight: 1 }}
+              className="font-mono flex-shrink-0 select-none"
+              style={{
+                fontSize: 'clamp(2rem, 8vw, 8vw)',
+                lineHeight: 1,
+                color: 'var(--fog)',
+                opacity: i === openIndex ? 0.15 : 0.08,
+                transition: 'opacity 300ms ease',
+              }}
             >
               {s.num}
             </span>
 
+            {/* Service name */}
             <span
-              className="font-display text-fog flex-1 relative"
-              style={{ fontSize: 'clamp(1.25rem, 3vw, 3vw)', lineHeight: 1.1 }}
+              className="font-display text-fog flex-1"
+              style={{ fontSize: 'clamp(1.25rem, 3.5vw, 3.5vw)', lineHeight: 1.1 }}
             >
               {s.name}
-              <span
-                className="absolute bottom-0 left-0 h-px bg-sand w-0 group-hover:w-full transition-[width] duration-[400ms] ease-out"
-              />
             </span>
 
+            {/* Toggle indicator */}
             <span
-              className="font-body text-muted text-right hidden md:block flex-shrink-0"
-              style={{ fontSize: '0.875rem', maxWidth: '280px', lineHeight: 1.6 }}
+              className="font-mono text-muted flex-shrink-0"
+              style={{ fontSize: '1.5rem', lineHeight: 1 }}
+            >
+              {i === openIndex ? '−' : '+'}
+            </span>
+          </div>
+
+          {/* Collapsible description */}
+          <div
+            ref={(el) => (descRefs.current[i] = el)}
+            style={{ overflow: 'hidden', height: 0, opacity: 0 }}
+          >
+            <p
+              className="font-body text-muted pb-8"
+              style={{ fontSize: '0.875rem', maxWidth: '480px', lineHeight: 1.6 }}
             >
               {s.desc}
-            </span>
+            </p>
           </div>
 
           {i < services.length - 1 && (
