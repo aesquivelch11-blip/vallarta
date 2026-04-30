@@ -49,7 +49,7 @@ export default function Partners() {
           <div
             className="absolute inset-0"
             style={{
-              background: 'linear-gradient(to top, rgba(14,30,47,0.95) 0%, rgba(14,30,47,0.4) 40%, transparent 70%)',
+              background: 'linear-gradient(to top, rgba(14,30,47,0.95) 0%, rgba(201,185,154,0.08) 5%, rgba(14,30,47,0.4) 40%, transparent 70%)',
             }}
           />
 
@@ -57,7 +57,7 @@ export default function Partners() {
             <div>
               <p
                 className="font-display text-fog"
-                style={{ fontSize: 'clamp(2rem, 6vw, 6vw)', lineHeight: 1 }}
+                style={{ fontSize: 'clamp(2rem, 7vw, 7vw)', lineHeight: 1 }}
               >
                 {partner.name}
               </p>
