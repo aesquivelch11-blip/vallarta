@@ -7,15 +7,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        obsidian: '#0A0A0A',
-        champagne: '#E8DCC8',
-        bone: '#F5F0E8',
-        graphite: '#2A2A2A',
-        smoke: '#8A8A8A',
+        bg: '#0E0E0E',
+        'bg-elevated': '#1A1A1A',
+        text: '#F5F0EB',
+        'text-muted': '#8A8580',
+        accent: '#C4A882',
+        'accent-hover': '#D4B892',
+        border: '#2A2A2A',
       },
       fontFamily: {
-        display: ['Canela', 'Georgia', 'serif'],
-        body: ['"DM Sans"', 'sans-serif'],
+        display: ['"Instrument Serif"', 'Georgia', 'serif'],
+        body: ['Inter', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
       },
     },
   },
