@@ -6,6 +6,7 @@ import Entrance from './components/Entrance'
 import Problem from './components/Problem'
 import Services from './components/Services'
 import Partners from './components/Partners'
+import CTA from './components/CTA'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -34,6 +35,7 @@ export default function App() {
       <Problem />
       <Services />
       <Partners />
+      <CTA />
     </main>
   )
 }
