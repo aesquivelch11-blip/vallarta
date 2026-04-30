@@ -31,6 +31,8 @@ export default function Services() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      const isMobile = window.innerWidth < 768;
+      const slideDistance = isMobile ? 30 : 60;
       services.forEach((_, i) => {
         const service = sectionRef.current.querySelector(`[data-service="${i}"]`);
         const image = service.querySelector('.service-image');
@@ -41,7 +43,7 @@ export default function Services() {
             trigger: service,
             start: 'top 80%',
           },
-          x: i % 2 === 0 ? -60 : 60,
+          x: i % 2 === 0 ? -slideDistance : slideDistance,
           opacity: 0,
           duration: 0.9,
           ease: 'power3.out',
@@ -52,7 +54,7 @@ export default function Services() {
             trigger: service,
             start: 'top 80%',
           },
-          x: i % 2 === 0 ? 60 : -60,
+          x: i % 2 === 0 ? slideDistance : -slideDistance,
           opacity: 0,
           duration: 0.9,
           ease: 'power3.out',
