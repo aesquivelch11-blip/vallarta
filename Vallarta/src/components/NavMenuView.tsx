@@ -148,20 +148,23 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
         <footer className="shrink-0 px-8 md:px-14 pb-8 md:pb-10">
           <div className="flex items-end justify-between">
             <div className="space-y-4">
-              <p className="text-[8px] tracking-[0.3em] text-white/60 uppercase font-medium" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}>
+              <p
+                className="text-[9px] tracking-[0.3em] text-white/80 uppercase font-medium"
+                style={{ textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}
+              >
                 Property Management
               </p>
-              <div className="flex flex-wrap gap-x-6 gap-y-3 text-[10px] tracking-[0.15em] text-white/80">
+              <div className="flex flex-wrap gap-x-6 gap-y-3 text-[11px] tracking-[0.15em] text-white/95">
                 <button
                   onClick={() =>
                     onNotify
                       ? onNotify('Support concierge: concierge@vallarta-estates.com')
                       : alert('Support concierge: concierge@vallarta-estates.com')
                   }
-                  className="flex items-center gap-2 hover:text-white/80 transition-colors duration-200 cursor-pointer uppercase"
+                  className="flex items-center gap-2 py-1 hover:text-white transition-colors duration-200 cursor-pointer uppercase"
                   id="nav-foo-contact"
                 >
-                  <Phone className="w-3.5 h-3.5 shrink-0" strokeWidth={1.5} />
+                  <Phone className="w-4 h-4 shrink-0" strokeWidth={1.5} />
                   Contact
                 </button>
                 <button
@@ -170,36 +173,36 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
                       ? onNotify('System telemetry functioning securely.')
                       : alert('System telemetry functioning securely.')
                   }
-                  className="flex items-center gap-2 hover:text-white/80 transition-colors duration-200 cursor-pointer uppercase"
+                  className="flex items-center gap-2 py-1 hover:text-white transition-colors duration-200 cursor-pointer uppercase"
                   id="nav-foo-settings"
                 >
-                  <Sliders className="w-3.5 h-3.5 shrink-0" strokeWidth={1.5} />
+                  <Sliders className="w-4 h-4 shrink-0" strokeWidth={1.5} />
                   Settings
                 </button>
                 <a
                   href="https://images.unsplash.com/photo-1613977257363-707ba9348227"
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-2 hover:text-white/80 transition-colors duration-200 uppercase"
+                  className="flex items-center gap-2 py-1 hover:text-white transition-colors duration-200 uppercase"
                   id="nav-foo-website"
                 >
-                  <Globe className="w-3.5 h-3.5 shrink-0" strokeWidth={1.5} />
+                  <Globe className="w-4 h-4 shrink-0" strokeWidth={1.5} />
                   Website
                 </a>
                 <button
                   onClick={() => onNavigate('login', 'push')}
-                  className="flex items-center gap-2 hover:text-white/80 transition-colors duration-200 cursor-pointer uppercase"
+                  className="flex items-center gap-2 py-1 hover:text-white transition-colors duration-200 cursor-pointer uppercase"
                   id="nav-foo-logout"
                 >
-                  <LogOut className="w-3.5 h-3.5 shrink-0" strokeWidth={1.5} />
+                  <LogOut className="w-4 h-4 shrink-0" strokeWidth={1.5} />
                   Logout
                 </button>
               </div>
             </div>
-            <div className="hidden md:flex items-center gap-3 text-white/70">
-              <span className="text-xs font-serif">01</span>
-              <div className="w-8 h-px bg-white/40" />
-              <span className="text-xs font-serif text-white/80">04</span>
+            <div className="hidden md:flex items-center gap-3 text-white/90">
+              <span className="text-sm font-serif">01</span>
+              <div className="w-8 h-px bg-white/50" />
+              <span className="text-sm font-serif">04</span>
             </div>
           </div>
         </footer>
