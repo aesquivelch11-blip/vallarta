@@ -286,7 +286,7 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
           id="download-full-fiscal-report-btn"
           className="w-full bg-neutral-900 hover:bg-neutral-800 text-stone-50 py-4 text-xs font-semibold tracking-[0.25em] uppercase flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-[0.99] transition-all disabled:opacity-80"
         >
-          <Download className={`w-4 h-4 shrink-0 ${downloading ? 'animate-bounce' : ''}`} />
+          <Download className="w-4 h-4 shrink-0" />
           {downloading ? 'PREPARING DOCUMENT...' : 'DOWNLOAD FULL FISCAL REPORT (PDF)'}
         </button>
 
