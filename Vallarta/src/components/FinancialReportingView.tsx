@@ -65,7 +65,7 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
-        className="relative h-[45vh] overflow-hidden"
+        className="relative h-[45vh] md:h-[62vh] overflow-hidden"
         id="casa-obsidiana-hero"
       >
         <img
@@ -74,12 +74,12 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
           className="w-full h-full object-cover"
           referrerPolicy="no-referrer"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 px-6 pb-6">
-          <span className="block text-[8px] tracking-[0.35em] uppercase text-white/55 font-mono mb-1.5">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent md:bg-[linear-gradient(to_top,rgba(0,0,0,0.75)_0%,rgba(0,0,0,0.2)_50%,transparent_100%),linear-gradient(to_right,rgba(0,0,0,0.35)_0%,transparent_55%)]" />
+        <div className="absolute bottom-0 left-0 right-0 px-6 md:px-10 pb-6 md:pb-10">
+          <span className="block text-[8px] md:text-[9px] tracking-[0.35em] uppercase text-white/55 font-mono mb-1.5">
             Estate 04 · Puerto Vallarta, Mexico
           </span>
-          <h2 className="text-3xl font-serif italic tracking-wide text-white" id="hero-estate-title">
+          <h2 className="text-3xl md:text-5xl font-serif italic tracking-wide text-white" id="hero-estate-title">
             Casa Obsidiana
           </h2>
         </div>
