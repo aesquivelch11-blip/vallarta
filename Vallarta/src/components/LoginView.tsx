@@ -131,7 +131,7 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
             <button
               type="submit"
               id="login-sign-in-btn"
-              className="w-full bg-black text-white hover:bg-neutral-900 transition-colors duration-300 py-4 text-xs font-medium tracking-[0.3em] uppercase border border-white/10 cursor-pointer shadow-lg active:scale-[0.98]"
+              className="w-full bg-neutral-950 text-white hover:bg-neutral-900 transition-colors duration-300 py-4 text-xs font-medium tracking-[0.3em] uppercase border border-white/10 cursor-pointer shadow-lg active:scale-[0.98]"
             >
               SIGN IN
             </button>
@@ -158,7 +158,7 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
       </main>
 
       {/* Footer Details */}
-      <footer className="w-full text-center py-8 px-4 border-t border-white/10 bg-black/30" id="login-footer">
+      <footer className="w-full text-center py-8 px-4 border-t border-white/10 bg-neutral-950/30" id="login-footer">
         <p className="text-[10px] tracking-[0.2em] text-white/40 uppercase mb-4" id="login-copyright">
           © 2024 ARCHITECTURAL COLLECTIVE. ALL RIGHTS RESERVED.
         </p>
