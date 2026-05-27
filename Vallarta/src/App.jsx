@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { Calendar, DollarSign, Users, Wrench } from 'lucide-react';
 import './App.css';
 
 // Mock Data
@@ -38,39 +37,27 @@ function App() {
 
   return (
     <div className="container" ref={containerRef}>
-      <header className="header animate-in">
-        <h1 className="display-text">Villa Horizonte</h1>
-        <p className="metric-sub" style={{ marginTop: 'var(--space-sm)' }}>
-          <span className="status-indicator"></span>
-          The estate is in perfect order.
-        </p>
-      </header>
-
-      <section className="dashboard-grid">
-        <div className="surface hero-metric animate-in">
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span className="metric-label">Monthly Yield</span>
-            <DollarSign size={20} color="var(--color-primary-light)" />
-          </div>
-          <div className="display-text metric-value">{metrics.revenue.current}</div>
-          <div className="metric-sub">Per-Room Yield: {metrics.revenue.revPAR}</div>
+      <section className="hero-drenched animate-in">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span className="metric-label" style={{ color: 'rgba(249, 248, 246, 0.7)' }}>Monthly Yield</span>
+          <span style={{ fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Villa Horizonte</span>
         </div>
+        <div className="metric-massive">{metrics.revenue.current}</div>
+        <div className="metric-sub" style={{ color: 'rgba(249, 248, 246, 0.7)' }}>
+          Per-Room Yield: {metrics.revenue.revPAR} &mdash; The estate is in perfect order.
+        </div>
+      </section>
 
-        <div className="surface animate-in">
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span className="metric-label">Occupancy</span>
-            <Calendar size={20} color="var(--color-primary-light)" />
-          </div>
-          <div className="display-text metric-value">{metrics.occupancy.current}</div>
+      <section className="metrics-secondary-grid animate-in">
+        <div className="surface-borderless">
+          <span className="metric-label">Occupancy</span>
+          <div className="display-text" style={{ fontSize: '3rem', margin: 'var(--space-sm) 0', color: 'var(--color-primary)' }}>{metrics.occupancy.current}</div>
           <div className="metric-sub">Next 30 Days</div>
         </div>
 
-        <div className="surface animate-in">
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span className="metric-label">Guest Satisfaction</span>
-            <Users size={20} color="var(--color-primary-light)" />
-          </div>
-          <div className="display-text metric-value">{metrics.satisfaction.score}</div>
+        <div className="surface-borderless">
+          <span className="metric-label">Guest Satisfaction</span>
+          <div className="display-text" style={{ fontSize: '3rem', margin: 'var(--space-sm) 0', color: 'var(--color-primary)' }}>{metrics.satisfaction.score}</div>
           <div className="metric-sub">Based on {metrics.satisfaction.total} reviews</div>
         </div>
       </section>
