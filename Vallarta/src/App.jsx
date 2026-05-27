@@ -47,7 +47,7 @@ function App() {
       </header>
 
       <section className="dashboard-grid">
-        <div className="surface animate-in">
+        <div className="surface hero-metric animate-in">
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <span className="metric-label">Monthly Yield</span>
             <DollarSign size={20} color="var(--color-primary-light)" />
