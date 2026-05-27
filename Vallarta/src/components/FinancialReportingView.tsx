@@ -126,38 +126,92 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
 
           {/* Chart section placeholder — replaced in Task 2 */}
           <section className="px-6 py-8 border-b border-[#C9B8A0]/25 md:border-b-0" id="reporting-chart-card">
-            <div className="flex justify-between items-baseline mb-5">
-              <span className="text-[9px] tracking-[0.28em] uppercase text-[#1C1917]/40">Yield Performance</span>
-              <span className="font-mono text-sm text-[#1C1917]" id="chart-latest-tooltip">$1,450</span>
-            </div>
-            <div className="relative h-[150px] md:h-[280px] w-full" id="reporting-chart-canvas">
-              <svg viewBox="0 0 500 110" className="w-full h-full overflow-visible" preserveAspectRatio="none">
-                <defs>
-                  <linearGradient id="wave-fill-terracotta" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="oklch(58% 0.09 48)" stopOpacity="0.28" />
-                    <stop offset="100%" stopColor="oklch(58% 0.09 48)" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-                <line x1="0" y1="25" x2="500" y2="25" stroke="#DDD5C8" strokeWidth="0.5" />
-                <line x1="0" y1="60" x2="500" y2="60" stroke="#DDD5C8" strokeWidth="0.5" />
-                <line x1="0" y1="95" x2="500" y2="95" stroke="#DDD5C8" strokeWidth="0.5" />
-                <path
-                  d="M 0 95 C 50 82 80 72 140 79 S 235 48 305 60 S 405 28 500 12 L 500 110 L 0 110 Z"
-                  fill="url(#wave-fill-terracotta)"
-                />
-                <path
-                  d="M 0 95 C 50 82 80 72 140 79 S 235 48 305 60 S 405 28 500 12"
-                  fill="none"
-                  stroke="oklch(42% 0.09 48)"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
-                <circle cx="500" cy="12" r="3" fill="oklch(42% 0.09 48)" />
-              </svg>
-              <div className="flex justify-between text-[8px] font-mono text-[#1C1917]/35 mt-2 uppercase tracking-widest">
-                <span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span>
-              </div>
-            </div>
+        <div className="flex justify-between items-baseline mb-5 md:mb-7">
+          <span className="text-[9px] tracking-[0.28em] uppercase text-[#1C1917]/40">Performance Overview</span>
+          <span className="font-mono text-sm text-[#1C1917]" id="chart-latest-tooltip">$1,450 yield</span>
+        </div>
+
+        {/* Desktop legend */}
+        <div className="hidden md:flex gap-6 mb-5">
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-[oklch(58%_0.09_48)] opacity-70" />
+            <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-[#1C1917]/45">Revenue</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-[oklch(70%_0.04_60)] opacity-70" />
+            <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-[#1C1917]/45">Expenses</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-[oklch(60%_0.06_155)] opacity-70" />
+            <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-[#1C1917]/45">Net Yield</span>
+          </div>
+        </div>
+
+        <div className="relative h-[150px] md:h-[280px] w-full" id="reporting-chart-canvas">
+          <svg viewBox="0 0 500 140" className="w-full h-full overflow-visible" preserveAspectRatio="none">
+            <defs>
+              {/* Terracotta — Revenue (largest) */}
+              <linearGradient id="wave-fill-revenue" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="oklch(58% 0.09 48)" stopOpacity="0.40" />
+                <stop offset="100%" stopColor="oklch(58% 0.09 48)" stopOpacity="0.05" />
+              </linearGradient>
+              {/* Warm stone — Expenses (medium) */}
+              <linearGradient id="wave-fill-opex" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="oklch(70% 0.04 60)" stopOpacity="0.50" />
+                <stop offset="100%" stopColor="oklch(70% 0.04 60)" stopOpacity="0.05" />
+              </linearGradient>
+              {/* Sage — Net Yield (smallest, foreground) */}
+              <linearGradient id="wave-fill-yield" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="oklch(60% 0.06 155)" stopOpacity="0.45" />
+                <stop offset="100%" stopColor="oklch(60% 0.06 155)" stopOpacity="0.05" />
+              </linearGradient>
+            </defs>
+
+            {/* Grid lines */}
+            <line x1="0" y1="30" x2="500" y2="30" stroke="#DDD5C8" strokeWidth="0.5" />
+            <line x1="0" y1="75" x2="500" y2="75" stroke="#DDD5C8" strokeWidth="0.5" />
+            <line x1="0" y1="120" x2="500" y2="120" stroke="#DDD5C8" strokeWidth="0.5" />
+
+            {/* Revenue — terracotta, tallest wave */}
+            <path
+              d="M 0 130 C 40 115 70 100 130 108 S 220 75 290 85 S 380 45 500 20 L 500 140 L 0 140 Z"
+              fill="url(#wave-fill-revenue)"
+            />
+            <path
+              d="M 0 130 C 40 115 70 100 130 108 S 220 75 290 85 S 380 45 500 20"
+              fill="none"
+              stroke="oklch(42% 0.09 48)"
+              strokeWidth="1.2"
+              strokeLinecap="round"
+            />
+
+            {/* Expenses — warm stone, medium height, starts slightly right */}
+            <path
+              d="M 0 140 C 60 128 100 118 170 122 S 270 98 360 105 S 440 80 500 60 L 500 140 L 0 140 Z"
+              fill="url(#wave-fill-opex)"
+            />
+
+            {/* Net Yield — sage, shortest wave, foreground */}
+            <path
+              d="M 0 140 C 80 136 120 130 200 133 S 310 118 400 122 S 460 110 500 98 L 500 140 L 0 140 Z"
+              fill="url(#wave-fill-yield)"
+            />
+            <path
+              d="M 0 140 C 80 136 120 130 200 133 S 310 118 400 122 S 460 110 500 98"
+              fill="none"
+              stroke="oklch(44% 0.06 155)"
+              strokeWidth="1.2"
+              strokeLinecap="round"
+            />
+
+            {/* End dot on revenue (primary series) */}
+            <circle cx="500" cy="20" r="3" fill="oklch(42% 0.09 48)" />
+          </svg>
+
+          <div className="flex justify-between text-[8px] font-mono text-[#1C1917]/35 mt-2 uppercase tracking-widest">
+            <span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span>
+          </div>
+        </div>
           </section>
         </div>
 
