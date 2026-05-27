@@ -1,35 +1,65 @@
 /* Component specific CSS handled in modules or inline, global styles in index.css */
-.hero-drenched {
-  background-color: var(--color-primary);
-  color: var(--color-bg);
-  padding: var(--space-2xl) var(--space-lg);
-  border-radius: var(--radius-lg);
-  margin-bottom: var(--space-xl);
-  position: relative;
-  overflow: hidden;
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: minmax(180px, auto);
+  gap: var(--space-xl);
+  margin-top: var(--space-xl);
 }
 
-.metric-massive {
+.bento-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bento-card:hover {
+  box-shadow: var(--shadow-diffused);
+  transform: translateY(-4px);
+}
+
+.card-hero {
+  grid-column: span 8;
+  grid-row: span 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card-side {
+  grid-column: span 4;
+}
+
+.luxury-value {
   font-family: var(--font-display);
-  font-size: clamp(4rem, 8vw, 8rem);
-  line-height: 1;
+  font-size: clamp(3rem, 6vw, 6rem);
   font-weight: 300;
   letter-spacing: -0.03em;
+  color: var(--color-primary);
   margin: var(--space-md) 0;
 }
 
-.metrics-secondary-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--space-xl);
-  margin-bottom: var(--space-2xl);
-  padding: 0 var(--space-lg);
+.luxury-label {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-text-muted);
 }
 
-.surface-borderless {
-  background: transparent;
-  border: none;
-  padding: 0;
+.progressive-data {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bento-card:hover .progressive-data {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .timeline-grid {
