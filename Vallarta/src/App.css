@@ -1,19 +1,35 @@
 /* Component specific CSS handled in modules or inline, global styles in index.css */
-.dashboard-grid {
+.hero-drenched {
+  background-color: var(--color-primary);
+  color: var(--color-bg);
+  padding: var(--space-2xl) var(--space-lg);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.metric-massive {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 8vw, 8rem);
+  line-height: 1;
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  margin: var(--space-md) 0;
+}
+
+.metrics-secondary-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: var(--space-lg);
-  margin-top: var(--space-lg);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-xl);
+  margin-bottom: var(--space-2xl);
+  padding: 0 var(--space-lg);
 }
 
-.hero-metric {
-  background-color: var(--color-bg);
+.surface-borderless {
+  background: transparent;
   border: none;
-}
-
-.hero-metric .metric-value {
-  font-size: 4rem;
-  letter-spacing: -0.02em;
+  padding: 0;
 }
 
 .timeline-grid {
@@ -70,7 +86,7 @@
 
 /* Responsiveness */
 @media (max-width: 1024px) {
-  .dashboard-grid, .timeline-grid {
+  .timeline-grid {
     grid-template-columns: 1fr;
   }
 }
