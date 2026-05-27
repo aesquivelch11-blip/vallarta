@@ -85,142 +85,153 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
         </div>
       </motion.section>
 
-      {/* ── Metrics strip — inline, hairline dividers, no cards ── */}
-      <section className="border-b border-[#C9B8A0]/25" id="reporting-metrics-section">
-        <div className="flex divide-x divide-[#C9B8A0]/25">
-          <div className="flex-1 px-4 py-5 pl-6" id="metric-revenue-card">
-            <span className="block text-[8px] tracking-[0.22em] uppercase text-[#1C1917]/40 mb-2">Revenue</span>
-            <span className="block text-lg font-mono text-[#1C1917]">$124,500</span>
-            <span className="block text-[9px] font-mono text-green-700 mt-1">+14%</span>
-          </div>
-          <div
-            className="flex-1 px-4 py-5 cursor-pointer"
-            onClick={() => onNavigate('deep_dive', 'push')}
-            id="metric-yield-card"
-          >
-            <span className="block text-[8px] tracking-[0.22em] uppercase text-[#1C1917]/40 mb-2">Yield</span>
-            <span className="block text-lg font-mono text-[#1C1917]">$1,450</span>
-            <span className="block text-[9px] font-mono text-[#1C1917]/35 mt-1">Stable</span>
-          </div>
-          <div
-            className="flex-1 px-4 py-5 cursor-pointer"
-            onClick={() => onNavigate('calendar', 'push')}
-            id="metric-occupancy-card"
-          >
-            <span className="block text-[8px] tracking-[0.22em] uppercase text-[#1C1917]/40 mb-2">Occupancy</span>
-            <span className="block text-lg font-mono text-[#1C1917]">88%</span>
-            <span className="block text-[9px] font-mono text-green-700 mt-1">+3%</span>
-          </div>
-          <div className="flex-1 px-4 py-5 pr-6" id="metric-sentiment-card">
-            <span className="block text-[8px] tracking-[0.22em] uppercase text-[#1C1917]/40 mb-2">Sentiment</span>
-            <span className="block text-lg font-mono text-[#1C1917]">4.9</span>
-            <span className="block text-[9px] font-mono text-[#1C1917]/35 mt-1">Top 5%</span>
-          </div>
-        </div>
-      </section>
+      {/* ── Responsive two-column grid (desktop) ── */}
+      <div className="md:grid md:grid-cols-[1fr_360px] md:divide-x md:divide-[#C9B8A0]/25">
 
-      {/* ── Organic wave chart (single series — mobile) ── */}
-      <section className="px-6 py-8 border-b border-[#C9B8A0]/25" id="reporting-chart-card">
-        <div className="flex justify-between items-baseline mb-5">
-          <span className="text-[9px] tracking-[0.28em] uppercase text-[#1C1917]/40">Yield Performance</span>
-          <span className="font-mono text-sm text-[#1C1917]" id="chart-latest-tooltip">$1,450</span>
-        </div>
-        <div className="relative h-[150px] w-full" id="reporting-chart-canvas">
-          <svg viewBox="0 0 500 110" className="w-full h-full overflow-visible" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="wave-fill-terracotta" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="oklch(58% 0.09 48)" stopOpacity="0.28" />
-                <stop offset="100%" stopColor="oklch(58% 0.09 48)" stopOpacity="0" />
-              </linearGradient>
-            </defs>
-            <line x1="0" y1="25" x2="500" y2="25" stroke="#DDD5C8" strokeWidth="0.5" />
-            <line x1="0" y1="60" x2="500" y2="60" stroke="#DDD5C8" strokeWidth="0.5" />
-            <line x1="0" y1="95" x2="500" y2="95" stroke="#DDD5C8" strokeWidth="0.5" />
-            <path
-              d="M 0 95 C 50 82 80 72 140 79 S 235 48 305 60 S 405 28 500 12 L 500 110 L 0 110 Z"
-              fill="url(#wave-fill-terracotta)"
-            />
-            <path
-              d="M 0 95 C 50 82 80 72 140 79 S 235 48 305 60 S 405 28 500 12"
-              fill="none"
-              stroke="oklch(42% 0.09 48)"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-            <circle cx="500" cy="12" r="3" fill="oklch(42% 0.09 48)" />
-          </svg>
-          <div className="flex justify-between text-[8px] font-mono text-[#1C1917]/35 mt-2 uppercase tracking-widest">
-            <span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Arrivals — numbered editorial list ── */}
-      <section className="px-6 py-8 border-b border-[#C9B8A0]/25" id="reporting-timeline-section">
-        <span className="block text-[8px] tracking-[0.3em] uppercase text-[#1C1917]/40 mb-6">
-          Upcoming Arrivals
-        </span>
-        <div id="arrival-timeline-list">
-          {arrivals.map((a) => (
-            <div
-              key={a.num}
-              id={`arrival-${a.num}`}
-              className="flex items-start gap-4 py-4 border-b border-[#C9B8A0]/20 last:border-0 cursor-pointer group"
-              onClick={() => onNavigate('calendar', 'push')}
-            >
-              <span className="text-[10px] font-mono text-[#1C1917]/25 mt-0.5 w-5 shrink-0">{a.num}</span>
-              <div className="flex-1 flex justify-between items-start gap-3">
-                <div>
-                  <h5 className="font-serif text-[15px] text-[#1C1917] group-hover:text-[#1C1917]/55 transition-colors duration-200">
-                    {a.name}
-                  </h5>
-                  <p className="text-[9px] uppercase font-mono tracking-wider text-[#1C1917]/40 mt-0.5">
-                    {a.dates} · {a.nights}
-                  </p>
-                </div>
-                <span className={`text-[8px] tracking-[0.15em] font-mono uppercase mt-0.5 shrink-0 ${a.typeStyle}`}>
-                  {a.type}
-                </span>
+        {/* Left column: metrics + chart */}
+        <div>
+          {/* ── Metrics strip — inline, hairline dividers, no cards ── */}
+          <section className="border-b border-[#C9B8A0]/25" id="reporting-metrics-section">
+            <div className="flex divide-x divide-[#C9B8A0]/25">
+              <div className="flex-1 px-4 py-5 pl-6 md:py-7" id="metric-revenue-card">
+                <span className="block text-[8px] tracking-[0.22em] uppercase text-[#1C1917]/40 mb-2">Revenue</span>
+                <span className="block text-lg md:text-2xl font-mono text-[#1C1917]">$124,500</span>
+                <span className="block text-[9px] font-mono text-green-700 mt-1">+14%</span>
+              </div>
+              <div
+                className="flex-1 px-4 py-5 md:py-7 cursor-pointer"
+                onClick={() => onNavigate('deep_dive', 'push')}
+                id="metric-yield-card"
+              >
+                <span className="block text-[8px] tracking-[0.22em] uppercase text-[#1C1917]/40 mb-2">Yield</span>
+                <span className="block text-lg md:text-2xl font-mono text-[#1C1917]">$1,450</span>
+                <span className="block text-[9px] font-mono text-[#1C1917]/35 mt-1">Stable</span>
+              </div>
+              <div
+                className="flex-1 px-4 py-5 md:py-7 cursor-pointer"
+                onClick={() => onNavigate('calendar', 'push')}
+                id="metric-occupancy-card"
+              >
+                <span className="block text-[8px] tracking-[0.22em] uppercase text-[#1C1917]/40 mb-2">Occupancy</span>
+                <span className="block text-lg md:text-2xl font-mono text-[#1C1917]">88%</span>
+                <span className="block text-[9px] font-mono text-green-700 mt-1">+3%</span>
+              </div>
+              <div className="flex-1 px-4 py-5 md:py-7 pr-6" id="metric-sentiment-card">
+                <span className="block text-[8px] tracking-[0.22em] uppercase text-[#1C1917]/40 mb-2">Sentiment</span>
+                <span className="block text-lg md:text-2xl font-mono text-[#1C1917]">4.9</span>
+                <span className="block text-[9px] font-mono text-[#1C1917]/35 mt-1">Top 5%</span>
               </div>
             </div>
-          ))}
-        </div>
-      </section>
+          </section>
 
-      {/* ── Financial Summary ── */}
-      <section className="px-6 py-8 border-b border-[#C9B8A0]/25" id="reporting-analysis-section">
-        <span className="block text-[8px] tracking-[0.3em] uppercase text-[#1C1917]/40 mb-5">
-          Financial Summary
-        </span>
-        <div id="financial-reports-summary">
-          <div
-            className="flex justify-between items-baseline py-4 border-b border-[#C9B8A0]/20"
-            id="report-net-profit"
-          >
-            <span className="text-[9px] tracking-[0.2em] uppercase text-[#1C1917]/45">Net Profit</span>
-            <div>
-              <span className="font-mono text-base text-[#1C1917]">$84,200</span>
-              <span className="text-[9px] text-green-700 font-mono ml-2">+8%</span>
+          {/* Chart section placeholder — replaced in Task 2 */}
+          <section className="px-6 py-8 border-b border-[#C9B8A0]/25 md:border-b-0" id="reporting-chart-card">
+            <div className="flex justify-between items-baseline mb-5">
+              <span className="text-[9px] tracking-[0.28em] uppercase text-[#1C1917]/40">Yield Performance</span>
+              <span className="font-mono text-sm text-[#1C1917]" id="chart-latest-tooltip">$1,450</span>
             </div>
-          </div>
-          <div className="flex justify-between items-baseline py-4" id="report-opex">
-            <span className="text-[9px] tracking-[0.2em] uppercase text-[#1C1917]/45">
-              Operating Expenses
-            </span>
-            <div>
-              <span className="font-mono text-base text-[#1C1917]">$40,300</span>
-              <span className="text-[9px] text-[#1C1917]/35 font-mono ml-2">Stable</span>
+            <div className="relative h-[150px] md:h-[280px] w-full" id="reporting-chart-canvas">
+              <svg viewBox="0 0 500 110" className="w-full h-full overflow-visible" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="wave-fill-terracotta" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="oklch(58% 0.09 48)" stopOpacity="0.28" />
+                    <stop offset="100%" stopColor="oklch(58% 0.09 48)" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                <line x1="0" y1="25" x2="500" y2="25" stroke="#DDD5C8" strokeWidth="0.5" />
+                <line x1="0" y1="60" x2="500" y2="60" stroke="#DDD5C8" strokeWidth="0.5" />
+                <line x1="0" y1="95" x2="500" y2="95" stroke="#DDD5C8" strokeWidth="0.5" />
+                <path
+                  d="M 0 95 C 50 82 80 72 140 79 S 235 48 305 60 S 405 28 500 12 L 500 110 L 0 110 Z"
+                  fill="url(#wave-fill-terracotta)"
+                />
+                <path
+                  d="M 0 95 C 50 82 80 72 140 79 S 235 48 305 60 S 405 28 500 12"
+                  fill="none"
+                  stroke="oklch(42% 0.09 48)"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
+                <circle cx="500" cy="12" r="3" fill="oklch(42% 0.09 48)" />
+              </svg>
+              <div className="flex justify-between text-[8px] font-mono text-[#1C1917]/35 mt-2 uppercase tracking-widest">
+                <span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span>
+              </div>
             </div>
-          </div>
+          </section>
         </div>
-        <button
-          onClick={() => onNavigate('deep_dive', 'push')}
-          id="view-financial-reports-btn"
-          className="mt-6 w-full py-3.5 border border-[#1C1917]/15 text-[9px] uppercase tracking-[0.25em] font-mono text-[#1C1917]/50 hover:text-[#1C1917] hover:border-[#1C1917]/40 transition-all duration-300 cursor-pointer"
-        >
-          View Full Financial Report
-        </button>
-      </section>
+
+        {/* Right column: arrivals + financial summary (desktop briefing panel) */}
+        <div className="md:flex md:flex-col">
+          {/* ── Arrivals — numbered editorial list ── */}
+          <section className="px-6 py-8 border-b border-[#C9B8A0]/25" id="reporting-timeline-section">
+            <span className="block text-[8px] tracking-[0.3em] uppercase text-[#1C1917]/40 mb-6">
+              Upcoming Arrivals
+            </span>
+            <div id="arrival-timeline-list">
+              {arrivals.map((a) => (
+                <div
+                  key={a.num}
+                  id={`arrival-${a.num}`}
+                  className="flex items-start gap-4 py-4 border-b border-[#C9B8A0]/20 last:border-0 cursor-pointer group"
+                  onClick={() => onNavigate('calendar', 'push')}
+                >
+                  <span className="text-[10px] font-mono text-[#1C1917]/25 mt-0.5 w-5 shrink-0">{a.num}</span>
+                  <div className="flex-1 flex justify-between items-start gap-3">
+                    <div>
+                      <h5 className="font-serif text-[15px] text-[#1C1917] group-hover:text-[#1C1917]/55 transition-colors duration-200">
+                        {a.name}
+                      </h5>
+                      <p className="text-[9px] uppercase font-mono tracking-wider text-[#1C1917]/40 mt-0.5">
+                        {a.dates} · {a.nights}
+                      </p>
+                    </div>
+                    <span className={`text-[8px] tracking-[0.15em] font-mono uppercase mt-0.5 shrink-0 ${a.typeStyle}`}>
+                      {a.type}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* ── Financial Summary ── */}
+          <section className="px-6 py-8 border-b border-[#C9B8A0]/25 md:flex-1" id="reporting-analysis-section">
+            <span className="block text-[8px] tracking-[0.3em] uppercase text-[#1C1917]/40 mb-5">
+              Financial Summary
+            </span>
+            <div id="financial-reports-summary">
+              <div
+                className="flex justify-between items-baseline py-4 border-b border-[#C9B8A0]/20"
+                id="report-net-profit"
+              >
+                <span className="text-[9px] tracking-[0.2em] uppercase text-[#1C1917]/45">Net Profit</span>
+                <div>
+                  <span className="font-mono text-base text-[#1C1917]">$84,200</span>
+                  <span className="text-[9px] text-green-700 font-mono ml-2">+8%</span>
+                </div>
+              </div>
+              <div className="flex justify-between items-baseline py-4" id="report-opex">
+                <span className="text-[9px] tracking-[0.2em] uppercase text-[#1C1917]/45">
+                  Operating Expenses
+                </span>
+                <div>
+                  <span className="font-mono text-base text-[#1C1917]">$40,300</span>
+                  <span className="text-[9px] text-[#1C1917]/35 font-mono ml-2">Stable</span>
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => onNavigate('deep_dive', 'push')}
+              id="view-financial-reports-btn"
+              className="mt-6 w-full py-3.5 border border-[#1C1917]/15 text-[9px] uppercase tracking-[0.25em] font-mono text-[#1C1917]/50 hover:text-[#1C1917] hover:border-[#1C1917]/40 transition-all duration-300 cursor-pointer"
+            >
+              View Full Financial Report
+            </button>
+          </section>
+        </div>
+
+      </div>{/* end responsive grid */}
 
       {/* ── Supervision — inline status strip + camera ── */}
       <section className="px-6 py-8 border-b border-[#C9B8A0]/25" id="reporting-supervision-section">
