@@ -114,7 +114,7 @@ export default function CameraFeedView({ onNavigate, onNotify }: CameraFeedViewP
               </div>
             </div>
 
-            <div className="absolute top-4 right-4 pointer-events-none text-neutral-300 font-mono text-[10px] px-2 py-0.5 bg-black/60 tracking-wider">
+            <div className="absolute top-4 right-4 pointer-events-none text-neutral-300 font-mono text-[10px] px-2 py-0.5 bg-neutral-950/60 tracking-wider">
               1080P UHD @ 30FPS
             </div>
 

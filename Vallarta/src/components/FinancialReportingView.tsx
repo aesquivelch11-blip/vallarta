@@ -182,7 +182,7 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
               className="w-full h-full object-cover transition duration-500 group-hover:scale-[1.03]"
               referrerPolicy="no-referrer"
             />
-            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors" />
+            <div className="absolute inset-0 bg-stone-900/40 group-hover:bg-stone-900/50 transition-colors" />
 
             {/* Badges */}
             <span className="absolute top-4 left-4 bg-red-600 text-white text-[9px] tracking-widest uppercase font-semibold px-2 py-1 flex items-center gap-1.5" id="camera-live-badge">
