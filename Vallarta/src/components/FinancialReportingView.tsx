@@ -359,35 +359,48 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
       </section>
 
       {/* ── Footer ── */}
-      <footer className="bg-[#1C1917] text-[#F5F1E8] py-10 px-6 text-center" id="reporting-footer">
-        <h4 className="text-xl font-serif italic tracking-[0.1em] text-[#F5F1E8] mb-5">Vallarta Estates</h4>
-        <div className="flex justify-center gap-6 text-[8px] uppercase tracking-[0.2em] mb-5 text-[#F5F1E8]/40">
-          <button
-            onClick={() => onNotify?.('Secure privacy guidelines.')}
-            className="hover:text-[#C9B8A0] cursor-pointer transition-colors"
-          >
-            Privacy
-          </button>
-          <button
-            onClick={() => onNotify?.('Accepting terms of use.')}
-            className="hover:text-[#C9B8A0] cursor-pointer transition-colors"
-          >
-            Terms
-          </button>
-          <button
-            onClick={() => onNotify?.('Media kits.')}
-            className="hover:text-[#C9B8A0] cursor-pointer transition-colors"
-          >
-            Press
-          </button>
+      <footer
+        className="bg-[#1C1917] text-[#F5F1E8] py-10 px-6 md:px-10 text-center md:text-left"
+        id="reporting-footer"
+      >
+        <div className="md:flex md:items-start md:justify-between md:gap-8 md:max-w-5xl md:mx-auto">
+          {/* Brand */}
+          <h4 className="text-xl font-serif italic tracking-[0.1em] text-[#F5F1E8] mb-5 md:mb-0 md:shrink-0">
+            Vallarta Estates
+          </h4>
+
+          {/* Legal links */}
+          <div className="flex justify-center md:justify-start gap-6 text-[8px] uppercase tracking-[0.2em] mb-5 md:mb-0 text-[#F5F1E8]/40">
+            <button
+              onClick={() => onNotify?.('Secure privacy guidelines.')}
+              className="hover:text-[#C9B8A0] cursor-pointer transition-colors"
+            >
+              Privacy
+            </button>
+            <button
+              onClick={() => onNotify?.('Accepting terms of use.')}
+              className="hover:text-[#C9B8A0] cursor-pointer transition-colors"
+            >
+              Terms
+            </button>
+            <button
+              onClick={() => onNotify?.('Media kits.')}
+              className="hover:text-[#C9B8A0] cursor-pointer transition-colors"
+            >
+              Press
+            </button>
+          </div>
+
+          {/* Concierge contact */}
           <button
             onClick={() => onNotify?.('Call primary concierge at +52 (322) 849-0122.')}
-            className="hover:text-[#C9B8A0] cursor-pointer transition-colors"
+            className="block text-[8px] uppercase tracking-[0.2em] text-[#F5F1E8]/40 hover:text-[#C9B8A0] cursor-pointer transition-colors md:shrink-0"
           >
-            Contact
+            Contact Concierge
           </button>
         </div>
-        <p className="text-[9px] text-[#F5F1E8]/25 tracking-[0.12em] max-w-sm mx-auto leading-relaxed uppercase">
+
+        <p className="text-[9px] text-[#F5F1E8]/20 tracking-[0.12em] max-w-sm mx-auto md:mx-0 md:max-w-none leading-relaxed uppercase mt-6 md:mt-8 md:max-w-5xl md:mx-auto">
           © 2024 Vallarta Property Management. Architectural Precision in Hospitality.
         </p>
       </footer>
