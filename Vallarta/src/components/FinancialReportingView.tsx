@@ -288,60 +288,73 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
       </div>{/* end responsive grid */}
 
       {/* ── Supervision — inline status strip + camera ── */}
-      <section className="px-6 py-8 border-b border-[#C9B8A0]/25" id="reporting-supervision-section">
-        <span className="block text-[8px] tracking-[0.3em] uppercase text-[#1C1917]/40 mb-5">
-          Property Status
-        </span>
-        <div className="flex gap-8 mb-6" id="supervision-stats">
-          <div id="supervision-security">
-            <span className="block text-[8px] tracking-[0.22em] uppercase text-[#1C1917]/40 mb-1.5">Security</span>
-            <div className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-              <span className="font-mono text-xs text-[#1C1917]">Active</span>
-            </div>
-          </div>
-          <div id="supervision-maintenance">
-            <span className="block text-[8px] tracking-[0.22em] uppercase text-[#1C1917]/40 mb-1.5">
-              Maintenance
+      <section className="border-b border-[#C9B8A0]/25" id="reporting-supervision-section">
+        <div className="md:grid md:grid-cols-[1fr_1fr] md:divide-x md:divide-[#C9B8A0]/25">
+
+          {/* Status strip */}
+          <div className="px-6 py-8">
+            <span className="block text-[8px] tracking-[0.3em] uppercase text-[#1C1917]/40 mb-5">
+              Property Status
             </span>
-            <span className="font-mono text-xs text-[#1C1917]">On Schedule</span>
-          </div>
-          <div id="supervision-staff">
-            <span className="block text-[8px] tracking-[0.22em] uppercase text-[#1C1917]/40 mb-1.5">Staff</span>
-            <span className="font-mono text-xs text-[#1C1917]">4 On-Site</span>
-          </div>
-        </div>
-        <div
-          className="relative h-[180px] overflow-hidden cursor-pointer group"
-          onClick={() => onNavigate('camera_expanded', 'push')}
-          id="supervision-camera-card"
-        >
-          <img
-            src="https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?auto=format&fit=crop&w=800&q=80"
-            alt="Pool camera feed preview"
-            className="w-full h-full object-cover transition duration-500 group-hover:scale-[1.02]"
-            referrerPolicy="no-referrer"
-          />
-          <div className="absolute inset-0 bg-black/35 group-hover:bg-black/45 transition-colors" />
-          <span
-            className="absolute top-4 left-4 bg-red-600 text-white text-[8px] tracking-widest uppercase font-mono px-2.5 py-1 flex items-center gap-1.5 rounded-full"
-            id="camera-live-badge"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-            LIVE
-          </span>
-          <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end text-white">
-            <div>
-              <p className="text-[9px] tracking-wider text-white/55 uppercase font-mono">CAM 02 · POOL TERRACE</p>
-              <h4 className="text-lg font-serif italic tracking-wide mt-0.5">Obsidiana Main Suite View</h4>
+            <div className="flex gap-8 md:gap-12" id="supervision-stats">
+              <div id="supervision-security">
+                <span className="block text-[8px] tracking-[0.22em] uppercase text-[#1C1917]/40 mb-1.5">Security</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                  <span className="font-mono text-xs text-[#1C1917]">Active</span>
+                </div>
+              </div>
+              <div id="supervision-maintenance">
+                <span className="block text-[8px] tracking-[0.22em] uppercase text-[#1C1917]/40 mb-1.5">
+                  Maintenance
+                </span>
+                <span className="font-mono text-xs text-[#1C1917]">On Schedule</span>
+              </div>
+              <div id="supervision-staff">
+                <span className="block text-[8px] tracking-[0.22em] uppercase text-[#1C1917]/40 mb-1.5">Staff</span>
+                <span className="font-mono text-xs text-[#1C1917]">4 On-Site</span>
+              </div>
             </div>
-            <button
-              id="view-cameras-btn"
-              className="text-[9px] uppercase tracking-[0.2em] font-mono text-white/65 hover:text-white transition-colors cursor-pointer flex items-center gap-1.5"
-            >
-              VIEW <ArrowRight className="w-3 h-3" />
-            </button>
           </div>
+
+          {/* Camera feed */}
+          <div
+            className="relative h-[180px] md:h-[200px] overflow-hidden cursor-pointer group"
+            onClick={() => onNavigate('camera_expanded', 'push')}
+            id="supervision-camera-card"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?auto=format&fit=crop&w=800&q=80"
+              alt="Pool camera feed preview"
+              className="w-full h-full object-cover transition duration-500 group-hover:scale-[1.02]"
+              referrerPolicy="no-referrer"
+            />
+            <div className="absolute inset-0 bg-black/35 group-hover:bg-black/45 transition-colors" />
+            <span
+              className="absolute top-4 left-4 bg-red-600 text-white text-[8px] tracking-widest uppercase font-mono px-2.5 py-1 flex items-center gap-1.5 rounded-full"
+              id="camera-live-badge"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+              LIVE
+            </span>
+            <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end text-white">
+              <div>
+                <p className="text-[9px] tracking-wider text-white/55 uppercase font-mono">
+                  CAM 02 · POOL TERRACE
+                </p>
+                <h4 className="text-lg font-serif italic tracking-wide mt-0.5">
+                  Obsidiana Main Suite View
+                </h4>
+              </div>
+              <button
+                id="view-cameras-btn"
+                className="text-[9px] uppercase tracking-[0.2em] font-mono text-white/65 hover:text-white transition-colors cursor-pointer flex items-center gap-1.5"
+              >
+                VIEW <ArrowRight className="w-3 h-3" />
+              </button>
+            </div>
+          </div>
+
         </div>
       </section>
 
