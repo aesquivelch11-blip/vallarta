@@ -47,7 +47,7 @@ function App() {
       </header>
 
       <section className="dashboard-grid">
-        <div className="surface interactive animate-in">
+        <div className="surface animate-in">
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <span className="metric-label">Monthly Yield</span>
             <DollarSign size={20} color="var(--color-primary-light)" />
@@ -56,7 +56,7 @@ function App() {
           <div className="metric-sub">Per-Room Yield: {metrics.revenue.revPAR}</div>
         </div>
 
-        <div className="surface interactive animate-in">
+        <div className="surface animate-in">
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <span className="metric-label">Occupancy</span>
             <Calendar size={20} color="var(--color-primary-light)" />
@@ -65,7 +65,7 @@ function App() {
           <div className="metric-sub">Next 30 Days</div>
         </div>
 
-        <div className="surface interactive animate-in">
+        <div className="surface animate-in">
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <span className="metric-label">Guest Satisfaction</span>
             <Users size={20} color="var(--color-primary-light)" />
@@ -76,7 +76,7 @@ function App() {
       </section>
 
       <section className="timeline-grid">
-        <div className="surface interactive animate-in">
+        <div className="surface animate-in">
           <h2 className="display-text" style={{ fontSize: '1.5rem', marginBottom: 'var(--space-md)' }}>Upcoming Stays</h2>
           <div className="booking-list">
             {bookings.map((booking) => (
@@ -99,7 +99,7 @@ function App() {
           </div>
         </div>
 
-        <div className="surface interactive animate-in" style={{ backgroundColor: 'var(--color-primary)', color: 'var(--color-surface)' }}>
+        <div className="surface animate-in" style={{ backgroundColor: 'var(--color-primary)', color: 'var(--color-surface)' }}>
           <h2 className="display-text" style={{ fontSize: '1.5rem', marginBottom: 'var(--space-md)' }}>Operations</h2>
           
           <div style={{ marginBottom: 'var(--space-lg)' }}>
