@@ -2,13 +2,12 @@
 
 :root {
   /* Colors */
-  --color-primary: #2c4642; /* Deep luxury teal */
-  --color-primary-light: #3a5c57;
-  --color-bg: #f9f8f6; /* Warm ash cream */
-  --color-surface: #ffffff;
-  --color-text: #1a1a1a;
-  --color-text-muted: #666666;
-  --color-border: #e8e4dc;
+  --color-primary: #1a2e2b;
+  --color-bg: #FBFBFA;
+  --color-surface: #FFFFFF;
+  --color-text: #111111;
+  --color-text-muted: #787774;
+  --color-border: #EAEAEA;
 
   /* Typography */
   --font-display: 'Cormorant Garamond', Georgia, serif;
@@ -29,6 +28,7 @@
 
   /* Shadows (Used sparingly for interactions) */
   --shadow-hover: 0 12px 24px rgba(0,0,0,0.06);
+  --shadow-diffused: 0 20px 40px rgba(0,0,0,0.05);
   
   /* Motion */
   --transition-standard: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -48,10 +48,17 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, .display-text {
+h1, h2, h3 {
   font-family: var(--font-display);
   font-weight: 400;
   line-height: 1.2;
+}
+
+.display-text {
+  font-family: var(--font-display);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
 /* Base structural classes */
