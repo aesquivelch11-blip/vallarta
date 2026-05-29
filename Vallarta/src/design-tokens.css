@@ -294,7 +294,7 @@ body {
 .hero {
   position: relative;
   display: grid;
-  grid-template-columns: 80% 20%;
+  grid-template-columns: 75% 25%;
   background: var(--color-canvas);
   min-height: 60vh;
   max-height: 700px;
