@@ -230,11 +230,11 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
           <div className="flex gap-6 mb-6">
             <div className="flex items-center gap-2">
               <span className="w-4 h-0.5 rounded-sm bg-[#B45309]" />
-              <span className="t-metric-label" style={{ fontSize: '12px' }}>Revenue</span>
+              <span className="t-metric-label" style={{ fontSize: '0.75rem' }}>Revenue</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="w-4 h-0.5 rounded-sm bg-[#15803D]" />
-              <span className="t-metric-label" style={{ fontSize: '12px' }}>Net Yield</span>
+              <span className="t-metric-label" style={{ fontSize: '0.75rem' }}>Net Yield</span>
             </div>
           </div>
 
@@ -343,27 +343,27 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
             </span>
             <div id="financial-reports-summary">
               <div className="flex justify-between items-baseline py-4 border-b border-[rgba(28,25,23,0.06)]" id="report-net-profit">
-                <span className="t-mono" style={{ color: 'var(--color-ink-secondary)', fontSize: '10px' }}>
+                <span className="t-mono" style={{ color: 'var(--color-ink-secondary)', fontSize: '0.625rem' }}>
                   Net Profit
                 </span>
                 <div>
-                  <span className="t-body" style={{ fontSize: '16px', fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>
+                  <span className="t-body" style={{ fontSize: '1rem', fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>
                     $84,200
                   </span>
-                  <span className="t-mono text-[#15803D]" style={{ fontSize: '10px', marginLeft: '8px' }}>
+                  <span className="t-mono text-[#15803D]" style={{ fontSize: '0.625rem', marginLeft: '8px' }}>
                     +8%
                   </span>
                 </div>
               </div>
               <div className="flex justify-between items-baseline py-4" id="report-opex">
-                <span className="t-mono" style={{ color: 'var(--color-ink-secondary)', fontSize: '10px' }}>
+                <span className="t-mono" style={{ color: 'var(--color-ink-secondary)', fontSize: '0.625rem' }}>
                   Operating Expenses
                 </span>
                 <div>
-                  <span className="t-body" style={{ fontSize: '16px', fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>
+                  <span className="t-body" style={{ fontSize: '1rem', fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>
                     $40,300
                   </span>
-                  <span className="t-mono text-[#A8A29E]" style={{ fontSize: '10px', marginLeft: '8px' }}>
+                  <span className="t-mono text-[#A8A29E]" style={{ fontSize: '0.625rem', marginLeft: '8px' }}>
                     Stable
                   </span>
                 </div>
