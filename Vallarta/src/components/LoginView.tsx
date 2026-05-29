@@ -47,18 +47,22 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
     }, 800);
   };
 
+  const [notice, setNotice] = useState('');
+
   const handleForgotPassword = () => {
     if (!email.trim() || !validateEmail(email)) {
       setError('Please enter your email address first.');
       return;
     }
     setError('');
-    alert('Password reset instructions sent to ' + email);
+    setNotice('Password reset instructions will be sent to ' + email);
+    setTimeout(() => setNotice(''), 5000);
   };
 
   const handleRequestAccess = () => {
     setError('');
-    alert('Please contact our concierge team to request access.');
+    setNotice('Please contact our concierge team to request access.');
+    setTimeout(() => setNotice(''), 5000);
   };
 
   return (
@@ -153,6 +157,23 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
               </div>
             )}
 
+            {notice && (
+              <div
+                className="flex items-start gap-3 p-3 text-sm"
+                style={{
+                  backgroundColor: 'oklch(30% 0.01 70)',
+                  color: 'var(--login-ink-secondary)',
+                  borderRadius: 'var(--radius-card)',
+                  border: '1px solid var(--login-border)'
+                }}
+                id="login-notice-banner"
+                role="status"
+              >
+                <ArrowRight className="w-4 h-4 shrink-0 mt-0.5" style={{ color: 'var(--login-accent)' }} />
+                <span>{notice}</span>
+              </div>
+            )}
+
             <div
               className="relative pb-2 group"
               id="login-email-group"
@@ -173,7 +194,10 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
                   type="email"
                   id="email-input"
                   className="w-full bg-transparent focus:outline-none font-mono text-sm"
-                  style={{ color: 'var(--login-ink)' }}
+                  style={{
+                    color: 'var(--login-ink)',
+                    caretColor: 'var(--login-accent)'
+                  }}
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
@@ -210,7 +234,10 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
                   type="password"
                   id="password-input"
                   className="w-full bg-transparent focus:outline-none font-mono text-sm tracking-widest"
-                  style={{ color: 'var(--login-ink)' }}
+                  style={{
+                    color: 'var(--login-ink)',
+                    caretColor: 'var(--login-accent)'
+                  }}
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
