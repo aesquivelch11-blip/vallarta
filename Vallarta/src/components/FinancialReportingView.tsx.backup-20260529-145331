@@ -80,7 +80,20 @@ function MetricItem({ label, value, change, trend, isPrimary, delay, onClick }: 
 }
 
 export default function FinancialReportingView({ onNavigate, onNotify }: FinancialReportingViewProps) {
+  const scrollRef = useRef(0);
+  const heroImgRef = useRef<HTMLImageElement>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      scrollRef.current = window.scrollY;
+      if (heroImgRef.current) {
+        heroImgRef.current.style.transform = `translateY(${window.scrollY * 0.75}px) scale(1)`;
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
@@ -117,13 +130,14 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
           <AnimatePresence mode="wait">
             <motion.img
               key={currentSlide}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              ref={heroImgRef}
+              initial={{ opacity: 0, scale: 1.06 }}
+              animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
               src={HERO_SLIDES[currentSlide].src}
               alt={HERO_SLIDES[currentSlide].alt}
-              className="hero__slide-img"
+              className="cinematic-grade"
               referrerPolicy="no-referrer"
             />
           </AnimatePresence>

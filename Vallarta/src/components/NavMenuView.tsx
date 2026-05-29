@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { X, Menu, Phone, Sliders, Globe, LogOut } from 'lucide-react';
+import { X, Phone, Sliders, Globe, LogOut } from 'lucide-react';
 import { ScreenType } from '../types';
-import bgImage from '../assets/Vallarta-coast.jpeg';
+import bgImage from '../assets/Vallarta-coast-2.jpeg';
 
 interface NavMenuViewProps {
   onNavigate: (screen: ScreenType, transitionStyle: 'push' | 'slide_up') => void;
@@ -61,7 +61,7 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
         className="absolute inset-0 z-20 pointer-events-none"
         style={{
           background:
-            'linear-gradient(to right, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.10) 60%, transparent 100%)',
+            'linear-gradient(to left, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.10) 60%, transparent 100%)',
         }}
       />
 
@@ -74,16 +74,9 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
       />
 
       {/* Full-height flex column */}
-      <div className="relative z-30 w-full min-h-[100dvh] flex flex-col">
+      <div className="relative z-30 w-full h-[100dvh] flex flex-col">
         {/* Top bar */}
-        <header className="flex items-center justify-between px-8 md:px-14 pt-8 md:pt-12 shrink-0">
-          {/* Hamburger — decorative, not interactive */}
-          <div
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-black/30 backdrop-blur-md border border-white/20"
-            aria-hidden="true"
-          >
-            <Menu className="w-5 h-5 text-white" strokeWidth={1.5} />
-          </div>
+        <header className="flex items-center justify-end gap-8 px-8 md:px-14 lg:px-20 pt-8 md:pt-12 shrink-0">
           <h2
             className="text-[10px] md:text-[11px] tracking-[0.35em] text-white uppercase font-medium"
             id="nav-menu-brand"
@@ -102,8 +95,8 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
         </header>
 
         {/* Menu items — flex column, spacious */}
-        <main className="flex-1 flex flex-col justify-center px-8 md:px-14" id="nav-menu-links-list">
-          <div className="max-w-2xl space-y-14 md:space-y-16">
+        <main className="flex-1 flex flex-col items-end px-8 md:px-14 lg:px-20 pr-12 md:pr-20 pt-4 md:pt-8" id="nav-menu-links-list">
+          <div className="max-w-2xl space-y-16 md:space-y-20 text-right">
             {menuItems.map((item, index) => (
               <motion.div
                 key={item.id}
@@ -122,7 +115,7 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
                     e.preventDefault();
                     onNavigate(item.screen, 'push');
                   }}
-                  whileHover={{ x: 8 }}
+                  whileHover={{ x: -8 }}
                   transition={{ type: 'spring', stiffness: 280, damping: 22 }}
                   className="group block"
                 >
@@ -133,7 +126,7 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
                     {item.label}
                   </span>
                   <span
-                    className="text-[11px] md:text-[12px] tracking-[0.25em] text-white/90 font-mono block mt-2.5 uppercase"
+                    className="text-[11px] md:text-[12px] tracking-[0.25em] text-white/90 font-mono block mt-4 uppercase"
                     style={{ textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}
                   >
                     {item.subtitle}
@@ -145,16 +138,16 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
         </main>
 
         {/* Bottom bar */}
-        <footer className="shrink-0 px-8 md:px-14 pb-8 md:pb-10">
-          <div className="flex items-end justify-between">
-            <div className="space-y-4">
+        <footer className="shrink-0 px-8 md:px-14 lg:px-20 pb-8 md:pb-12">
+          <div className="flex items-end justify-end gap-8">
+            <div className="space-y-6">
               <p
                 className="text-[9px] tracking-[0.3em] text-white/80 uppercase font-medium"
                 style={{ textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}
               >
                 Property Management
               </p>
-              <div className="flex flex-wrap gap-x-6 gap-y-3 text-[11px] tracking-[0.15em] text-white/95">
+              <div className="flex flex-wrap gap-x-8 gap-y-4 text-[11px] tracking-[0.15em] text-white/95">
                 <button
                   onClick={() =>
                     onNotify
