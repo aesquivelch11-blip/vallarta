@@ -294,7 +294,7 @@ body {
 .hero {
   position: relative;
   display: grid;
-  grid-template-columns: 65% 35%;
+  grid-template-columns: 80% 20%;
   background: var(--color-canvas);
   min-height: 60vh;
   max-height: 700px;
@@ -340,9 +340,9 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  max-width: 450px;
+  max-width: 300px;
   gap: 32px;
-  padding: 32px 32px 32px 48px;
+  padding: 32px 24px 32px 32px;
 }
 
 .hero-stat {
