@@ -296,8 +296,8 @@ body {
   display: grid;
   grid-template-columns: 55% 45%;
   background: var(--color-canvas);
-  min-height: 70vh;
-  max-height: 900px;
+  min-height: 60vh;
+  max-height: 700px;
 }
 
 .hero__media {
@@ -305,7 +305,7 @@ body {
   overflow: hidden;
   border-radius: 0 var(--radius-panel) var(--radius-panel) 0;
   height: 100%;
-  min-height: 500px;
+  min-height: 400px;
 }
 
 .hero__media img {
@@ -341,7 +341,7 @@ body {
   flex-direction: column;
   justify-content: center;
   gap: 32px;
-  padding: 48px 64px;
+  padding: 32px 48px;
 }
 
 .hero-stat {
@@ -465,7 +465,7 @@ body {
 .hero-metric-beam {
   max-width: var(--grid-max-width);
   margin: 0 auto;
-  padding: 48px var(--grid-gutter) 40px;
+  padding: 32px var(--grid-gutter) 32px;
   background: var(--color-canvas);
   border-bottom: 1px solid var(--color-border-subtle);
 }
@@ -742,7 +742,7 @@ body::before {
     min-height: 300px;
   }
   .hero__stats {
-    padding: 32px var(--grid-gutter);
+    padding: 24px var(--grid-gutter);
     gap: 24px;
   }
   .hero-stat {
@@ -752,7 +752,7 @@ body::before {
     font-size: 1.5rem;
   }
   .hero-metric-beam {
-    padding: 32px var(--grid-gutter) 24px;
+    padding: 24px var(--grid-gutter) 20px;
   }
   .hero-metric-beam__text {
     font-size: clamp(3rem, 14vw, 6rem);
