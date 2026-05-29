@@ -17,6 +17,7 @@
   /* --- Accents --- */
   --color-accent-positive: #15803D;
   --color-accent-positive-bg: rgba(21, 128, 61, 0.08);
+  --color-accent-negative: #DC2626;
   --color-accent-warning: #B45309;
   --color-accent-warning-bg: rgba(180, 83, 9, 0.08);
   --color-accent-live: #9F1239;
@@ -259,12 +260,6 @@ body {
   }
 }
 
-/* Ken Burns */
-@keyframes ken-burns {
-  0% { transform: scale(1); }
-  100% { transform: scale(1.03); }
-}
-
 /* Cinematic grade for all photographs */
 .cinematic-grade {
   filter: saturate(0.92) contrast(1.04) brightness(0.98);
@@ -295,18 +290,22 @@ body {
   box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.08);
 }
 
-/* Hero */
+/* Hero — Editorial Split Layout */
 .hero {
   position: relative;
+  display: grid;
+  grid-template-columns: 55% 45%;
+  background: var(--color-canvas);
+  min-height: 70vh;
+  max-height: 900px;
 }
 
 .hero__media {
   position: relative;
   overflow: hidden;
-  border-radius: 0 0 var(--radius-panel) var(--radius-panel);
-  height: 85vh;
-  min-height: 600px;
-  max-height: 900px;
+  border-radius: 0 var(--radius-panel) var(--radius-panel) 0;
+  height: 100%;
+  min-height: 500px;
 }
 
 .hero__media img {
@@ -328,26 +327,76 @@ body {
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(0,0,0,0.25) 0%,
-    rgba(0,0,0,0) 30%,
+    rgba(0,0,0,0.08) 0%,
+    rgba(0,0,0,0) 40%,
     rgba(0,0,0,0) 60%,
-    rgba(0,0,0,0.55) 100%
+    rgba(0,0,0,0.25) 100%
   );
   pointer-events: none;
 }
 
-.hero__content {
-  position: absolute;
-  bottom: 80px;
-  left: var(--grid-gutter);
-  right: var(--grid-gutter);
-  max-width: var(--grid-max-width);
-  margin: 0 auto;
+.hero__stats {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 32px;
+  padding: 48px 64px;
 }
 
-.hero__location {
-  color: rgba(255,255,255,0.55);
-  margin-bottom: 12px;
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--color-border-subtle);
+  cursor: default;
+}
+
+.hero-stat:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.hero-stat[role="button"] {
+  cursor: pointer;
+  transition: opacity 200ms ease;
+}
+
+.hero-stat[role="button"]:hover {
+  opacity: 0.7;
+}
+
+.hero-stat__label {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--color-ink-muted);
+}
+
+.hero-stat__value {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 2.5vw, 2.5rem);
+  font-weight: 500;
+  line-height: 1.1;
+  color: var(--color-ink);
+}
+
+.hero-stat__delta {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-ink-muted);
+}
+
+.hero-stat__delta--positive {
+  color: var(--color-accent-positive);
+}
+
+.hero-stat__delta--negative {
+  color: var(--color-accent-negative);
 }
 
 .hero__dots {
@@ -412,76 +461,25 @@ body {
   transform: translateY(-50%) scale(1.08);
 }
 
-/* ── Metrics Rail ── */
-.metrics-rail {
+/* Hero Metric Beam */
+.hero-metric-beam {
   max-width: var(--grid-max-width);
   margin: 0 auto;
-  position: relative;
-  z-index: 10;
-  display: flex;
-  align-items: stretch;
+  padding: 48px var(--grid-gutter) 40px;
   background: var(--color-canvas);
   border-bottom: 1px solid var(--color-border-subtle);
 }
 
-.metrics-rail__item {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 36px 32px;
-  border-right: 1px solid var(--color-border-subtle);
-  transition: background var(--duration-fast) var(--ease-out-expo);
-}
-
-.metrics-rail__item:last-child {
-  border-right: none;
-}
-
-.metrics-rail__item--primary {
-  flex: 1.6;
-}
-
-.metrics-rail__item[role="button"]:hover {
-  background: rgba(28, 25, 23, 0.025);
-  cursor: pointer;
-}
-
-.metrics-rail__label {
+.hero-metric-beam__text {
+  display: block;
   font-family: var(--font-ui);
-  font-size: 0.625rem;
-  font-weight: 400;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--color-ink-muted);
-  margin-bottom: 10px;
-}
-
-.metrics-rail__value {
-  font-family: var(--font-ui);
-  font-size: clamp(2rem, 3vw, 2.75rem);
-  font-weight: 300;
-  letter-spacing: -0.02em;
-  line-height: 1.05;
+  font-weight: 700;
+  font-size: clamp(4rem, 10vw, 12rem);
+  line-height: 0.9;
   color: var(--color-ink);
-  font-variant-numeric: tabular-nums;
-}
-
-.metrics-rail__item--primary .metrics-rail__value {
-  font-size: clamp(40px, 4vw, 56px);
-}
-
-.metrics-rail__delta {
-  font-family: var(--font-ui);
-  font-size: 0.625rem;
-  letter-spacing: 0.15em;
   text-transform: uppercase;
-  margin-top: 8px;
+  letter-spacing: -0.03em;
 }
-
-.metrics-rail__delta--positive { color: var(--color-accent-positive); }
-.metrics-rail__delta--neutral  { color: var(--color-ink-muted); }
-.metrics-rail__delta--negative { color: #DC2626; }
 
 /* Dashboard Body */
 .dashboard__body {
@@ -727,33 +725,37 @@ body::before {
   .dashboard__body {
     grid-template-columns: 1fr;
   }
-  .metrics-rail {
-    flex-wrap: wrap;
-  }
-  .metrics-rail__item {
-    flex: 1 1 30%;
-    border-bottom: 1px solid var(--color-border-subtle);
-  }
-  .metrics-rail__item:nth-child(3n) {
-    border-right: none;
-  }
   .sidebar {
     max-width: 100%;
   }
 }
 
 @media (max-width: 768px) {
-  .metrics-rail__item {
-    flex: 1 1 50%;
-  }
-  .metrics-rail__item:nth-child(2n) {
-    border-right: none;
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    max-height: none;
   }
   .hero__media {
-    height: 70vh;
+    border-radius: 0 0 var(--radius-panel) var(--radius-panel);
+    height: 50vh;
+    min-height: 300px;
   }
-  .t-property-name {
-    font-size: 40px;
+  .hero__stats {
+    padding: 32px var(--grid-gutter);
+    gap: 24px;
+  }
+  .hero-stat {
+    padding-bottom: 20px;
+  }
+  .hero-stat__value {
+    font-size: 1.5rem;
+  }
+  .hero-metric-beam {
+    padding: 32px var(--grid-gutter) 24px;
+  }
+  .hero-metric-beam__text {
+    font-size: clamp(3rem, 14vw, 6rem);
   }
   .status-band {
     flex-direction: column;
@@ -1087,7 +1089,10 @@ body::before {
 @media (prefers-reduced-motion: reduce) {
   .cal-day,
   .cal-booking-row,
-  .cal-nav__brand {
+  .cal-nav__brand,
+  .hero__dot,
+  .hero__arrow,
+  .hero-stat[role="button"] {
     transition: none;
   }
 }

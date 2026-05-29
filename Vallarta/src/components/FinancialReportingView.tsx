@@ -35,59 +35,11 @@ const arrivals = [
   { num: '03', name: 'The Al-Sayed Party', dates: 'Oct 24 — Nov 02', nights: '9 nights', type: 'OWNER USE' },
 ];
 
-function MetricItem({ label, value, change, trend, isPrimary, delay, onClick }: {
-  label: string;
-  value: string;
-  change: string;
-  trend: 'up' | 'stable' | 'down';
-  isPrimary?: boolean;
-  delay: number;
-  onClick?: () => void;
-}) {
-  const deltaLabel = change && (change.startsWith('+') || change.startsWith('-'))
-    ? change.split(' ')[0]
-    : null;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }}
-      className={`metrics-rail__item${isPrimary ? ' metrics-rail__item--primary' : ''}`}
-      onClick={onClick}
-      role={onClick ? 'button' : undefined}
-      tabIndex={onClick ? 0 : undefined}
-      onKeyDown={onClick ? (e) => e.key === 'Enter' && onClick() : undefined}
-    >
-      <span className="metrics-rail__label">{label}</span>
-      <span className="metrics-rail__value">{value}</span>
-      {deltaLabel && (
-        <span className={`metrics-rail__delta ${
-          trend === 'up' ? 'metrics-rail__delta--positive' 
-          : trend === 'down' ? 'metrics-rail__delta--negative' 
-          : 'metrics-rail__delta--neutral'
-        }`}>
-          {deltaLabel} · {change.replace(deltaLabel, '').trim()}
-        </span>
-      )}
-      {!deltaLabel && (
-        <span className="metrics-rail__delta metrics-rail__delta--neutral">
-          {change}
-        </span>
-      )}
-    </motion.div>
-  );
-}
-
 export default function FinancialReportingView({ onNavigate, onNotify }: FinancialReportingViewProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
-  };
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
   };
 
   return (
@@ -128,93 +80,96 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
             />
           </AnimatePresence>
           <div className="hero__gradient" />
-        </div>
-        <div className="hero__content">
-          <motion.p
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="t-mono hero__location"
-            style={{ textShadow: '0 2px 12px rgba(0,0,0,0.25)' }}
+          <button
+            onClick={() => setCurrentSlide((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length)}
+            className="hero__arrow hero__arrow--prev"
+            aria-label="Previous slide"
           >
-            ESTATE 04 · PUERTO VALLARTA, MEXICO
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="t-property-name"
-            style={{ color: '#fff', textShadow: '0 2px 12px rgba(0,0,0,0.25)' }}
+            &#8249;
+          </button>
+          <button
+            onClick={() => setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length)}
+            className="hero__arrow hero__arrow--next"
+            aria-label="Next slide"
           >
-            Casa Obsidiana
-          </motion.h1>
+            &#8250;
+          </button>
+          <div className="hero__dots">
+            {HERO_SLIDES.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => goToSlide(i)}
+                className={`hero__dot ${i === currentSlide ? 'hero__dot--active' : ''}`}
+                aria-label={`View slide ${i + 1}`}
+              />
+            ))}
+          </div>
         </div>
-        <div className="hero__dots">
-          {HERO_SLIDES.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => goToSlide(i)}
-              className={`hero__dot ${i === currentSlide ? 'hero__dot--active' : ''}`}
-              aria-label={`View slide ${i + 1}`}
-            />
-          ))}
+
+        <div className="hero__stats">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="hero-stat"
+          >
+            <span className="hero-stat__label">Revenue</span>
+            <span className="hero-stat__value">$124,500</span>
+            <span className="hero-stat__delta hero-stat__delta--positive">+14% vs last period</span>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="hero-stat"
+            onClick={() => onNavigate('deep_dive', 'push')}
+            role="button"
+            tabIndex={0}
+            aria-label="View yield deep dive"
+            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onNavigate('deep_dive', 'push')}
+          >
+            <span className="hero-stat__label">Yield</span>
+            <span className="hero-stat__value">$1,450</span>
+            <span className="hero-stat__delta hero-stat__delta--neutral">Stable</span>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            className="hero-stat"
+            onClick={() => onNavigate('calendar', 'push')}
+            role="button"
+            tabIndex={0}
+            aria-label="View occupancy calendar"
+            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onNavigate('calendar', 'push')}
+          >
+            <span className="hero-stat__label">Occupancy</span>
+            <span className="hero-stat__value">88%</span>
+            <span className="hero-stat__delta hero-stat__delta--positive">+3% vs last period</span>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="hero-stat"
+          >
+            <span className="hero-stat__label">Sentiment</span>
+            <span className="hero-stat__value">4.9</span>
+            <span className="hero-stat__delta hero-stat__delta--positive">Top 5%</span>
+          </motion.div>
         </div>
-        <button
-          onClick={() => setCurrentSlide((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length)}
-          className="hero__arrow hero__arrow--prev"
-          aria-label="Previous slide"
-        >
-          &#8249;
-        </button>
-        <button
-          onClick={() => setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length)}
-          className="hero__arrow hero__arrow--next"
-          aria-label="Next slide"
-        >
-          &#8250;
-        </button>
       </section>
 
-      {/* ── Stats Band ── */}
-      <section className="metrics-rail" id="reporting-metrics-section">
-        <MetricItem
-          label="REVENUE"
-          value="$124,500"
-          change="+14% VS LAST PERIOD"
-          trend="up"
-          isPrimary
-          delay={0.5}
-        />
-        <MetricItem
-          label="YIELD"
-          value="$1,450"
-          change="STABLE"
-          trend="stable"
-          delay={0.58}
-          onClick={() => onNavigate('deep_dive', 'push')}
-        />
-        <MetricItem
-          label="OCCUPANCY"
-          value="88%"
-          change="+3% VS LAST PERIOD"
-          trend="up"
-          delay={0.66}
-          onClick={() => onNavigate('calendar', 'push')}
-        />
-        <MetricItem
-          label="SENTIMENT"
-          value="4.9"
-          change="TOP 5%"
-          trend="up"
-          delay={0.74}
-        />
-        <MetricItem
-          label="NIGHTS BOOKED"
-          value="129"
-          change="+12% VS LAST PERIOD"
-          trend="up"
-          delay={0.82}
-        />
+      {/* ── Hero Metric Beam ── */}
+      <section className="hero-metric-beam" id="hero-metric-beam">
+        <motion.span
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="hero-metric-beam__text"
+        >
+          Casa Obsidiana
+        </motion.span>
       </section>
 
       {/* ── Dashboard Body ── */}
