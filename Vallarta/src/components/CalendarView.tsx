@@ -64,12 +64,12 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
   };
 
   return (
-    <div className="min-h-screen bg-stone-50 text-neutral-900 font-sans flex flex-col justify-between" id="calendar-view-container">
+    <div className="min-h-screen bg-transparent text-[#1C1917] font-sans flex flex-col justify-between" id="calendar-view-container">
       
       {/* Top Header Menu Bar */}
-      <header className="sticky top-0 bg-stone-50/90 z-40 border-b border-stone-200/60 px-6 py-4 flex justify-between items-center" id="calendar-header">
-        <h1 className="text-xl md:text-2xl font-serif tracking-[0.2em] text-neutral-900 font-light cursor-pointer" onClick={() => onNavigate('reporting', 'push')}>
-          VALLARTA
+      <header className="sticky top-0 bg-[#F5F1E8]/90 z-40 border-b border-[#C9B8A0]/30 px-6 py-4 flex justify-between items-center backdrop-blur-xl" id="calendar-header">
+        <h1 className="text-2xl md:text-3xl font-serif italic tracking-[0.1em] text-[#1C1917] cursor-pointer" onClick={() => onNavigate('reporting', 'push')}>
+          Vallarta Estates
         </h1>
         
         {/* Menu button specifically designed to switch back to Navigation Menu */}
@@ -90,30 +90,30 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
         
         {/* Header Breadcrumb */}
         <div className="space-y-1" id="calendar-breadcrumb-group">
-          <span className="text-[10px] tracking-[0.3em] font-medium text-neutral-400 block uppercase">
+          <span className="text-[10px] tracking-[0.3em] font-medium text-[#1C1917]/50 block uppercase">
             VILLA ARCADIA
           </span>
-          <h2 className="text-3xl font-serif tracking-wide text-neutral-900" id="calendar-page-title">
+          <h2 className="text-4xl md:text-5xl font-serif italic tracking-wide text-[#1C1917]" id="calendar-page-title">
             Property Calendar
           </h2>
         </div>
 
         {/* Manager Concierge Hero Oversight Panel */}
-        <div className="border border-stone-200 p-6 bg-white flex flex-col md:flex-row md:items-center md:justify-between gap-6" id="calendar-oversight-panel">
+        <div className="border border-[#C9B8A0]/30 rounded-[2rem] p-6 bg-[#F5F1E8] flex flex-col md:flex-row md:items-center md:justify-between gap-6 shadow-[0_10px_40px_rgba(201,184,160,0.1)]" id="calendar-oversight-panel">
           <div className="flex items-center gap-4">
             <img 
               src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80" 
               alt="Elena Rostova Dedicated Estate Manager Avatar" 
-              className="w-14 h-14 rounded-full object-cover border border-neutral-300"
+              className="w-14 h-14 rounded-full object-cover border border-[#C9B8A0]/50"
               referrerPolicy="no-referrer"
               id="concierge-avatar"
             />
             <div>
-              <span className="text-[9px] tracking-[0.25em] text-neutral-400 font-medium block uppercase">OVERSIGHT</span>
-              <h4 className="font-serif text-[15px] font-semibold text-neutral-900 mt-0.5" id="concierge-name">
-                ELENA ROSTOVA
+              <span className="text-[9px] tracking-[0.25em] text-[#1C1917]/50 font-medium block uppercase">OVERSIGHT</span>
+              <h4 className="font-serif italic text-xl text-[#1C1917] mt-0.5" id="concierge-name">
+                Elena Rostova
               </h4>
-              <p className="text-xs text-neutral-500 font-light" id="concierge-role">Dedicated Estate Manager</p>
+              <p className="text-xs text-[#1C1917]/60 font-light" id="concierge-role">Dedicated Estate Manager</p>
             </div>
           </div>
 
@@ -128,26 +128,26 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
                 alert('Contacting Elena Rostova... Secure link established.');
               }
             }}
-            className="border border-stone-300 hover:border-black hover:bg-neutral-900 hover:text-white text-neutral-800 text-xs tracking-[0.2em] uppercase px-5 py-3 transition-all duration-300 cursor-pointer text-center"
+            className="border border-[#1C1917] hover:bg-[#1C1917] hover:text-[#F5F1E8] text-[#1C1917] text-xs tracking-[0.2em] uppercase px-6 py-3 transition-all duration-300 cursor-pointer text-center rounded-[2rem] magnetic-btn bg-transparent"
           >
             CONTACT CONCIERGE
           </button>
         </div>
 
         {/* Calendar Nav Slider Row */}
-        <div className="flex justify-between items-center bg-stone-100/60 p-4 border border-stone-200/50" id="calendar-month-slider">
+        <div className="flex justify-between items-center bg-[#C9B8A0]/10 p-4 border border-[#C9B8A0]/30 rounded-full" id="calendar-month-slider">
           <button 
             id="prev-month-btn"
             onClick={() => {
               setCurrentMonth('SEPTEMBER 2024');
               setActiveDateNote("Displaying historical September records.");
             }}
-            className="p-1 text-neutral-600 hover:text-black transition cursor-pointer"
+            className="p-1 text-[#1C1917]/60 hover:text-[#1C1917] transition cursor-pointer"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
 
-          <span className="text-sm font-medium tracking-[0.25em] text-neutral-800 uppercase" id="current-month-display">
+          <span className="text-sm font-mono tracking-[0.25em] text-[#1C1917] uppercase" id="current-month-display">
             {currentMonth}
           </span>
 
@@ -164,7 +164,7 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
         </div>
 
         {/* Days of the Week Headers */}
-        <div className="grid grid-cols-7 gap-1 text-center font-mono text-[10px] text-neutral-400 font-semibold uppercase tracking-wider" id="calendar-days-headers-row">
+        <div className="grid grid-cols-7 gap-1 text-center font-mono text-[10px] text-[#1C1917]/50 font-semibold uppercase tracking-wider" id="calendar-days-headers-row">
           <span>S</span>
           <span>M</span>
           <span>T</span>
@@ -175,19 +175,19 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
         </div>
 
         {/* Calendar Grid Numbers */}
-        <div className="grid grid-cols-7 gap-1" id="calendar-numbers-grid">
+        <div className="grid grid-cols-7 gap-2" id="calendar-numbers-grid">
           {days.map((dayObj, idx) => {
-            let cellStyle = "bg-white text-neutral-900 border-neutral-100";
+            let cellStyle = "bg-[#F5F1E8] text-[#1C1917] border-[#C9B8A0]/30";
             let dotIndicator = null;
 
             if (!dayObj.current) {
-              cellStyle = "bg-stone-50 text-neutral-300 border-neutral-100/30";
+              cellStyle = "bg-transparent text-[#1C1917]/30 border-transparent";
             } else if (dayObj.status === 'owner') {
-              cellStyle = "bg-amber-100/80 text-amber-900 border-amber-300/40 font-semibold";
-              dotIndicator = <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-amber-600" />;
+              cellStyle = "bg-[#A0522D]/10 text-[#A0522D] border-[#A0522D]/30 font-semibold";
+              dotIndicator = <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#A0522D]" />;
             } else if (dayObj.status === 'guest') {
-              cellStyle = "bg-stone-200/80 text-stone-900 border-stone-300/40";
-              dotIndicator = <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-stone-700" />;
+              cellStyle = "bg-[#C9B8A0]/20 text-[#1C1917] border-[#C9B8A0]/40";
+              dotIndicator = <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#1C1917]/40" />;
             }
 
             return (
@@ -195,7 +195,7 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
                 key={idx}
                 type="button"
                 onClick={() => handleDayClick(dayObj)}
-                className={`relative aspect-square border p-1 md:p-3 text-left text-[11px] font-medium transition-all group hover:border-black cursor-pointer ${cellStyle}`}
+                className={`relative aspect-square border p-1 md:p-3 text-left text-[11px] font-mono transition-all group hover:border-[#A0522D] cursor-pointer rounded-2xl ${cellStyle}`}
                 id={`calendar-day-cell-${idx}`}
               >
                 <span>{dayObj.day}</span>
@@ -207,23 +207,23 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
 
         {/* Interactive Reservation details */}
         {activeDateNote && (
-          <div className="bg-stone-900/95 text-stone-100 p-6" id="calendar-interactive-notes-box">
-            <span className="text-[8px] tracking-[0.25em] text-neutral-400 font-semibold uppercase block mb-1">
+          <div className="bg-[#1C1917] text-[#F5F1E8] p-8 rounded-[2rem] shadow-xl" id="calendar-interactive-notes-box">
+            <span className="text-[8px] tracking-[0.25em] text-[#F5F1E8]/50 font-semibold uppercase block mb-2">
               RESERVATION HIGHLIGHTS
             </span>
-            <p className="text-xs leading-relaxed font-light text-neutral-200">{activeDateNote}</p>
+            <p className="text-sm md:text-base font-serif italic leading-relaxed text-[#F5F1E8]/90">{activeDateNote}</p>
           </div>
         )}
 
         {/* Grid Legends */}
-        <div className="flex justify-start gap-8 pt-4 text-[10px] tracking-widest text-neutral-500 uppercase font-mono" id="calendar-legends">
+        <div className="flex justify-start gap-8 pt-4 text-[10px] tracking-widest text-[#1C1917]/50 uppercase font-mono" id="calendar-legends">
           <div className="flex items-center gap-2" id="legend-owner-occupancy">
-            <span className="w-3.5 h-3.5 border border-amber-300 bg-amber-100 inline-block" />
+            <span className="w-3.5 h-3.5 rounded-full bg-[#A0522D] inline-block" />
             <span>OWNER OCCUPANCY</span>
           </div>
 
           <div className="flex items-center gap-2" id="legend-guest-booked">
-            <span className="w-3.5 h-3.5 border border-stone-300 bg-stone-200 inline-block" />
+            <span className="w-3.5 h-3.5 rounded-full bg-[#C9B8A0]/40 border border-[#C9B8A0]/60 inline-block" />
             <span>GUEST BOOKED</span>
           </div>
         </div>
@@ -231,15 +231,15 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
       </main>
 
       {/* Primary Footer */}
-      <footer className="bg-neutral-900 text-stone-400 py-12 px-6 border-t border-white/5 mt-16 text-center" id="calendar-footer">
-        <h4 className="text-xl font-serif text-white tracking-[0.2em] mb-4">VALLARTA</h4>
-        <div className="flex justify-center gap-6 text-[9px] uppercase tracking-[0.2em] mb-6 text-stone-400">
-          <button onClick={() => onNotify ? onNotify('Privacy directives active.') : alert('Privacy directives active.')} className="hover:text-white cursor-pointer transition-colors">PRIVACY</button>
-          <button onClick={() => onNotify ? onNotify('Directives terms active.') : alert('Directives terms active.')} className="hover:text-white cursor-pointer transition-colors">TERMS</button>
-          <button onClick={() => onNotify ? onNotify('Media packages.') : alert('Media packages.')} className="hover:text-white cursor-pointer transition-colors">PRESS</button>
-          <button onClick={() => onNotify ? onNotify('Interactive call active.') : alert('Interactive call active.')} className="hover:text-white cursor-pointer transition-colors">CONTACT</button>
+      <footer className="bg-[#1C1917] text-[#F5F1E8] py-12 px-6 border-none rounded-t-[4rem] mt-16 text-center shadow-[0_-10px_40px_rgba(28,25,23,0.1)] relative z-20" id="calendar-footer">
+        <h4 className="text-2xl font-serif italic text-[#F5F1E8] tracking-[0.1em] mb-6">Vallarta Estates</h4>
+        <div className="flex justify-center gap-6 text-[9px] uppercase tracking-[0.2em] mb-6 text-[#F5F1E8]/50">
+          <button onClick={() => onNotify ? onNotify('Privacy directives active.') : alert('Privacy directives active.')} className="hover:text-[#C9B8A0] cursor-pointer transition-colors magnetic-btn">PRIVACY</button>
+          <button onClick={() => onNotify ? onNotify('Directives terms active.') : alert('Directives terms active.')} className="hover:text-[#C9B8A0] cursor-pointer transition-colors magnetic-btn">TERMS</button>
+          <button onClick={() => onNotify ? onNotify('Media packages.') : alert('Media packages.')} className="hover:text-[#C9B8A0] cursor-pointer transition-colors magnetic-btn">PRESS</button>
+          <button onClick={() => onNotify ? onNotify('Interactive call active.') : alert('Interactive call active.')} className="hover:text-[#C9B8A0] cursor-pointer transition-colors magnetic-btn">CONTACT</button>
         </div>
-        <p className="text-[10px] text-stone-500 tracking-[0.15em] max-w-sm mx-auto leading-relaxed uppercase">
+        <p className="text-[10px] text-[#F5F1E8]/30 tracking-[0.15em] max-w-sm mx-auto leading-relaxed uppercase">
           © 2024 VALLARTA PROPERTY MANAGEMENT. ARCHITECTURAL PRECISION IN HOSPITALITY.
         </p>
       </footer>

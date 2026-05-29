@@ -32,18 +32,18 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
 
   return (
     <div 
-      className="relative min-h-screen flex flex-col justify-between text-white bg-cover bg-center font-sans overflow-hidden" 
+      className="relative min-h-screen flex flex-col justify-between text-[#F5F1E8] bg-cover bg-center font-sans overflow-hidden" 
       style={{ 
-        backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1200&q=80')` 
+        backgroundImage: `linear-gradient(rgba(28,25,23,0.4), rgba(28,25,23,0.7)), url('https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1200&q=80')` 
       }}
       id="login-view-container"
     >
       {/* Top Header Bar */}
-      <header className="w-full flex justify-between items-center px-8 py-6 border-b border-white/10" id="login-header">
+      <header className="w-full flex justify-between items-center px-8 py-6 border-b border-[#F5F1E8]/10" id="login-header">
         <button 
           id="login-menu-toggle"
           aria-label="Menu"
-          className="p-2 text-white/80 hover:text-white transition duration-200 cursor-pointer"
+          className="p-2 text-[#F5F1E8]/80 hover:text-[#F5F1E8] transition duration-200 cursor-pointer"
           onClick={() => triggerToast('Please authenticate to unlock system dashboard.')}
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -51,8 +51,8 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
           </svg>
         </button>
         
-        <h1 className="text-2xl md:text-3xl font-serif tracking-[0.2em] uppercase text-white font-light" id="login-brand-logo">
-          VALLARTA
+        <h1 className="text-3xl md:text-4xl font-serif italic tracking-[0.1em] text-[#F5F1E8]" id="login-brand-logo">
+          Vallarta Estates
         </h1>
         
         <button 
@@ -70,47 +70,47 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="w-full max-w-md glass p-10 md:p-12 rounded-none border border-white/20 shadow-2xl relative"
+          className="w-full max-w-md glass p-10 md:p-12 rounded-[3rem] border border-[#F5F1E8]/20 shadow-2xl relative"
           id="login-card"
         >
-          <h2 className="text-center text-sm uppercase tracking-[0.3em] font-medium text-amber-200/90 mb-10" id="login-form-title">
+          <h2 className="text-center text-sm uppercase tracking-[0.3em] font-medium text-[#C9B8A0]/90 mb-10" id="login-form-title">
             ESTATE ACCESS
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-8" id="login-form">
             {/* Email Input */}
-            <div className="relative border-b border-white/20 pb-2 group" id="login-email-group">
-              <label className="block text-[10px] uppercase tracking-[0.2em] text-white/50 mb-1" htmlFor="email-input">
+            <div className="relative border-b border-[#F5F1E8]/20 pb-2 group" id="login-email-group">
+              <label className="block text-[10px] uppercase tracking-[0.2em] text-[#F5F1E8]/50 mb-1" htmlFor="email-input">
                 EMAIL ADDRESS
               </label>
               <div className="flex items-center">
                 <input 
                   type="email"
                   id="email-input"
-                  className="bg-transparent w-full focus:outline-none text-white font-light text-sm tracking-wider"
+                  className="bg-transparent w-full focus:outline-none text-[#F5F1E8] font-mono font-light text-sm tracking-wider"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="owner@vallarta.com"
                 />
-                <Mail className="w-4 h-4 text-white/40 group-focus-within:text-white transition-colors" />
+                <Mail className="w-4 h-4 text-[#F5F1E8]/40 group-focus-within:text-[#C9B8A0] transition-colors" />
               </div>
             </div>
 
             {/* Password Input */}
-            <div className="relative border-b border-white/20 pb-2 group" id="login-password-group">
-              <label className="block text-[10px] uppercase tracking-[0.2em] text-white/50 mb-1" htmlFor="password-input">
+            <div className="relative border-b border-[#F5F1E8]/20 pb-2 group" id="login-password-group">
+              <label className="block text-[10px] uppercase tracking-[0.2em] text-[#F5F1E8]/50 mb-1" htmlFor="password-input">
                 SECURE PASSWORD
               </label>
               <div className="flex items-center">
                 <input 
                   type="password"
                   id="password-input"
-                  className="bg-transparent w-full focus:outline-none text-white font-light text-sm tracking-widest"
+                  className="bg-transparent w-full focus:outline-none text-[#F5F1E8] font-mono font-light text-sm tracking-widest"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                 />
-                <Lock className="w-4 h-4 text-white/40 group-focus-within:text-white transition-colors" />
+                <Lock className="w-4 h-4 text-[#F5F1E8]/40 group-focus-within:text-[#C9B8A0] transition-colors" />
               </div>
             </div>
 
@@ -119,11 +119,11 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
               <motion.div 
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-xs text-amber-300 bg-amber-950/40 p-3 border border-amber-500/30 font-light flex items-center gap-2"
+                className="text-xs text-[#C9B8A0] bg-[#1C1917]/80 p-3 border border-[#C9B8A0]/30 font-light flex items-center gap-2 rounded-[1rem]"
                 id="login-alert-box"
               >
                 <Sparkles className="w-4 h-4 shrink-0" />
-                <span>{toastMessage}</span>
+                <span className="font-mono">{toastMessage}</span>
               </motion.div>
             )}
 
@@ -131,9 +131,10 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
             <button
               type="submit"
               id="login-sign-in-btn"
-              className="w-full bg-neutral-950 text-white hover:bg-neutral-900 transition-colors duration-300 py-4 text-xs font-medium tracking-[0.3em] uppercase border border-white/10 cursor-pointer shadow-lg active:scale-[0.98]"
+              className="w-full bg-[#1C1917] text-[#F5F1E8] hover:bg-[#A0522D] magnetic-btn py-4 text-xs font-medium tracking-[0.3em] uppercase border border-[#F5F1E8]/10 cursor-pointer shadow-lg active:scale-[0.98] rounded-[2rem] overflow-hidden relative group"
             >
-              SIGN IN
+              <span className="relative z-10">SIGN IN</span>
+              <div className="absolute inset-0 bg-[#A0522D] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left ease-[cubic-bezier(0.25,0.46,0.45,0.94)] z-0"></div>
             </button>
           </form>
 
