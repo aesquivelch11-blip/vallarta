@@ -448,10 +448,10 @@ body {
 }
 
 .metrics-rail__label {
-  font-family: var(--font-mono);
-  font-size: 9px;
+  font-family: var(--font-ui);
+  font-size: 10px;
   font-weight: 400;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--color-ink-muted);
   margin-bottom: 10px;
@@ -472,9 +472,9 @@ body {
 }
 
 .metrics-rail__delta {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.12em;
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   margin-top: 8px;
 }
@@ -548,18 +548,18 @@ body {
 }
 
 .arrival-row__meta {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.14em;
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--color-ink-muted);
   margin-top: 5px;
 }
 
 .arrival-row__type {
-  font-family: var(--font-mono);
-  font-size: 8px;
-  letter-spacing: 0.18em;
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--color-ink-muted);
   align-self: center;
@@ -595,10 +595,10 @@ body {
 }
 
 .camera-feed__label {
-  font-family: var(--font-mono);
+  font-family: var(--font-ui);
   font-size: 11px;
   color: rgba(255,255,255,0.85);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
 }
 
