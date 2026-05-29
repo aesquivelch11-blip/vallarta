@@ -39,6 +39,11 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
       return;
     }
 
+    if (email !== 'owner@vallartagroup.com' || password !== 'vallarta2024') {
+      setError('Invalid email or password.');
+      return;
+    }
+
     setIsLoading(true);
 
     setTimeout(() => {
@@ -66,7 +71,7 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col justify-between overflow-hidden"
+    <div className="relative min-h-screen flex flex-col justify-between overflow-hidden font-sans"
       style={{ backgroundColor: 'var(--login-canvas)' }}
       id="login-view-container"
     >
@@ -96,10 +101,9 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
         </button>
 
         <h1
-          className="text-3xl md:text-4xl italic tracking-wide"
+          className="text-3xl md:text-4xl font-serif italic tracking-wide"
           id="login-brand-logo"
           style={{
-            fontFamily: 'var(--font-display)',
             color: 'var(--login-ink)'
           }}
         >
@@ -132,7 +136,6 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
             className="text-center text-xs uppercase font-medium tracking-[0.2em] mb-10"
             id="login-form-title"
             style={{
-              fontFamily: 'var(--font-ui)',
               color: 'var(--login-ink-secondary)'
             }}
           >
@@ -183,7 +186,6 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
                 className="block text-[10px] uppercase tracking-[0.15em] mb-2"
                 htmlFor="email-input"
                 style={{
-                  fontFamily: 'var(--font-ui)',
                   color: 'var(--login-ink-muted)'
                 }}
               >
@@ -223,7 +225,6 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
                 className="block text-[10px] uppercase tracking-[0.15em] mb-2"
                 htmlFor="password-input"
                 style={{
-                  fontFamily: 'var(--font-ui)',
                   color: 'var(--login-ink-muted)'
                 }}
               >
@@ -263,7 +264,6 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
                 backgroundColor: 'var(--login-accent)',
                 color: 'var(--login-ink)',
                 borderRadius: 'var(--radius-pill)',
-                fontFamily: 'var(--font-ui)',
                 transition: 'background-color 0.2s var(--ease-out-expo), opacity 0.2s var(--ease-out-expo)'
               }}
               onMouseEnter={(e) => {
@@ -323,7 +323,6 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
           className="text-[10px] uppercase tracking-[0.15em] mb-4"
           id="login-copyright"
           style={{
-            fontFamily: 'var(--font-ui)',
             color: 'var(--login-ink-muted)'
           }}
         >
