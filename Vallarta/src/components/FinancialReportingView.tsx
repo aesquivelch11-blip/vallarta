@@ -493,8 +493,22 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
               Press
             </button>
           </div>
-          <button onClick={() => onNotify?.('Call primary concierge at +52 (322) 849-0122.')}>
-            Contact Concierge
+          <button
+            onClick={() => onNotify?.('Call primary concierge at +52 (322) 849-0122.')}
+            style={{
+              fontFamily: 'var(--font-ui)',
+              fontSize: '0.5625rem',
+              letterSpacing: '0.20em',
+              textTransform: 'uppercase' as const,
+              color: 'var(--color-dark-ink-muted)',
+              background: 'none',
+              border: 'none',
+              padding: 0,
+              cursor: 'pointer',
+              transition: 'color 0.35s ease',
+            }}
+          >
+            Concierge →
           </button>
         </div>
       </footer>
