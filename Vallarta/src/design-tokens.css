@@ -453,7 +453,7 @@ body {
   font-weight: 500;
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.38);
+  color: rgba(255, 255, 255, 0.55);
   line-height: 1;
 }
 
@@ -473,7 +473,7 @@ body {
   font-size: 0.5625rem;
   letter-spacing: 0.10em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.30);
+  color: rgba(255, 255, 255, 0.48);
   line-height: 1;
 }
 
@@ -550,7 +550,7 @@ body {
 
 .performance-section__label-text {
   font-family: var(--font-ui);
-  font-size: 0.5625rem;
+  font-size: 0.625rem;
   font-weight: 500;
   letter-spacing: 0.35em;
   text-transform: uppercase;
@@ -707,7 +707,7 @@ body {
 
 .chronicle-section__label {
   font-family: var(--font-ui);
-  font-size: 0.5625rem;
+  font-size: 0.625rem;
   font-weight: 500;
   letter-spacing: 0.35em;
   text-transform: uppercase;
@@ -730,7 +730,7 @@ body {
 
 .chronicle-legend__item {
   font-family: var(--font-mono);
-  font-size: 0.5625rem;
+  font-size: 0.625rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-dark-ink-muted);
@@ -852,7 +852,7 @@ body {
 
 .financial-brief__label {
   font-family: var(--font-ui);
-  font-size: 0.5625rem;
+  font-size: 0.625rem;
   font-weight: 500;
   letter-spacing: 0.35em;
   text-transform: uppercase;
@@ -924,16 +924,6 @@ body {
   }
 }
 
-/* Dashboard Body — retired, replaced by individual editorial sections */
-.dashboard__body {
-  display: none;
-}
-
-.chart-panel {
-  background: transparent;
-  padding: 0;
-}
-
 /* ── Property Vitals Operations ── */
 .vitals-ops {
   background: var(--color-dark-canvas);
@@ -963,7 +953,7 @@ body {
 
 .vitals-ops__status-label {
   font-family: var(--font-ui);
-  font-size: 0.5625rem;
+  font-size: 0.625rem;
   font-weight: 500;
   letter-spacing: 0.35em;
   text-transform: uppercase;
@@ -1128,10 +1118,6 @@ body::before {
 
 
 /* Responsive */
-@media (max-width: 1024px) {
-  /* Dashboard body retired */
-}
-
 @media (max-width: 768px) {
   .hero {
     height: 70vh;

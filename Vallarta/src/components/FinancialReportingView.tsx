@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Menu, ArrowRight } from 'lucide-react';
 import { ScreenType } from '../types';
@@ -104,10 +104,6 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
     }, 6000);
     return () => clearInterval(timer);
   }, []);
-
-  const goToSlide = (index: number) => {
-    setCurrentSlide(index);
-  };
 
   return (
     <div className="min-h-screen" id="reporting-view-wrapper">
