@@ -72,14 +72,51 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
               src={HERO_SLIDES[currentSlide].src}
               alt={HERO_SLIDES[currentSlide].alt}
-              className="hero__slide-img"
+              className="hero__slide-img cinematic-grade"
               referrerPolicy="no-referrer"
             />
           </AnimatePresence>
           <div className="hero__gradient" />
+
+          {/* Property Identity */}
+          <div className="hero__identity">
+            <motion.span
+              className="hero__property-name"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.0, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            >
+              Casa Obsidiana
+            </motion.span>
+            <motion.span
+              className="hero__property-location"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            >
+              Puerto Vallarta · October 2026
+            </motion.span>
+          </div>
+
+          {/* Slide counter */}
+          <div
+            className="hero__counter"
+            aria-live="polite"
+            aria-label={`Slide ${currentSlide + 1} of ${HERO_SLIDES.length}`}
+          >
+            <span className="hero__counter-current">
+              {String(currentSlide + 1).padStart(2, '0')}
+            </span>
+            <span className="hero__counter-sep">/</span>
+            <span className="hero__counter-total">
+              {String(HERO_SLIDES.length).padStart(2, '0')}
+            </span>
+          </div>
+
+          {/* Navigation arrows */}
           <button
             onClick={() => setCurrentSlide((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length)}
             className="hero__arrow hero__arrow--prev"
@@ -100,78 +137,6 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
               <polyline points="13,1 19,6 13,11" fill="none" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" strokeLinecap="round"/>
             </svg>
           </button>
-          <div
-            className="hero__counter"
-            aria-live="polite"
-            aria-label={`Slide ${currentSlide + 1} of ${HERO_SLIDES.length}`}
-          >
-            <span className="hero__counter-current">
-              {String(currentSlide + 1).padStart(2, '0')}
-            </span>
-            <span className="hero__counter-sep">/</span>
-            <span className="hero__counter-total">
-              {String(HERO_SLIDES.length).padStart(2, '0')}
-            </span>
-          </div>
-        </div>
-
-        <div className="hero__stats">
-          {/* Property identity */}
-          <div className="hero-stat__property-id">
-            <span className="hero-stat__property-serif">Casa</span>
-            <span className="hero-stat__property-sans">Obsidiana</span>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="hero-stat"
-          >
-            <span className="hero-stat__label">Revenue</span>
-            <span className="hero-stat__value">$124,500</span>
-            <span className="hero-stat__delta hero-stat__delta--positive">+14% · vs Sep</span>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="hero-stat"
-            onClick={() => onNavigate('deep_dive', 'push')}
-            role="button"
-            tabIndex={0}
-            aria-label="View yield deep dive"
-            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onNavigate('deep_dive', 'push')}
-          >
-            <span className="hero-stat__label">Avg. Nightly Rate</span>
-            <span className="hero-stat__value">$1,450</span>
-            <span className="hero-stat__delta hero-stat__delta--neutral">Stable · Q4</span>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="hero-stat"
-            onClick={() => onNavigate('calendar', 'push')}
-            role="button"
-            tabIndex={0}
-            aria-label="View occupancy calendar"
-            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onNavigate('calendar', 'push')}
-          >
-            <span className="hero-stat__label">Occupancy</span>
-            <span className="hero-stat__value">88%</span>
-            <span className="hero-stat__delta hero-stat__delta--positive">+3% · vs Sep</span>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="hero-stat"
-          >
-            <span className="hero-stat__label">Sentiment</span>
-            <span className="hero-stat__value">4.9</span>
-            <span className="hero-stat__delta hero-stat__delta--positive">Top 5% · 47 reviews</span>
-          </motion.div>
         </div>
       </section>
 
