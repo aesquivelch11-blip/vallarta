@@ -4,20 +4,20 @@
   --font-ui: 'Josefin Sans', -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* --- Color: Geological Warmth --- */
-  --color-canvas: #F7F5F2;
-  --color-surface: rgba(255, 255, 255, 0.72);
-  --color-surface-solid: #FDFCFB;
-  --color-ink: #1C1917;
-  --color-ink-secondary: #78716C;
-  --color-ink-muted: #A8A29E;
-  --color-border-subtle: rgba(28, 25, 23, 0.06);
-  --color-border-medium: rgba(28, 25, 23, 0.10);
+  /* --- Color: Geological Warmth (OKLCH) --- */
+  --color-canvas: oklch(97.2% 0.006 68);
+  --color-surface: oklch(100% 0 0 / 0.72);
+  --color-surface-solid: oklch(99.0% 0.004 68);
+  --color-ink: oklch(13.5% 0.008 50);
+  --color-ink-secondary: oklch(49.5% 0.012 52);
+  --color-ink-muted: oklch(67.5% 0.010 52);
+  --color-border-subtle: oklch(13.5% 0.008 50 / 0.06);
+  --color-border-medium: oklch(13.5% 0.008 50 / 0.10);
 
   /* --- Accents --- */
   --color-accent-positive: oklch(0.50 0.07 148);
   --color-accent-positive-bg: oklch(0.50 0.07 148 / 0.07);
-  --color-accent-negative: #DC2626;
+  --color-accent-negative: oklch(53% 0.20 25);
   --color-accent-warning: #B45309;
   --color-accent-warning-bg: rgba(180, 83, 9, 0.08);
   --color-accent-live: #9F1239;
