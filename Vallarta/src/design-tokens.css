@@ -341,7 +341,7 @@ body {
   flex-direction: column;
   justify-content: center;
   max-width: 300px;
-  gap: 40px;
+  gap: 0;
   padding: 32px 24px 32px 32px;
 }
 
@@ -355,6 +355,48 @@ body {
 .hero-stat:last-child {
   border-bottom: none;
   padding-bottom: 0;
+}
+
+/* Revenue — primary stat, Cormorant display treatment */
+.hero-stat:first-child {
+  padding-bottom: 28px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.hero-stat:first-child .hero-stat__value {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(2.25rem, 3.2vw, 3.25rem);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* Supporting stats — secondary, tighter */
+.hero-stat:not(:first-child) {
+  padding-bottom: 16px;
+}
+
+.hero-stat:not(:first-child):last-child {
+  padding-bottom: 0;
+}
+
+.hero-stat:not(:first-child) + .hero-stat:not(:first-child) {
+  margin-top: 12px;
+}
+
+.hero-stat:not(:first-child) .hero-stat__value {
+  font-size: clamp(1.25rem, 1.75vw, 1.625rem);
+  font-weight: 400;
+}
+
+.hero-stat:not(:first-child) .hero-stat__label {
+  font-size: 0.5625rem;
+  letter-spacing: 0.18em;
+}
+
+.hero-stat:not(:first-child) .hero-stat__delta {
+  font-size: 0.5625rem;
 }
 
 .hero-stat[role="button"] {
@@ -754,7 +796,7 @@ body::before {
   }
   .hero__stats {
     padding: 24px var(--grid-gutter);
-    gap: 24px;
+    gap: 0;
   }
   .hero-stat {
     padding-bottom: 20px;
