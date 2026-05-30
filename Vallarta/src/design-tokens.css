@@ -442,6 +442,11 @@ body {
   background: rgba(255, 255, 255, 0.04);
 }
 
+.hero__metric--interactive:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.5);
+  outline-offset: 4px;
+}
+
 .hero__metric-label {
   font-family: var(--font-ui);
   font-size: 0.5625rem;

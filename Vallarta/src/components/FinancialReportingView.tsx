@@ -216,7 +216,12 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
             tabIndex={0}
             aria-label="View yield analysis"
             onClick={() => onNavigate('deep_dive', 'push')}
-            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onNavigate('deep_dive', 'push')}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onNavigate('deep_dive', 'push');
+              }
+            }}
           >
             <span className="hero__metric-label">Avg. Nightly Rate</span>
             <span className="hero__metric-value">$1,450</span>
@@ -229,7 +234,12 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
             tabIndex={0}
             aria-label="View occupancy calendar"
             onClick={() => onNavigate('calendar', 'push')}
-            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onNavigate('calendar', 'push')}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onNavigate('calendar', 'push');
+              }
+            }}
           >
             <span className="hero__metric-label">Occupancy</span>
             <span className="hero__metric-value">88%</span>
@@ -265,7 +275,12 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
           tabIndex={0}
           aria-label="View yield analysis"
           onClick={() => onNavigate('deep_dive', 'push')}
-          onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onNavigate('deep_dive', 'push')}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onNavigate('deep_dive', 'push');
+            }
+          }}
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -282,7 +297,12 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
           tabIndex={0}
           aria-label="View occupancy calendar"
           onClick={() => onNavigate('calendar', 'push')}
-          onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onNavigate('calendar', 'push')}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onNavigate('calendar', 'push');
+            }
+          }}
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
