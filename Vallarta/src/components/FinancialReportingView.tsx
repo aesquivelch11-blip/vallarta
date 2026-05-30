@@ -115,7 +115,7 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
           >
             <span className="hero-stat__label">Revenue</span>
             <span className="hero-stat__value">$124,500</span>
-            <span className="hero-stat__delta hero-stat__delta--positive">+14% vs last period</span>
+            <span className="hero-stat__delta hero-stat__delta--positive">+14% · vs Sep</span>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -128,9 +128,9 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
             aria-label="View yield deep dive"
             onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onNavigate('deep_dive', 'push')}
           >
-            <span className="hero-stat__label">Yield</span>
+            <span className="hero-stat__label">Avg. Nightly Rate</span>
             <span className="hero-stat__value">$1,450</span>
-            <span className="hero-stat__delta hero-stat__delta--neutral">Stable</span>
+            <span className="hero-stat__delta hero-stat__delta--neutral">Stable · Q4</span>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -145,7 +145,7 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
           >
             <span className="hero-stat__label">Occupancy</span>
             <span className="hero-stat__value">88%</span>
-            <span className="hero-stat__delta hero-stat__delta--positive">+3% vs last period</span>
+            <span className="hero-stat__delta hero-stat__delta--positive">+3% · vs Sep</span>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -155,7 +155,7 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
           >
             <span className="hero-stat__label">Sentiment</span>
             <span className="hero-stat__value">4.9</span>
-            <span className="hero-stat__delta hero-stat__delta--positive">Top 5%</span>
+            <span className="hero-stat__delta hero-stat__delta--positive">Top 5% · 47 reviews</span>
           </motion.div>
         </div>
       </section>
