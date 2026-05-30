@@ -85,24 +85,33 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
             className="hero__arrow hero__arrow--prev"
             aria-label="Previous slide"
           >
-            &#8249;
+            <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <line x1="20" y1="6" x2="1" y2="6" stroke="currentColor" strokeWidth="1"/>
+              <polyline points="7,1 1,6 7,11" fill="none" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" strokeLinecap="round"/>
+            </svg>
           </button>
           <button
             onClick={() => setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length)}
             className="hero__arrow hero__arrow--next"
             aria-label="Next slide"
           >
-            &#8250;
+            <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <line x1="0" y1="6" x2="19" y2="6" stroke="currentColor" strokeWidth="1"/>
+              <polyline points="13,1 19,6 13,11" fill="none" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" strokeLinecap="round"/>
+            </svg>
           </button>
-          <div className="hero__dots">
-            {HERO_SLIDES.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => goToSlide(i)}
-                className={`hero__dot ${i === currentSlide ? 'hero__dot--active' : ''}`}
-                aria-label={`View slide ${i + 1}`}
-              />
-            ))}
+          <div
+            className="hero__counter"
+            aria-live="polite"
+            aria-label={`Slide ${currentSlide + 1} of ${HERO_SLIDES.length}`}
+          >
+            <span className="hero__counter-current">
+              {String(currentSlide + 1).padStart(2, '0')}
+            </span>
+            <span className="hero__counter-sep">/</span>
+            <span className="hero__counter-total">
+              {String(HERO_SLIDES.length).padStart(2, '0')}
+            </span>
           </div>
         </div>
 
