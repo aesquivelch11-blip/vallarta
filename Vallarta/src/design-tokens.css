@@ -41,7 +41,7 @@
   /* --- Layout --- */
   --grid-max-width: 1400px;
   --grid-gutter: 24px;
-  --space-section: 96px;
+  --space-section: 120px;
   --space-element: 32px;
   --radius-panel: 20px;
   --radius-card: 16px;
@@ -78,6 +78,15 @@
   --cal-pill-bg: rgba(255,255,255,0.07);
   --cal-avatar-bg: rgba(255,255,255,0.10);
   --cal-booking-border: rgba(255,255,255,0.09);
+
+  /* --- Dark Surface (Guest Chronicle + Operations + Footer) --- */
+  --color-dark-canvas: oklch(12% 0.010 55);
+  --color-dark-surface: oklch(16% 0.012 55);
+  --color-dark-ink: oklch(92% 0.008 70);
+  --color-dark-ink-secondary: oklch(72% 0.008 70);
+  --color-dark-ink-muted: oklch(52% 0.008 70);
+  --color-dark-border: oklch(28% 0.010 55);
+  --color-dark-accent: oklch(65% 0.050 55);
 }
 
 /* Typography System */
@@ -286,8 +295,8 @@ body {
 }
 
 .status-dot--active {
-  background: var(--color-accent-positive);
-  box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.08);
+  background: var(--color-dark-accent);
+  box-shadow: none;
 }
 
 /* Hero — Editorial Split Layout */
@@ -545,12 +554,8 @@ body {
 }
 
 .chart-panel {
-  background: var(--color-surface);
-  backdrop-filter: blur(24px);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-panel);
-  padding: 40px;
-  box-shadow: var(--shadow-contact), var(--shadow-ambient);
+  background: transparent;
+  padding: 0;
 }
 
 /* Sidebar */
@@ -561,13 +566,8 @@ body {
 }
 
 .sidebar__section {
-  background: var(--color-surface);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-panel);
-  padding: 28px;
-  box-shadow: var(--shadow-contact), var(--shadow-ambient);
+  background: transparent;
+  padding: 0;
 }
 
 /* ── Arrival Row ── */
