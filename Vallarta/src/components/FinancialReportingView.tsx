@@ -140,6 +140,67 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
         </div>
       </section>
 
+      {/* ── Estate Vitals Band ── */}
+      <section className="vitals-band" id="estate-vitals-band">
+        <motion.div
+          className="vitals-band__cell"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.0, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <span className="vitals-band__label">Revenue</span>
+          <span className="vitals-band__value">$124,500</span>
+          <span className="vitals-band__delta">+14% · Oct vs Sep</span>
+        </motion.div>
+
+        <motion.div
+          className="vitals-band__cell"
+          role="button"
+          tabIndex={0}
+          aria-label="View yield analysis"
+          onClick={() => onNavigate('deep_dive', 'push')}
+          onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onNavigate('deep_dive', 'push')}
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <span className="vitals-band__label">Avg. Nightly Rate</span>
+          <span className="vitals-band__value">$1,450</span>
+          <span className="vitals-band__delta">Stable · Q4</span>
+        </motion.div>
+
+        <motion.div
+          className="vitals-band__cell"
+          role="button"
+          tabIndex={0}
+          aria-label="View occupancy calendar"
+          onClick={() => onNavigate('calendar', 'push')}
+          onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onNavigate('calendar', 'push')}
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <span className="vitals-band__label">Occupancy</span>
+          <span className="vitals-band__value">88%</span>
+          <span className="vitals-band__delta">+3% · vs Sep</span>
+        </motion.div>
+
+        <motion.div
+          className="vitals-band__cell"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.24, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <span className="vitals-band__label">Sentiment</span>
+          <span className="vitals-band__value">4.9</span>
+          <span className="vitals-band__delta">Top 5% · 47 reviews</span>
+        </motion.div>
+      </section>
+
       {/* ── Dashboard Body ── */}
       <div className="dashboard__body">
 
