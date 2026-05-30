@@ -1199,12 +1199,7 @@ body::before {
 
 /* Responsive */
 @media (max-width: 1024px) {
-  .dashboard__body {
-    grid-template-columns: 1fr;
-  }
-  .sidebar {
-    max-width: 100%;
-  }
+  /* Dashboard body retired */
 }
 
 @media (max-width: 768px) {
@@ -1217,55 +1212,6 @@ body::before {
   }
   .hero__identity {
     bottom: 12vh;
-  }
-  .hero__media {
-    border-radius: 0 0 var(--radius-panel) var(--radius-panel);
-    height: 50vh;
-    min-height: 300px;
-  }
-.hero__identity {
-  position: absolute;
-  bottom: 15vh;
-  left: clamp(24px, 6vw, 80px);
-  z-index: 2;
-  pointer-events: none;
-}
-
-.hero__property-name {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 300;
-  font-size: clamp(3.5rem, 8vw, 6rem);
-  letter-spacing: 0.06em;
-  line-height: 1.0;
-  color: rgba(255, 255, 255, 0.95);
-  display: block;
-}
-
-.hero__property-location {
-  font-family: var(--font-mono);
-  font-size: 0.5625rem;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
-  display: block;
-  margin-top: 12px;
-}
-
-.hero__stats {
-    padding: 24px var(--grid-gutter);
-    gap: 0;
-  }
-  .hero-stat {
-    padding-bottom: 20px;
-  }
-  .hero-stat__value {
-    font-size: 1.5rem;
-  }
-
-  .status-band {
-    flex-direction: column;
-    gap: 24px;
   }
   .site-footer__inner {
     flex-direction: column;

@@ -79,6 +79,20 @@ const arrivals = [
 
 export default function FinancialReportingView({ onNavigate, onNotify }: FinancialReportingViewProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.8);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, []);
 
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
@@ -88,9 +102,15 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
     <div className="min-h-screen" id="reporting-view-wrapper">
 
       {/* ── Header ── */}
-      <header className="sticky top-0 z-40 bg-[#F7F5F2]/95 backdrop-blur-sm px-6 py-3 flex justify-between items-center border-b border-[rgba(28,25,23,0.06)]">
+      <header
+        className={`sticky top-0 z-40 px-6 py-3 flex justify-between items-center transition-all duration-500 ${
+          scrolled
+            ? 'bg-[#F7F5F2]/95 backdrop-blur-sm border-b border-[rgba(28,25,23,0.06)]'
+            : 'bg-transparent border-b border-transparent'
+        }`}
+      >
         <h1
-          className="t-wordmark cursor-pointer"
+          className={`t-wordmark cursor-pointer transition-colors duration-500 ${scrolled ? 'text-[#1C1917]' : 'text-white'}`}
           onClick={() => onNavigate('reporting', 'push')}
         >
           Vallarta Estates
@@ -99,7 +119,9 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
           aria-label="Menu"
           id="reporting-menu-btn"
           onClick={() => onNavigate('nav_menu', 'slide_up')}
-          className="p-2 text-[#78716C] hover:text-[#1C1917] transition-colors cursor-pointer"
+          className={`p-2 transition-colors duration-500 cursor-pointer ${
+            scrolled ? 'text-[#78716C] hover:text-[#1C1917]' : 'text-white/70 hover:text-white'
+          }`}
         >
           <Menu className="w-5 h-5" strokeWidth={1.5} />
         </button>
