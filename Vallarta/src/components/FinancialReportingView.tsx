@@ -77,6 +77,17 @@ const arrivals = [
   },
 ];
 
+const MONTHLY_DATA = [
+  { month: 'May', revenue: 89200 },
+  { month: 'Jun', revenue: 94500 },
+  { month: 'Jul', revenue: 108000 },
+  { month: 'Aug', revenue: 115300 },
+  { month: 'Sep', revenue: 109200 },
+  { month: 'Oct', revenue: 124500 },
+] as const;
+
+const MONTHLY_MAX = Math.max(...MONTHLY_DATA.map((d) => d.revenue));
+
 export default function FinancialReportingView({ onNavigate, onNotify }: FinancialReportingViewProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [scrolled, setScrolled] = useState(false);
@@ -265,43 +276,45 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
 
         {/* Chart */}
         <div className="performance-section__chart">
-          <div className="relative h-[280px] w-full" id="reporting-chart-canvas">
-            <svg viewBox="0 0 500 140" className="w-full h-full overflow-visible" preserveAspectRatio="none">
-              <motion.path
-                initial={{ strokeDasharray: 820, strokeDashoffset: 820 }}
-                whileInView={{ strokeDashoffset: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 2.0, ease: [0.16, 1, 0.3, 1] }}
-                d="M 0 130 C 40 115 70 100 130 108 S 220 75 290 85 S 380 45 500 20"
-                fill="none"
-                stroke="#B45309"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-              <circle cx="500" cy="20" r="3" fill="#B45309" />
-              <text
-                x="492"
-                y="14"
-                textAnchor="end"
-                fontFamily="'JetBrains Mono', monospace"
-                fontSize="8"
-                fill="rgba(28,25,23,0.45)"
-                letterSpacing="0.08em"
-              >
-                $124,500 · OCT
-              </text>
-            </svg>
+          <div className="monthly-table" id="reporting-chart-canvas">
+            {MONTHLY_DATA.map((item, i) => {
+              const prev = i > 0 ? MONTHLY_DATA[i - 1].revenue : null;
+              const delta = prev !== null
+                ? ((item.revenue - prev) / prev * 100).toFixed(0)
+                : null;
+              const isCurrent = i === MONTHLY_DATA.length - 1;
+              const barWidth = (item.revenue / MONTHLY_MAX) * 100;
 
-            <div className="performance-chart__axis-labels">
-              {['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'].map((month) => (
-                <span
-                  key={month}
-                  style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', letterSpacing: '0.12em', color: 'var(--color-ink-muted)', textTransform: 'uppercase' }}
+              return (
+                <motion.div
+                  key={item.month}
+                  className={`monthly-table__row${isCurrent ? ' monthly-table__row--current' : ''}`}
+                  initial={{ opacity: 0, x: -12 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.06, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  {month}
-                </span>
-              ))}
-            </div>
+                  <span className="monthly-table__month">{item.month}</span>
+                  <span className="monthly-table__revenue">
+                    ${item.revenue.toLocaleString()}
+                  </span>
+                  {delta !== null ? (
+                    <span className={`monthly-table__delta${Number(delta) >= 0 ? ' monthly-table__delta--up' : ' monthly-table__delta--down'}`}>
+                      {Number(delta) >= 0 ? '+' : ''}{delta}%
+                    </span>
+                  ) : (
+                    <span className="monthly-table__delta" />
+                  )}
+                  <motion.div
+                    className="monthly-table__bar"
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${barWidth}%` }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.9, delay: i * 0.06 + 0.2, ease: [0.16, 1, 0.3, 1] }}
+                  />
+                </motion.div>
+              );
+            })}
           </div>
         </div>
 

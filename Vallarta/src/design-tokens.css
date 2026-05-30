@@ -601,10 +601,85 @@ body {
   opacity: 0.65;
 }
 
-.performance-chart__axis-labels {
+/* Monthly revenue table */
+.monthly-table {
   display: flex;
-  justify-content: space-between;
-  margin-top: 12px;
+  flex-direction: column;
+}
+
+.monthly-table__row {
+  display: grid;
+  grid-template-columns: 36px 1fr 48px auto;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.monthly-table__row:last-child {
+  border-bottom: none;
+}
+
+.monthly-table__month {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  line-height: 1;
+}
+
+.monthly-table__revenue {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 1.125rem;
+  color: var(--color-ink-secondary);
+  letter-spacing: -0.01em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.monthly-table__delta {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.10em;
+  color: var(--color-ink-muted);
+  line-height: 1;
+  text-align: right;
+}
+
+.monthly-table__delta--up {
+  color: var(--color-accent-positive);
+}
+
+.monthly-table__delta--down {
+  color: var(--color-accent-negative);
+}
+
+.monthly-table__bar {
+  height: 1px;
+  background: var(--color-accent-warning);
+  opacity: 0.28;
+  min-width: 0;
+}
+
+/* Current month emphasis */
+.monthly-table__row--current .monthly-table__revenue {
+  font-size: 1.375rem;
+  color: var(--color-ink);
+}
+
+.monthly-table__row--current .monthly-table__month {
+  color: var(--color-ink-secondary);
+}
+
+.monthly-table__row--current .monthly-table__bar {
+  opacity: 1;
+}
+
+.monthly-table__row--current .monthly-table__delta {
+  color: var(--color-ink-secondary);
 }
 
 @media (max-width: 900px) {
