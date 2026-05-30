@@ -402,14 +402,6 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           id="financial-reports-summary"
         >
-          <div className="financial-brief__row" id="report-net-revenue">
-            <span className="financial-brief__row-label">Net Revenue</span>
-            <div className="financial-brief__row-right">
-              <span className="financial-brief__row-value">$124,500</span>
-              <span className="financial-brief__row-delta">Up 14% from September</span>
-            </div>
-          </div>
-
           <div className="financial-brief__row" id="report-net-profit">
             <span className="financial-brief__row-label">Net Profit</span>
             <div className="financial-brief__row-right">
@@ -426,13 +418,20 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
             </div>
           </div>
 
-          <div className="financial-brief__cta-row">
-            <button
-              className="financial-brief__cta"
-              onClick={() => onNavigate('deep_dive', 'push')}
-            >
-              View full financial report →
-            </button>
+          <div className="financial-brief__row" id="report-margin">
+            <span className="financial-brief__row-label">Profit Margin</span>
+            <div className="financial-brief__row-right">
+              <span className="financial-brief__row-value">67.6%</span>
+              <span className="financial-brief__row-delta">+3.4 pts vs September</span>
+            </div>
+          </div>
+
+          <div className="financial-brief__row" id="report-net-per-night">
+            <span className="financial-brief__row-label">Net / Occupied Night</span>
+            <div className="financial-brief__row-right">
+              <span className="financial-brief__row-value">$3,119</span>
+              <span className="financial-brief__row-delta">27 nights · Oct 2026</span>
+            </div>
           </div>
         </motion.div>
       </section>

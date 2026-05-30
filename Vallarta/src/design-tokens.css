@@ -879,30 +879,6 @@ body {
   margin-top: 6px;
 }
 
-.financial-brief__cta-row {
-  display: flex;
-  justify-content: flex-end;
-  padding-top: 40px;
-}
-
-.financial-brief__cta {
-  font-family: var(--font-ui);
-  font-size: 0.5625rem;
-  font-weight: 500;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--color-accent-warning);
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  transition: opacity var(--duration-fast) var(--ease-out-expo);
-}
-
-.financial-brief__cta:hover {
-  opacity: 0.65;
-}
-
 @media (max-width: 768px) {
   .financial-brief__row {
     flex-direction: column;
