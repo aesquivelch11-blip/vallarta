@@ -346,6 +346,12 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
           <div className="chronicle-section__rule" />
         </div>
 
+        {/* Timeline legend */}
+        <div className="chronicle-legend" aria-label="Timeline legend">
+          <span className="chronicle-legend__item chronicle-legend__item--owner">Owner Use</span>
+          <span className="chronicle-legend__item chronicle-legend__item--guest">Guest</span>
+        </div>
+
         <div className="chronicle-timeline">
           <div className="chronicle-timeline__stays">
             {arrivals.map((arrival, i) => {
