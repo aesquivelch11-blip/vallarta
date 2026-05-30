@@ -201,6 +201,47 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
               <polyline points="13,1 19,6 13,11" fill="none" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" strokeLinecap="round"/>
             </svg>
           </button>
+
+        {/* Hero metrics overlay — key data visible above the fold */}
+        <div className="hero__metrics" aria-label="Property metrics summary">
+          <div className="hero__metric">
+            <span className="hero__metric-label">Revenue</span>
+            <span className="hero__metric-value">$124,500</span>
+            <span className="hero__metric-delta">+14% · Oct vs Sep</span>
+          </div>
+
+          <div
+            className="hero__metric hero__metric--interactive"
+            role="button"
+            tabIndex={0}
+            aria-label="View yield analysis"
+            onClick={() => onNavigate('deep_dive', 'push')}
+            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onNavigate('deep_dive', 'push')}
+          >
+            <span className="hero__metric-label">Avg. Nightly Rate</span>
+            <span className="hero__metric-value">$1,450</span>
+            <span className="hero__metric-delta">Stable · Q4</span>
+          </div>
+
+          <div
+            className="hero__metric hero__metric--interactive"
+            role="button"
+            tabIndex={0}
+            aria-label="View occupancy calendar"
+            onClick={() => onNavigate('calendar', 'push')}
+            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onNavigate('calendar', 'push')}
+          >
+            <span className="hero__metric-label">Occupancy</span>
+            <span className="hero__metric-value">88%</span>
+            <span className="hero__metric-delta">+3% · vs Sep</span>
+          </div>
+
+          <div className="hero__metric">
+            <span className="hero__metric-label">Sentiment</span>
+            <span className="hero__metric-value">4.9 / 5</span>
+            <span className="hero__metric-delta">Top 5% · 47 reviews</span>
+          </div>
+        </div>
         </div>
       </section>
 
