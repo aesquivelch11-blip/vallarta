@@ -168,7 +168,8 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
           transition={{ duration: 0.9, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="hero-metric-beam__text"
         >
-          Casa Obsidiana
+          <span className="hero-metric-beam__serif">Casa</span>
+          <span className="hero-metric-beam__sans">Obsidiana</span>
         </motion.span>
       </section>
 
