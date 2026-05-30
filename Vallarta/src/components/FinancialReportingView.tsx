@@ -29,10 +29,52 @@ interface FinancialReportingViewProps {
   onNotify?: (message: string) => void;
 }
 
+const TIMELINE_START = new Date('2026-10-10');
+const TIMELINE_END   = new Date('2026-11-04');
+const TIMELINE_DAYS  = Math.round(
+  (TIMELINE_END.getTime() - TIMELINE_START.getTime()) / 86400000
+);
+
+function stayToPercent(startIso: string, endIso: string) {
+  const start = new Date(startIso);
+  const end   = new Date(endIso);
+  const left  = Math.round(
+    (start.getTime() - TIMELINE_START.getTime()) / 86400000
+  ) / TIMELINE_DAYS * 100;
+  const width = Math.round(
+    (end.getTime() - start.getTime()) / 86400000
+  ) / TIMELINE_DAYS * 100;
+  return { left, width };
+}
+
 const arrivals = [
-  { num: '01', name: 'The Sinclair Family', dates: 'Oct 12 — 19', nights: '7 nights', type: 'OWNER USE' },
-  { num: '02', name: 'M. Dubois', dates: 'Oct 18 — 21', nights: '3 nights', type: 'ACCEPTED GUEST' },
-  { num: '03', name: 'The Al-Sayed Party', dates: 'Oct 24 — Nov 02', nights: '9 nights', type: 'OWNER USE' },
+  {
+    num: '01',
+    name: 'The Sinclair Family',
+    dates: 'Oct 12 – 19',
+    nights: '7 nights',
+    type: 'OWNER USE' as const,
+    startDate: '2026-10-12',
+    endDate:   '2026-10-19',
+  },
+  {
+    num: '02',
+    name: 'M. Dubois',
+    dates: 'Oct 18 – 21',
+    nights: '3 nights',
+    type: 'GUEST' as const,
+    startDate: '2026-10-18',
+    endDate:   '2026-10-21',
+  },
+  {
+    num: '03',
+    name: 'The Al-Sayed Party',
+    dates: 'Oct 24 – Nov 2',
+    nights: '9 nights',
+    type: 'OWNER USE' as const,
+    startDate: '2026-10-24',
+    endDate:   '2026-11-02',
+  },
 ];
 
 export default function FinancialReportingView({ onNavigate, onNotify }: FinancialReportingViewProps) {
@@ -270,6 +312,55 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
             View full report →
           </button>
         </motion.div>
+      </section>
+
+      {/* ── Guest Chronicle ── */}
+      <section className="chronicle-section" id="reporting-timeline-section">
+        <div className="chronicle-section__header">
+          <span className="chronicle-section__label">Guest Chronicle</span>
+          <div className="chronicle-section__rule" />
+        </div>
+
+        <div className="chronicle-timeline">
+          <div className="chronicle-timeline__stays">
+            {arrivals.map((arrival, i) => {
+              const { left, width } = stayToPercent(arrival.startDate, arrival.endDate);
+              const topOffset = i * 56;
+              return (
+                <motion.div
+                  key={arrival.num}
+                  className={`chronicle-stay chronicle-stay--${arrival.type === 'OWNER USE' ? 'owner' : 'guest'}`}
+                  style={{
+                    left: `${left}%`,
+                    width: `${width}%`,
+                    top: `${topOffset}px`,
+                    transformOrigin: 'left center',
+                  }}
+                  initial={{ opacity: 0, scaleX: 0 }}
+                  whileInView={{ opacity: 1, scaleX: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.9, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
+                  onClick={() => onNavigate('calendar', 'push')}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`View ${arrival.name} booking`}
+                  onKeyDown={(e) => e.key === 'Enter' && onNavigate('calendar', 'push')}
+                >
+                  <div className="chronicle-stay__bar" />
+                  <span className="chronicle-stay__name">{arrival.name}</span>
+                  <span className="chronicle-stay__meta">{arrival.dates} · {arrival.nights}</span>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          <div className="chronicle-timeline__axis" />
+          <div className="chronicle-timeline__axis-labels">
+            {['Oct 10', 'Oct 14', 'Oct 18', 'Oct 22', 'Oct 26', 'Oct 30', 'Nov 3'].map((label) => (
+              <span key={label} className="chronicle-timeline__axis-label">{label}</span>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* ── Status Band + Camera ── */}
