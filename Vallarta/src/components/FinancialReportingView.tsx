@@ -412,57 +412,65 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
         </motion.div>
       </section>
 
-      {/* ── Status Band + Camera ── */}
-      <section className="supervision-section" id="reporting-supervision-section">
-        <div className="supervision-grid">
-          {/* Property Status */}
-          <div className="supervision-status">
-            <span className="t-metric-label">Property Status</span>
-            <div className="status-band" id="supervision-stats">
-              <div id="supervision-security">
-                <span className="status-item__label">Security</span>
-                <div className="status-item__value">
-                  <span className="status-dot status-dot--active" />
-                  <span>Active</span>
-                </div>
-              </div>
-              <div id="supervision-maintenance">
-                <span className="status-item__label">Maintenance</span>
-                <div className="status-item__value">
-                  <span className="status-dot status-dot--active" />
-                  <span>On Schedule</span>
-                </div>
-              </div>
-              <div id="supervision-staff">
-                <span className="status-item__label">Staff</span>
-                <div className="status-item__value">
-                  <span className="status-dot status-dot--active" />
-                  <span>4 On-Site</span>
-                </div>
-              </div>
+      {/* ── Property Vitals ── */}
+      <section className="vitals-ops" id="reporting-supervision-section">
+        <div className="vitals-ops__inner">
+          {/* Status column */}
+          <div className="vitals-ops__status">
+            <div className="vitals-ops__status-header">
+              <span className="vitals-ops__status-label">Property Status</span>
+              <div className="vitals-ops__status-rule" />
             </div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="vitals-ops__status-item" id="supervision-security">
+                <span className="vitals-ops__status-item-label">Security</span>
+                <span className="vitals-ops__status-item-value">Active</span>
+                <span className="vitals-ops__status-item-sub">All perimeter sensors nominal</span>
+              </div>
+
+              <div className="vitals-ops__status-item" id="supervision-maintenance">
+                <span className="vitals-ops__status-item-label">Maintenance</span>
+                <span className="vitals-ops__status-item-value">On Schedule</span>
+                <span className="vitals-ops__status-item-sub">Next service Nov 8</span>
+              </div>
+
+              <div className="vitals-ops__status-item" id="supervision-staff">
+                <span className="vitals-ops__status-item-label">Staff</span>
+                <span className="vitals-ops__status-item-value">4 On-Site</span>
+                <span className="vitals-ops__status-item-sub">2 interior · 2 grounds</span>
+              </div>
+            </motion.div>
           </div>
 
-          {/* Camera Feed */}
+          {/* Camera feed */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 1.5, ease: [0.16, 1, 0.3, 1] }}
-            className="camera-feed"
-            style={{ height: '200px' }}
+            className="vitals-ops__camera"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             onClick={() => onNavigate('camera_expanded', 'push')}
             id="supervision-camera-card"
+            role="button"
+            tabIndex={0}
+            aria-label="Expand camera feed"
+            onKeyDown={(e) => e.key === 'Enter' && onNavigate('camera_expanded', 'push')}
           >
             <img
-              src="https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?auto=format&fit=crop&w=800&q=80"
+              src="https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?auto=format&fit=crop&w=1200&q=80"
               alt="Pool camera feed preview"
               className="cinematic-grade"
               loading="lazy"
               referrerPolicy="no-referrer"
             />
-            <div className="camera-feed__overlay">
-              <p className="camera-feed__label">CAM 02 · POOL TERRACE</p>
-              <h4 className="camera-feed__title">Obsidiana Main Suite View</h4>
+            <div className="vitals-ops__camera-overlay">
+              <span className="vitals-ops__camera-id">CAM 02 · POOL TERRACE</span>
             </div>
           </motion.div>
         </div>
