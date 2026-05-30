@@ -191,7 +191,7 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
               <span className="t-metric-label" style={{ fontSize: '0.75rem' }}>Revenue</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="w-4 h-0.5 rounded-sm bg-[#15803D]" />
+              <span className="w-4 h-0.5 rounded-sm bg-[var(--color-accent-positive)]" />
               <span className="t-metric-label" style={{ fontSize: '0.75rem' }}>Net Yield</span>
             </div>
           </div>
@@ -235,7 +235,7 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
                 transition={{ duration: 1.8, delay: 1.2, ease: [0.16, 1, 0.3, 1] }}
                 d="M 0 140 C 80 136 120 130 200 133 S 310 118 400 122 S 460 110 500 98"
                 fill="none"
-                stroke="#15803D"
+                stroke="var(--color-accent-positive)"
                 strokeWidth="2"
                 strokeLinecap="round"
               />
@@ -308,7 +308,7 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
                   <span className="t-body" style={{ fontSize: '1rem', fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>
                     $84,200
                   </span>
-                  <span className="t-mono text-[#15803D]" style={{ fontSize: '0.625rem', marginLeft: '8px' }}>
+                  <span className="t-mono text-[var(--color-accent-positive)]" style={{ fontSize: '0.625rem', marginLeft: '8px' }}>
                     +8%
                   </span>
                 </div>
