@@ -1138,7 +1138,8 @@ body::before {
   .cal-day,
   .cal-booking-row,
   .cal-nav__brand,
-  .hero-stat[role="button"] {
+  .hero-stat[role="button"],
+  .hero__arrow {
     transition: none;
   }
 }
