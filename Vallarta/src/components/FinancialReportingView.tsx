@@ -107,6 +107,12 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
         </div>
 
         <div className="hero__stats">
+          {/* Property identity */}
+          <div className="hero-stat__property-id">
+            <span className="hero-stat__property-serif">Casa</span>
+            <span className="hero-stat__property-sans">Obsidiana</span>
+          </div>
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -158,19 +164,6 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
             <span className="hero-stat__delta hero-stat__delta--positive">Top 5% · 47 reviews</span>
           </motion.div>
         </div>
-      </section>
-
-      {/* ── Hero Metric Beam ── */}
-      <section className="hero-metric-beam" id="hero-metric-beam">
-        <motion.span
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="hero-metric-beam__text"
-        >
-          <span className="hero-metric-beam__serif">Casa</span>
-          <span className="hero-metric-beam__sans">Obsidiana</span>
-        </motion.span>
       </section>
 
       {/* ── Dashboard Body ── */}
