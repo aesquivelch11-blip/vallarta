@@ -363,6 +363,55 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
         </div>
       </section>
 
+      {/* ── Financial Brief ── */}
+      <section className="financial-brief" id="reporting-analysis-section">
+        <div className="financial-brief__header">
+          <span className="financial-brief__label">Financial Summary</span>
+          <div className="financial-brief__rule" />
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          id="financial-reports-summary"
+        >
+          <div className="financial-brief__row" id="report-net-revenue">
+            <span className="financial-brief__row-label">Net Revenue</span>
+            <div className="financial-brief__row-right">
+              <span className="financial-brief__row-value">$124,500</span>
+              <span className="financial-brief__row-delta">Up 14% from September</span>
+            </div>
+          </div>
+
+          <div className="financial-brief__row" id="report-net-profit">
+            <span className="financial-brief__row-label">Net Profit</span>
+            <div className="financial-brief__row-right">
+              <span className="financial-brief__row-value">$84,200</span>
+              <span className="financial-brief__row-delta">Up 8% from September</span>
+            </div>
+          </div>
+
+          <div className="financial-brief__row" id="report-opex">
+            <span className="financial-brief__row-label">Operating Expenses</span>
+            <div className="financial-brief__row-right">
+              <span className="financial-brief__row-value">$40,300</span>
+              <span className="financial-brief__row-delta">Stable · Q4</span>
+            </div>
+          </div>
+
+          <div className="financial-brief__cta-row">
+            <button
+              className="financial-brief__cta"
+              onClick={() => onNavigate('deep_dive', 'push')}
+            >
+              View full financial report →
+            </button>
+          </div>
+        </motion.div>
+      </section>
+
       {/* ── Status Band + Camera ── */}
       <section className="supervision-section" id="reporting-supervision-section">
         <div className="supervision-grid">
