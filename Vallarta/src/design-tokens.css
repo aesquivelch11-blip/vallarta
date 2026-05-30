@@ -622,14 +622,97 @@ body {
   }
 }
 
-/* Dashboard Body */
-.dashboard__body {
-  display: grid;
-  grid-template-columns: 1fr 380px;
-  gap: calc(var(--grid-gutter) * 1.5);
+/* ── Performance Section ── */
+.performance-section {
   max-width: var(--grid-max-width);
   margin: 0 auto;
-  padding: var(--space-section) var(--grid-gutter);
+  padding: var(--space-section) clamp(24px, 6vw, 80px);
+  display: grid;
+  grid-template-columns: 60fr 36fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.performance-section__label {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.performance-section__label-text {
+  font-family: var(--font-ui);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  white-space: nowrap;
+}
+
+.performance-section__label-rule {
+  flex: 1;
+  height: 1px;
+  background: var(--color-border-subtle);
+}
+
+.performance-section__chart {
+  display: flex;
+  flex-direction: column;
+}
+
+.performance-section__aside {
+  padding-top: 8px;
+}
+
+.performance-section__aside-quote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  line-height: 1.55;
+  color: var(--color-ink-secondary);
+  margin: 0 0 32px 0;
+}
+
+.performance-section__aside-cta {
+  font-family: var(--font-ui);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--color-accent-warning);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity var(--duration-fast) var(--ease-out-expo);
+}
+
+.performance-section__aside-cta:hover {
+  opacity: 0.65;
+}
+
+.performance-chart__axis-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+@media (max-width: 900px) {
+  .performance-section {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  .performance-section__label {
+    margin-bottom: 32px;
+  }
+}
+
+/* Dashboard Body — retired, replaced by individual editorial sections */
+.dashboard__body {
+  display: none;
 }
 
 .chart-panel {

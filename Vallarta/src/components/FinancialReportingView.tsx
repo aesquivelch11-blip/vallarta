@@ -201,170 +201,76 @@ export default function FinancialReportingView({ onNavigate, onNotify }: Financi
         </motion.div>
       </section>
 
-      {/* ── Dashboard Body ── */}
-      <div className="dashboard__body">
+      {/* ── Performance Section ── */}
+      <section className="performance-section" id="reporting-chart-card">
+        {/* Section label */}
+        <div className="performance-section__label">
+          <span className="performance-section__label-text">Performance Overview</span>
+          <div className="performance-section__label-rule" />
+        </div>
 
-        {/* Chart Panel */}
-        <section className="chart-panel" id="reporting-chart-card">
-          <div className="flex justify-between items-baseline mb-7">
-            <span className="t-section-header">Performance Overview</span>
-            <span className="t-mono text-[#A8A29E]" id="chart-latest-tooltip">$1,450 yield</span>
-          </div>
-
-          <div className="flex gap-6 mb-6">
-            <div className="flex items-center gap-2">
-              <span className="w-4 h-0.5 rounded-sm bg-[#B45309]" />
-              <span className="t-metric-label" style={{ fontSize: '0.75rem' }}>Revenue</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-4 h-0.5 rounded-sm bg-[var(--color-accent-positive)]" />
-              <span className="t-metric-label" style={{ fontSize: '0.75rem' }}>Net Yield</span>
-            </div>
-          </div>
-
+        {/* Chart */}
+        <div className="performance-section__chart">
           <div className="relative h-[280px] w-full" id="reporting-chart-canvas">
             <svg viewBox="0 0 500 140" className="w-full h-full overflow-visible" preserveAspectRatio="none">
-
-              <line x1="0" y1="30" x2="500" y2="30" stroke="rgba(28,25,23,0.04)" strokeWidth="1" />
-              <line x1="0" y1="75" x2="500" y2="75" stroke="rgba(28,25,23,0.04)" strokeWidth="1" />
-              <line x1="0" y1="120" x2="500" y2="120" stroke="rgba(28,25,23,0.04)" strokeWidth="1" />
-
-              <motion.path
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 2.7 }}
-                d="M 0 130 C 40 115 70 100 130 108 S 220 75 290 85 S 380 45 500 20 L 500 140 L 0 140 Z"
-                fill="none"
-              />
               <motion.path
                 initial={{ strokeDasharray: 820, strokeDashoffset: 820 }}
-                animate={{ strokeDashoffset: 0 }}
-                transition={{ duration: 1.8, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
+                whileInView={{ strokeDashoffset: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 2.0, ease: [0.16, 1, 0.3, 1] }}
                 d="M 0 130 C 40 115 70 100 130 108 S 220 75 290 85 S 380 45 500 20"
                 fill="none"
                 stroke="#B45309"
-                strokeWidth="2"
+                strokeWidth="1.5"
                 strokeLinecap="round"
               />
               <circle cx="500" cy="20" r="3" fill="#B45309" />
-
-              <motion.path
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 2.7 }}
-                d="M 0 140 C 80 136 120 130 200 133 S 310 118 400 122 S 460 110 500 98 L 500 140 L 0 140 Z"
-                fill="none"
-              />
-              <motion.path
-                initial={{ strokeDasharray: 560, strokeDashoffset: 560 }}
-                animate={{ strokeDashoffset: 0 }}
-                transition={{ duration: 1.8, delay: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                d="M 0 140 C 80 136 120 130 200 133 S 310 118 400 122 S 460 110 500 98"
-                fill="none"
-                stroke="var(--color-accent-positive)"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
+              <text
+                x="492"
+                y="14"
+                textAnchor="end"
+                fontFamily="'JetBrains Mono', monospace"
+                fontSize="8"
+                fill="rgba(28,25,23,0.45)"
+                letterSpacing="0.08em"
+              >
+                $124,500 · OCT
+              </text>
             </svg>
 
-            <div className="flex justify-between mt-2">
-              <span className="t-caption" style={{ color: 'var(--color-ink-muted)' }}>May</span>
-              <span className="t-caption" style={{ color: 'var(--color-ink-muted)' }}>Jun</span>
-              <span className="t-caption" style={{ color: 'var(--color-ink-muted)' }}>Jul</span>
-              <span className="t-caption" style={{ color: 'var(--color-ink-muted)' }}>Aug</span>
-              <span className="t-caption" style={{ color: 'var(--color-ink-muted)' }}>Sep</span>
-              <span className="t-caption" style={{ color: 'var(--color-ink-muted)' }}>Oct</span>
-            </div>
-          </div>
-        </section>
-
-        {/* Sidebar */}
-        <aside className="sidebar">
-
-          {/* Arrivals */}
-          <div className="sidebar__section" id="reporting-timeline-section">
-            <span className="t-metric-label" style={{ marginBottom: '24px', display: 'block' }}>
-              Upcoming Arrivals
-            </span>
-            <div id="arrival-timeline-list">
-              {arrivals.map((a, i) => (
-                <motion.div
-                  key={a.num}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.7, delay: 1.1 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                  className="arrival-row"
-                  id={`arrival-${a.num}`}
-                  onClick={() => onNavigate('calendar', 'push')}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => e.key === 'Enter' && onNavigate('calendar', 'push')}
+            <div className="performance-chart__axis-labels">
+              {['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'].map((month) => (
+                <span
+                  key={month}
+                  style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', letterSpacing: '0.12em', color: 'var(--color-ink-muted)', textTransform: 'uppercase' }}
                 >
-                  <div>
-                    <h4 className="arrival-row__name">{a.name}</h4>
-                    <div className="arrival-row__meta">
-                      {a.dates} · {a.nights}
-                    </div>
-                  </div>
-                  <span className={`arrival-row__type ${a.type === 'OWNER USE' ? 'arrival-row__type--owner' : ''}`}>
-                    {a.type}
-                  </span>
-                </motion.div>
+                  {month}
+                </span>
               ))}
             </div>
           </div>
+        </div>
 
-          {/* Financial Summary */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 1.3, ease: [0.16, 1, 0.3, 1] }}
-            className="sidebar__section"
-            id="reporting-analysis-section"
+        {/* Editorial aside — replaces legend */}
+        <motion.div
+          className="performance-section__aside"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <p className="performance-section__aside-quote">
+            Revenue grew 14% against September, driven by extended owner-use weeks and above-target weekend rates.
+          </p>
+          <button
+            className="performance-section__aside-cta"
+            onClick={() => onNavigate('deep_dive', 'push')}
+            id="view-financial-reports-btn"
           >
-            <span className="t-metric-label" style={{ marginBottom: '20px', display: 'block' }}>
-              Financial Summary
-            </span>
-            <div id="financial-reports-summary">
-              <div className="flex justify-between items-baseline py-4 border-b border-[rgba(28,25,23,0.06)]" id="report-net-profit">
-                <span className="t-mono" style={{ color: 'var(--color-ink-secondary)', fontSize: '0.625rem' }}>
-                  Net Profit
-                </span>
-                <div>
-                  <span className="t-body" style={{ fontSize: '1rem', fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>
-                    $84,200
-                  </span>
-                  <span className="t-mono text-[var(--color-accent-positive)]" style={{ fontSize: '0.625rem', marginLeft: '8px' }}>
-                    +8%
-                  </span>
-                </div>
-              </div>
-              <div className="flex justify-between items-baseline py-4" id="report-opex">
-                <span className="t-mono" style={{ color: 'var(--color-ink-secondary)', fontSize: '0.625rem' }}>
-                  Operating Expenses
-                </span>
-                <div>
-                  <span className="t-body" style={{ fontSize: '1rem', fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>
-                    $40,300
-                  </span>
-                  <span className="t-mono text-[#A8A29E]" style={{ fontSize: '0.625rem', marginLeft: '8px' }}>
-                    Stable
-                  </span>
-                </div>
-              </div>
-            </div>
-            <button
-              onClick={() => onNavigate('deep_dive', 'push')}
-              id="view-financial-reports-btn"
-              className="btn"
-              style={{ marginTop: '24px', width: '100%' }}
-            >
-              View Full Financial Report
-            </button>
-          </motion.div>
-
-        </aside>
-      </div>
+            View full report →
+          </button>
+        </motion.div>
+      </section>
 
       {/* ── Status Band + Camera ── */}
       <section className="supervision-section" id="reporting-supervision-section">
