@@ -366,7 +366,7 @@ body {
 }
 
 .hero__counter-sep {
-  font-size: 0.5rem;
+  font-size: 0.625rem;
   margin: 0 1px;
 }
 
@@ -799,7 +799,7 @@ body {
 
 .chronicle-stay__meta {
   font-family: var(--font-mono);
-  font-size: 0.5rem;
+  font-size: 0.625rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--color-dark-ink-muted);
@@ -821,7 +821,7 @@ body {
 
 .chronicle-timeline__axis-label {
   font-family: var(--font-mono);
-  font-size: 0.5rem;
+  font-size: 0.625rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-dark-ink-muted);
@@ -988,7 +988,7 @@ body {
 
 .vitals-ops__status-item-label {
   font-family: var(--font-ui);
-  font-size: 0.5rem;
+  font-size: 0.625rem;
   font-weight: 500;
   letter-spacing: 0.30em;
   text-transform: uppercase;
@@ -1046,7 +1046,7 @@ body {
 
 .vitals-ops__camera-id {
   font-family: var(--font-mono);
-  font-size: 0.5rem;
+  font-size: 0.625rem;
   letter-spacing: 0.25em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.45);
