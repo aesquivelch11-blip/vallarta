@@ -28,19 +28,19 @@ export default function CameraFeedView({ onNavigate, onNotify }: CameraFeedViewP
   };
 
   return (
-    <div className="min-h-screen bg-[#1C1917] text-[#F5F1E8] flex flex-col justify-between font-sans relative overflow-hidden" id="camera-feed-fullscreen-view">
+    <div className="min-h-screen bg-[#242424] text-[#FAF8F5] flex flex-col justify-between font-sans relative overflow-hidden" id="camera-feed-fullscreen-view">
       
       {/* Decorative scanline or dark luxury noise */}
-      <div className="absolute inset-0 bg-radial-gradient from-transparent to-[#1C1917]/80 pointer-events-none z-10" />
+      <div className="absolute inset-0 bg-radial-gradient from-transparent to-[#242424]/80 pointer-events-none z-10" />
 
       {/* Top bar with Live indicator, Menu and Close */}
-      <header className="flex justify-between items-center px-6 py-4 border-b border-[#F5F1E8]/10 bg-[#1C1917]/60 backdrop-blur-xl z-20" id="camera-feed-header">
+      <header className="flex justify-between items-center px-6 py-4 border-b border-[#FAF8F5]/10 bg-[#242424]/60 backdrop-blur-xl z-20" id="camera-feed-header">
         <div className="flex items-center gap-3" id="camera-header-live-group">
           <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse" />
-          <span className="text-[10px] tracking-[0.3em] font-semibold text-[#F5F1E8] uppercase font-sans">
+          <span className="text-[10px] tracking-[0.3em] font-semibold text-[#FAF8F5] uppercase font-sans">
             LIVE
           </span>
-          <span className="text-[10px] text-[#F5F1E8]/50 font-mono tracking-wider hidden sm:inline px-3 py-1 border border-[#F5F1E8]/10 rounded-full">
+           <span className="text-[10px] text-[#FAF8F5]/50 font-sans tracking-wider hidden sm:inline px-3 py-1 border border-[#FAF8F5]/10 rounded-full">
             SYSTEMS STABLE
           </span>
         </div>
@@ -49,7 +49,7 @@ export default function CameraFeedView({ onNavigate, onNotify }: CameraFeedViewP
           {/* Zoom layout toggle */}
           <button 
             onClick={() => setZoomed(!zoomed)}
-            className="p-3 border border-[#F5F1E8]/15 hover:bg-[#F5F1E8]/10 transition rounded-full cursor-pointer text-[#F5F1E8]/80 magnetic-btn"
+            className="p-3 border border-[#FAF8F5]/15 hover:bg-[#FAF8F5]/10 transition rounded-full cursor-pointer text-[#FAF8F5]/80 magnetic-btn"
             title="Toggle fullscreen view"
           >
             <Maximize className="w-4 h-4" />
@@ -60,7 +60,7 @@ export default function CameraFeedView({ onNavigate, onNotify }: CameraFeedViewP
             aria-label="Menu"
             id="camera-menu-nav-btn"
             onClick={() => onNavigate('nav_menu', 'slide_up')}
-            className="p-3 border border-[#F5F1E8]/15 hover:bg-[#F5F1E8]/10 transition duration-200 cursor-pointer text-[#F5F1E8] rounded-full magnetic-btn"
+            className="p-3 border border-[#FAF8F5]/15 hover:bg-[#FAF8F5]/10 transition duration-200 cursor-pointer text-[#FAF8F5] rounded-full magnetic-btn"
           >
             <Menu className="w-4 h-4" />
           </button>
@@ -70,7 +70,7 @@ export default function CameraFeedView({ onNavigate, onNotify }: CameraFeedViewP
             aria-label="Close View"
             id="camera-close-view-btn"
             onClick={() => onNavigate('reporting', 'push_back')}
-            className="p-3 border border-[#F5F1E8]/15 hover:bg-[#F5F1E8]/10 transition duration-300 cursor-pointer text-[#F5F1E8]/80 hover:text-[#F5F1E8] rounded-full magnetic-btn"
+            className="p-3 border border-[#FAF8F5]/15 hover:bg-[#FAF8F5]/10 transition duration-300 cursor-pointer text-[#FAF8F5]/80 hover:text-[#FAF8F5] rounded-full magnetic-btn"
             title="Back to Reporting overview"
           >
             <X className="w-4 h-4" />
@@ -84,16 +84,16 @@ export default function CameraFeedView({ onNavigate, onNotify }: CameraFeedViewP
           
           {/* Titles */}
           <div className="text-left" id="camera-title-group">
-            <h3 className="text-4xl md:text-5xl font-serif italic text-[#F5F1E8] tracking-wide">
+            <h3 className="text-4xl md:text-5xl font-serif italic text-[#FAF8F5] tracking-wide">
               Casa Obsidiana
             </h3>
-            <p className="text-[11px] font-mono tracking-widest text-[#F5F1E8]/60 uppercase mt-2">
+            <p className="text-[11px] font-sans tracking-widest text-[#FAF8F5]/60 uppercase mt-2">
               {feeds[activeCam].location} : {feeds[activeCam].code}
             </p>
           </div>
 
           {/* Screen projection container */}
-          <div className="relative border border-[#C9B8A0]/30 bg-[#1C1917] group overflow-hidden rounded-[3rem] shadow-2xl" id="camera-screen-projection">
+          <div className="relative border border-[#7E7A74]/30 bg-[#242424] group overflow-hidden rounded-[3rem] shadow-2xl" id="camera-screen-projection">
             {/* Monitor aspect ratio image container */}
             <div className={`transition-all duration-500 ease-in-out ${zoomed ? 'aspect-video object-contain h-[350px] md:h-[480px] w-full' : 'relative aspect-video'}`}>
               <img 
@@ -105,7 +105,7 @@ export default function CameraFeedView({ onNavigate, onNotify }: CameraFeedViewP
             </div>
 
             {/* Simulated telemetry HUD display overlays */}
-            <div className="absolute inset-x-0 bottom-6 left-6 right-6 text-[#F5F1E8]/60 font-mono text-[8px] sm:text-[9px] flex justify-between pointer-events-none z-20 uppercase tracking-widest">
+            <div className="absolute inset-x-0 bottom-6 left-6 right-6 text-[#FAF8F5]/60 font-sans text-[8px] sm:text-[9px] flex justify-between pointer-events-none z-20 uppercase tracking-widest">
               <div>
                 <span>ISO 400 • F2.8 • 1/60s</span>
               </div>
@@ -114,7 +114,7 @@ export default function CameraFeedView({ onNavigate, onNotify }: CameraFeedViewP
               </div>
             </div>
 
-            <div className="absolute top-6 right-6 pointer-events-none text-[#F5F1E8]/80 font-mono text-[10px] px-3 py-1 bg-[#1C1917]/60 backdrop-blur-md rounded-full tracking-wider">
+            <div className="absolute top-6 right-6 pointer-events-none text-[#FAF8F5]/80 font-sans text-[10px] px-3 py-1 bg-[#242424]/60 backdrop-blur-md rounded-full tracking-wider">
               1080P UHD @ 30FPS
             </div>
 
@@ -129,8 +129,8 @@ export default function CameraFeedView({ onNavigate, onNotify }: CameraFeedViewP
               id="cam-01-select-btn"
               className={`py-4 px-4 text-center text-xs font-semibold tracking-[0.2em] transition duration-300 border uppercase cursor-pointer rounded-full magnetic-btn ${
                 activeCam === 'cam01' 
-                  ? 'bg-[#F5F1E8] text-[#1C1917] border-[#F5F1E8]' 
-                  : 'bg-transparent text-[#F5F1E8]/60 border-[#C9B8A0]/30 hover:border-[#F5F1E8]/50 hover:text-[#F5F1E8]'
+                  ? 'bg-[#FAF8F5] text-[#242424] border-[#FAF8F5]' 
+                  : 'bg-transparent text-[#FAF8F5]/60 border-[#7E7A74]/30 hover:border-[#FAF8F5]/50 hover:text-[#FAF8F5]'
               }`}
             >
               CAM 01 : ENTRANCE
@@ -141,8 +141,8 @@ export default function CameraFeedView({ onNavigate, onNotify }: CameraFeedViewP
               id="cam-02-select-btn"
               className={`py-4 px-4 text-center text-xs font-semibold tracking-[0.2em] transition duration-300 border uppercase cursor-pointer rounded-full magnetic-btn ${
                 activeCam === 'cam02' 
-                  ? 'bg-[#F5F1E8] text-[#1C1917] border-[#F5F1E8]' 
-                  : 'bg-transparent text-[#F5F1E8]/60 border-[#C9B8A0]/30 hover:border-[#F5F1E8]/50 hover:text-[#F5F1E8]'
+                  ? 'bg-[#FAF8F5] text-[#242424] border-[#FAF8F5]' 
+                  : 'bg-transparent text-[#FAF8F5]/60 border-[#7E7A74]/30 hover:border-[#FAF8F5]/50 hover:text-[#FAF8F5]'
               }`}
             >
               CAM 02 : POOL
@@ -153,7 +153,7 @@ export default function CameraFeedView({ onNavigate, onNotify }: CameraFeedViewP
       </main>
 
       {/* Footer controls */}
-      <footer className="border-t border-[#F5F1E8]/10 py-6 px-6 bg-[#1C1917] text-[#F5F1E8]/50 text-center flex flex-col sm:flex-row justify-between items-center gap-4 z-20" id="camera-footer">
+      <footer className="border-t border-[#FAF8F5]/10 py-6 px-6 bg-[#242424] text-[#FAF8F5]/50 text-center flex flex-col sm:flex-row justify-between items-center gap-4 z-20" id="camera-footer">
         <div className="flex gap-4" id="camera-footer-controls-group">
           {/* Audio toggle button with icon */}
           <button 
@@ -166,14 +166,14 @@ export default function CameraFeedView({ onNavigate, onNotify }: CameraFeedViewP
               }
             }}
             id="camera-audio-toggle"
-            className="flex items-center gap-2 hover:text-[#F5F1E8] transition duration-200 cursor-pointer text-xs tracking-wider"
+            className="flex items-center gap-2 hover:text-[#FAF8F5] transition duration-200 cursor-pointer text-xs tracking-wider"
           >
             {muted ? <VolumeX className="w-4 h-4 shrink-0 text-[#A0522D]" /> : <Volume2 className="w-4 h-4 shrink-0 text-green-500" />}
             {muted ? "AUDIO LOCKED (MUTED)" : "MICROPHONE FEED RECEPTIVE"}
           </button>
         </div>
 
-        <p className="text-[8px] tracking-[0.25em] uppercase text-[#F5F1E8]/40" id="camera-security-disclaimer">
+        <p className="text-[8px] tracking-[0.25em] uppercase text-[#FAF8F5]/40" id="camera-security-disclaimer">
           RESTRICTED TRANSMISSION • REGISTERED OFF-SITE OWNERS CONSOLE SECURITY PRIVILEGE
         </p>
       </footer>

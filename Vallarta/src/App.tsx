@@ -174,14 +174,14 @@ export default function App() {
       default:
         return (
           <div key="default" className="w-full min-h-screen flex items-center justify-center bg-transparent">
-            <p className="text-[#1C1917]/50 font-serif italic">Awaiting Authentication.</p>
+            <p className="text-[#242424]/50 font-serif italic">Awaiting Authentication.</p>
           </div>
         );
     }
   };
 
   return (
-    <div className="w-full min-h-screen bg-transparent text-[#1C1917] select-none overflow-x-hidden antialiased relative" id="app-viewport">
+    <div className="w-full min-h-screen bg-transparent text-[#242424] select-none overflow-x-hidden antialiased relative" id="app-viewport">
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={currentScreen}
@@ -204,13 +204,13 @@ export default function App() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed bottom-20 left-6 right-6 md:left-auto md:right-8 md:w-96 bg-[#1C1917] border border-[#C9B8A0]/30 p-5 shadow-2xl z-[9999] flex items-start gap-4 rounded-[2rem]"
+            className="fixed bottom-20 left-6 right-6 md:left-auto md:right-8 md:w-96 bg-[#242424] border border-[#C9B8A0]/30 p-5 shadow-2xl z-[9999] flex items-start gap-4 rounded-[2rem]"
             id="global-toast-notification"
           >
             <div className="w-2 h-2 rounded-full bg-[#C9B8A0] mt-1.5 animate-pulse shrink-0" />
             <div className="flex-grow">
-              <span className="text-[9px] tracking-[0.25em] font-medium text-[#C9B8A0]/80 block uppercase mb-1 font-mono">
-                ESTATE CONCIERGE BULLETIN
+              <span className="text-[10px] tracking-[0.25em] font-medium text-[#C9B8A0]/80 block uppercase mb-1 font-sans">
+                Estate Concierge Bulletin
               </span>
               <p className="text-[#F5F1E8] text-xs font-light leading-relaxed tracking-wide font-sans">
                 {toastMessage}
