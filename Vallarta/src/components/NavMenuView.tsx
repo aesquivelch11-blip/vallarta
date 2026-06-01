@@ -20,26 +20,26 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
   {
     id: 'estates',
-    label: 'THE ESTATES',
-    subtitle: 'PORTFOLIO OVERVIEW & ASSET VALUATION',
+    label: 'The Estates',
+    subtitle: 'Portfolio Overview & Asset Valuation',
     screen: 'reporting',
   },
   {
     id: 'performance',
-    label: 'FINANCIAL PERFORMANCE',
-    subtitle: 'YIELD & REVENUE VELOCITY',
+    label: 'Financial Performance',
+    subtitle: 'Yield & Revenue Velocity',
     screen: 'deep_dive',
   },
   {
     id: 'operations',
-    label: 'OPERATIONS',
-    subtitle: 'OCCUPANCY & LIVE SUPERVISION',
+    label: 'Operations',
+    subtitle: 'Occupancy & Live Supervision',
     screen: 'camera_expanded',
   },
   {
     id: 'calendar',
-    label: 'CALENDAR',
-    subtitle: 'RESERVATIONS & TIMELINE',
+    label: 'Calendar',
+    subtitle: 'Reservations & Timeline',
     screen: 'calendar',
   },
 ];
@@ -120,13 +120,13 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
                   className="group block"
                 >
                   <span
-                    className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-white group-hover:text-white/90 transition-colors duration-300 leading-[1.15]"
+                    className="text-3xl md:text-4xl lg:text-5xl font-serif italic font-normal text-white group-hover:text-white/90 transition-colors duration-300 leading-[1.15] tracking-[0.04em]"
                     style={{ textShadow: '0 2px 8px rgba(0,0,0,0.55)' }}
                   >
                     {item.label}
                   </span>
                   <span
-                    className="text-[11px] md:text-[12px] tracking-[0.25em] text-white/90 font-mono block mt-4 uppercase"
+                    className="text-[11px] md:text-[12px] tracking-[0.25em] text-white/90 font-sans block mt-4 uppercase leading-none"
                     style={{ textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}
                   >
                     {item.subtitle}
@@ -142,7 +142,7 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
           <div className="flex items-end justify-end gap-8">
             <div className="space-y-6">
               <p
-                className="text-[9px] tracking-[0.3em] text-white/80 uppercase font-medium"
+                className="text-[10px] tracking-[0.3em] text-white/80 uppercase font-medium"
                 style={{ textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}
               >
                 Property Management
@@ -193,9 +193,9 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
               </div>
             </div>
             <div className="hidden md:flex items-center gap-3 text-white/90">
-              <span className="text-sm font-serif">01</span>
+              <span className="text-sm font-sans tabular-nums">01</span>
               <div className="w-8 h-px bg-white/50" />
-              <span className="text-sm font-serif">04</span>
+              <span className="text-sm font-sans tabular-nums">04</span>
             </div>
           </div>
         </footer>
