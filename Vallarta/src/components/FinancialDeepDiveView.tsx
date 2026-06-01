@@ -56,11 +56,11 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
   };
 
   return (
-    <div className="min-h-screen bg-transparent text-[#1C1917] font-sans flex flex-col justify-between pb-16 md:pb-20" id="deep-dive-container">
+    <div className="min-h-screen bg-transparent text-[#242424] font-sans flex flex-col justify-between pb-16 md:pb-20" id="deep-dive-container">
       
       {/* Top Bar Logo & Menu */}
-      <header className="sticky top-0 bg-[#F5F1E8]/90 z-40 border-b border-[#C9B8A0]/30 px-6 py-4 flex justify-between items-center backdrop-blur-xl" id="deep-dive-header">
-        <h1 className="text-2xl md:text-3xl font-serif italic tracking-[0.1em] text-[#1C1917] cursor-pointer" onClick={() => onNavigate('reporting', 'push')}>
+      <header className="sticky top-0 bg-[#FAF8F5]/90 z-40 border-b border-[#7E7A74]/30 px-6 py-4 flex justify-between items-center backdrop-blur-xl" id="deep-dive-header">
+        <h1 className="text-2xl md:text-3xl font-serif italic tracking-[0.1em] text-[#242424] cursor-pointer" onClick={() => onNavigate('reporting', 'push')}>
           Vallarta Estates
         </h1>
         
@@ -80,32 +80,32 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
         
         {/* Page title */}
         <div className="space-y-1" id="deep-dive-title-group">
-          <span className="text-[10px] tracking-[0.3em] font-medium text-[#1C1917]/50 block uppercase">
-            FINANCIAL ANALYSIS
+          <span className="text-[10px] tracking-[0.3em] font-medium text-[#242424]/50 block uppercase">
+            Financial Analysis
           </span>
-          <h2 className="text-4xl md:text-5xl font-serif italic tracking-wide text-[#1C1917]" id="deep-dive-header-title">
+          <h2 className="text-4xl md:text-5xl font-serif italic tracking-wide text-[#242424]" id="deep-dive-header-title">
             Total Portfolio Yield
           </h2>
         </div>
 
         {/* Top Key Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6" id="deep-dive-top-metrics">
-          <div className="border border-[#C9B8A0]/30 rounded-[2rem] p-6 bg-[#F5F1E8]" id="deep-dive-yield-box">
-            <span className="text-[10px] tracking-[0.2em] text-[#1C1917]/50 font-medium block mb-1 uppercase">CURRENT QUARTER YIELD</span>
+          <div className="border border-[#7E7A74]/30 rounded-[2rem] p-6 bg-[#FAF8F5]" id="deep-dive-yield-box">
+            <span className="text-[10px] tracking-[0.2em] text-[#242424]/50 font-medium block mb-1 uppercase">CURRENT QUARTER YIELD</span>
             <div className="flex justify-between items-baseline">
-              <span className="text-4xl font-mono text-[#1C1917]">8.4%</span>
-              <span className="text-xs text-green-700 font-mono flex items-center gap-1">
+              <span className="text-4xl font-serif italic font-normal text-[#242424] tabular-nums">8.4%</span>
+              <span className="text-xs text-green-700 font-sans flex items-center gap-1">
                 <ArrowUpRight className="w-3.5 h-3.5" />
                 +1.2% VS PREV. QUARTER
               </span>
             </div>
           </div>
 
-          <div className="border border-[#C9B8A0]/30 rounded-[2rem] p-6 bg-[#F5F1E8]" id="deep-dive-ytd-box">
-            <span className="text-[10px] tracking-[0.2em] text-[#1C1917]/50 font-medium block mb-1 uppercase">YEAR-TO-DATE REVENUE</span>
+          <div className="border border-[#7E7A74]/30 rounded-[2rem] p-6 bg-[#FAF8F5]" id="deep-dive-ytd-box">
+            <span className="text-[10px] tracking-[0.2em] text-[#242424]/50 font-medium block mb-1 uppercase">YEAR-TO-DATE REVENUE</span>
             <div className="flex justify-between items-baseline">
-              <span className="text-3xl font-mono text-[#1C1917]">$1,245,000</span>
-              <span className="text-xs text-[#1C1917]/50 font-mono">
+              <span className="text-3xl font-serif italic font-normal text-[#242424] tabular-nums">$1,245,000</span>
+              <span className="text-xs text-[#242424]/50 font-sans">
                 Projected EOY: $1.8M
               </span>
             </div>
@@ -115,15 +115,15 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
         {/* Revenue Velocity Chart */}
         <section className="space-y-4" id="deep-dive-velocity-section">
           <div className="flex justify-between items-center">
-            <span className="text-3xl font-serif italic text-[#1C1917]">
+            <span className="text-3xl font-serif italic text-[#242424]">
               Revenue Velocity
             </span>
-            <span className="text-[9px] font-mono tracking-widest text-[#1C1917]/60 border border-[#C9B8A0]/30 rounded-full px-3 py-1 uppercase bg-[#F5F1E8]">
+            <span className="text-[9px] font-sans tracking-widest text-[#242424]/60 border border-[#7E7A74]/30 rounded-full px-3 py-1 uppercase bg-[#FAF8F5]">
               YTD 2024
             </span>
           </div>
 
-          <div className="border border-[#C9B8A0]/30 rounded-[3rem] p-6 bg-white/20 backdrop-blur-md relative h-[220px]" id="revenue-velocity-canvas">
+          <div className="border border-[#7E7A74]/30 rounded-[3rem] p-6 bg-white/20 backdrop-blur-md relative h-[220px]" id="revenue-velocity-canvas">
             {/* Elegant SVG filling most of the space */}
             <svg viewBox="0 0 500 150" className="w-full h-full text-stone-200 fill-current overflow-visible">
               <defs>
@@ -156,7 +156,7 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
             </svg>
 
             {/* Labels aligned */}
-            <div className="flex justify-between text-[9px] font-mono text-neutral-400 mt-4 uppercase tracking-widest">
+            <div className="flex justify-between text-[9px] font-sans text-neutral-400 mt-4 uppercase tracking-widest">
               <span>JAN</span>
               <span>FEB</span>
               <span>MAR</span>
@@ -173,7 +173,7 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
         {/* Operational Expenses */}
         <section className="space-y-4" id="deep-dive-opex-section">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <span className="text-3xl font-serif italic text-[#1C1917] block">
+            <span className="text-3xl font-serif italic text-[#242424] block">
               Operational Expenses
             </span>
             
@@ -188,7 +188,7 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
                   placeholder="Search expense category..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-8 py-2 bg-[#F5F1E8] border border-[#C9B8A0]/30 rounded-full text-xs focus:outline-none focus:border-[#1C1917] transition-colors font-sans tracking-wide"
+                  className="w-full pl-9 pr-8 py-2 bg-[#FAF8F5] border border-[#7E7A74]/30 rounded-full text-xs focus:outline-none focus:border-[#242424] transition-colors font-sans tracking-wide"
                 />
                 {searchQuery && (
                   <button
@@ -208,7 +208,7 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
                   id="opex-sort-select"
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as 'highest' | 'newest')}
-                  className="w-full pl-4 pr-8 py-2 bg-[#F5F1E8] border border-[#C9B8A0]/30 rounded-full text-xs focus:outline-none focus:border-[#1C1917] transition-colors font-sans tracking-wide appearance-none cursor-pointer"
+                  className="w-full pl-4 pr-8 py-2 bg-[#FAF8F5] border border-[#7E7A74]/30 rounded-full text-xs focus:outline-none focus:border-[#242424] transition-colors font-sans tracking-wide appearance-none cursor-pointer"
                 >
                   <option value="highest">SORT: HIGHEST COST</option>
                   <option value="newest">SORT: NEWEST CHANGE</option>
@@ -222,27 +222,27 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
             </div>
           </div>
 
-          <div className="bg-[#F5F1E8] border border-[#C9B8A0]/30 rounded-[2rem] divide-y divide-[#C9B8A0]/20 overflow-hidden" id="opex-detail-table">
+          <div className="bg-[#FAF8F5] border border-[#7E7A74]/30 rounded-[2rem] divide-y divide-[#7E7A74]/20 overflow-hidden" id="opex-detail-table">
             {sortedExpenses.length > 0 ? (
               sortedExpenses.map((expense) => {
-                const changeColor = expense.trend === 'down' ? 'text-green-700 font-mono' : 'text-amber-700 font-mono';
+                const changeColor = expense.trend === 'down' ? 'text-green-700 font-sans' : 'text-amber-700 font-sans';
                 return (
-                  <div className="p-5 flex justify-between items-center hover:bg-[#C9B8A0]/10 transition" id={`opex-row-${expense.id}`} key={expense.id}>
+                  <div className="p-5 flex justify-between items-center hover:bg-[#7E7A74]/10 transition" id={`opex-row-${expense.id}`} key={expense.id}>
                     <div>
-                      <span className="text-[#1C1917] font-serif text-lg italic block">{expense.category}</span>
-                      <span className="text-[10px] text-[#1C1917]/50 font-mono uppercase tracking-wider block mt-0.5">
+                      <span className="text-[#242424] font-serif text-lg italic block">{expense.category}</span>
+                      <span className="text-[10px] text-[#242424]/50 font-sans uppercase tracking-wider block mt-0.5">
                         Modified: {expense.formattedDate}
                       </span>
                     </div>
                     <div className="text-right">
-                      <p className="font-mono text-[#1C1917] font-light text-lg">{expense.amount}</p>
+                      <p className="font-sans text-[#242424] font-light text-lg">{expense.amount}</p>
                       <span className={`text-[10px] ${changeColor}`}>{expense.change}</span>
                     </div>
                   </div>
                 );
               })
             ) : (
-              <div className="p-8 text-center text-[#1C1917]/50 text-xs font-light" id="opex-empty-state">
+              <div className="p-8 text-center text-[#242424]/50 text-xs font-light" id="opex-empty-state">
                 No expense category matched "{searchQuery}"
               </div>
             )}
@@ -250,30 +250,30 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
         </section>
 
         {/* Yield Correlation Panel matching fifth section */}
-        <section className="border border-[#C9B8A0]/30 rounded-[3rem] p-8 space-y-6 bg-white/20 backdrop-blur-md" id="deep-dive-correlation-card">
+        <section className="border border-[#7E7A74]/30 rounded-[3rem] p-8 space-y-6 bg-white/20 backdrop-blur-md" id="deep-dive-correlation-card">
           <div className="space-y-2">
-            <h4 className="text-2xl font-serif italic text-[#1C1917]">
+            <h4 className="text-2xl font-serif italic text-[#242424]">
               Yield Correlation
             </h4>
-            <p className="text-xs text-[#1C1917]/60 font-light leading-relaxed">
+            <p className="text-xs text-[#242424]/60 font-light leading-relaxed">
               Analysis indicates a direct correlation between guest sentiment scores and sustained rental yield optimization.
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-4" id="correlation-boxes-row">
-            <div className="bg-[#1C1917] text-[#F5F1E8] rounded-[2rem] p-6 text-center flex flex-col justify-between h-40 shadow-xl" id="box-avg-sentiment">
-              <span className="text-4xl md:text-5xl font-mono text-amber-200 mt-2">4.9</span>
+            <div className="bg-[#242424] text-[#FAF8F5] rounded-[2rem] p-6 text-center flex flex-col justify-between h-40 shadow-xl" id="box-avg-sentiment">
+              <span className="text-4xl md:text-5xl font-serif italic font-normal text-amber-200 mt-2 tabular-nums">4.9</span>
               <div>
-                <span className="block text-[9px] tracking-[0.2em] text-[#F5F1E8]/50 uppercase font-semibold">AVG SENTIMENT SCORE</span>
-                <span className="text-[8px] font-mono tracking-widest text-[#F5F1E8]/40 uppercase mt-1 block">Top 5% Portfolio Tier</span>
+                <span className="block text-[9px] tracking-[0.2em] text-[#FAF8F5]/50 uppercase font-semibold">AVG SENTIMENT SCORE</span>
+                <span className="text-[8px] font-sans tracking-widest text-[#FAF8F5]/40 uppercase mt-1 block">Top 5% Portfolio Tier</span>
               </div>
             </div>
 
-            <div className="bg-[#1C1917] text-[#F5F1E8] rounded-[2rem] p-6 text-center flex flex-col justify-between h-40 shadow-xl" id="box-premium-capture">
-              <span className="text-4xl md:text-5xl font-mono text-amber-200 mt-2">+14%</span>
+            <div className="bg-[#242424] text-[#FAF8F5] rounded-[2rem] p-6 text-center flex flex-col justify-between h-40 shadow-xl" id="box-premium-capture">
+              <span className="text-4xl md:text-5xl font-serif italic font-normal text-amber-200 mt-2 tabular-nums">+14%</span>
               <div>
-                <span className="block text-[9px] tracking-[0.2em] text-[#F5F1E8]/50 uppercase font-semibold">PREMIUM CAPTURE</span>
-                <span className="text-[8px] font-mono tracking-widest text-[#F5F1E8]/40 uppercase mt-1 block">% Above Market Baseline</span>
+                <span className="block text-[9px] tracking-[0.2em] text-[#FAF8F5]/50 uppercase font-semibold">PREMIUM CAPTURE</span>
+                <span className="text-[8px] font-sans tracking-widest text-[#FAF8F5]/40 uppercase mt-1 block">% Above Market Baseline</span>
               </div>
             </div>
           </div>
@@ -284,7 +284,7 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
           onClick={startDownload}
           disabled={downloading}
           id="download-full-fiscal-report-btn"
-          className="w-full bg-[#1C1917] hover:bg-[#1C1917]/80 text-[#F5F1E8] py-4 text-xs font-semibold tracking-[0.25em] uppercase flex items-center justify-center gap-2 cursor-pointer shadow-lg transition-all disabled:opacity-80 rounded-full magnetic-btn"
+          className="w-full bg-[#242424] hover:bg-[#242424]/80 text-[#FAF8F5] py-4 text-xs font-semibold tracking-[0.25em] uppercase flex items-center justify-center gap-2 cursor-pointer shadow-lg transition-all disabled:opacity-80 rounded-full magnetic-btn"
         >
           <Download className="w-4 h-4 shrink-0" />
           {downloading ? 'PREPARING DOCUMENT...' : 'DOWNLOAD FULL FISCAL REPORT (PDF)'}
@@ -293,10 +293,10 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
       </main>
 
       {/* Floating Bottom Menu Bar matching page 4 mockup design */}
-      <footer className="fixed bottom-0 left-0 right-0 border-t border-[#C9B8A0]/30 bg-[#F5F1E8]/95 backdrop-blur-xl px-4 py-3 flex justify-around items-center z-50 text-[#1C1917] shadow-[0_-10px_40px_rgba(28,25,23,0.05)] rounded-t-[2rem]" id="deep-dive-bottom-bar">
+      <footer className="fixed bottom-0 left-0 right-0 border-t border-[#7E7A74]/30 bg-[#FAF8F5]/95 backdrop-blur-xl px-4 py-3 flex justify-around items-center z-50 text-[#242424] shadow-[0_-10px_40px_rgba(28,25,23,0.05)] rounded-t-[2rem]" id="deep-dive-bottom-bar">
         <button 
           onClick={() => onNavigate('reporting', 'push')}
-          className="flex flex-col items-center justify-center p-1.5 hover:text-[#1C1917] transition text-[#1C1917]/50 cursor-pointer"
+          className="flex flex-col items-center justify-center p-1.5 hover:text-[#242424] transition text-[#242424]/50 cursor-pointer"
           id="tab-btn-dashboard"
         >
           <LayoutDashboard className="w-5 h-5 mb-1" />
@@ -305,7 +305,7 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
 
         <button 
           onClick={() => onNavigate('reporting', 'push')}
-          className="flex flex-col items-center justify-center p-1.5 hover:text-[#1C1917] transition text-[#1C1917]/50 cursor-pointer"
+          className="flex flex-col items-center justify-center p-1.5 hover:text-[#242424] transition text-[#242424]/50 cursor-pointer"
           id="tab-btn-portfolio"
         >
           <Briefcase className="w-5 h-5 mb-1" />
@@ -314,16 +314,16 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
 
         <button 
           onClick={() => onNavigate('deep_dive', 'push')}
-          className="flex flex-col items-center justify-center p-1.5 text-[#1C1917] transition cursor-pointer"
+          className="flex flex-col items-center justify-center p-1.5 text-[#242424] transition cursor-pointer"
           id="tab-btn-reports"
         >
-          <FileBarChart className="w-5 h-5 mb-1 text-[#1C1917]" />
-          <span className="text-[8px] tracking-[0.1em] font-bold uppercase text-[#1C1917]">Reports</span>
+          <FileBarChart className="w-5 h-5 mb-1 text-[#242424]" />
+          <span className="text-[8px] tracking-[0.1em] font-bold uppercase text-[#242424]">Reports</span>
         </button>
 
         <button 
           onClick={() => onNavigate('nav_menu', 'slide_up')}
-          className="flex flex-col items-center justify-center p-1.5 hover:text-[#1C1917] transition text-[#1C1917]/50 cursor-pointer"
+          className="flex flex-col items-center justify-center p-1.5 hover:text-[#242424] transition text-[#242424]/50 cursor-pointer"
           id="tab-btn-settings"
         >
           <Settings className="w-5 h-5 mb-1" />
