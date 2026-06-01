@@ -124,7 +124,7 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
         <main className="relative flex-1 flex items-center justify-center px-8 py-8" id="login-main-form-section">
           <div className="w-full max-w-sm mx-auto">
             <h2
-              className="text-4xl font-serif font-light tracking-wide mb-16 text-center animate-fade-in-up"
+              className="text-4xl font-serif italic font-normal tracking-wide mb-16 text-center animate-fade-in-up"
               id="login-title"
               style={{ color: 'var(--login-ink)', animationDelay: '300ms' }}
             >
@@ -154,7 +154,7 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
                 <div
                   className="flex items-start gap-3 p-3 text-sm animate-fade-in-up"
                   style={{
-                    backgroundColor: 'oklch(30% 0.01 70)',
+                    backgroundColor: 'var(--login-surface)',
                     color: 'var(--login-ink-secondary)',
                     borderRadius: 'var(--radius-card)',
                     border: '1px solid var(--login-border)',
@@ -186,7 +186,7 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
                   <input
                     type="email"
                     id="email-input"
-                    className="w-full bg-transparent focus:outline-none font-mono text-sm pb-1"
+                    className="w-full bg-transparent focus:outline-none font-sans text-sm pb-1"
                     style={{
                       color: 'var(--login-ink)',
                       caretColor: 'var(--login-accent)'
@@ -225,7 +225,7 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
                   <input
                     type={showPassword ? 'text' : 'password'}
                     id="password-input"
-                    className="w-full bg-transparent focus:outline-none font-mono text-sm tracking-widest pb-1"
+                    className="w-full bg-transparent focus:outline-none font-sans text-sm tracking-widest pb-1"
                     style={{
                       color: 'var(--login-ink)',
                       caretColor: 'var(--login-accent)'
