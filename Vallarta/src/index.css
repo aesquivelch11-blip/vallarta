@@ -2,9 +2,18 @@
 @import "./design-tokens.css";
 
 @theme {
-  --font-sans: "Josefin Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Cormorant Garamond", Georgia, serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-sans: "Syne", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "DM Serif Display", Georgia, serif;
+  --font-mono: "Syne", ui-monospace, SFMono-Regular, monospace;
+}
+
+/* Suppress browser autofill color injection on cream login panel */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--login-canvas) inset !important;
+  -webkit-text-fill-color: var(--login-ink) !important;
+  caret-color: var(--login-accent);
 }
 
 /* Custom scroll bar */
@@ -46,4 +55,62 @@
     opacity: 1 !important;
     transform: none !important;
   }
+}
+
+/* Editorial section numbers */
+.section-num {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(3.5rem, 6vw, 5.5rem);
+  line-height: 0.85;
+  letter-spacing: -0.03em;
+  color: var(--color-ink-muted);
+  opacity: 0.28;
+  display: block;
+  margin-bottom: 20px;
+  user-select: none;
+  pointer-events: none;
+}
+
+.section-num--dark {
+  color: var(--color-dark-ink-muted);
+  opacity: 0.22;
+}
+
+/* Login screen animations */
+.animate-login-image {
+  animation: login-image-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-login-content {
+  animation: login-content-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+
+@keyframes login-image-in {
+  from { opacity: 0; transform: scale(1.03); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes login-content-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-login-image,
+  .animate-login-content {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Dark surface autofill — login over image */
+.login-dark input:-webkit-autofill,
+.login-dark input:-webkit-autofill:hover,
+.login-dark input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px rgba(22, 39, 50, 0.95) inset !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.88) !important;
+  caret-color: var(--color-accent-warning);
 }
