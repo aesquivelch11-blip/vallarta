@@ -2,9 +2,9 @@
 @import "./design-tokens.css";
 
 @theme {
-  --font-sans: "Syne", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "DM Serif Display", Georgia, serif;
-  --font-mono: "Syne", ui-monospace, SFMono-Regular, monospace;
+  --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Fraunces", Georgia, serif;
+  --font-mono: "Instrument Sans", ui-monospace, SFMono-Regular, monospace;
 }
 
 /* Suppress browser autofill color injection on cream login panel */
