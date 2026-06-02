@@ -1,41 +1,41 @@
 :root {
   /* --- Typography --- */
-  --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-ui: 'Josefin Sans', -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-ui: 'Syne', -apple-system, sans-serif;
+  --font-mono: 'Syne', ui-monospace, monospace;
 
-  /* --- Color: Geological Warmth (OKLCH) --- */
-  --color-canvas: oklch(97.2% 0.006 68);
-  --color-surface: oklch(100% 0 0 / 0.72);
-  --color-surface-solid: oklch(99.0% 0.004 68);
-  --color-ink: oklch(13.5% 0.008 50);
-  --color-ink-secondary: oklch(49.5% 0.012 52);
-  --color-ink-muted: oklch(67.5% 0.010 52);
-  --color-border-subtle: oklch(13.5% 0.008 50 / 0.06);
-  --color-border-medium: oklch(13.5% 0.008 50 / 0.10);
+  /* --- Color: Banderas Palette --- */
+  --color-canvas: #FAF8F5;          /* Bleached Bone — global background */
+  --color-surface: rgba(255, 255, 255, 0.72);
+  --color-surface-solid: #F2ECE4;   /* Travertine Cream — solid surface */
+  --color-ink: #242424;             /* Obsidian Charcoal — primary body copy */
+  --color-ink-secondary: #7E7A74;   /* Weathered Timber — secondary text */
+  --color-ink-muted: #7E7A74;       /* Weathered Timber — muted text */
+  --color-border-subtle: rgba(36, 36, 36, 0.06);
+  --color-border-medium: rgba(36, 36, 36, 0.10);
 
   /* --- Accents --- */
-  --color-accent-positive: oklch(50% 0.07 148);
-  --color-accent-positive-bg: oklch(50% 0.07 148 / 0.07);
+  --color-accent-positive: #2B3B32;             /* Shadowed Agave — success/guest */
+  --color-accent-positive-bg: rgba(43, 59, 50, 0.07);
   --color-accent-negative: oklch(53% 0.20 25);
-  --color-accent-warning: oklch(50% 0.10 32);
-  --color-accent-warning-bg: oklch(50% 0.10 32 / 0.08);
+  --color-accent-warning: #D49A55;              /* Sunset Ochre — warning/owner */
+  --color-accent-warning-bg: rgba(212, 154, 85, 0.08);
   --color-accent-live: oklch(38% 0.15 12);
   --color-accent-live-glow: oklch(38% 0.15 12 / 0.25);
   --color-accent-live-bg: oklch(38% 0.15 12 / 0.08);
 
-  /* --- Login Surface: Dark Warm --- */
-  --login-canvas: oklch(18% 0.01 70);
-  --login-surface: oklch(22% 0.008 70);
-  --login-ink: oklch(96% 0.005 70);
-  --login-ink-secondary: oklch(75% 0.008 70);
-  --login-ink-muted: oklch(60% 0.006 70);
-  --login-border: oklch(30% 0.01 70);
-  --login-border-focus: oklch(45% 0.015 70);
-  --login-accent: oklch(60% 0.08 60);
-  --login-accent-hover: oklch(55% 0.09 60);
-  --login-error: oklch(55% 0.14 25);
-  --login-error-bg: oklch(25% 0.04 25);
+  /* --- Login Surface: Banderas Palette --- */
+  --login-canvas: #FAF8F5;                          /* Bleached Bone */
+  --login-surface: #F2ECE4;                         /* Travertine Cream */
+  --login-ink: #242424;                             /* Obsidian Charcoal */
+  --login-ink-secondary: #7E7A74;                   /* Weathered Timber */
+  --login-ink-muted: #7E7A74;                       /* Weathered Timber */
+  --login-border: rgba(36, 36, 36, 0.12);
+  --login-border-focus: rgba(36, 36, 36, 0.35);
+  --login-accent: #D49A55;                          /* Sunset Ochre */
+  --login-accent-hover: #BF8A4A;                    /* Sunset Ochre darkened */
+  --login-error: oklch(53% 0.20 25);
+  --login-error-bg: oklch(96% 0.015 25);
 
 
   /* --- Layout --- */
@@ -80,20 +80,20 @@
   --cal-booking-border: rgba(255,255,255,0.09);
 
   /* --- Dark Surface (Guest Chronicle + Operations + Footer) --- */
-  --color-dark-canvas: oklch(12% 0.010 55);
-  --color-dark-surface: oklch(16% 0.012 55);
-  --color-dark-ink: oklch(92% 0.008 70);
-  --color-dark-ink-secondary: oklch(72% 0.008 70);
-  --color-dark-ink-muted: oklch(52% 0.008 70);
-  --color-dark-border: oklch(28% 0.010 55);
-  --color-dark-accent: oklch(65% 0.050 55);
+  --color-dark-canvas: #162732;       /* Banderas Midnight */
+  --color-dark-surface: #1E3340;      /* Banderas Midnight lightened */
+  --color-dark-ink: #FAF8F5;          /* Bleached Bone */
+  --color-dark-ink-secondary: #D1DFE2; /* Horizon Wash */
+  --color-dark-ink-muted: #7E7A74;    /* Weathered Timber */
+  --color-dark-border: rgba(255, 255, 255, 0.12);
+  --color-dark-accent: #D49A55;       /* Sunset Ochre */
 }
 
 /* Typography System */
 .t-property-name {
   font-family: var(--font-display);
   font-size: clamp(3.5rem, 5vw, 4.5rem);
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: -0.02em;
   line-height: 1.05;
 }
@@ -108,7 +108,7 @@
 .t-metric-value {
   font-family: var(--font-ui);
   font-size: clamp(2.5rem, 3.5vw, 3rem);
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: -0.02em;
   line-height: 1.1;
   font-variant-numeric: tabular-nums;
@@ -126,10 +126,10 @@
 
 .t-body {
   font-family: var(--font-ui);
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 400;
   letter-spacing: 0.01em;
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
 .t-caption {
@@ -185,7 +185,7 @@ body {
   gap: 8px;
   padding: 14px 28px;
   font-family: var(--font-ui);
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -213,7 +213,7 @@ body {
   padding: 4px 10px;
   border-radius: var(--radius-pill);
   font-family: var(--font-ui);
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -221,7 +221,7 @@ body {
 
 .badge--owner {
   background: var(--color-accent-warning-bg);
-  color: #92400E;
+  color: #8B6530; /* Dark Sunset Ochre for readability */
 }
 
 .badge--guest {
@@ -230,7 +230,7 @@ body {
 }
 
 .badge--pending {
-  background: rgba(120, 113, 108, 0.08);
+  background: rgba(126, 122, 116, 0.08); /* Weathered Timber */
   color: var(--color-ink-secondary);
 }
 
@@ -244,7 +244,7 @@ body {
   color: #fff;
   border-radius: var(--radius-pill);
   font-family: var(--font-ui);
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   animation: live-pulse 2.5s ease-in-out infinite;
@@ -269,9 +269,9 @@ body {
   }
 }
 
-/* Cinematic grade for all photographs */
+/* Cinematic grade for all photographs — warm matte film look */
 .cinematic-grade {
-  filter: saturate(0.92) contrast(1.04) brightness(0.98);
+  filter: saturate(0.78) contrast(0.88) brightness(1.06) sepia(0.14) hue-rotate(-5deg);
 }
 
 /* Reveal animation utility */
@@ -389,7 +389,7 @@ body {
 .hero__property-name {
   font-family: var(--font-display);
   font-size: clamp(2.75rem, 5.5vw, 4.5rem);
-  font-weight: 300;
+  font-weight: 400;
   font-style: italic;
   letter-spacing: -0.02em;
   line-height: 1;
@@ -449,7 +449,7 @@ body {
 
 .hero__metric-label {
   font-family: var(--font-ui);
-  font-size: 0.5625rem;
+  font-size: 0.625rem;
   font-weight: 500;
   letter-spacing: 0.25em;
   text-transform: uppercase;
@@ -460,7 +460,7 @@ body {
 .hero__metric-value {
   font-family: var(--font-display);
   font-style: italic;
-  font-weight: 300;
+  font-weight: 400;
   font-size: clamp(1.25rem, 2.2vw, 1.875rem);
   color: rgba(255, 255, 255, 0.90);
   letter-spacing: -0.01em;
@@ -470,7 +470,7 @@ body {
 
 .hero__metric-delta {
   font-family: var(--font-mono);
-  font-size: 0.5625rem;
+  font-size: 0.625rem;
   letter-spacing: 0.10em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.48);
@@ -585,7 +585,7 @@ body {
 
 .performance-section__aside-cta {
   font-family: var(--font-ui);
-  font-size: 0.5625rem;
+  font-size: 0.625rem;
   font-weight: 500;
   letter-spacing: 0.25em;
   text-transform: uppercase;
@@ -622,7 +622,7 @@ body {
 
 .monthly-table__month {
   font-family: var(--font-mono);
-  font-size: 0.5625rem;
+  font-size: 0.625rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-ink-muted);
@@ -632,7 +632,7 @@ body {
 .monthly-table__revenue {
   font-family: var(--font-display);
   font-style: italic;
-  font-weight: 300;
+  font-weight: 400;
   font-size: 1.125rem;
   color: var(--color-ink-secondary);
   letter-spacing: -0.01em;
@@ -642,7 +642,7 @@ body {
 
 .monthly-table__delta {
   font-family: var(--font-mono);
-  font-size: 0.5625rem;
+  font-size: 0.625rem;
   letter-spacing: 0.10em;
   color: var(--color-ink-muted);
   line-height: 1;
@@ -790,7 +790,7 @@ body {
 .chronicle-stay__name {
   font-family: var(--font-display);
   font-style: italic;
-  font-weight: 300;
+  font-weight: 400;
   font-size: clamp(0.875rem, 1.5vw, 1.0625rem);
   color: var(--color-dark-ink);
   white-space: nowrap;
@@ -894,7 +894,7 @@ body {
 .financial-brief__row-value {
   font-family: var(--font-display);
   font-style: italic;
-  font-weight: 300;
+  font-weight: 400;
   font-size: clamp(1.75rem, 3vw, 2.5rem);
   letter-spacing: -0.01em;
   color: var(--color-ink);
@@ -905,7 +905,7 @@ body {
 
 .financial-brief__row-delta {
   font-family: var(--font-ui);
-  font-size: 0.5625rem;
+  font-size: 0.625rem;
   letter-spacing: 0.10em;
   color: var(--color-ink-muted);
   display: block;
@@ -990,7 +990,7 @@ body {
 .vitals-ops__status-item-value {
   font-family: var(--font-display);
   font-style: italic;
-  font-weight: 300;
+  font-weight: 400;
   font-size: clamp(1rem, 1.8vw, 1.25rem);
   color: var(--color-dark-ink);
   display: block;
@@ -999,7 +999,7 @@ body {
 
 .vitals-ops__status-item-sub {
   font-family: var(--font-ui);
-  font-size: 0.5625rem;
+  font-size: 0.625rem;
   letter-spacing: 0.10em;
   color: var(--color-dark-ink-muted);
   display: block;
@@ -1073,7 +1073,7 @@ body {
 .site-footer__wordmark {
   font-family: var(--font-display);
   font-style: italic;
-  font-weight: 300;
+  font-weight: 400;
   font-size: 1.125rem;
   letter-spacing: 0.04em;
   color: var(--color-dark-ink-secondary);
@@ -1087,7 +1087,7 @@ body {
 .site-footer__links button,
 .site-footer__links a {
   font-family: var(--font-ui);
-  font-size: 0.5625rem;
+  font-size: 0.625rem;
   font-weight: 400;
   letter-spacing: 0.20em;
   text-transform: uppercase;
@@ -1203,7 +1203,7 @@ body::before {
   align-items: center;
   gap: clamp(12px, 2vw, 24px);
   font-size: 0.8125rem;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .cal-pill {
@@ -1252,7 +1252,7 @@ body::before {
 .cal-month {
   font-family: var(--font-display);
   font-size: clamp(2.25rem, 6vw, 3.5rem);
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: -0.02em;
   line-height: 1;
   margin-bottom: 8px;
@@ -1288,7 +1288,7 @@ body::before {
 .cal-day {
   font-family: var(--font-ui);
   font-size: clamp(0.8125rem, 1.8vw, 0.9375rem);
-  font-weight: 300;
+  font-weight: 400;
   height: clamp(36px, 5vh, 48px);
   display: flex;
   align-items: center;
@@ -1320,7 +1320,7 @@ body::before {
   width: 3px;
   height: 3px;
   border-radius: 50%;
-  background: #c9a96e;
+  background: #D49A55; /* Sunset Ochre */
 }
 
 .cal-day__dot {
@@ -1412,7 +1412,7 @@ body::before {
 }
 
 .cal-booking-row__status--confirmed {
-  color: #c9a96e;
+  color: #D49A55; /* Sunset Ochre */
 }
 
 .cal-booking-row__status--pending {
