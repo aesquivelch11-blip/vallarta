@@ -53,15 +53,15 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
         style={{ backgroundImage: `url(${bgImage})` }}
       />
 
-      {/* Uniform dark overlay — raised to 50% for WCAG AA compliance */}
-      <div className="absolute inset-0 z-10 pointer-events-none bg-black/50" />
+      {/* Uniform dark overlay — WCAG AA compliant, warm-tinted OKLCH */}
+      <div className="absolute inset-0 z-10 pointer-events-none" style={{ background: 'var(--nav-overlay-base)' }} />
 
-      {/* Gradient scrim — heavier at left where text lives */}
+      {/* Gradient scrim — heavier at right where text lives */}
       <div
         className="absolute inset-0 z-20 pointer-events-none"
         style={{
           background:
-            'linear-gradient(to left, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.10) 60%, transparent 100%)',
+            'linear-gradient(to left, var(--nav-scrim-dark) 0%, var(--nav-scrim-mid) 60%, transparent 100%)',
         }}
       />
 
@@ -80,7 +80,7 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
           <h2
             className="text-[10px] md:text-[11px] tracking-[0.35em] text-white uppercase font-medium"
             id="nav-menu-brand"
-            style={{ textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}
+            style={{ textShadow: 'var(--nav-text-shadow-base)' }}
           >
             Vallarta Estates
           </h2>
@@ -88,7 +88,7 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
             aria-label="Close menu"
             id="nav-menu-close-btn"
             onClick={onClose}
-            className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/30 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-black/45 transition-colors duration-300 cursor-pointer"
+            className="nav-close-btn w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center cursor-pointer"
           >
             <X className="w-4 h-4 text-white" strokeWidth={1.5} />
           </button>
@@ -121,13 +121,13 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
                 >
                     <span
                     className="text-3xl md:text-4xl lg:text-5xl font-sans font-light text-white group-hover:text-white/90 transition-colors duration-300 leading-[1.15] tracking-[0.02em]"
-                    style={{ textShadow: '0 2px 8px rgba(0,0,0,0.55)' }}
+                    style={{ textShadow: 'var(--nav-text-shadow-strong)' }}
                   >
                     {item.label}
                   </span>
                   <span
                     className="text-[11px] md:text-[12px] tracking-[0.25em] text-white/90 font-sans block mt-4 uppercase leading-none"
-                    style={{ textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}
+                    style={{ textShadow: 'var(--nav-text-shadow-base)' }}
                   >
                     {item.subtitle}
                   </span>
@@ -143,7 +143,7 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
             <div className="space-y-6">
               <p
                 className="text-[10px] tracking-[0.3em] text-white/80 uppercase font-medium"
-                style={{ textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}
+                style={{ textShadow: 'var(--nav-text-shadow-base)' }}
               >
                 Property Management
               </p>

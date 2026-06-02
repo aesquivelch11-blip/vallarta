@@ -87,6 +87,25 @@
   --color-dark-ink-muted: #7E7A74;    /* Weathered Timber */
   --color-dark-border: rgba(255, 255, 255, 0.12);
   --color-dark-accent: #D49A55;       /* Sunset Ochre */
+
+  /* --- Nav Menu Overlays --- */
+  --nav-overlay-base: oklch(12% 0.008 60 / 0.52);
+  --nav-scrim-dark: oklch(12% 0.008 60 / 0.38);
+  --nav-scrim-mid: oklch(12% 0.008 60 / 0.12);
+  --nav-close-bg: oklch(12% 0.008 60 / 0.30);
+  --nav-close-bg-hover: oklch(12% 0.008 60 / 0.45);
+  --nav-close-border: oklch(98% 0.005 80 / 0.20);
+  --nav-text-shadow-strong: 0 2px 10px oklch(12% 0.008 60 / 0.55);
+  --nav-text-shadow-base: 0 1px 6px oklch(12% 0.008 60 / 0.40);
+}
+
+.nav-close-btn {
+  background: var(--nav-close-bg);
+  border: 1px solid var(--nav-close-border);
+  transition: background 300ms var(--ease-out-quart);
+}
+.nav-close-btn:hover {
+  background: var(--nav-close-bg-hover);
 }
 
 /* Typography System */
