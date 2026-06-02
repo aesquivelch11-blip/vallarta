@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { X, Phone, Sliders, Globe, LogOut } from 'lucide-react';
 import { ScreenType } from '../types';
@@ -62,6 +62,14 @@ export default function NavMenuView({ onNavigate, onClose, onNotify, originScree
       }, 3000);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (logoutTimerRef.current) {
+        clearTimeout(logoutTimerRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="relative w-full min-h-[100dvh] overflow-hidden font-sans" id="nav-menu-container">
