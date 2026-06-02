@@ -194,7 +194,244 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
             Your portfolio,<br />at a glance.
           </h1>
 
-          {/* Form and secondary actions go here — Task 4 */}
+          {/* Error state */}
+          {error && (
+            <div
+              role="alert"
+              style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '10px',
+                padding: '11px 14px',
+                marginBottom: '24px',
+                background: 'oklch(96% 0.015 25 / 0.10)',
+                border: '1px solid oklch(53% 0.20 25 / 0.45)',
+                borderRadius: '6px',
+                color: 'oklch(88% 0.06 25)',
+                fontSize: '0.8125rem',
+                lineHeight: 1.45,
+                fontFamily: 'var(--font-ui)'
+              }}
+            >
+              <AlertCircle style={{ width: 14, height: 14, flexShrink: 0, marginTop: 2 }} />
+              <span>{error}</span>
+            </div>
+          )}
+
+          {/* Notice state */}
+          {notice && (
+            <div
+              role="status"
+              style={{
+                padding: '11px 14px',
+                marginBottom: '24px',
+                background: 'rgba(255,255,255,0.05)',
+                border: '1px solid rgba(255,255,255,0.12)',
+                borderRadius: '6px',
+                color: 'rgba(255,255,255,0.65)',
+                fontSize: '0.8125rem',
+                lineHeight: 1.45,
+                fontFamily: 'var(--font-ui)'
+              }}
+            >
+              {notice}
+            </div>
+          )}
+
+          <form
+            onSubmit={handleSubmit}
+            style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}
+          >
+            {/* Email field */}
+            <div
+              style={{ borderBottom: '1px solid rgba(255,255,255,0.20)', paddingBottom: '10px' }}
+              onFocusCapture={e => (e.currentTarget.style.borderBottomColor = 'rgba(255,255,255,0.65)')}
+              onBlurCapture={e => (e.currentTarget.style.borderBottomColor = 'rgba(255,255,255,0.20)')}
+            >
+              <label
+                htmlFor="email-input"
+                style={{
+                  display: 'block',
+                  fontFamily: 'var(--font-ui)',
+                  fontSize: '0.5625rem',
+                  fontWeight: 500,
+                  letterSpacing: '0.22em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(255,255,255,0.40)',
+                  marginBottom: '10px'
+                }}
+              >
+                Email
+              </label>
+              <input
+                ref={emailRef}
+                type="email"
+                id="email-input"
+                autoComplete="email"
+                value={email}
+                onChange={e => { setEmail(e.target.value); if (error) setError(''); }}
+                disabled={isLoading}
+                style={{
+                  width: '100%',
+                  background: 'transparent',
+                  border: 'none',
+                  outline: 'none',
+                  fontFamily: 'var(--font-ui)',
+                  fontSize: '0.9375rem',
+                  fontWeight: 400,
+                  color: 'rgba(255,255,255,0.88)',
+                  caretColor: 'var(--color-accent-warning)'
+                }}
+              />
+            </div>
+
+            {/* Password field */}
+            <div
+              style={{ borderBottom: '1px solid rgba(255,255,255,0.20)', paddingBottom: '10px' }}
+              onFocusCapture={e => (e.currentTarget.style.borderBottomColor = 'rgba(255,255,255,0.65)')}
+              onBlurCapture={e => (e.currentTarget.style.borderBottomColor = 'rgba(255,255,255,0.20)')}
+            >
+              <label
+                htmlFor="password-input"
+                style={{
+                  display: 'block',
+                  fontFamily: 'var(--font-ui)',
+                  fontSize: '0.5625rem',
+                  fontWeight: 500,
+                  letterSpacing: '0.22em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(255,255,255,0.40)',
+                  marginBottom: '10px'
+                }}
+              >
+                Password
+              </label>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  id="password-input"
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={e => { setPassword(e.target.value); if (error) setError(''); }}
+                  disabled={isLoading}
+                  style={{
+                    flex: 1,
+                    background: 'transparent',
+                    border: 'none',
+                    outline: 'none',
+                    fontFamily: 'var(--font-ui)',
+                    fontSize: '0.9375rem',
+                    fontWeight: 400,
+                    color: 'rgba(255,255,255,0.88)',
+                    caretColor: 'var(--color-accent-warning)'
+                  }}
+                />
+                <button
+                  type="button"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  onClick={() => setShowPassword(v => !v)}
+                  className="login-toggle-btn"
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    padding: '4px',
+                    cursor: 'pointer',
+                    color: 'rgba(255,255,255,0.35)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    borderRadius: '3px',
+                    transition: 'color 0.15s',
+                    flexShrink: 0
+                  }}
+                  onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.80)')}
+                  onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.35)')}
+                >
+                  {showPassword
+                    ? <EyeOff style={{ width: 15, height: 15 }} />
+                    : <Eye style={{ width: 15, height: 15 }} />
+                  }
+                </button>
+              </div>
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              style={{
+                width: '100%',
+                padding: '15px',
+                fontFamily: 'var(--font-ui)',
+                fontSize: '0.625rem',
+                fontWeight: 600,
+                letterSpacing: '0.22em',
+                textTransform: 'uppercase',
+                border: '1px solid rgba(255,255,255,0.30)',
+                borderRadius: 'var(--radius-pill)',
+                background: 'transparent',
+                color: 'rgba(255,255,255,0.80)',
+                cursor: isLoading ? 'not-allowed' : 'pointer',
+                opacity: isLoading ? 0.5 : 1,
+                marginTop: '8px',
+                transition: [
+                  'background var(--duration-fast) var(--ease-out-expo)',
+                  'border-color var(--duration-fast) var(--ease-out-expo)',
+                  'color var(--duration-fast) var(--ease-out-expo)'
+                ].join(', ')
+              }}
+              onMouseEnter={e => {
+                if (isLoading) return;
+                const b = e.currentTarget as HTMLButtonElement;
+                b.style.background = 'rgba(255,255,255,0.08)';
+                b.style.borderColor = 'rgba(255,255,255,0.60)';
+                b.style.color = 'rgba(255,255,255,1)';
+              }}
+              onMouseLeave={e => {
+                const b = e.currentTarget as HTMLButtonElement;
+                b.style.background = 'transparent';
+                b.style.borderColor = 'rgba(255,255,255,0.30)';
+                b.style.color = 'rgba(255,255,255,0.80)';
+              }}
+            >
+              {isLoading ? 'Authenticating…' : 'Sign In'}
+            </button>
+          </form>
+
+          {/* Secondary actions */}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              marginTop: '20px'
+            }}
+          >
+            {[
+              { label: 'Forgot Password', onClick: handleForgotPassword },
+              { label: 'Request Access', onClick: handleRequestAccess }
+            ].map(({ label, onClick }) => (
+              <button
+                key={label}
+                type="button"
+                onClick={onClick}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  padding: '4px 0',
+                  fontFamily: 'var(--font-ui)',
+                  fontSize: '0.5625rem',
+                  letterSpacing: '0.15em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(255,255,255,0.30)',
+                  cursor: 'pointer',
+                  transition: 'color 0.2s'
+                }}
+                onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.65)')}
+                onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.30)')}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
 
         </div>
       </main>
