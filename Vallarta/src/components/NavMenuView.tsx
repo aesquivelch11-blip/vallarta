@@ -8,6 +8,7 @@ interface NavMenuViewProps {
   onNavigate: (screen: ScreenType, transitionStyle: 'push' | 'slide_up') => void;
   onClose: () => void;
   onNotify?: (message: string) => void;
+  originScreen?: ScreenType;
 }
 
 interface MenuItem {
@@ -44,7 +45,7 @@ const menuItems: MenuItem[] = [
   },
 ];
 
-export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuViewProps) {
+export default function NavMenuView({ onNavigate, onClose, onNotify, originScreen }: NavMenuViewProps) {
   return (
     <div className="relative w-full min-h-[100dvh] overflow-hidden font-sans" id="nav-menu-container">
       {/* Background Image */}
@@ -113,11 +114,11 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
                   id={`nav-link-${item.id}`}
                   onClick={(e) => {
                     e.preventDefault();
-                    onNavigate(item.screen, 'push');
+                    if (item.screen !== originScreen) onNavigate(item.screen, 'push');
                   }}
-                  whileHover={{ x: -8 }}
+                  whileHover={item.screen !== originScreen ? { x: -8 } : {}}
                   transition={{ type: 'spring', stiffness: 280, damping: 22 }}
-                  className="group block"
+                  className={`group block ${item.screen === originScreen ? 'opacity-40 pointer-events-none cursor-default' : ''}`}
                 >
                     <span
                     className="text-3xl md:text-4xl lg:text-5xl font-sans font-light text-white group-hover:text-white/90 transition-colors duration-300 leading-[1.15] tracking-[0.02em]"
