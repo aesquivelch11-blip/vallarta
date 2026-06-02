@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import { X, Phone, Sliders, Globe, LogOut } from 'lucide-react';
 import { ScreenType } from '../types';
@@ -46,6 +46,23 @@ const menuItems: MenuItem[] = [
 ];
 
 export default function NavMenuView({ onNavigate, onClose, onNotify, originScreen }: NavMenuViewProps) {
+  const [logoutPending, setLogoutPending] = useState(false);
+  const logoutTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleLogoutClick = () => {
+    if (logoutPending) {
+      if (logoutTimerRef.current) clearTimeout(logoutTimerRef.current);
+      setLogoutPending(false);
+      onNavigate('login', 'push');
+    } else {
+      setLogoutPending(true);
+      onNotify?.('Tap again to confirm logout');
+      logoutTimerRef.current = setTimeout(() => {
+        setLogoutPending(false);
+      }, 3000);
+    }
+  };
+
   return (
     <div className="relative w-full min-h-[100dvh] overflow-hidden font-sans" id="nav-menu-container">
       {/* Background Image */}
@@ -184,12 +201,14 @@ export default function NavMenuView({ onNavigate, onClose, onNotify, originScree
                   Website
                 </a>
                 <button
-                  onClick={() => onNavigate('login', 'push')}
-                  className="flex items-center gap-2 py-1 hover:text-white transition-colors duration-200 cursor-pointer uppercase"
+                  onClick={handleLogoutClick}
+                  className={`flex items-center gap-2 py-1 transition-colors duration-200 cursor-pointer uppercase ${
+                    logoutPending ? 'text-white' : 'hover:text-white'
+                  }`}
                   id="nav-foo-logout"
                 >
                   <LogOut className="w-4 h-4 shrink-0" strokeWidth={1.5} />
-                  Logout
+                  {logoutPending ? 'Confirm?' : 'Logout'}
                 </button>
               </div>
             </div>
