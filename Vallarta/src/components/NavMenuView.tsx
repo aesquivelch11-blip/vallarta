@@ -94,22 +94,15 @@ export default function NavMenuView({ onNavigate, onClose, onNotify, originScree
       {/* Uniform dark overlay — WCAG AA compliant, warm-tinted OKLCH */}
       <div className="absolute inset-0 z-10 pointer-events-none" style={{ background: 'var(--nav-overlay-base)' }} />
 
-      {/* Gradient scrim — heavier at right where text lives */}
+      {/* Gradient scrim — heavier at right, behind right-aligned text */}
       <div
         className="absolute inset-0 z-20 pointer-events-none"
         style={{
           background:
-            'linear-gradient(to left, var(--nav-scrim-dark) 0%, var(--nav-scrim-mid) 60%, transparent 100%)',
+            'linear-gradient(to right, transparent 0%, var(--nav-scrim-mid) 40%, var(--nav-scrim-dark) 100%)',
         }}
       />
 
-      {/* Grain texture */}
-      <div
-        className="absolute inset-0 z-30 pointer-events-none opacity-[0.02]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-        }}
-      />
 
       {/* Full-height flex column */}
       <div className="relative z-30 w-full h-[100dvh] flex flex-col">
@@ -188,59 +181,24 @@ export default function NavMenuView({ onNavigate, onClose, onNotify, originScree
         {/* Bottom bar */}
         <footer className="shrink-0 px-6 md:px-16 lg:px-24 pb-10 md:pb-16">
           <div className="flex items-end justify-center md:justify-end gap-8">
-            <div className="space-y-6">
-              <p
-                className="text-[10px] tracking-[0.3em] text-white/80 uppercase font-medium"
-                style={{ textShadow: 'var(--nav-text-shadow-base)' }}
-              >
-                Property Management
-              </p>
-              <div className="flex flex-wrap gap-x-8 gap-y-4 text-[11px] tracking-[0.15em] text-white/95">
-                <button
-                  onClick={() =>
-                    onNotify
-                      ? onNotify('Support concierge: concierge@vallarta-estates.com')
-                      : alert('Support concierge: concierge@vallarta-estates.com')
-                  }
-                  className="flex items-center gap-2 py-1 hover:text-white transition-colors duration-200 cursor-pointer uppercase"
-                  id="nav-foo-contact"
-                >
-                  <Phone className="w-4 h-4 shrink-0" strokeWidth={1.5} />
-                  Contact
-                </button>
-                <button
-                  onClick={() =>
-                    onNotify
-                      ? onNotify('System telemetry functioning securely.')
-                      : alert('System telemetry functioning securely.')
-                  }
-                  className="flex items-center gap-2 py-1 hover:text-white transition-colors duration-200 cursor-pointer uppercase"
-                  id="nav-foo-settings"
-                >
-                  <Sliders className="w-4 h-4 shrink-0" strokeWidth={1.5} />
-                  Settings
-                </button>
-                <a
-                  href="https://images.unsplash.com/photo-1613977257363-707ba9348227"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center gap-2 py-1 hover:text-white transition-colors duration-200 uppercase"
-                  id="nav-foo-website"
-                >
-                  <Globe className="w-4 h-4 shrink-0" strokeWidth={1.5} />
-                  Website
-                </a>
-                <button
-                  onClick={handleLogoutClick}
-                  className={`flex items-center gap-2 py-1 transition-colors duration-200 cursor-pointer uppercase ${
-                    logoutPending ? 'text-white' : 'hover:text-white'
-                  }`}
-                  id="nav-foo-logout"
-                >
-                  <LogOut className="w-4 h-4 shrink-0" strokeWidth={1.5} />
-                  {logoutPending ? 'Confirm?' : 'Logout'}
-                </button>
-              </div>
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-[11px] tracking-[0.15em] text-white/95">
+              <button onClick={() => onNotify ? onNotify('Support concierge: concierge@vallarta-estates.com') : alert('Support concierge: concierge@vallarta-estates.com')} className="flex items-center gap-2 py-1 hover:text-white transition-colors duration-200 cursor-pointer uppercase" id="nav-foo-contact">
+                <Phone className="w-4 h-4 shrink-0" strokeWidth={1.5} />
+                Contact
+              </button>
+              <button onClick={() => onNotify ? onNotify('System telemetry functioning securely.') : alert('System telemetry functioning securely.')} className="flex items-center gap-2 py-1 hover:text-white transition-colors duration-200 cursor-pointer uppercase" id="nav-foo-settings">
+                <Sliders className="w-4 h-4 shrink-0" strokeWidth={1.5} />
+                Settings
+              </button>
+              <a href="https://vallarta-estates.com" target="_blank" rel="noreferrer" className="flex items-center gap-2 py-1 hover:text-white transition-colors duration-200 uppercase" id="nav-foo-website">
+                <Globe className="w-4 h-4 shrink-0" strokeWidth={1.5} />
+                Website
+              </a>
+              <div className="hidden md:block w-px h-4 bg-white/20 mx-2" />
+              <button onClick={handleLogoutClick} className={`flex items-center gap-2 py-1 transition-colors duration-200 cursor-pointer uppercase ${logoutPending ? 'text-white' : 'text-white/60 hover:text-white'}`} id="nav-foo-logout">
+                <LogOut className="w-4 h-4 shrink-0" strokeWidth={1.5} />
+                {logoutPending ? 'Confirm?' : 'Logout'}
+              </button>
             </div>
             <div className="hidden md:flex items-center gap-3 text-white/90 transition-opacity duration-200">
               <span className="text-sm font-sans tabular-nums">
