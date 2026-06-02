@@ -33,7 +33,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 99999,
-        fontFamily: "'Inter', sans-serif",
+        fontFamily: "var(--font-ui)",
         WebkitFontSmoothing: 'antialiased',
         overflow: 'hidden',
       }}
