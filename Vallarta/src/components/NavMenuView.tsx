@@ -15,33 +15,43 @@ interface MenuItem {
   id: string;
   label: string;
   subtitle: string;
+  dataValue: string;
   screen: ScreenType;
+  weight: 'primary' | 'secondary';
 }
 
 const menuItems: MenuItem[] = [
   {
     id: 'estates',
     label: 'The Estates',
-    subtitle: 'Portfolio Overview & Asset Valuation',
+    subtitle: 'Portfolio Overview',
+    dataValue: '4 Active Stays',
     screen: 'reporting',
+    weight: 'primary',
   },
   {
     id: 'performance',
     label: 'Financial Performance',
-    subtitle: 'Yield & Revenue Velocity',
+    subtitle: 'Yield Revenue',
+    dataValue: '$12.4K MTD',
     screen: 'deep_dive',
+    weight: 'secondary',
   },
   {
     id: 'operations',
     label: 'Operations',
-    subtitle: 'Occupancy & Live Supervision',
+    subtitle: 'Live Supervision',
+    dataValue: '2 Cameras Online',
     screen: 'camera_expanded',
+    weight: 'secondary',
   },
   {
     id: 'calendar',
     label: 'Calendar',
-    subtitle: 'Reservations & Timeline',
+    subtitle: 'Reservations',
+    dataValue: '3 Arrivals This Week',
     screen: 'calendar',
+    weight: 'primary',
   },
 ];
 
@@ -150,17 +160,25 @@ export default function NavMenuView({ onNavigate, onClose, onNotify, originScree
                   }`}
                 >
                     <span
-                    className="text-3xl md:text-4xl lg:text-5xl font-sans font-light text-white group-hover:text-white/90 transition-colors duration-300 leading-[1.15] tracking-[0.02em]"
+                     className={`font-sans font-light text-white group-hover:text-white/90 transition-colors duration-300 leading-[1.15] tracking-[0.02em] ${item.weight === 'primary' ? 'text-[2.25rem] md:text-[3.5rem] lg:text-[4.5rem]' : 'text-[1.75rem] md:text-[2.75rem] lg:text-[3.5rem] opacity-75'}`}
                     style={{ textShadow: 'var(--nav-text-shadow-strong)' }}
                   >
                     {item.label}
                   </span>
-                  <span
-                    className="text-[11px] md:text-[12px] tracking-[0.25em] text-white/90 font-sans block mt-4 uppercase leading-none"
-                    style={{ textShadow: 'var(--nav-text-shadow-base)' }}
-                  >
-                    {item.subtitle}
-                  </span>
+                  <div className={`relative h-[1.2em] ${item.weight === 'primary' ? 'mt-4' : 'mt-3'}`}>
+                    <span
+                      className="absolute inset-0 text-[11px] md:text-[12px] tracking-[0.25em] text-white/90 font-sans uppercase leading-none transition-opacity duration-300"
+                      style={{ textShadow: 'var(--nav-text-shadow-base)', opacity: hoveredIndex === index ? 0 : 1 }}
+                    >
+                      {item.subtitle}
+                    </span>
+                    <span
+                      className="absolute inset-0 text-[11px] md:text-[12px] tracking-[0.25em] text-white/90 font-sans uppercase leading-none transition-opacity duration-300"
+                      style={{ textShadow: 'var(--nav-text-shadow-base)', opacity: hoveredIndex === index ? 1 : 0 }}
+                    >
+                      {item.dataValue}
+                    </span>
+                  </div>
                 </motion.button>
               </motion.div>
             ))}
