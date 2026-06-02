@@ -15,6 +15,7 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [notice, setNotice] = useState('');
 
   const emailRef = useRef<HTMLInputElement>(null);
 
@@ -57,8 +58,6 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
     setIsLoading(false);
     onSignIn();
   };
-
-  const [notice, setNotice] = useState('');
 
   const handleForgotPassword = () => {
     setError('');
@@ -413,6 +412,16 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
                 b.style.borderColor = 'rgba(255,255,255,0.30)';
                 b.style.color = 'rgba(255,255,255,0.80)';
               }}
+              onFocus={e => {
+                if (isLoading) return;
+                const b = e.currentTarget as HTMLButtonElement;
+                b.style.outline = '1px solid rgba(255,255,255,0.55)';
+                b.style.outlineOffset = '3px';
+              }}
+              onBlur={e => {
+                const b = e.currentTarget as HTMLButtonElement;
+                b.style.outline = 'none';
+              }}
             >
               {isLoading ? 'Authenticating…' : 'Sign In'}
             </button>
@@ -434,6 +443,7 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
                 key={label}
                 type="button"
                 onClick={onClick}
+                className="login-secondary-btn"
                 style={{
                   background: 'none',
                   border: 'none',
