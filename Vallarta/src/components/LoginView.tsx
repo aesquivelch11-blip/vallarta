@@ -119,7 +119,124 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
         }}
       />
 
-      {/* Content layers go here — added in subsequent tasks */}
+      {/* Top nav */}
+      <header
+        className="absolute top-0 left-0 right-0 z-10 flex justify-between items-center"
+        style={{ padding: 'clamp(20px, 3.5vh, 36px) clamp(24px, 5vw, 56px)' }}
+      >
+        <span
+          style={{
+            fontFamily: 'var(--font-ui)',
+            fontSize: '0.6875rem',
+            fontWeight: 500,
+            letterSpacing: '0.35em',
+            textTransform: 'uppercase',
+            color: 'rgba(255,255,255,0.85)'
+          }}
+        >
+          Vallarta Estates
+        </span>
+        <a
+          href="tel:+523228490122"
+          style={{
+            fontFamily: 'var(--font-ui)',
+            fontSize: '0.5625rem',
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            color: 'rgba(255,255,255,0.40)',
+            textDecoration: 'none',
+            transition: 'color var(--duration-fast) var(--ease-out-expo)'
+          }}
+          onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.80)')}
+          onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.40)')}
+          onFocus={e => ((e.currentTarget as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.80)')}
+          onBlur={e => ((e.currentTarget as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.40)')}
+        >
+          Contact
+        </a>
+      </header>
+
+      {/* Main login content */}
+      <main
+        className="animate-login-content absolute inset-0 z-10 flex flex-col justify-center lg:justify-center justify-end"
+        style={{ padding: 'clamp(24px, 5vw, 56px)', paddingBottom: 'clamp(80px, 12vh, 120px)' }}
+        aria-label="Sign in to Vallarta Estates"
+      >
+        <div style={{ maxWidth: '420px' }}>
+          {/* Location label */}
+          <p
+            style={{
+              fontFamily: 'var(--font-ui)',
+              fontSize: '0.5625rem',
+              fontWeight: 500,
+              letterSpacing: '0.28em',
+              textTransform: 'uppercase',
+              color: 'rgba(255,255,255,0.40)',
+              marginBottom: '16px'
+            }}
+          >
+            Puerto Vallarta · Punta Mita
+          </p>
+
+          {/* Editorial headline */}
+          <h1
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontStyle: 'italic',
+              fontWeight: 400,
+              fontSize: 'clamp(1.875rem, 3.5vw, 2.625rem)',
+              color: 'rgba(255,255,255,0.92)',
+              lineHeight: 1.15,
+              letterSpacing: '-0.01em',
+              marginBottom: '48px'
+            }}
+          >
+            Your portfolio,<br />at a glance.
+          </h1>
+
+          {/* Form and secondary actions go here — Task 4 */}
+
+        </div>
+      </main>
+
+      {/* Bottom footer */}
+      <footer
+        className="absolute bottom-0 left-0 right-0 z-10 flex justify-between items-center"
+        style={{ padding: 'clamp(14px, 2.5vh, 24px) clamp(24px, 5vw, 56px)' }}
+      >
+        <span
+          style={{
+            fontFamily: 'var(--font-ui)',
+            fontSize: '0.5625rem',
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            color: 'rgba(255,255,255,0.18)'
+          }}
+        >
+          © {new Date().getFullYear()} Vallarta Estates
+        </span>
+        <div style={{ display: 'flex', gap: '20px' }}>
+          {(['Privacy', 'Terms'] as const).map(label => (
+            <a
+              key={label}
+              href={`#${label.toLowerCase()}`}
+              style={{
+                fontFamily: 'var(--font-ui)',
+                fontSize: '0.5625rem',
+                letterSpacing: '0.15em',
+                textTransform: 'uppercase',
+                color: 'rgba(255,255,255,0.18)',
+                textDecoration: 'none',
+                transition: 'color 0.2s'
+              }}
+              onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.50)')}
+              onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.18)')}
+            >
+              {label}
+            </a>
+          ))}
+        </div>
+      </footer>
 
     </div>
   );
