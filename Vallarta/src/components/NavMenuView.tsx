@@ -63,6 +63,8 @@ export default function NavMenuView({ onNavigate, onClose, onNotify, originScree
     }
   };
 
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
   useEffect(() => {
     return () => {
       if (logoutTimerRef.current) {
@@ -103,13 +105,13 @@ export default function NavMenuView({ onNavigate, onClose, onNotify, originScree
       <div className="relative z-30 w-full h-[100dvh] flex flex-col">
         {/* Top bar */}
         <header className="flex items-center justify-end gap-8 px-8 md:px-14 lg:px-20 pt-8 md:pt-12 shrink-0">
-          <h2
+          <p
             className="text-[10px] md:text-[11px] tracking-[0.35em] text-white uppercase font-medium"
             id="nav-menu-brand"
             style={{ textShadow: 'var(--nav-text-shadow-base)' }}
           >
             Vallarta Estates
-          </h2>
+          </p>
           <button
             aria-label="Close menu"
             id="nav-menu-close-btn"
@@ -133,17 +135,19 @@ export default function NavMenuView({ onNavigate, onClose, onNotify, originScree
                   delay: 0.08 * index,
                   ease: [0.16, 1, 0.3, 1],
                 }}
+                onHoverStart={() => setHoveredIndex(index)}
+                onHoverEnd={() => setHoveredIndex(null)}
               >
-                <motion.a
-                  href="#"
+                <motion.button
                   id={`nav-link-${item.id}`}
-                  onClick={(e) => {
-                    e.preventDefault();
+                  onClick={() => {
                     if (item.screen !== originScreen) onNavigate(item.screen, 'push');
                   }}
                   whileHover={item.screen !== originScreen ? { x: -8 } : {}}
                   transition={{ type: 'spring', stiffness: 280, damping: 22 }}
-                  className={`group block ${item.screen === originScreen ? 'opacity-40 pointer-events-none cursor-default' : ''}`}
+                  className={`group block w-full bg-transparent border-none p-0 cursor-pointer ${
+                    item.screen === originScreen ? 'opacity-40 pointer-events-none cursor-default' : ''
+                  }`}
                 >
                     <span
                     className="text-3xl md:text-4xl lg:text-5xl font-sans font-light text-white group-hover:text-white/90 transition-colors duration-300 leading-[1.15] tracking-[0.02em]"
@@ -157,7 +161,7 @@ export default function NavMenuView({ onNavigate, onClose, onNotify, originScree
                   >
                     {item.subtitle}
                   </span>
-                </motion.a>
+                </motion.button>
               </motion.div>
             ))}
           </div>
@@ -220,10 +224,12 @@ export default function NavMenuView({ onNavigate, onClose, onNotify, originScree
                 </button>
               </div>
             </div>
-            <div className="hidden md:flex items-center gap-3 text-white/90">
-              <span className="text-sm font-sans tabular-nums">01</span>
+            <div className="hidden md:flex items-center gap-3 text-white/90 transition-opacity duration-200">
+              <span className="text-sm font-sans tabular-nums">
+                {hoveredIndex !== null ? String(hoveredIndex + 1).padStart(2, '0') : '—'}
+              </span>
               <div className="w-8 h-px bg-white/50" />
-              <span className="text-sm font-sans tabular-nums">04</span>
+              <span className="text-sm font-sans tabular-nums">{String(menuItems.length).padStart(2, '0')}</span>
             </div>
           </div>
         </footer>
