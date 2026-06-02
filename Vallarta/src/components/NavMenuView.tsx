@@ -121,8 +121,8 @@ export default function NavMenuView({ onNavigate, onClose, onNotify, originScree
         </header>
 
         {/* Menu items — flex column, spacious */}
-        <main className="flex-1 flex flex-col items-end px-8 md:px-14 lg:px-20 pr-12 md:pr-20 pt-4 md:pt-8" id="nav-menu-links-list">
-          <div className="max-w-2xl space-y-16 md:space-y-20 text-right">
+        <main className="flex-1 flex flex-col items-center md:items-end px-8 md:px-14 lg:px-20 md:pr-20 pt-4 md:pt-8" id="nav-menu-links-list">
+          <div className="max-w-2xl space-y-16 md:space-y-20 text-center md:text-right">
             {menuItems.map((item, index) => (
               <motion.div
                 key={item.id}
@@ -165,7 +165,7 @@ export default function NavMenuView({ onNavigate, onClose, onNotify, originScree
 
         {/* Bottom bar */}
         <footer className="shrink-0 px-8 md:px-14 lg:px-20 pb-8 md:pb-12">
-          <div className="flex items-end justify-end gap-8">
+          <div className="flex items-end justify-center md:justify-end gap-8">
             <div className="space-y-6">
               <p
                 className="text-[10px] tracking-[0.3em] text-white/80 uppercase font-medium"
