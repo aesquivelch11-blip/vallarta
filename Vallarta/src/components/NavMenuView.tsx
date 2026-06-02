@@ -104,7 +104,7 @@ export default function NavMenuView({ onNavigate, onClose, onNotify, originScree
       {/* Full-height flex column */}
       <div className="relative z-30 w-full h-[100dvh] flex flex-col">
         {/* Top bar */}
-        <header className="flex items-center justify-end gap-8 px-8 md:px-14 lg:px-20 pt-8 md:pt-12 shrink-0">
+        <header className="flex items-center justify-end gap-8 px-6 md:px-16 lg:px-24 pt-10 md:pt-16 shrink-0">
           <p
             className="text-[10px] md:text-[11px] tracking-[0.35em] text-white uppercase font-medium"
             id="nav-menu-brand"
@@ -123,7 +123,7 @@ export default function NavMenuView({ onNavigate, onClose, onNotify, originScree
         </header>
 
         {/* Menu items — flex column, spacious */}
-        <main className="flex-1 flex flex-col items-center md:items-end px-8 md:px-14 lg:px-20 md:pr-20 pt-4 md:pt-8" id="nav-menu-links-list">
+        <main className="flex-1 flex flex-col items-center md:items-end px-10 md:px-20 lg:px-28 md:pr-24 pt-6 md:pt-12" id="nav-menu-links-list">
           <div className="max-w-2xl space-y-16 md:space-y-20 text-center md:text-right">
             {menuItems.map((item, index) => (
               <motion.div
@@ -144,7 +144,7 @@ export default function NavMenuView({ onNavigate, onClose, onNotify, originScree
                     if (item.screen !== originScreen) onNavigate(item.screen, 'push');
                   }}
                   whileHover={item.screen !== originScreen ? { x: -8 } : {}}
-                  transition={{ type: 'spring', stiffness: 280, damping: 22 }}
+                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                   className={`group block w-full bg-transparent border-none p-0 cursor-pointer ${
                     item.screen === originScreen ? 'opacity-40 pointer-events-none cursor-default' : ''
                   }`}
@@ -168,7 +168,7 @@ export default function NavMenuView({ onNavigate, onClose, onNotify, originScree
         </main>
 
         {/* Bottom bar */}
-        <footer className="shrink-0 px-8 md:px-14 lg:px-20 pb-8 md:pb-12">
+        <footer className="shrink-0 px-6 md:px-16 lg:px-24 pb-10 md:pb-16">
           <div className="flex items-end justify-center md:justify-end gap-8">
             <div className="space-y-6">
               <p
