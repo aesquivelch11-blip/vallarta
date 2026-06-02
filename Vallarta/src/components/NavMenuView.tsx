@@ -119,7 +119,7 @@ export default function NavMenuView({ onNavigate, onClose, onNotify, originScree
             aria-label="Close menu"
             id="nav-menu-close-btn"
             onClick={onClose}
-            className="nav-close-btn w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center cursor-pointer"
+            className="nav-close-btn w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
           >
             <X className="w-4 h-4 text-white" strokeWidth={1.5} />
           </button>
@@ -148,7 +148,7 @@ export default function NavMenuView({ onNavigate, onClose, onNotify, originScree
                   }}
                   whileHover={item.screen !== originScreen ? { x: -8 } : {}}
                   transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                  className={`group block w-full bg-transparent border-none p-0 cursor-pointer ${
+                  className={`group block w-full bg-transparent border-none p-0 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-sm ${
                     item.screen === originScreen ? 'opacity-40 pointer-events-none cursor-default' : ''
                   }`}
                 >
@@ -182,20 +182,20 @@ export default function NavMenuView({ onNavigate, onClose, onNotify, originScree
         <footer className="shrink-0 px-6 md:px-16 lg:px-24 pb-10 md:pb-16">
           <div className="flex items-end justify-center md:justify-end gap-8">
             <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-[11px] tracking-[0.15em] text-white/95">
-              <button onClick={() => onNotify ? onNotify('Support concierge: concierge@vallarta-estates.com') : alert('Support concierge: concierge@vallarta-estates.com')} className="flex items-center gap-2 py-1 hover:text-white transition-colors duration-200 cursor-pointer uppercase" id="nav-foo-contact">
+              <button onClick={() => onNotify ? onNotify('Support concierge: concierge@vallarta-estates.com') : alert('Support concierge: concierge@vallarta-estates.com')} className="flex items-center gap-2 py-1 hover:text-white transition-colors duration-200 cursor-pointer uppercase outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-sm" id="nav-foo-contact">
                 <Phone className="w-4 h-4 shrink-0" strokeWidth={1.5} />
                 Contact
               </button>
-              <button onClick={() => onNotify ? onNotify('System telemetry functioning securely.') : alert('System telemetry functioning securely.')} className="flex items-center gap-2 py-1 hover:text-white transition-colors duration-200 cursor-pointer uppercase" id="nav-foo-settings">
+              <button onClick={() => onNotify ? onNotify('System telemetry functioning securely.') : alert('System telemetry functioning securely.')} className="flex items-center gap-2 py-1 hover:text-white transition-colors duration-200 cursor-pointer uppercase outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-sm" id="nav-foo-settings">
                 <Sliders className="w-4 h-4 shrink-0" strokeWidth={1.5} />
                 Settings
               </button>
-              <a href="https://vallarta-estates.com" target="_blank" rel="noreferrer" className="flex items-center gap-2 py-1 hover:text-white transition-colors duration-200 uppercase" id="nav-foo-website">
+              <a href="https://vallarta-estates.com" target="_blank" rel="noreferrer" className="flex items-center gap-2 py-1 hover:text-white transition-colors duration-200 uppercase outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-sm" id="nav-foo-website">
                 <Globe className="w-4 h-4 shrink-0" strokeWidth={1.5} />
                 Website
               </a>
               <div className="hidden md:block w-px h-4 bg-white/20 mx-2" />
-              <button onClick={handleLogoutClick} className={`flex items-center gap-2 py-1 transition-colors duration-200 cursor-pointer uppercase ${logoutPending ? 'text-white' : 'text-white/60 hover:text-white'}`} id="nav-foo-logout">
+              <button onClick={handleLogoutClick} className={`flex items-center gap-2 py-1 transition-colors duration-200 cursor-pointer uppercase outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-sm ${logoutPending ? 'text-white' : 'text-white/60 hover:text-white'}`} id="nav-foo-logout">
                 <LogOut className="w-4 h-4 shrink-0" strokeWidth={1.5} />
                 {logoutPending ? 'Confirm?' : 'Logout'}
               </button>
