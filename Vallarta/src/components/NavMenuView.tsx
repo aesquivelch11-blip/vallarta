@@ -120,7 +120,7 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
                   className="group block"
                 >
                   <span
-                    className="text-3xl md:text-4xl lg:text-5xl font-serif italic font-normal text-white group-hover:text-white/90 transition-colors duration-300 leading-[1.15] tracking-[0.04em]"
+                    className="text-3xl md:text-4xl lg:text-5xl font-serif font-normal text-white group-hover:text-white/90 transition-colors duration-300 leading-[1.15] tracking-[0.04em]"
                     style={{ textShadow: '0 2px 8px rgba(0,0,0,0.55)' }}
                   >
                     {item.label}

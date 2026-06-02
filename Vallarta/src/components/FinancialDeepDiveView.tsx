@@ -60,7 +60,7 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
       
       {/* Top Bar Logo & Menu */}
       <header className="sticky top-0 bg-[#FAF8F5]/90 z-40 border-b border-[#7E7A74]/30 px-6 py-4 flex justify-between items-center backdrop-blur-xl" id="deep-dive-header">
-        <h1 className="text-2xl md:text-3xl font-serif italic tracking-[0.1em] text-[#242424] cursor-pointer" onClick={() => onNavigate('reporting', 'push')}>
+        <h1 className="text-2xl md:text-3xl font-serif tracking-[0.1em] text-[#242424] cursor-pointer" onClick={() => onNavigate('reporting', 'push')}>
           Vallarta Estates
         </h1>
         
@@ -83,7 +83,7 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
           <span className="text-[10px] tracking-[0.3em] font-medium text-[#242424]/50 block uppercase">
             Financial Analysis
           </span>
-          <h2 className="text-4xl md:text-5xl font-serif italic tracking-wide text-[#242424]" id="deep-dive-header-title">
+          <h2 className="text-4xl md:text-5xl font-serif tracking-wide text-[#242424]" id="deep-dive-header-title">
             Total Portfolio Yield
           </h2>
         </div>
@@ -93,7 +93,7 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
           <div className="border border-[#7E7A74]/30 rounded-[2rem] p-6 bg-[#FAF8F5]" id="deep-dive-yield-box">
             <span className="text-[10px] tracking-[0.2em] text-[#242424]/50 font-medium block mb-1 uppercase">CURRENT QUARTER YIELD</span>
             <div className="flex justify-between items-baseline">
-              <span className="text-4xl font-serif italic font-normal text-[#242424] tabular-nums">8.4%</span>
+              <span className="text-4xl font-serif font-normal text-[#242424] tabular-nums">8.4%</span>
               <span className="text-xs text-green-700 font-sans flex items-center gap-1">
                 <ArrowUpRight className="w-3.5 h-3.5" />
                 +1.2% VS PREV. QUARTER
@@ -104,7 +104,7 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
           <div className="border border-[#7E7A74]/30 rounded-[2rem] p-6 bg-[#FAF8F5]" id="deep-dive-ytd-box">
             <span className="text-[10px] tracking-[0.2em] text-[#242424]/50 font-medium block mb-1 uppercase">YEAR-TO-DATE REVENUE</span>
             <div className="flex justify-between items-baseline">
-              <span className="text-3xl font-serif italic font-normal text-[#242424] tabular-nums">$1,245,000</span>
+              <span className="text-3xl font-serif font-normal text-[#242424] tabular-nums">$1,245,000</span>
               <span className="text-xs text-[#242424]/50 font-sans">
                 Projected EOY: $1.8M
               </span>
@@ -115,7 +115,7 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
         {/* Revenue Velocity Chart */}
         <section className="space-y-4" id="deep-dive-velocity-section">
           <div className="flex justify-between items-center">
-            <span className="text-3xl font-serif italic text-[#242424]">
+            <span className="text-3xl font-serif text-[#242424]">
               Revenue Velocity
             </span>
             <span className="text-[9px] font-sans tracking-widest text-[#242424]/60 border border-[#7E7A74]/30 rounded-full px-3 py-1 uppercase bg-[#FAF8F5]">
@@ -173,7 +173,7 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
         {/* Operational Expenses */}
         <section className="space-y-4" id="deep-dive-opex-section">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <span className="text-3xl font-serif italic text-[#242424] block">
+            <span className="text-3xl font-serif text-[#242424] block">
               Operational Expenses
             </span>
             
@@ -229,7 +229,7 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
                 return (
                   <div className="p-5 flex justify-between items-center hover:bg-[#7E7A74]/10 transition" id={`opex-row-${expense.id}`} key={expense.id}>
                     <div>
-                      <span className="text-[#242424] font-serif text-lg italic block">{expense.category}</span>
+                      <span className="text-[#242424] font-serif text-lg block">{expense.category}</span>
                       <span className="text-[10px] text-[#242424]/50 font-sans uppercase tracking-wider block mt-0.5">
                         Modified: {expense.formattedDate}
                       </span>
@@ -252,7 +252,7 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
         {/* Yield Correlation Panel matching fifth section */}
         <section className="border border-[#7E7A74]/30 rounded-[3rem] p-8 space-y-6 bg-white/20 backdrop-blur-md" id="deep-dive-correlation-card">
           <div className="space-y-2">
-            <h4 className="text-2xl font-serif italic text-[#242424]">
+            <h4 className="text-2xl font-serif text-[#242424]">
               Yield Correlation
             </h4>
             <p className="text-xs text-[#242424]/60 font-light leading-relaxed">
@@ -262,7 +262,7 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
 
           <div className="grid grid-cols-2 gap-4" id="correlation-boxes-row">
             <div className="bg-[#242424] text-[#FAF8F5] rounded-[2rem] p-6 text-center flex flex-col justify-between h-40 shadow-xl" id="box-avg-sentiment">
-              <span className="text-4xl md:text-5xl font-serif italic font-normal text-amber-200 mt-2 tabular-nums">4.9</span>
+              <span className="text-4xl md:text-5xl font-serif font-normal text-amber-200 mt-2 tabular-nums">4.9</span>
               <div>
                 <span className="block text-[9px] tracking-[0.2em] text-[#FAF8F5]/50 uppercase font-semibold">AVG SENTIMENT SCORE</span>
                 <span className="text-[8px] font-sans tracking-widest text-[#FAF8F5]/40 uppercase mt-1 block">Top 5% Portfolio Tier</span>
@@ -270,7 +270,7 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
             </div>
 
             <div className="bg-[#242424] text-[#FAF8F5] rounded-[2rem] p-6 text-center flex flex-col justify-between h-40 shadow-xl" id="box-premium-capture">
-              <span className="text-4xl md:text-5xl font-serif italic font-normal text-amber-200 mt-2 tabular-nums">+14%</span>
+              <span className="text-4xl md:text-5xl font-serif font-normal text-amber-200 mt-2 tabular-nums">+14%</span>
               <div>
                 <span className="block text-[9px] tracking-[0.2em] text-[#FAF8F5]/50 uppercase font-semibold">PREMIUM CAPTURE</span>
                 <span className="text-[8px] font-sans tracking-widest text-[#FAF8F5]/40 uppercase mt-1 block">% Above Market Baseline</span>

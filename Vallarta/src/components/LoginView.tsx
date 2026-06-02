@@ -179,7 +179,6 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
           <h1
             style={{
               fontFamily: 'var(--font-display)',
-              fontStyle: 'italic',
               fontWeight: 400,
               fontSize: 'clamp(1.875rem, 3.5vw, 2.625rem)',
               color: 'rgba(255,255,255,0.92)',

@@ -174,7 +174,7 @@ export default function App() {
       default:
         return (
           <div key="default" className="w-full min-h-screen flex items-center justify-center bg-transparent">
-            <p className="text-[#242424]/50 font-serif italic">Awaiting Authentication.</p>
+            <p className="text-[#242424]/50 font-serif">Awaiting Authentication.</p>
           </div>
         );
     }
