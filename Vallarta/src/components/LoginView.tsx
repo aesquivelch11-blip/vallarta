@@ -151,8 +151,13 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
 
       {/* Main login content */}
       <main
-        className="animate-login-content absolute inset-0 z-10 flex flex-col justify-center lg:justify-center justify-end"
-        style={{ padding: 'clamp(24px, 5vw, 56px)', paddingBottom: 'clamp(80px, 12vh, 120px)' }}
+        className="animate-login-content absolute inset-0 z-10 flex flex-col justify-end lg:justify-center"
+        style={{
+          paddingTop: 'clamp(24px, 5vw, 56px)',
+          paddingLeft: 'clamp(24px, 5vw, 56px)',
+          paddingRight: 'clamp(24px, 5vw, 56px)',
+          paddingBottom: 'clamp(88px, 14vh, 120px)'
+        }}
         aria-label="Sign in to Vallarta Estates"
       >
         <div style={{ maxWidth: '420px' }}>
