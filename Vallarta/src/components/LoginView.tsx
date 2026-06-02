@@ -26,59 +26,52 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setNotice('');
 
     if (!email.trim()) {
-      setError('Please enter your email address.');
+      setError('Enter your email address.');
       return;
     }
-
     if (!validateEmail(email)) {
-      setError('Please enter a valid email address.');
+      setError('Enter a valid email address.');
       return;
     }
-
     if (!password.trim()) {
-      setError('Please enter your password.');
+      setError('Enter your password.');
       return;
     }
-
     if (password.length < 6) {
       setError('Password must be at least 6 characters.');
       return;
     }
-
     if (email !== DEMO_EMAIL || password !== DEMO_PASSWORD) {
-      setError('Invalid email or password.');
+      setError('Email or password is incorrect.');
       return;
     }
 
     setIsLoading(true);
-
-    setTimeout(() => {
-      setIsLoading(false);
-      onSignIn();
-    }, 800);
+    await new Promise<void>(resolve => setTimeout(resolve, 800));
+    setIsLoading(false);
+    onSignIn();
   };
 
   const [notice, setNotice] = useState('');
 
   const handleForgotPassword = () => {
-    if (!email.trim() || !validateEmail(email)) {
-      setError('Please enter your email address first.');
-      return;
-    }
     setError('');
-    setNotice('Password reset instructions will be sent to ' + email);
-    setTimeout(() => setNotice(''), 5000);
+    if (email.trim() && validateEmail(email)) {
+      setNotice(`Reset instructions will be sent to ${email}.`);
+    } else {
+      setNotice('Enter your email address above, then try again.');
+    }
   };
 
   const handleRequestAccess = () => {
     setError('');
-    setNotice('Please contact our concierge team to request access.');
-    setTimeout(() => setNotice(''), 5000);
+    setNotice('Contact our concierge: +52 322 849 0122 · concierge@vallartagroup.com');
   };
 
   return (
@@ -200,8 +193,8 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
               role="alert"
               style={{
                 display: 'flex',
-                alignItems: 'flex-start',
-                gap: '10px',
+                flexDirection: 'column',
+                gap: '8px',
                 padding: '11px 14px',
                 marginBottom: '24px',
                 background: 'oklch(96% 0.015 25 / 0.10)',
@@ -213,8 +206,31 @@ export default function LoginView({ onSignIn }: LoginViewProps) {
                 fontFamily: 'var(--font-ui)'
               }}
             >
-              <AlertCircle style={{ width: 14, height: 14, flexShrink: 0, marginTop: 2 }} />
-              <span>{error}</span>
+              <span style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                <AlertCircle style={{ width: 14, height: 14, flexShrink: 0, marginTop: 2 }} />
+                <span>{error}</span>
+              </span>
+              {error.includes('incorrect') && (
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    padding: 0,
+                    paddingLeft: '24px',
+                    fontFamily: 'var(--font-ui)',
+                    fontSize: '0.5625rem',
+                    letterSpacing: '0.15em',
+                    textTransform: 'uppercase',
+                    color: 'var(--color-accent-warning)',
+                    cursor: 'pointer',
+                    textAlign: 'left'
+                  }}
+                >
+                  Reset password →
+                </button>
+              )}
             </div>
           )}
 
