@@ -9,7 +9,8 @@ interface BookingListProps {
 }
 
 export default function BookingList({ bookings, onSelect, onAdd }: BookingListProps) {
-  const todayStr = new Date().toISOString().slice(0, 10);
+  const now = new Date();
+  const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
   const visible = [...bookings]
     .filter(b => b.checkIn >= todayStr)
     .sort((a, b) => a.checkIn.localeCompare(b.checkIn));
@@ -35,11 +36,10 @@ export default function BookingList({ bookings, onSelect, onAdd }: BookingListPr
       {visible.length === 0 ? (
         <p className="cal-bookings__empty">No upcoming reservations</p>
       ) : (
-        <ul role="list" className="cal-bookings__list">
+        <ul className="cal-bookings__list">
           {visible.map(booking => (
             <li
               key={booking.id}
-              role="listitem"
               className={[
                 'cal-booking-row',
                 booking.type === 'owner' ? 'cal-booking-row--owner' : '',
@@ -58,6 +58,7 @@ export default function BookingList({ bookings, onSelect, onAdd }: BookingListPr
               aria-label={`${booking.guest}, ${formatDisplayDates(booking.checkIn, booking.checkOut)}, ${booking.nights} nights, ${booking.status}`}
             >
               <time
+                datetime={booking.checkIn}
                 className={`cal-booking-row__date${booking.status === 'Cancelled' ? ' line-through' : ''}`}
               >
                 {formatDisplayDates(booking.checkIn, booking.checkOut)}
