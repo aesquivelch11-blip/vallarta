@@ -18,11 +18,11 @@ export default function BookingList({ bookings, onSelect, onAdd }: BookingListPr
   const activeCount = bookings.filter(b => b.status !== 'Cancelled').length;
 
   return (
-    <div role="region" aria-label="Upcoming arrivals" className="cal-bookings">
+    <div role="region" aria-label="Reservations" className="cal-bookings">
       <div className="cal-bookings__header">
-        <h2 className="cal-bookings__title">Upcoming Arrivals</h2>
+        <h2 className="cal-bookings__title">Reservations</h2>
         <div className="cal-bookings__header-right">
-          <span className="cal-bookings__meta">{activeCount} Active Reservations</span>
+          <span className="cal-bookings__meta">{activeCount} Active</span>
           <button
             onClick={onAdd}
             aria-label="Add new booking"
@@ -34,7 +34,15 @@ export default function BookingList({ bookings, onSelect, onAdd }: BookingListPr
       </div>
 
       {visible.length === 0 ? (
-        <p className="cal-bookings__empty">No upcoming reservations</p>
+        <div className="cal-bookings__empty-state">
+          <p className="cal-bookings__empty">No upcoming reservations.</p>
+          <button
+            onClick={onAdd}
+            className="cal-bookings__empty-cta"
+          >
+            + Add a reservation
+          </button>
+        </div>
       ) : (
         <ul className="cal-bookings__list">
           {visible.map(booking => (
@@ -58,23 +66,26 @@ export default function BookingList({ bookings, onSelect, onAdd }: BookingListPr
               aria-label={`${booking.guest}, ${formatDisplayDates(booking.checkIn, booking.checkOut)}, ${booking.nights} nights, ${booking.status}`}
             >
               <time
-                datetime={booking.checkIn}
+                dateTime={booking.checkIn}
                 className={`cal-booking-row__date${booking.status === 'Cancelled' ? ' line-through' : ''}`}
               >
                 {formatDisplayDates(booking.checkIn, booking.checkOut)}
               </time>
-              <span className="cal-booking-row__guest">{booking.guest}</span>
-              {booking.type === 'owner' && (
-                <span className="cal-booking-row__chip cal-booking-row__chip--owner">
-                  Owner Stay
-                </span>
-              )}
+              {/* Guest name + chip live inside one grid column via flex wrapper */}
+              <span className="cal-booking-row__guest-cell">
+                <span className="cal-booking-row__guest">{booking.guest}</span>
+                {booking.type === 'owner' && (
+                  <span className="cal-booking-row__chip cal-booking-row__chip--owner">
+                    Owner Stay
+                  </span>
+                )}
+              </span>
               <span
                 className={`cal-booking-row__status cal-booking-row__status--${booking.status.toLowerCase()}`}
               >
                 {booking.status}
               </span>
-              <span className="cal-booking-row__nights">{booking.nights} nights</span>
+              <span className="cal-booking-row__nights">{booking.nights}n</span>
             </li>
           ))}
         </ul>

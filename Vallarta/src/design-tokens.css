@@ -1596,6 +1596,33 @@ body::before {
   text-align: center;
 }
 
+.cal-bookings__empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: clamp(16px, 3vh, 28px) 0;
+}
+
+.cal-bookings__empty-cta {
+  font-family: var(--font-ui);
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cal-owner-accent);
+  background: none;
+  border: 1px solid rgba(201,184,160,0.25);
+  border-radius: 999px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.cal-bookings__empty-cta:hover {
+  border-color: rgba(201,184,160,0.6);
+  color: rgba(255,255,255,0.9);
+}
+
 /* ─── Grid legend ─── */
 .cal-grid-legend {
   display: flex;
