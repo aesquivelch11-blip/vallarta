@@ -106,6 +106,10 @@
   --nav-card-border: oklch(75% 0.06 80 / 0.25);
   --nav-card-border-hover: oklch(75% 0.06 80 / 0.6);
   --nav-card-text-shadow: 0 2px 12px oklch(10% 0.01 60 / 0.6);
+  --nav-card-estates-glow: oklch(32% 0.09 145);
+  --nav-card-financial-glow: oklch(28% 0.08 260);
+  --nav-card-operations-glow: oklch(30% 0.10 65);
+  --nav-card-calendar-glow: oklch(26% 0.08 185);
 
   /* --- Calendar Accent Colors --- */
   --cal-owner-accent: #C9B8A0;
