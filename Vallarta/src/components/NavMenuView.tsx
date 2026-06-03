@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion } from 'motion/react';
 import { X, LogOut } from 'lucide-react';
 import { ScreenType } from '../types';
 import menuImg1 from '../assets/Menu/menu-1.jpg';
@@ -147,19 +146,8 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
               tabIndex={0}
             />
 
-            {/* Mount stagger animation */}
-            <motion.div
-              className="absolute inset-0 pointer-events-none"
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.5,
-                delay: 0.08 * index,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-            >
-              {/* Bottom-anchored content */}
-              <div className="absolute bottom-0 left-0 right-0 p-[clamp(1.5rem,5vh,3.5rem)]">
+            {/* Bottom-anchored content */}
+            <div className="absolute bottom-0 left-0 right-0 p-[clamp(1.5rem,5vh,3.5rem)]">
                 <span
                   className="block text-[0.625rem] tracking-[0.3em] text-white/40 mb-3"
                   style={{ fontFamily: 'var(--font-ui)', textShadow: 'var(--nav-text-shadow-base)' }}
@@ -192,8 +180,7 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
                     {item.dataValue}
                   </span>
                 </div>
-              </div>
-            </motion.div>
+            </div>
           </div>
         ))}
       </div>
