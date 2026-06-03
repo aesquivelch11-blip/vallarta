@@ -18,6 +18,7 @@ export interface CalendarDay {
   empty?: boolean;
   booked?: boolean;
   ownerStay?: boolean;
+  pending?: boolean;
   today?: boolean;
   checkin?: boolean;
   checkout?: boolean;
@@ -83,23 +84,28 @@ const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, 
 
     let booked = false;
     let ownerStay = false;
+    let pending = false;
     let checkin = false;
     let checkout = false;
 
     for (const b of activeBookings) {
+      const isPending = b.status === 'Pending';
       if (dateStr === b.checkIn) {
         checkin = true;
         if (b.type === 'owner') ownerStay = true;
+        if (isPending) pending = true;
       } else if (dateStr === b.checkOut) {
         checkout = true;
         if (b.type === 'owner') ownerStay = true;
+        if (isPending) pending = true;
       } else if (dateStr > b.checkIn && dateStr < b.checkOut) {
         booked = true;
         if (b.type === 'owner') ownerStay = true;
+        if (isPending) pending = true;
       }
     }
 
-    days.push({ day: d, today: isToday, booked, ownerStay, checkin, checkout });
+    days.push({ day: d, today: isToday, booked, ownerStay, pending, checkin, checkout });
   }
 
   return days;
