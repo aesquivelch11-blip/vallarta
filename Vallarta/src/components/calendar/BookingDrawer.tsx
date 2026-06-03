@@ -59,7 +59,7 @@ export default function BookingDrawer({
     }
     setDateError('');
     setOverlapWarning('');
-  }, [open, mode, booking]);
+  }, [open, mode, booking?.id]);
 
   const derivedNights = calcNights(formCheckIn, formCheckOut);
 
@@ -79,7 +79,7 @@ export default function BookingDrawer({
     setDateError('');
     const overlap = findOverlap(formCheckIn, formCheckOut, bookings, booking?.id);
     setOverlapWarning(overlap ? `Dates overlap with ${overlap.guest}` : '');
-    return true;
+    return !overlap;
   };
 
   const handleSave = () => {
@@ -127,6 +127,7 @@ export default function BookingDrawer({
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ duration: 0.45, ease: EASE }}
+            onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }}
           >
             {/* Drag handle */}
             <div className="w-10 h-1 bg-white/20 rounded-full mx-auto" aria-hidden="true" />
