@@ -107,6 +107,11 @@
   --nav-card-border-hover: oklch(75% 0.06 80 / 0.6);
   --nav-card-text-shadow: 0 2px 12px oklch(10% 0.01 60 / 0.6);
 
+  /* --- Calendar Accent Colors --- */
+  --cal-owner-accent: #C9B8A0;
+  --cal-btn-text-dark: #1a1a1a;
+  --cal-error: rgba(248,113,113,0.85);
+  --cal-error-border: rgba(248,113,113,0.25);
 
 }
 
@@ -1340,12 +1345,12 @@ body::before {
 }
 
 .cal-day--owner {
-  color: #C9B8A0;
+  color: var(--cal-owner-accent);
   opacity: 0.9;
 }
 
 .cal-day__dot--owner {
-  background: #C9B8A0;
+  background: var(--cal-owner-accent);
 }
 
 .cal-day__dot {
@@ -1407,7 +1412,7 @@ body::before {
   font-family: var(--font-ui);
   font-size: 1.25rem;
   line-height: 1;
-  color: #C9B8A0;
+  color: var(--cal-owner-accent);
   background: none;
   border: 1px solid rgba(201,184,160,0.3);
   border-radius: 50%;
@@ -1528,7 +1533,7 @@ body::before {
 
 /* ─── Booking row variants ─── */
 .cal-booking-row--owner {
-  border-left: 2px solid #C9B8A0;
+  border-left: 2px solid var(--cal-owner-accent);
   padding-left: calc(clamp(12px, 2vw, 20px) - 2px);
 }
 
@@ -1548,7 +1553,7 @@ body::before {
 }
 
 .cal-booking-row__chip--owner {
-  color: #C9B8A0;
+  color: var(--cal-owner-accent);
   border: 1px solid rgba(201,184,160,0.4);
 }
 
@@ -1593,6 +1598,7 @@ body::before {
 
 .cal-drawer-input:focus {
   border-color: rgba(201,184,160,0.6);
+  box-shadow: 0 0 0 2px rgba(201,184,160,0.3);
 }
 
 .cal-drawer-input::placeholder {
@@ -1623,8 +1629,8 @@ body::before {
 }
 
 .cal-drawer-toggle__option--active {
-  background: #C9B8A0;
-  color: #1a1a1a;
+  background: var(--cal-owner-accent);
+  color: var(--cal-btn-text-dark);
 }
 
 .cal-drawer-btn {
@@ -1644,8 +1650,8 @@ body::before {
 .cal-drawer-btn:hover { opacity: 0.85; }
 
 .cal-drawer-btn--confirm {
-  background: #C9B8A0;
-  color: #1a1a1a;
+  background: var(--cal-owner-accent);
+  color: var(--cal-btn-text-dark);
 }
 
 .cal-drawer-btn--edit {
@@ -1656,13 +1662,13 @@ body::before {
 
 .cal-drawer-btn--cancel {
   background: transparent;
-  color: rgba(248,113,113,0.7);
-  border: 1px solid rgba(248,113,113,0.25);
+  color: var(--cal-error);
+  border: 1px solid var(--cal-error-border);
 }
 
 .cal-drawer-btn--save {
-  background: #C9B8A0;
-  color: #1a1a1a;
+  background: var(--cal-owner-accent);
+  color: var(--cal-btn-text-dark);
 }
 
 .cal-drawer-btn--close {
@@ -1674,14 +1680,14 @@ body::before {
 .cal-drawer-error {
   font-family: var(--font-ui);
   font-size: 0.6875rem;
-  color: rgba(248,113,113,0.85);
+  color: var(--cal-error);
   letter-spacing: 0.05em;
 }
 
 .cal-drawer-warning {
   font-family: var(--font-ui);
   font-size: 0.6875rem;
-  color: #C9B8A0;
+  color: var(--cal-owner-accent);
   letter-spacing: 0.05em;
 }
 
