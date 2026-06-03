@@ -121,6 +121,40 @@
 
 }
 
+/* ── Nav Menu Panel Accordion (pure CSS hover) ── */
+.nav-panel {
+  transition: flex 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.nav-card-grid:hover .nav-panel { flex: 0.70; }
+.nav-card-grid:hover .nav-panel:hover,
+.nav-card-grid:has(.nav-panel:focus-within) .nav-panel:focus-within { flex: 1.90; }
+.nav-card-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) { flex: 0.70; }
+
+.nav-panel__title {
+  display: block;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav-panel:hover .nav-panel__title,
+.nav-panel:focus-within .nav-panel__title { transform: scale(1.03); }
+
+.nav-panel__subtitle { opacity: 1; transition: opacity 0.3s ease; }
+.nav-panel__data     { opacity: 0; transition: opacity 0.3s ease; }
+.nav-panel:hover .nav-panel__subtitle,
+.nav-panel:focus-within .nav-panel__subtitle { opacity: 0; }
+.nav-panel:hover .nav-panel__data,
+.nav-panel:focus-within .nav-panel__data { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-panel,
+  .nav-panel__title,
+  .nav-panel__subtitle,
+  .nav-panel__data { transition: none; }
+  .nav-card-grid:hover .nav-panel,
+  .nav-card-grid:hover .nav-panel:hover,
+  .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:focus-within,
+  .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) { flex: 1; }
+}
+
 .nav-close-btn {
   background: var(--nav-close-bg);
   border: 1px solid var(--nav-close-border);

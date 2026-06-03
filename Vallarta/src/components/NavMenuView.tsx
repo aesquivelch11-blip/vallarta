@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { motion } from 'motion/react';
 import { X, LogOut } from 'lucide-react';
 import { ScreenType } from '../types';
 
@@ -64,10 +64,8 @@ const menuItems: MenuItem[] = [
 ];
 
 export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuViewProps) {
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [logoutPending, setLogoutPending] = useState(false);
   const logoutTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     return () => {
@@ -119,94 +117,83 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
         </div>
       </header>
 
-      {/* 4-panel grid */}
-        <div className="flex w-full h-full">
-          {menuItems.map((item, index) => (
-            <motion.div
-              key={item.id}
-              className="relative h-full overflow-hidden cursor-pointer border-r border-white/[0.06] last:border-r-0 outline-none focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-white/40"
+      {/* 4-panel grid — flex expansion handled entirely by CSS hover */}
+      <div className="nav-card-grid flex w-full h-full">
+        {menuItems.map((item, index) => (
+          <div
+            key={item.id}
+            className="nav-panel relative h-full overflow-hidden cursor-pointer border-r border-white/[0.06] last:border-r-0 outline-none focus-within:ring-inset focus-within:ring-2 focus-within:ring-white/40"
+            style={{
+              flex: 1,
+              background: `var(${item.bgVar})`,
+            }}
+          >
+            {/* Ambient glow */}
+            <div
+              className="absolute inset-0 pointer-events-none"
               style={{
-                flexGrow: hoveredId === item.id ? 3.5 : 1,
-                flexShrink: 1,
-                flexBasis: 0,
-                background: `var(${item.bgVar})`,
-                transition: prefersReducedMotion ? 'none' : 'flex-grow 0.55s cubic-bezier(0.16, 1, 0.3, 1)',
+                background: `radial-gradient(ellipse 120% 45% at 50% 0%, var(${item.glowVar}) 0%, transparent 70%)`,
               }}
-              onPointerEnter={() => setHoveredId(item.id)}
-              onPointerLeave={() => setHoveredId(null)}
+            />
+
+            {/* Clickable / focusable button covers the full panel */}
+            <button
+              className="absolute inset-0 w-full h-full bg-transparent border-none outline-none focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-white/40 cursor-pointer"
               onClick={() => onNavigate(item.screen, 'push')}
-              tabIndex={0}
-              role="button"
               aria-label={item.label}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  onNavigate(item.screen, 'push');
-                }
+              tabIndex={0}
+            />
+
+            {/* Mount stagger animation */}
+            <motion.div
+              className="absolute inset-0 pointer-events-none"
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.5,
+                delay: 0.08 * index,
+                ease: [0.16, 1, 0.3, 1],
               }}
-              onFocus={() => setHoveredId(item.id)}
-              onBlur={() => setHoveredId(null)}
             >
-              {/* Ambient glow at top */}
-              <div
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  background: `radial-gradient(ellipse 120% 45% at 50% 0%, var(${item.glowVar}) 0%, transparent 70%)`,
-                }}
-              />
+              {/* Bottom-anchored content */}
+              <div className="absolute bottom-0 left-0 right-0 p-[clamp(1.5rem,5vh,3.5rem)]">
+                <span
+                  className="block text-[0.625rem] tracking-[0.3em] text-white/40 mb-3"
+                  style={{ fontFamily: 'var(--font-ui)', textShadow: 'var(--nav-text-shadow-base)' }}
+                >
+                  {item.index}
+                </span>
 
-              {/* Mount stagger wrapper — separate from layout motion.div to avoid conflicts */}
-              <motion.div
-                className="absolute inset-0"
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={
-                  prefersReducedMotion
-                    ? { duration: 0, delay: 0 }
-                    : { duration: 0.5, delay: 0.08 * index, ease: [0.16, 1, 0.3, 1] }
-                }
-              >
-                {/* Bottom-anchored content */}
-                <div className="absolute bottom-0 left-0 right-0 p-[clamp(1.5rem,5vh,3.5rem)]">
+                <span
+                  className="nav-panel__title text-[clamp(1.75rem,3vw,3.5rem)] font-light leading-[1.1] text-white/90 mb-4"
+                  style={{
+                    fontFamily: 'var(--font-display)',
+                    textShadow: 'var(--nav-card-text-shadow)',
+                  }}
+                >
+                  {item.label}
+                </span>
+
+                {/* Subtitle / dataValue crossfade */}
+                <div className="relative h-[1.4em] mt-4">
                   <span
-                    className="block text-[0.625rem] tracking-[0.3em] text-white/40 mb-3"
-                    style={{ fontFamily: 'var(--font-ui)', textShadow: 'var(--nav-text-shadow-base)' }}
+                    className="nav-panel__subtitle absolute inset-0 text-[0.6875rem] tracking-[0.2em] text-white/60 uppercase leading-none"
+                    style={{ fontFamily: 'var(--font-ui)' }}
                   >
-                    {item.index}
+                    {item.subtitle}
                   </span>
-
-                  <motion.span
-                    className="block text-[clamp(1.75rem,3vw,3.5rem)] font-light leading-[1.1] text-white/90 mb-4"
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      textShadow: 'var(--nav-card-text-shadow)',
-                    }}
-                    animate={{ scale: (!prefersReducedMotion && hoveredId === item.id) ? 1.03 : 1 }}
-                    transition={{ type: 'spring', stiffness: 280, damping: 30 }}
+                  <span
+                    className="nav-panel__data absolute inset-0 text-[0.6875rem] tracking-[0.2em] text-white/60 uppercase leading-none"
+                    style={{ fontFamily: 'var(--font-ui)' }}
                   >
-                    {item.label}
-                  </motion.span>
-
-                  {/* Subtitle / dataValue crossfade — same dual-span technique as previous design */}
-                  <div className="relative h-[1.4em]">
-                    <span
-                      className="absolute inset-0 text-[0.6875rem] tracking-[0.2em] text-white/60 uppercase leading-none transition-opacity duration-300"
-                      style={{ fontFamily: 'var(--font-ui)', opacity: hoveredId === item.id ? 0 : 1 }}
-                    >
-                      {item.subtitle}
-                    </span>
-                    <span
-                      className="absolute inset-0 text-[0.6875rem] tracking-[0.2em] text-white/60 uppercase leading-none transition-opacity duration-300"
-                      style={{ fontFamily: 'var(--font-ui)', opacity: hoveredId === item.id ? 1 : 0 }}
-                    >
-                      {item.dataValue}
-                    </span>
-                  </div>
+                    {item.dataValue}
+                  </span>
                 </div>
-              </motion.div>
+              </div>
             </motion.div>
-          ))}
-        </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
