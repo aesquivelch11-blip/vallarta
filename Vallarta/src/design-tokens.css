@@ -112,7 +112,9 @@
   --nav-card-calendar-glow: oklch(26% 0.08 185);
 
   /* --- Calendar Accent Colors --- */
-  --cal-owner-accent: #C9B8A0;
+  --cal-owner-accent: #C9B8A0;       /* Estate Sand — owner stays, brand accent */
+  --cal-accent-ochre: #D49A55;       /* Sunset Ochre — confirmed status, check-in dots */
+  --cal-drawer-surface: #242424;     /* Drawer sheet background */
   --cal-btn-text-dark: #1a1a1a;
   --cal-error: rgba(248,113,113,0.85);
   --cal-error-border: rgba(248,113,113,0.25);
@@ -1357,13 +1359,22 @@ body::before {
   background: var(--cal-owner-accent);
 }
 
+.cal-day__dot--pending {
+  background: transparent;
+  border: 1.5px solid var(--cal-accent-ochre);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  bottom: clamp(3px, 0.7vh, 7px);
+}
+
 .cal-day__dot {
   position: absolute;
   bottom: clamp(4px, 0.8vh, 8px);
   width: 3px;
   height: 3px;
   border-radius: 50%;
-  background: #D49A55; /* Sunset Ochre */
+  background: var(--cal-accent-ochre);
 }
 
 .cal-day__dot {
@@ -1445,6 +1456,13 @@ body::before {
   list-style: none;
   margin: 0;
   padding: 0;
+  max-height: clamp(160px, 28vh, 260px);
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.cal-bookings__list::-webkit-scrollbar {
+  display: none;
 }
 
 .cal-booking-row {
@@ -1478,9 +1496,13 @@ body::before {
 }
 
 .cal-booking-row__guest {
-  font-family: var(--font-ui);
-  font-size: clamp(0.8125rem, 1.5vw, 0.875rem);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(0.8125rem, 1.5vw, 0.9375rem);
   font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .cal-booking-row__status {
@@ -1491,11 +1513,16 @@ body::before {
 }
 
 .cal-booking-row__status--confirmed {
-  color: #D49A55; /* Sunset Ochre */
+  color: var(--cal-accent-ochre);
 }
 
 .cal-booking-row__status--pending {
   color: rgba(255,255,255,0.55);
+}
+
+.cal-booking-row__status--cancelled {
+  color: rgba(255,255,255,0.3);
+  text-decoration: line-through;
 }
 
 .cal-booking-row__nights {
@@ -1537,8 +1564,7 @@ body::before {
 
 /* ─── Booking row variants ─── */
 .cal-booking-row--owner {
-  border-left: 2px solid var(--cal-owner-accent);
-  padding-left: calc(clamp(12px, 2vw, 20px) - 2px);
+  background: rgba(201, 184, 160, 0.04);
 }
 
 .cal-booking-row--cancelled {
@@ -1568,6 +1594,96 @@ body::before {
   letter-spacing: 0.1em;
   padding: clamp(16px, 3vh, 28px) 0;
   text-align: center;
+}
+
+/* ─── Grid legend ─── */
+.cal-grid-legend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: clamp(8px, 1.5vh, 14px);
+  padding-left: 2px;
+}
+
+.cal-grid-legend__item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-ui);
+  font-size: 0.5625rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+}
+
+.cal-grid-legend__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.cal-grid-legend__dot--confirmed {
+  background: var(--cal-accent-ochre);
+}
+
+.cal-grid-legend__dot--pending {
+  background: transparent;
+  border: 1.5px solid var(--cal-accent-ochre);
+}
+
+.cal-grid-legend__dot--owner {
+  background: var(--cal-owner-accent);
+}
+
+/* ─── Booking row guest cell (flex wrapper for guest + chip) ─── */
+.cal-booking-row__guest-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* ─── Drawer surface token ─── */
+.cal-drawer-sheet {
+  background: var(--cal-drawer-surface);
+  border-top: 1px solid rgba(201, 184, 160, 0.3);
+  border-radius: 2rem 2rem 0 0;
+}
+
+/* ─── Drawer guest name (EB Garamond italic in view mode) ─── */
+.cal-drawer-guest-name {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.3;
+}
+
+/* ─── Cancel as text link (not a peer pill button) ─── */
+.cal-drawer-btn--cancel-link {
+  font-family: var(--font-ui);
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(248, 113, 113, 0.55);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px 4px;
+  transition: color 0.2s ease;
+  align-self: center;
+}
+
+.cal-drawer-btn--cancel-link:hover {
+  color: rgba(248, 113, 113, 0.85);
+}
+
+.cal-drawer-btn--cancel-link--armed {
+  color: rgba(248, 113, 113, 0.9);
+  font-weight: 500;
 }
 
 /* ─── Booking Drawer ─── */
@@ -1691,7 +1807,7 @@ body::before {
 .cal-drawer-warning {
   font-family: var(--font-ui);
   font-size: 0.6875rem;
-  color: var(--cal-owner-accent);
+  color: rgba(255, 255, 255, 0.6);
   letter-spacing: 0.05em;
 }
 
