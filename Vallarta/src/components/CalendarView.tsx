@@ -34,23 +34,21 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
   );
 
   const handlePrevMonth = () => {
-    setCurrentMonth(prev => {
-      if (prev === 0) {
-        setCurrentYear(y => y - 1);
-        return 11;
-      }
-      return prev - 1;
-    });
+    if (currentMonth === 0) {
+      setCurrentMonth(11);
+      setCurrentYear(y => y - 1);
+    } else {
+      setCurrentMonth(prev => prev - 1);
+    }
   };
 
   const handleNextMonth = () => {
-    setCurrentMonth(prev => {
-      if (prev === 11) {
-        setCurrentYear(y => y + 1);
-        return 0;
-      }
-      return prev + 1;
-    });
+    if (currentMonth === 11) {
+      setCurrentMonth(0);
+      setCurrentYear(y => y + 1);
+    } else {
+      setCurrentMonth(prev => prev + 1);
+    }
   };
 
   const handleSelectBooking = (booking: Booking) => {
