@@ -128,7 +128,7 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
               src={item.image}
               alt=""
               aria-hidden="true"
-              className="absolute inset-0 w-full h-full object-cover pointer-events-none cinematic-grade"
+              className="absolute inset-0 w-full h-full object-cover pointer-events-none"
             />
 
             {/* Dark gradient scrim — heavy at bottom for text legibility */}
