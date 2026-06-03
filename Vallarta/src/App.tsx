@@ -125,19 +125,16 @@ export default function App() {
             </AnimatePresence>
           </div>
         );
-      case 'nav_menu': {
-        const originScreen = history[history.length - 2] as ScreenType | undefined;
+      case 'nav_menu':
         return (
           <div key="nav_menu" className="w-full min-h-screen">
-            <NavMenuView 
-              onNavigate={(screen, style) => handleNavigate(screen, style)} 
-              onClose={handleCloseNavMenu} 
+            <NavMenuView
+              onNavigate={(screen, style) => handleNavigate(screen, style)}
+              onClose={handleCloseNavMenu}
               onNotify={triggerToast}
-              originScreen={originScreen}
             />
           </div>
         );
-      }
       case 'reporting':
         return (
           <div key="reporting" className="w-full min-h-screen">
