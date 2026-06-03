@@ -19,8 +19,6 @@ interface MenuItem {
   subtitle: string;
   dataValue: string;
   screen: ScreenType;
-  bgVar: string;
-  glowVar: string;
   index: string;
   image: string;
 }
@@ -32,8 +30,6 @@ const menuItems: MenuItem[] = [
     subtitle: 'Portfolio Overview',
     dataValue: '4 Active Stays',
     screen: 'reporting',
-    bgVar: '--nav-card-estates-bg',
-    glowVar: '--nav-card-estates-glow',
     index: '01',
     image: menuImg1,
   },
@@ -43,8 +39,6 @@ const menuItems: MenuItem[] = [
     subtitle: 'Yield Revenue',
     dataValue: '$12.4K MTD',
     screen: 'deep_dive',
-    bgVar: '--nav-card-financial-bg',
-    glowVar: '--nav-card-financial-glow',
     index: '02',
     image: menuImg2,
   },
@@ -54,8 +48,6 @@ const menuItems: MenuItem[] = [
     subtitle: 'Live Supervision',
     dataValue: '2 Cameras Online',
     screen: 'camera_expanded',
-    bgVar: '--nav-card-operations-bg',
-    glowVar: '--nav-card-operations-glow',
     index: '03',
     image: menuImg3,
   },
@@ -65,8 +57,6 @@ const menuItems: MenuItem[] = [
     subtitle: 'Reservations',
     dataValue: '3 Arrivals This Week',
     screen: 'calendar',
-    bgVar: '--nav-card-calendar-bg',
-    glowVar: '--nav-card-calendar-glow',
     index: '04',
     image: menuImg4,
   },
@@ -132,7 +122,6 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
           <div
             key={item.id}
             className="nav-panel relative h-full overflow-hidden cursor-pointer border-r border-white/[0.06] last:border-r-0 outline-none focus-within:ring-inset focus-within:ring-2 focus-within:ring-white/40"
-            style={{ background: `var(${item.bgVar})` }}
           >
             {/* Full-bleed photo */}
             <img
@@ -140,7 +129,6 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
               alt=""
               aria-hidden="true"
               className="absolute inset-0 w-full h-full object-cover pointer-events-none cinematic-grade"
-              style={{ opacity: 0.45 }}
             />
 
             {/* Dark gradient scrim — heavy at bottom for text legibility */}
@@ -148,14 +136,6 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
               className="absolute inset-0 pointer-events-none"
               style={{
                 background: 'linear-gradient(to top, rgba(5,4,3,0.88) 0%, rgba(5,4,3,0.42) 36%, rgba(5,4,3,0.08) 65%, transparent 100%)',
-              }}
-            />
-
-            {/* Ambient glow at top */}
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background: `radial-gradient(ellipse 120% 45% at 50% 0%, var(${item.glowVar}) 0%, transparent 70%)`,
               }}
             />
 
