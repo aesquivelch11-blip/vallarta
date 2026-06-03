@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { LayoutGroup, motion } from 'motion/react';
+import { LayoutGroup, motion, useReducedMotion } from 'motion/react';
 import { X, LogOut } from 'lucide-react';
 import { ScreenType } from '../types';
 
@@ -67,6 +67,7 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [logoutPending, setLogoutPending] = useState(false);
   const logoutTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     return () => {
@@ -127,12 +128,12 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
               layout
               className="relative h-full overflow-hidden cursor-pointer border-r border-white/[0.06] last:border-r-0 outline-none focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-white/40"
               style={{
-                flexGrow: hoveredId === item.id ? 3.5 : 1,
+                flexGrow: prefersReducedMotion ? 1 : (hoveredId === item.id ? 3.5 : 1),
                 flexShrink: 1,
                 flexBasis: 0,
                 background: `var(${item.bgVar})`,
               }}
-              transition={{ layout: { type: 'spring', stiffness: 280, damping: 30 } }}
+              transition={{ layout: prefersReducedMotion ? { duration: 0 } : { type: 'spring', stiffness: 280, damping: 30 } }}
               onHoverStart={() => setHoveredId(item.id)}
               onHoverEnd={() => setHoveredId(null)}
               onClick={() => onNavigate(item.screen, 'push')}
@@ -161,11 +162,11 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
                 className="absolute inset-0"
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.5,
-                  delay: 0.08 * index,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
+                transition={
+                  prefersReducedMotion
+                    ? { duration: 0, delay: 0 }
+                    : { duration: 0.5, delay: 0.08 * index, ease: [0.16, 1, 0.3, 1] }
+                }
               >
                 {/* Bottom-anchored content */}
                 <div className="absolute bottom-0 left-0 right-0 p-[clamp(1.5rem,5vh,3.5rem)]">
@@ -182,7 +183,7 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
                       fontFamily: 'var(--font-display)',
                       textShadow: 'var(--nav-card-text-shadow)',
                     }}
-                    animate={{ scale: hoveredId === item.id ? 1.03 : 1 }}
+                    animate={{ scale: (!prefersReducedMotion && hoveredId === item.id) ? 1.03 : 1 }}
                     transition={{ type: 'spring', stiffness: 280, damping: 30 }}
                   >
                     {item.label}
