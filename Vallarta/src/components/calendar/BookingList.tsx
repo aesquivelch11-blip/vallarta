@@ -55,6 +55,7 @@ export default function BookingList({ bookings, onSelect, onAdd }: BookingListPr
               ]
                 .filter(Boolean)
                 .join(' ')}
+              role="button"
               onClick={() => onSelect(booking)}
               onKeyDown={e => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -71,7 +72,6 @@ export default function BookingList({ bookings, onSelect, onAdd }: BookingListPr
               >
                 {formatDisplayDates(booking.checkIn, booking.checkOut)}
               </time>
-              {/* Guest name + chip live inside one grid column via flex wrapper */}
               <span className="cal-booking-row__guest-cell">
                 <span className="cal-booking-row__guest">{booking.guest}</span>
                 {booking.type === 'owner' && (

@@ -1618,6 +1618,11 @@ body::before {
   transition: border-color 0.2s ease, color 0.2s ease;
 }
 
+.cal-bookings__empty-cta:focus-visible {
+  outline: 2px solid rgba(201, 184, 160, 0.6);
+  outline-offset: 3px;
+}
+
 .cal-bookings__empty-cta:hover {
   border-color: rgba(201,184,160,0.6);
   color: rgba(255,255,255,0.9);
