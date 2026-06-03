@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { LayoutGroup, motion, useReducedMotion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
 import { X, LogOut } from 'lucide-react';
 import { ScreenType } from '../types';
 
@@ -120,22 +120,20 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
       </header>
 
       {/* 4-panel grid */}
-      <LayoutGroup>
         <div className="flex w-full h-full">
           {menuItems.map((item, index) => (
             <motion.div
               key={item.id}
-              layout
               className="relative h-full overflow-hidden cursor-pointer border-r border-white/[0.06] last:border-r-0 outline-none focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-white/40"
               style={{
-                flexGrow: prefersReducedMotion ? 1 : (hoveredId === item.id ? 3.5 : 1),
+                flexGrow: hoveredId === item.id ? 3.5 : 1,
                 flexShrink: 1,
                 flexBasis: 0,
                 background: `var(${item.bgVar})`,
+                transition: prefersReducedMotion ? 'none' : 'flex-grow 0.55s cubic-bezier(0.16, 1, 0.3, 1)',
               }}
-              transition={{ layout: prefersReducedMotion ? { duration: 0 } : { type: 'spring', stiffness: 280, damping: 30 } }}
-              onHoverStart={() => setHoveredId(item.id)}
-              onHoverEnd={() => setHoveredId(null)}
+              onPointerEnter={() => setHoveredId(item.id)}
+              onPointerLeave={() => setHoveredId(null)}
               onClick={() => onNavigate(item.screen, 'push')}
               tabIndex={0}
               role="button"
@@ -209,7 +207,6 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
             </motion.div>
           ))}
         </div>
-      </LayoutGroup>
     </div>
   );
 }
