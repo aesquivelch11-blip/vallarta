@@ -64,7 +64,8 @@ export function buildCalendarDays(
   month: number, // 0-indexed (0=January)
   bookings: Booking[],
 ): CalendarDay[] {
-  const todayStr = new Date().toISOString().slice(0, 10);
+  const now = new Date();
+const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const firstDayOfWeek = new Date(year, month, 1).getDay(); // 0=Sunday
   const offset = (firstDayOfWeek + 6) % 7; // Monday-first grid offset
