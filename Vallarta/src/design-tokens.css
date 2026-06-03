@@ -123,6 +123,7 @@
 
 /* ── Nav Menu Panel Accordion (pure CSS hover) ── */
 .nav-panel {
+  flex: 1;
   transition: flex 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .nav-card-grid:hover .nav-panel { flex: 0.70; }

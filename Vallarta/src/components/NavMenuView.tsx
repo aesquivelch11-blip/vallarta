@@ -2,6 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import { X, LogOut } from 'lucide-react';
 import { ScreenType } from '../types';
+import menuImg1 from '../assets/Menu/menu-1.jpg';
+import menuImg2 from '../assets/Menu/menu-2.jpg';
+import menuImg3 from '../assets/Menu/menu-3.jpg';
+import menuImg4 from '../assets/Menu/menu-4.jpg';
 
 interface NavMenuViewProps {
   onNavigate: (screen: ScreenType, transitionStyle: 'push' | 'slide_up') => void;
@@ -18,6 +22,7 @@ interface MenuItem {
   bgVar: string;
   glowVar: string;
   index: string;
+  image: string;
 }
 
 const menuItems: MenuItem[] = [
@@ -30,6 +35,7 @@ const menuItems: MenuItem[] = [
     bgVar: '--nav-card-estates-bg',
     glowVar: '--nav-card-estates-glow',
     index: '01',
+    image: menuImg1,
   },
   {
     id: 'financial',
@@ -40,6 +46,7 @@ const menuItems: MenuItem[] = [
     bgVar: '--nav-card-financial-bg',
     glowVar: '--nav-card-financial-glow',
     index: '02',
+    image: menuImg2,
   },
   {
     id: 'operations',
@@ -50,6 +57,7 @@ const menuItems: MenuItem[] = [
     bgVar: '--nav-card-operations-bg',
     glowVar: '--nav-card-operations-glow',
     index: '03',
+    image: menuImg3,
   },
   {
     id: 'calendar',
@@ -60,6 +68,7 @@ const menuItems: MenuItem[] = [
     bgVar: '--nav-card-calendar-bg',
     glowVar: '--nav-card-calendar-glow',
     index: '04',
+    image: menuImg4,
   },
 ];
 
@@ -123,12 +132,26 @@ export default function NavMenuView({ onNavigate, onClose, onNotify }: NavMenuVi
           <div
             key={item.id}
             className="nav-panel relative h-full overflow-hidden cursor-pointer border-r border-white/[0.06] last:border-r-0 outline-none focus-within:ring-inset focus-within:ring-2 focus-within:ring-white/40"
-            style={{
-              flex: 1,
-              background: `var(${item.bgVar})`,
-            }}
+            style={{ background: `var(${item.bgVar})` }}
           >
-            {/* Ambient glow */}
+            {/* Full-bleed photo */}
+            <img
+              src={item.image}
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 w-full h-full object-cover pointer-events-none cinematic-grade"
+              style={{ opacity: 0.45 }}
+            />
+
+            {/* Dark gradient scrim — heavy at bottom for text legibility */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: 'linear-gradient(to top, rgba(5,4,3,0.88) 0%, rgba(5,4,3,0.42) 36%, rgba(5,4,3,0.08) 65%, transparent 100%)',
+              }}
+            />
+
+            {/* Ambient glow at top */}
             <div
               className="absolute inset-0 pointer-events-none"
               style={{
