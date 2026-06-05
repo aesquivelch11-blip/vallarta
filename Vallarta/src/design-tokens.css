@@ -88,32 +88,35 @@
   --color-dark-border: rgba(255, 255, 255, 0.12);
   --color-dark-accent: #D49A55;       /* Sunset Ochre */
 
-  /* --- Nav Menu Fonts (adapt to project design language in later workflow) --- */
-  --nav-font-display: 'Cormorant Garamond', Georgia, serif;
-  --nav-font-label: 'Montserrat', sans-serif;
+  /* --- Nav Menu --- */
+  /* Shell */
+  --nav-shell-bg:            #090806;
+  --nav-font-display:        var(--font-display);
+  --nav-font-label:          var(--font-ui);
 
-  /* --- Nav Menu Overlays --- */
-  --nav-overlay-base: oklch(12% 0.008 60 / 0.52);
-  --nav-scrim-dark: oklch(12% 0.008 60 / 0.38);
-  --nav-scrim-mid: oklch(12% 0.008 60 / 0.12);
-  --nav-close-bg: oklch(12% 0.008 60 / 0.30);
-  --nav-close-bg-hover: oklch(12% 0.008 60 / 0.45);
-  --nav-close-border: oklch(98% 0.005 80 / 0.20);
-  --nav-text-shadow-strong: 0 2px 10px oklch(12% 0.008 60 / 0.55);
-  --nav-text-shadow-base: 0 1px 6px oklch(12% 0.008 60 / 0.40);
+  /* Gold accent — maps to project Sunset Ochre */
+  --nav-gold:                var(--color-accent-warning);
+  --nav-subtitle-hover:      rgba(212, 154, 85, 0.75);
 
-  /* --- Nav Menu Cards --- */
-  --nav-card-estates-bg: oklch(18% 0.04 145);
-  --nav-card-financial-bg: oklch(15% 0.03 260);
-  --nav-card-operations-bg: oklch(16% 0.04 65);
-  --nav-card-calendar-bg: oklch(14% 0.03 185);
-  --nav-card-border: oklch(75% 0.06 80 / 0.25);
-  --nav-card-border-hover: oklch(75% 0.06 80 / 0.6);
-  --nav-card-text-shadow: 0 2px 12px oklch(10% 0.01 60 / 0.6);
-  --nav-card-estates-glow: oklch(32% 0.09 145);
-  --nav-card-financial-glow: oklch(28% 0.08 260);
-  --nav-card-operations-glow: oklch(30% 0.10 65);
-  --nav-card-calendar-glow: oklch(26% 0.08 185);
+  /* Scrim system */
+  --nav-scrim-top:           rgba(5, 4, 3, 0.35);
+  --nav-scrim-heavy:         rgba(5, 4, 3, 0.88);
+  --nav-scrim-mid:           rgba(5, 4, 3, 0.42);
+  --nav-scrim-light:         rgba(5, 4, 3, 0.08);
+  --nav-veil:                rgba(5, 4, 3, 0.45);
+
+  /* Card grid */
+  --nav-card-separator:      rgba(255, 255, 255, 0.05);
+
+  /* Header text */
+  --nav-wordmark-color:      rgba(255, 255, 255, 0.5);
+  --nav-subtitle-color:      rgba(255, 255, 255, 0.3);
+
+  /* Close button */
+  --nav-close-color:         rgba(255, 255, 255, 0.5);
+  --nav-close-border:        rgba(255, 255, 255, 0.18);
+  --nav-close-border-hover:  rgba(255, 255, 255, 0.55);
+  --nav-close-bg-hover:      rgba(255, 255, 255, 0.06);
 
   /* --- Calendar Accent Colors --- */
   --cal-owner-accent: #C9B8A0;       /* Estate Sand — owner stays, brand accent */
