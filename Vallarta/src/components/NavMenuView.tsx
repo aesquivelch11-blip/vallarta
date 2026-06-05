@@ -22,7 +22,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
   return (
     <div
       className="relative w-full h-[100dvh] overflow-hidden"
-      style={{ background: '#090806' }}
+      style={{ background: 'var(--nav-shell-bg)' }}
     >
       {/* ── Header ── */}
       <header
@@ -35,7 +35,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
             fontSize: '10px',
             fontWeight: 300,
             letterSpacing: '5px',
-            color: 'rgba(255,255,255,0.5)',
+            color: 'var(--nav-wordmark-color)',
             textTransform: 'uppercase',
           }}
         >
@@ -57,7 +57,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
           <div
             key={item.id}
             className="nav-panel relative h-full overflow-hidden border-r last:border-r-0 outline-none"
-            style={{ borderColor: 'rgba(255,255,255,0.05)' }}
+            style={{ borderColor: 'var(--nav-card-separator)' }}
           >
             {/* Full-bleed photo */}
             <img
@@ -73,8 +73,8 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
               style={{
                 zIndex: 2,
                 background: `
-                  linear-gradient(to bottom, rgba(5,4,3,0.35) 0%, transparent 20%),
-                  linear-gradient(to top, rgba(5,4,3,0.88) 0%, rgba(5,4,3,0.42) 36%, rgba(5,4,3,0.08) 65%, transparent 100%)
+                  linear-gradient(to bottom, var(--nav-scrim-top) 0%, transparent 20%),
+                  linear-gradient(to top, var(--nav-scrim-heavy) 0%, var(--nav-scrim-mid) 36%, var(--nav-scrim-light) 65%, transparent 100%)
                 `,
               }}
             />
@@ -103,7 +103,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
                   fontSize: '9px',
                   fontWeight: 300,
                   letterSpacing: '4px',
-                  color: '#c9a96e',
+                  color: 'var(--nav-gold)',
                   marginBottom: '14px',
                 }}
               >
@@ -116,7 +116,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
                   fontFamily: 'var(--nav-font-display)',
                   fontSize: 'clamp(22px, 2.5vw, 42px)',
                   fontWeight: 300,
-                  color: '#fff',
+                  color: 'var(--nav-title-color)',
                   lineHeight: 1,
                   letterSpacing: '0.3px',
                   marginBottom: '11px',

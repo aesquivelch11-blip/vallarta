@@ -110,6 +110,7 @@
 
   /* Header text */
   --nav-wordmark-color:      rgba(255, 255, 255, 0.5);
+  --nav-title-color:         #fff;
   --nav-subtitle-color:      rgba(255, 255, 255, 0.3);
 
   /* Close button */
