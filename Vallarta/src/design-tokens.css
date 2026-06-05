@@ -88,6 +88,10 @@
   --color-dark-border: rgba(255, 255, 255, 0.12);
   --color-dark-accent: #D49A55;       /* Sunset Ochre */
 
+  /* --- Nav Menu Fonts (adapt to project design language in later workflow) --- */
+  --nav-font-display: 'Cormorant Garamond', Georgia, serif;
+  --nav-font-label: 'Montserrat', sans-serif;
+
   /* --- Nav Menu Overlays --- */
   --nav-overlay-base: oklch(12% 0.008 60 / 0.52);
   --nav-scrim-dark: oklch(12% 0.008 60 / 0.38);
@@ -121,12 +125,46 @@
 
 }
 
-/* ── Nav Menu Panel Accordion (pure CSS hover) ── */
+/* ── Nav Menu — entry animations ── */
+@keyframes navHeaderIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes navPanelIn {
   from { opacity: 0; transform: translateY(30px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ── Nav Menu — header ── */
+.nav-header {
+  animation: navHeaderIn 0.55s ease 0.06s both;
+}
+
+/* ── Nav Menu — close button ── */
+.nav-close-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: var(--nav-font-label);
+  font-weight: 300;
+  transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
+}
+.nav-close-btn:hover {
+  border-color: rgba(255, 255, 255, 0.55);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* ── Nav Menu — card accordion ── */
 .nav-panel {
   flex: 1;
   opacity: 0;
@@ -137,43 +175,88 @@
 .nav-panel:nth-child(2) { animation-delay: 0.16s; }
 .nav-panel:nth-child(3) { animation-delay: 0.26s; }
 .nav-panel:nth-child(4) { animation-delay: 0.36s; }
-.nav-card-grid:hover .nav-panel { flex: 0.70; }
-.nav-card-grid:hover .nav-panel:hover,
-.nav-card-grid:has(.nav-panel:focus-within) .nav-panel:focus-within { flex: 1.90; }
+
+.nav-card-grid:hover .nav-panel       { flex: 0.70; }
+.nav-card-grid:hover .nav-panel:hover { flex: 1.90; }
+.nav-card-grid:has(.nav-panel:focus-within) .nav-panel:focus-within     { flex: 1.90; }
 .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) { flex: 0.70; }
 
-.nav-panel__title {
-  display: block;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+/* ── Nav Menu — card veil (dims non-hovered) ── */
+.nav-card-veil {
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  z-index: 3;
+  pointer-events: none;
+  transition: background 0.5s ease;
 }
-.nav-panel:hover .nav-panel__title,
-.nav-panel:focus-within .nav-panel__title { transform: scale(1.03); }
+.nav-card-grid:hover .nav-panel:not(:hover) .nav-card-veil,
+.nav-card-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) .nav-card-veil {
+  background: rgba(5, 4, 3, 0.45);
+}
 
-.nav-panel__subtitle { opacity: 1; transition: opacity 0.3s ease; }
-.nav-panel__data     { opacity: 0; transition: opacity 0.3s ease; }
+/* ── Nav Menu — gold bottom line sweep ── */
+.nav-card-line {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1.5px;
+  background: #c9a96e;
+  transform: scaleX(0);
+  transform-origin: left;
+  z-index: 10;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.nav-panel:hover .nav-card-line,
+.nav-panel:focus-within .nav-card-line { transform: scaleX(1); }
+
+/* ── Nav Menu — card content (dims + sinks on siblings) ── */
+.nav-card-content {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 0 40px 48px;
+  z-index: 10;
+  transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.nav-card-grid:hover .nav-panel:not(:hover) .nav-card-content,
+.nav-card-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) .nav-card-content {
+  opacity: 0.32;
+  transform: translateY(6px);
+}
+
+/* ── Nav Menu — card subtitle color on hover ── */
+.nav-panel__subtitle {
+  display: block;
+  font-family: var(--nav-font-label);
+  font-size: 8px;
+  font-weight: 300;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  transition: color 0.35s ease;
+}
 .nav-panel:hover .nav-panel__subtitle,
-.nav-panel:focus-within .nav-panel__subtitle { opacity: 0; }
-.nav-panel:hover .nav-panel__data,
-.nav-panel:focus-within .nav-panel__data { opacity: 1; }
+.nav-panel:focus-within .nav-panel__subtitle {
+  color: rgba(201, 169, 110, 0.75);
+}
 
+/* ── Nav Menu — reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
-  .nav-panel,
-  .nav-panel__title,
-  .nav-panel__subtitle,
-  .nav-panel__data { transition: none; }
+  .nav-header      { animation: none; opacity: 1; transform: none; }
+  .nav-panel       { animation: none; opacity: 1; transform: none; transition: none; }
+  .nav-card-veil   { transition: none; }
+  .nav-card-line   { transition: none; }
+  .nav-card-content { transition: none; }
+  .nav-panel__subtitle { transition: none; }
   .nav-card-grid:hover .nav-panel,
   .nav-card-grid:hover .nav-panel:hover,
   .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:focus-within,
   .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) { flex: 1; }
 }
 
-.nav-close-btn {
-  background: var(--nav-close-bg);
-  border: 1px solid var(--nav-close-border);
-  transition: background 300ms var(--ease-out-quart);
-}
-.nav-close-btn:hover {
-  background: var(--nav-close-bg-hover);
+/* ── Nav Menu — mobile stack ── */
+@media (max-width: 767px) {
+  .nav-card-grid { flex-direction: column; }
+  .nav-card-content { padding: 0 28px 36px; }
 }
 
 /* Typography System */
