@@ -284,7 +284,9 @@
   }
 
   /* Kill all decorative transitions */
-  .nav-panel img      { transition: none; transform: none; will-change: auto; }
+  .nav-panel img,
+  .nav-panel:hover img,
+  .nav-panel:focus-within img { transition: none; transform: none; will-change: auto; }
   .nav-card-veil      { transition: none; }
   .nav-card-line      { transition: none; }
   .nav-card-content   { transition: none; transform: none; }
