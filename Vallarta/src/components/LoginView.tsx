@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Eye, EyeOff, AlertCircle } from 'lucide-react';
-import bgImage from '../assets/Wideshot-vallarta.jpeg';
+import bgImage from '../assets/login-hero.jpeg';
 
 const DEMO_EMAIL = import.meta.env.VITE_DEMO_EMAIL ?? 'owner@vallartagroup.com';
 const DEMO_PASSWORD = import.meta.env.VITE_DEMO_PASSWORD ?? 'vallarta2024';
