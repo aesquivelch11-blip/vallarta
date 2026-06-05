@@ -195,12 +195,12 @@
 
 /* ── Nav Menu — photo kenburns on hover ── */
 .nav-panel img {
-  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform;
 }
 .nav-panel:hover img,
 .nav-panel:focus-within img {
-  transform: scale(1.045);
+  transform: scale(1.02);
 }
 
 /* ── Nav Menu — card veil (dims non-hovered) ── */
@@ -248,8 +248,7 @@
 }
 .nav-card-grid:hover .nav-panel:not(:hover) .nav-card-content,
 .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) .nav-card-content {
-  opacity: 0.28;
-  transform: translateY(8px);
+  opacity: 0.58;
 }
 
 /* ── Nav Menu — card subtitle color on hover ── */
