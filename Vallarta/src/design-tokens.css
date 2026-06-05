@@ -269,20 +269,41 @@
 
 /* ── Nav Menu — reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
-  .nav-header      { animation: none; opacity: 1; transform: none; }
-  .nav-panel       { animation: none; opacity: 1; transform: none; transition: none; }
-  .nav-panel img   { transition: none; }
-  .nav-card-veil   { transition: none; }
-  .nav-card-line   { transition: none; }
-  .nav-card-content { transition: none; transform: none; }
+  /* Kill all entrance animations — snap to visible immediately */
+  .nav-header {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .nav-panel {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    /* Keep a minimal flex-grow transition — spatial signal, not motion */
+    transition: flex-grow 0.15s linear;
+  }
+
+  /* Kill all decorative transitions */
+  .nav-panel img      { transition: none; transform: none; will-change: auto; }
+  .nav-card-veil      { transition: none; }
+  .nav-card-line      { transition: none; }
+  .nav-card-content   { transition: none; transform: none; }
+  .nav-panel__subtitle { transition: none; }
+  .nav-close-btn      { transition: none; }
+
+  /* Kill content lift/sink — snap states */
   .nav-panel:hover .nav-card-content,
   .nav-panel:focus-within .nav-card-content { transform: none; }
-  .nav-panel__subtitle { transition: none; }
-  .nav-close-btn   { transition: none; }
+  .nav-card-grid:hover .nav-panel:not(:hover) .nav-card-content,
+  .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) .nav-card-content {
+    transform: none;
+  }
+
+  /* Keep accordion functional but instant — spatial orientation is still useful */
   .nav-card-grid:hover .nav-panel,
+  .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) { flex-grow: 0.70; }
   .nav-card-grid:hover .nav-panel:hover,
-  .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:focus-within,
-  .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) { flex: 1; }
+  .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:focus-within { flex-grow: 1.90; }
 }
 
 /* ── Nav Menu — mobile stack ── */
