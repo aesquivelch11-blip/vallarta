@@ -132,18 +132,18 @@
 
 /* ── Nav Menu — entry animations ── */
 @keyframes navHeaderIn {
-  from { opacity: 0; transform: translateY(-10px); }
+  from { opacity: 0; transform: translateY(-14px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes navPanelIn {
-  from { opacity: 0; transform: translateY(30px); }
+  from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ── Nav Menu — header ── */
 .nav-header {
-  animation: navHeaderIn 0.55s ease 0.06s both;
+  animation: navHeaderIn 0.30s cubic-bezier(0.16, 1, 0.3, 1) 0.01s both;
 }
 
 /* ── Nav Menu — close button ── */
@@ -161,30 +161,47 @@
   cursor: pointer;
   font-family: var(--nav-font-label);
   font-weight: 300;
-  transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
+  transition:
+    border-color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    color        0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    background   0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    transform    0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .nav-close-btn:hover {
   border-color: var(--nav-close-border-hover);
   color: var(--nav-close-color-hover);
   background: var(--nav-close-bg-hover);
 }
+.nav-close-btn:active {
+  transform: scale(0.88);
+}
 
 /* ── Nav Menu — card accordion ── */
 .nav-panel {
   flex: 1;
   opacity: 0;
-  animation: navPanelIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  transition: flex 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation: navPanelIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transition: flex-grow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.nav-panel:nth-child(1) { animation-delay: 0.06s; }
-.nav-panel:nth-child(2) { animation-delay: 0.16s; }
-.nav-panel:nth-child(3) { animation-delay: 0.26s; }
-.nav-panel:nth-child(4) { animation-delay: 0.36s; }
+.nav-panel:nth-child(1) { animation-delay: 0s; }
+.nav-panel:nth-child(2) { animation-delay: 0.04s; }
+.nav-panel:nth-child(3) { animation-delay: 0.08s; }
+.nav-panel:nth-child(4) { animation-delay: 0.12s; }
 
 .nav-card-grid:hover .nav-panel       { flex: 0.70; }
 .nav-card-grid:hover .nav-panel:hover { flex: 1.90; }
 .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:focus-within     { flex: 1.90; }
 .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) { flex: 0.70; }
+
+/* ── Nav Menu — photo kenburns on hover ── */
+.nav-panel img {
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+.nav-panel:hover img,
+.nav-panel:focus-within img {
+  transform: scale(1.045);
+}
 
 /* ── Nav Menu — card veil (dims non-hovered) ── */
 .nav-card-veil {
@@ -193,7 +210,7 @@
   background: transparent;
   z-index: 3;
   pointer-events: none;
-  transition: background 0.5s ease;
+  transition: background 0.38s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .nav-card-grid:hover .nav-panel:not(:hover) .nav-card-veil,
 .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) .nav-card-veil {
@@ -209,23 +226,30 @@
   transform: scaleX(0);
   transform-origin: left;
   z-index: 10;
-  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .nav-panel:hover .nav-card-line,
 .nav-panel:focus-within .nav-card-line { transform: scaleX(1); }
 
-/* ── Nav Menu — card content (dims + sinks on siblings) ── */
+/* ── Nav Menu — card content (lifts on hover, dims + sinks on siblings) ── */
 .nav-card-content {
   position: absolute;
   bottom: 0; left: 0; right: 0;
   padding: 0 40px 48px;
   z-index: 10;
-  transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateY(0);
+  transition:
+    opacity   0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav-panel:hover .nav-card-content,
+.nav-panel:focus-within .nav-card-content {
+  transform: translateY(-6px);
 }
 .nav-card-grid:hover .nav-panel:not(:hover) .nav-card-content,
 .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) .nav-card-content {
-  opacity: 0.32;
-  transform: translateY(6px);
+  opacity: 0.28;
+  transform: translateY(8px);
 }
 
 /* ── Nav Menu — card subtitle color on hover ── */
@@ -237,7 +261,7 @@
   letter-spacing: 3.5px;
   text-transform: uppercase;
   color: var(--nav-subtitle-color);
-  transition: color 0.35s ease;
+  transition: color 0.30s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .nav-panel:hover .nav-panel__subtitle,
 .nav-panel:focus-within .nav-panel__subtitle {
@@ -248,10 +272,14 @@
 @media (prefers-reduced-motion: reduce) {
   .nav-header      { animation: none; opacity: 1; transform: none; }
   .nav-panel       { animation: none; opacity: 1; transform: none; transition: none; }
+  .nav-panel img   { transition: none; }
   .nav-card-veil   { transition: none; }
   .nav-card-line   { transition: none; }
-  .nav-card-content { transition: none; }
+  .nav-card-content { transition: none; transform: none; }
+  .nav-panel:hover .nav-card-content,
+  .nav-panel:focus-within .nav-card-content { transform: none; }
   .nav-panel__subtitle { transition: none; }
+  .nav-close-btn   { transition: none; }
   .nav-card-grid:hover .nav-panel,
   .nav-card-grid:hover .nav-panel:hover,
   .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:focus-within,
