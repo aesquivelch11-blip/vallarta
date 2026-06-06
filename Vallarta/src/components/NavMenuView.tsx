@@ -76,7 +76,10 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
       {/* ── Header ── */}
       <header
         className="nav-header absolute top-0 left-0 right-0 z-[100] flex items-center justify-between"
-        style={{ height: '80px', padding: '0 44px' }}
+        style={{
+          height: 'var(--nav-header-height)',
+          padding: '0 44px',
+        }}
       >
         <span
           style={{
