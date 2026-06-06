@@ -184,6 +184,62 @@
   transform: scale(0.88);
 }
 
+/* ── Nav Menu — edge indicators ── */
+.nav-portal__edge {
+  flex: 0 0 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  z-index: 10;
+  padding: 0;
+}
+
+.nav-portal__edge-label {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 0.5rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.25);
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  transition: color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-portal__edge--right .nav-portal__edge-label {
+  transform: none;
+}
+
+.nav-portal__edge:hover .nav-portal__edge-label {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.nav-portal__edge:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.3);
+  outline-offset: -2px;
+}
+
+@keyframes navEdgeFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.nav-portal-grid--cinematic .nav-portal__edge {
+  opacity: 0;
+  animation: navEdgeFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+}
+
+.nav-portal-grid--snappy .nav-portal__edge {
+  opacity: 1;
+  transition: none;
+}
+
 /* ── Nav Menu — panel button ── */
 .nav-panel__button {
   position: absolute;
@@ -209,7 +265,6 @@
   flex: 1;
   opacity: 0;
   animation: navPanelIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  transition: flex-grow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 /* Cinematic entrance: staggered bloom (first open per session) */
 .nav-portal-grid--cinematic .nav-panel:nth-child(1) { animation-delay: 0.06s; }
@@ -223,11 +278,6 @@
   animation-delay: 0s;
 }
 
-.nav-portal-grid:hover .nav-panel       { flex: 0.70; }
-.nav-portal-grid:hover .nav-panel:hover { flex: 1.90; }
-.nav-portal-grid:has(.nav-panel:focus-within) .nav-panel:focus-within     { flex: 1.90; }
-.nav-portal-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) { flex: 0.70; }
-
 /* ── Nav Menu — photo kenburns on hover ── */
 .nav-panel img {
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -236,21 +286,6 @@
 .nav-panel:focus-within img {
   transform: scale(1.02);
   will-change: transform;
-}
-
-/* ── Nav Menu — card veil (dims non-hovered) ── */
-.nav-portal-veil {
-  position: absolute;
-  inset: 0;
-  background: var(--nav-veil);
-  opacity: 0;
-  z-index: 3;
-  pointer-events: none;
-  transition: opacity 0.38s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.nav-portal-grid:hover .nav-panel:not(:hover) .nav-portal-veil,
-.nav-portal-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) .nav-portal-veil {
-  opacity: 1;
 }
 
 /* ── Nav Menu — gold bottom line sweep ── */
@@ -282,10 +317,6 @@
 .nav-panel:hover .nav-portal-content,
 .nav-panel:focus-within .nav-portal-content {
   transform: translateY(-6px);
-}
-.nav-portal-grid:hover .nav-panel:not(:hover) .nav-portal-content,
-.nav-portal-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) .nav-portal-content {
-  opacity: 0.58;
 }
 
 /* ── Nav Menu — index number ── */
@@ -372,14 +403,12 @@
     animation: none;
     opacity: 1;
     transform: none;
-    transition: flex-grow 0.05s linear;
   }
 
   .nav-panel img,
   .nav-panel:hover img,
   .nav-panel:focus-within img { transition: none; transform: none; will-change: auto; }
 
-  .nav-portal-veil,
   .nav-portal-line,
   .nav-portal-content,
   .nav-panel__subtitle,
@@ -389,11 +418,6 @@
 
   .nav-panel:hover .nav-portal-content,
   .nav-panel:focus-within .nav-portal-content { transform: none; }
-
-  .nav-portal-grid:hover .nav-panel:not(:hover) .nav-portal-content,
-  .nav-portal-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) .nav-portal-content {
-    transform: none;
-  }
 
   .nav-panel:hover .nav-portal__index,
   .nav-panel:focus-within .nav-portal__index { color: #fff; transition: none; }
@@ -407,20 +431,11 @@
     outline-offset: -2px;
   }
 
-  .nav-portal-grid:hover .nav-panel:not(:hover) .nav-portal-veil,
-  .nav-portal-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) .nav-portal-veil {
-    opacity: 1;
-    transition: none;
-  }
-
-  .nav-portal-grid:hover .nav-panel,
-  .nav-portal-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) { flex-grow: 0.70; }
-
-  .nav-portal-grid:hover .nav-panel:hover,
-  .nav-portal-grid:has(.nav-panel:focus-within) .nav-panel:focus-within { flex-grow: 1.90; }
-
   .nav-panel--selected .nav-portal-line { transition: none; }
   .nav-panel--selected .nav-portal__index { transition: none; }
+
+  .nav-portal__edge { transition: none; opacity: 1; }
+  .nav-portal__edge-label { transition: none; }
 }
 
 /* ── Nav Menu — mobile adaptation ── */
@@ -454,19 +469,6 @@
     transition: none;
   }
 
-  .nav-portal-grid:hover .nav-panel,
-  .nav-portal-grid:hover .nav-panel:hover,
-  .nav-portal-grid:has(.nav-panel:focus-within) .nav-panel:focus-within,
-  .nav-portal-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) {
-    flex: 1 1 0;
-  }
-
-  .nav-panel .nav-portal-veil,
-  .nav-portal-grid:hover .nav-panel:not(:hover) .nav-portal-veil,
-  .nav-portal-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) .nav-portal-veil {
-    opacity: 0;
-  }
-
   .nav-portal-line {
     transform: scaleX(0.45);
     opacity: 0.5;
@@ -492,6 +494,13 @@
 
   .nav-panel__button {
     outline: none;
+  }
+  .nav-portal__edge {
+    flex: 0 0 36px;
+  }
+  .nav-portal__edge-label {
+    font-size: 0.4375rem;
+    letter-spacing: 0.15em;
   }
 }
 
