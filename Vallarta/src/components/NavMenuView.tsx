@@ -193,73 +193,87 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
         </button>
       </header>
 
-      {/* ── 4-panel grid ── */}
+      {/* ── Passageway ── */}
       <div
         className={`nav-portal-grid ${hasAnimated.current ? 'nav-portal-grid--snappy' : 'nav-portal-grid--cinematic'} absolute inset-0 flex flex-row`}
       >
-        {menuItems.map((item) => (
-          <div
-            key={item.id}
-            className={`nav-panel relative h-full overflow-hidden outline-none ${selectedPanel === item.id ? 'nav-panel--selected' : ''}`}
-          >
-            {/* Image skeleton fallback */}
-            <div
-              className={`nav-portal__img-skeleton ${loadedImages[item.id] ? 'nav-portal__img-skeleton--hidden' : ''}`}
-              aria-hidden="true"
-            />
+        {(() => {
+          const active = menuItems[activeIndex];
+          const prevLabel = menuItems[(activeIndex - 1 + menuItems.length) % menuItems.length].label;
+          const nextLabel = menuItems[(activeIndex + 1) % menuItems.length].label;
 
-            {/* Full-bleed photo */}
-            <picture aria-hidden="true">
-              <source srcSet={item.imageWebp} type="image/webp" />
-              <img
-                src={item.image}
-                alt=""
-                className={`nav-portal__img ${loadedImages[item.id] ? 'nav-portal__img--loaded' : ''}`}
-                onLoad={() => handleImageLoad(item.id)}
-              />
-            </picture>
+          return (
+            <>
+              {/* Left edge indicator — walk to previous room */}
+              <button
+                className="nav-portal__edge nav-portal__edge--left"
+                aria-label={`Previous: ${prevLabel}`}
+                onClick={() => walk(-1)}
+                tabIndex={0}
+              >
+                <span className="nav-portal__edge-label">{prevLabel}</span>
+              </button>
 
-            {/* Dark vignette — top and bottom */}
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                zIndex: 2,
-                background: `
-                  linear-gradient(to bottom, var(--nav-scrim-top) 0%, transparent 20%),
-                  linear-gradient(to top, var(--nav-scrim-heavy) 0%, var(--nav-scrim-mid) 36%, var(--nav-scrim-light) 65%, transparent 100%)
-                `,
-              }}
-            />
+              {/* Active panel — full-bleed */}
+              <div
+                className={`nav-panel nav-panel--active relative h-full overflow-hidden outline-none ${selectedPanel === active.id ? 'nav-panel--selected' : ''}`}
+              >
+                {/* Image skeleton fallback */}
+                <div
+                  className={`nav-portal__img-skeleton ${loadedImages[active.id] ? 'nav-portal__img-skeleton--hidden' : ''}`}
+                  aria-hidden="true"
+                />
 
-            {/* Veil — dims on sibling hover */}
-            <div className="nav-portal-veil" />
+                {/* Full-bleed photo */}
+                <picture aria-hidden="true">
+                  <source srcSet={active.imageWebp} type="image/webp" />
+                  <img
+                    src={active.image}
+                    alt=""
+                    className={`nav-portal__img ${loadedImages[active.id] ? 'nav-portal__img--loaded' : ''}`}
+                    onLoad={() => handleImageLoad(active.id)}
+                  />
+                </picture>
 
-            {/* Gold bottom sweep line */}
-            <div className="nav-portal-line" />
+                {/* Dark vignette — top and bottom */}
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    zIndex: 2,
+                    background: 'linear-gradient(to bottom, var(--nav-scrim-top) 0%, transparent 20%), linear-gradient(to top, var(--nav-scrim-heavy) 0%, var(--nav-scrim-mid) 36%, var(--nav-scrim-light) 65%, transparent 100%)',
+                  }}
+                />
 
-            {/* Full-panel click target */}
-            <button
-              className="nav-panel__button"
-              onClick={() => handlePanelClick(item.screen, item.id)}
-              aria-label={`Navigate to ${item.label}`}
-            />
+                {/* Gold bottom sweep line */}
+                <div className="nav-portal-line" />
 
-            {/* Bottom-anchored content */}
-            <div className="nav-portal-content">
-              <span className="nav-portal__index">
-                {item.index}
-              </span>
+                {/* Full-panel click target */}
+                <button
+                  className="nav-panel__button"
+                  onClick={() => handlePanelClick(active.screen, active.id)}
+                  aria-label={`Navigate to ${active.label}`}
+                />
 
-              <span className="nav-portal__label">
-                {item.label}
-              </span>
+                {/* Bottom-anchored content */}
+                <div className="nav-portal-content">
+                  <span className="nav-portal__index">{active.index}</span>
+                  <span className="nav-portal__label">{active.label}</span>
+                  <span className="nav-panel__subtitle">{active.subtitle}</span>
+                </div>
+              </div>
 
-              <span className="nav-panel__subtitle">
-                {item.subtitle}
-              </span>
-            </div>
-          </div>
-        ))}
+              {/* Right edge indicator — walk to next room */}
+              <button
+                className="nav-portal__edge nav-portal__edge--right"
+                aria-label={`Next: ${nextLabel}`}
+                onClick={() => walk(1)}
+                tabIndex={0}
+              >
+                <span className="nav-portal__edge-label">{nextLabel}</span>
+              </button>
+            </>
+          );
+        })()}
       </div>
     </div>
   );
