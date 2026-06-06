@@ -135,7 +135,7 @@
 }
 
 @keyframes navPanelIn {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(24px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
@@ -211,10 +211,17 @@
   animation: navPanelIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   transition: flex-grow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.nav-panel:nth-child(1) { animation-delay: 0s; }
-.nav-panel:nth-child(2) { animation-delay: 0.04s; }
-.nav-panel:nth-child(3) { animation-delay: 0.08s; }
-.nav-panel:nth-child(4) { animation-delay: 0.12s; }
+/* Cinematic entrance: staggered bloom (first open per session) */
+.nav-card-grid--cinematic .nav-panel:nth-child(1) { animation-delay: 0.06s; }
+.nav-card-grid--cinematic .nav-panel:nth-child(2) { animation-delay: 0.13s; }
+.nav-card-grid--cinematic .nav-panel:nth-child(3) { animation-delay: 0.20s; }
+.nav-card-grid--cinematic .nav-panel:nth-child(4) { animation-delay: 0.27s; }
+
+/* Snappy entrance: all panels in 0.1s (subsequent opens) */
+.nav-card-grid--snappy .nav-panel {
+  animation: navPanelIn 0.10s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0s;
+}
 
 .nav-card-grid:hover .nav-panel       { flex: 0.70; }
 .nav-card-grid:hover .nav-panel:hover { flex: 1.90; }

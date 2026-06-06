@@ -31,6 +31,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const touchStartY = useRef(0);
+  const hasAnimated = useRef(sessionStorage.getItem('nav-anim') === '1');
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   const [selectedPanel, setSelectedPanel] = useState<string | null>(null);
 
@@ -83,6 +84,11 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
       document.removeEventListener('keydown', handleKeyDown);
       previousFocusRef.current?.focus();
     };
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => sessionStorage.setItem('nav-anim', '1'), 600);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleImageLoad = (id: string) => {
@@ -156,7 +162,9 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
       </header>
 
       {/* ── 4-panel grid ── */}
-      <div className="nav-card-grid absolute inset-0 flex flex-row">
+      <div
+        className={`nav-card-grid ${hasAnimated.current ? 'nav-card-grid--snappy' : 'nav-card-grid--cinematic'} absolute inset-0 flex flex-row`}
+      >
         {menuItems.map((item) => (
           <div
             key={item.id}
