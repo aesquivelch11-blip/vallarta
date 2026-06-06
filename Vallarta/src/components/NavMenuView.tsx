@@ -31,6 +31,19 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const touchStartY = useRef(0);
+  const lastPanelId = sessionStorage.getItem('nav-last-panel');
+  const initialIndex = (() => {
+    if (lastPanelId) {
+      const idx = menuItems.findIndex((item) => item.id === lastPanelId);
+      return idx === -1 ? 0 : idx;
+    }
+    return 0;
+  })();
+
+  const [activeIndex, setActiveIndex] = useState(initialIndex);
+  const activeIndexRef = useRef(activeIndex);
+  activeIndexRef.current = activeIndex;
+
   const hasAnimated = useRef(sessionStorage.getItem('nav-anim') === '1');
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   const [selectedPanel, setSelectedPanel] = useState<string | null>(null);
@@ -119,6 +132,25 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
       onClose();
     }
   };
+
+  const walk = (direction: -1 | 1) => {
+    setActiveIndex((prev) => {
+      const next = prev + direction;
+      if (next < 0) return menuItems.length - 1;
+      if (next >= menuItems.length) return 0;
+      return next;
+    });
+  };
+
+  const goToPanel = (index: number) => {
+    if (index >= 0 && index < menuItems.length) {
+      setActiveIndex(index);
+    }
+  };
+
+  useEffect(() => {
+    sessionStorage.setItem('nav-last-panel', menuItems[activeIndex].id);
+  }, [activeIndex]);
 
   return (
     <div
