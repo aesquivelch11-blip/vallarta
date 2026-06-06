@@ -110,8 +110,8 @@
 
   /* Header text */
   --nav-wordmark-color:      rgba(255, 255, 255, 0.5);
-  --nav-title-color:         #fff;
-  --nav-subtitle-color:      rgba(255, 255, 255, 0.3);
+  --nav-title-color:         oklch(97% 0.005 75);
+  --nav-subtitle-color:      rgba(255, 255, 255, 0.52);
 
   /* Close button */
   --nav-close-color:         rgba(255, 255, 255, 0.5);
@@ -148,8 +148,8 @@
 
 /* ── Nav Menu — close button ── */
 .nav-close-btn {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   border: 1px solid var(--nav-close-border);
   background: transparent;
@@ -207,14 +207,15 @@
 .nav-card-veil {
   position: absolute;
   inset: 0;
-  background: transparent;
+  background: var(--nav-veil);
+  opacity: 0;
   z-index: 3;
   pointer-events: none;
-  transition: background 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.38s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .nav-card-grid:hover .nav-panel:not(:hover) .nav-card-veil,
 .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) .nav-card-veil {
-  background: var(--nav-veil);
+  opacity: 1;
 }
 
 /* ── Nav Menu — gold bottom line sweep ── */
@@ -237,6 +238,7 @@
   bottom: 0; left: 0; right: 0;
   padding: 0 40px 48px;
   z-index: 10;
+  pointer-events: none;
   transform: translateY(0);
   transition:
     opacity   0.35s cubic-bezier(0.16, 1, 0.3, 1),
