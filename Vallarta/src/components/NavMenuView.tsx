@@ -31,6 +31,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const touchStartY = useRef(0);
+  const touchStartX = useRef(0);
   const lastPanelId = sessionStorage.getItem('nav-last-panel');
   const initialIndex = (() => {
     if (lastPanelId) {
@@ -136,11 +137,19 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
     const deltaY = e.changedTouches[0].clientY - touchStartY.current;
+
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+      walk(deltaX > 0 ? -1 : 1);
+      return;
+    }
+
     if (deltaY > 80) {
       onClose();
     }
