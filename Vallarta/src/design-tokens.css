@@ -474,6 +474,7 @@
   .nav-portal__edge { transition: none; opacity: 1; }
   .nav-portal__edge-label { transition: none; }
   .nav-portal__dot { transition: none; }
+  .nav-hint-banner { animation: none; opacity: 1; transform: none; }
 }
 
 /* ── Nav Menu — mobile adaptation ── */
@@ -542,6 +543,63 @@
   }
   .nav-portal__pagination { bottom: 28px; gap: 10px; }
   .nav-portal__dot { width: 5px; height: 5px; }
+}
+
+/* ── Nav Menu — keyboard hint ── */
+.nav-hint-banner {
+  padding: 8px 16px;
+  background: linear-gradient(to bottom, rgba(13, 28, 36, 0.92), rgba(13, 28, 36, 0));
+  animation: navHintIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+}
+
+@keyframes navHintIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.nav-hint-banner__text {
+  font-family: var(--font-ui);
+  font-size: 0.625rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.55);
+  display: flex;
+  align-items: center;
+}
+
+.nav-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  font-family: var(--font-ui);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 3px;
+  margin: 0 1px;
+}
+
+.nav-hint-banner__dismiss {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  margin-left: 12px;
+  padding: 0;
+}
+
+.nav-hint-banner__dismiss:hover {
+  color: rgba(255, 255, 255, 0.65);
 }
 
 /* Typography System */

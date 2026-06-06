@@ -60,6 +60,9 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
   const hasAnimated = useRef(sessionStorage.getItem('nav-anim') === '1');
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   const [selectedPanel, setSelectedPanel] = useState<string | null>(null);
+  const [hintVisible, setHintVisible] = useState(
+    sessionStorage.getItem('nav-hint-seen') !== '1'
+  );
 
   useEffect(() => {
     previousFocusRef.current = document.activeElement as HTMLElement;
@@ -135,6 +138,15 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
     const timer = setTimeout(() => sessionStorage.setItem('nav-anim', '1'), 600);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (!hintVisible) return;
+    const timer = setTimeout(() => {
+      setHintVisible(false);
+      sessionStorage.setItem('nav-hint-seen', '1');
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [hintVisible]);
 
   const handleImageLoad = (id: string) => {
     setLoadedImages((prev) => ({ ...prev, [id]: true }));
@@ -232,6 +244,36 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
           </svg>
         </button>
       </header>
+
+      {/* Keyboard hint banner */}
+      {hintVisible && (
+        <div
+          className="nav-hint-banner absolute top-[var(--nav-header-height)] left-0 right-0 z-[90] flex items-center justify-center"
+          role="status"
+          aria-live="polite"
+        >
+          <span className="nav-hint-banner__text">
+            <kbd className="nav-kbd">&larr;</kbd>
+            <kbd className="nav-kbd">&rarr;</kbd>
+            &nbsp;to browse&ensp;&middot;&ensp;
+            <kbd className="nav-kbd">1</kbd>
+            <kbd className="nav-kbd">4</kbd>
+            &nbsp;to jump&ensp;&middot;&ensp;
+            <kbd className="nav-kbd">Esc</kbd>
+            &nbsp;to close
+          </span>
+          <button
+            className="nav-hint-banner__dismiss"
+            onClick={() => { setHintVisible(false); sessionStorage.setItem('nav-hint-seen', '1'); }}
+            aria-label="Dismiss hint"
+          >
+            <svg width="8" height="8" viewBox="0 0 8 8" fill="none" aria-hidden="true">
+              <line x1="1" y1="1" x2="7" y2="7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              <line x1="7" y1="1" x2="1" y2="7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </button>
+        </div>
+      )}
 
       {/* ── Passageway ── */}
       <div
