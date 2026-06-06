@@ -140,7 +140,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
           padding: '0 44px',
         }}
       >
-        <span className="nav-card__wordmark">Vallarta Estates</span>
+        <span className="nav-portal__wordmark">Vallarta Estates</span>
 
         <button
           aria-label="Close menu"
@@ -163,7 +163,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
 
       {/* ── 4-panel grid ── */}
       <div
-        className={`nav-card-grid ${hasAnimated.current ? 'nav-card-grid--snappy' : 'nav-card-grid--cinematic'} absolute inset-0 flex flex-row`}
+        className={`nav-portal-grid ${hasAnimated.current ? 'nav-portal-grid--snappy' : 'nav-portal-grid--cinematic'} absolute inset-0 flex flex-row`}
       >
         {menuItems.map((item) => (
           <div
@@ -172,7 +172,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
           >
             {/* Image skeleton fallback */}
             <div
-              className={`nav-card__img-skeleton ${loadedImages[item.id] ? 'nav-card__img-skeleton--hidden' : ''}`}
+              className={`nav-portal__img-skeleton ${loadedImages[item.id] ? 'nav-portal__img-skeleton--hidden' : ''}`}
               aria-hidden="true"
             />
 
@@ -182,7 +182,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
               <img
                 src={item.image}
                 alt=""
-                className={`nav-card__img ${loadedImages[item.id] ? 'nav-card__img--loaded' : ''}`}
+                className={`nav-portal__img ${loadedImages[item.id] ? 'nav-portal__img--loaded' : ''}`}
                 onLoad={() => handleImageLoad(item.id)}
               />
             </picture>
@@ -200,10 +200,10 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
             />
 
             {/* Veil — dims on sibling hover */}
-            <div className="nav-card-veil" />
+            <div className="nav-portal-veil" />
 
             {/* Gold bottom sweep line */}
-            <div className="nav-card-line" />
+            <div className="nav-portal-line" />
 
             {/* Full-panel click target */}
             <button
@@ -213,12 +213,12 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
             />
 
             {/* Bottom-anchored content */}
-            <div className="nav-card-content">
-              <span className="nav-card__index">
+            <div className="nav-portal-content">
+              <span className="nav-portal__index">
                 {item.index}
               </span>
 
-              <span className="nav-card__label">
+              <span className="nav-portal__label">
                 {item.label}
               </span>
 
