@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { ScreenType } from '../types';
 import menuImg1 from '../assets/Menu/menu-1.jpg';
 import menuImg1Webp from '../assets/Menu/menu-1.webp';
@@ -25,6 +25,7 @@ const menuItems = [
 export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
+  const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     previousFocusRef.current = document.activeElement as HTMLElement;
@@ -63,6 +64,10 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
       previousFocusRef.current?.focus();
     };
   }, []);
+
+  const handleImageLoad = (id: string) => {
+    setLoadedImages((prev) => ({ ...prev, [id]: true }));
+  };
 
   return (
     <div
@@ -107,16 +112,22 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
         {menuItems.map((item) => (
           <div
             key={item.id}
-            className="nav-panel relative h-full overflow-hidden border-r last:border-r-0 outline-none"
-            style={{ borderColor: 'var(--nav-card-separator)' }}
+            className="nav-panel relative h-full overflow-hidden outline-none"
           >
+            {/* Image skeleton fallback */}
+            <div
+              className={`nav-card__img-skeleton ${loadedImages[item.id] ? 'nav-card__img-skeleton--hidden' : ''}`}
+              aria-hidden="true"
+            />
+
             {/* Full-bleed photo */}
-            <picture className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true">
+            <picture aria-hidden="true">
               <source srcSet={item.imageWebp} type="image/webp" />
               <img
                 src={item.image}
                 alt=""
-                className="w-full h-full object-cover"
+                className={`nav-card__img ${loadedImages[item.id] ? 'nav-card__img--loaded' : ''}`}
+                onLoad={() => handleImageLoad(item.id)}
               />
             </picture>
 
