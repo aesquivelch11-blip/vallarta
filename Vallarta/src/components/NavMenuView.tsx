@@ -25,6 +25,7 @@ const menuItems = [
 export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
+  const touchStartY = useRef(0);
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
@@ -40,6 +41,19 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
     focusable()[0]?.focus();
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+        return;
+      }
+
+      const panelKeys = ['1', '2', '3', '4'];
+      const keyIndex = panelKeys.indexOf(e.key);
+      if (keyIndex !== -1 && keyIndex < menuItems.length) {
+        e.preventDefault();
+        onNavigate(menuItems[keyIndex].screen, 'push');
+        return;
+      }
+
       if (e.key !== 'Tab') return;
       const els = focusable();
       if (els.length === 0) return;
@@ -69,6 +83,23 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
     setLoadedImages((prev) => ({ ...prev, [id]: true }));
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const deltaY = e.changedTouches[0].clientY - touchStartY.current;
+    if (deltaY > 80) {
+      onClose();
+    }
+  };
+
+  const handleShellClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
     <div
       ref={dialogRef}
@@ -77,6 +108,9 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
       aria-label="Navigation"
       className="relative w-full h-[100dvh] overflow-hidden"
       style={{ background: 'var(--nav-shell-bg)' }}
+      onClick={handleShellClick}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       {/* ── Header ── */}
       <header
