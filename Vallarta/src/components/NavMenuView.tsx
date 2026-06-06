@@ -81,18 +81,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
           padding: '0 44px',
         }}
       >
-        <span
-          style={{
-            fontFamily: 'var(--nav-font-label)',
-            fontSize: '10px',
-            fontWeight: 300,
-            letterSpacing: '5px',
-            color: 'var(--nav-wordmark-color)',
-            textTransform: 'uppercase',
-          }}
-        >
-          Vallarta Estates
-        </span>
+        <span className="nav-card__wordmark">Vallarta Estates</span>
 
         <button
           aria-label="Close menu"
@@ -160,33 +149,11 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
 
             {/* Bottom-anchored content */}
             <div className="nav-card-content">
-              <span
-                style={{
-                  display: 'block',
-                  fontFamily: 'var(--nav-font-label)',
-                  fontSize: '9px',
-                  fontWeight: 300,
-                  letterSpacing: '4px',
-                  color: 'var(--nav-gold)',
-                  marginBottom: '14px',
-                }}
-              >
+              <span className="nav-card__index">
                 {item.index}
               </span>
 
-              <span
-                style={{
-                  display: 'block',
-                  fontFamily: 'var(--nav-font-display)',
-                  fontSize: 'clamp(22px, 2.5vw, 42px)',
-                  fontWeight: 300,
-                  color: 'var(--nav-title-color)',
-                  lineHeight: 1,
-                  letterSpacing: '0.3px',
-                  marginBottom: '11px',
-                  textWrap: 'pretty' as React.CSSProperties['textWrap'],
-                }}
-              >
+              <span className="nav-card__label">
                 {item.label}
               </span>
 

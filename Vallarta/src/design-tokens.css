@@ -147,6 +147,16 @@
   animation: navHeaderIn 0.30s cubic-bezier(0.16, 1, 0.3, 1) 0.01s both;
 }
 
+/* ── Nav Menu — wordmark ── */
+.nav-card__wordmark {
+  font-family: var(--font-ui);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--nav-wordmark-color);
+}
+
 /* ── Nav Menu — close button ── */
 .nav-close-btn {
   width: 44px;
@@ -252,6 +262,30 @@
 .nav-card-grid:hover .nav-panel:not(:hover) .nav-card-content,
 .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) .nav-card-content {
   opacity: 0.58;
+}
+
+/* ── Nav Menu — index number ── */
+.nav-card__index {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 0.5625rem;
+  font-weight: 300;
+  letter-spacing: 0.25em;
+  color: var(--nav-gold);
+  margin-bottom: 14px;
+}
+
+/* ── Nav Menu — label ── */
+.nav-card__label {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1.375rem, 2.5vw, 2.625rem);
+  font-weight: 400;
+  color: var(--nav-title-color);
+  line-height: 1;
+  letter-spacing: 0.3px;
+  margin-bottom: 11px;
+  text-wrap: pretty;
 }
 
 /* ── Nav Menu — card subtitle color on hover ── */
