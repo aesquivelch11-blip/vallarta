@@ -302,6 +302,20 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
                   <span className="nav-portal__label">{active.label}</span>
                   <span className="nav-panel__subtitle">{active.subtitle}</span>
                 </div>
+
+                {/* Pagination dots */}
+                <div className="nav-portal__pagination" role="tablist" aria-label="Sections">
+                  {menuItems.map((item, i) => (
+                    <button
+                      key={item.id}
+                      role="tab"
+                      aria-selected={i === activeIndex}
+                      aria-label={item.label}
+                      className={`nav-portal__dot ${i === activeIndex ? 'nav-portal__dot--active' : ''}`}
+                      onClick={() => handlePanelClick(item.screen, item.id)}
+                    />
+                  ))}
+                </div>
               </div>
 
               {/* Right edge indicator — walk to next room */}

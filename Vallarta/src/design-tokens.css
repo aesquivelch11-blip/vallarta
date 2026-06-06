@@ -248,6 +248,41 @@
   transition: none;
 }
 
+/* ── Nav Menu — pagination dots ── */
+.nav-portal__pagination {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 10;
+}
+
+.nav-portal__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-portal__dot:hover {
+  background: rgba(255, 255, 255, 0.50);
+}
+
+.nav-portal__dot:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 3px;
+}
+
+.nav-portal__dot--active {
+  background: #fff;
+}
+
 /* ── Nav Menu — panel button ── */
 .nav-panel__button {
   position: absolute;
@@ -438,6 +473,7 @@
 
   .nav-portal__edge { transition: none; opacity: 1; }
   .nav-portal__edge-label { transition: none; }
+  .nav-portal__dot { transition: none; }
 }
 
 /* ── Nav Menu — mobile adaptation ── */
@@ -504,6 +540,8 @@
     font-size: 0.4375rem;
     letter-spacing: 0.15em;
   }
+  .nav-portal__pagination { bottom: 28px; gap: 10px; }
+  .nav-portal__dot { width: 5px; height: 5px; }
 }
 
 /* Typography System */
