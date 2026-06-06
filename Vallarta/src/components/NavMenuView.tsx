@@ -227,19 +227,19 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
       >
         {(() => {
           const active = menuItems[activeIndex];
-          const prevLabel = menuItems[(activeIndex - 1 + menuItems.length) % menuItems.length].label;
-          const nextLabel = menuItems[(activeIndex + 1) % menuItems.length].label;
+          const prevItem = menuItems[(activeIndex - 1 + menuItems.length) % menuItems.length];
+          const nextItem = menuItems[(activeIndex + 1) % menuItems.length];
 
           return (
             <>
               {/* Left edge indicator — walk to previous room */}
               <button
                 className="nav-portal__edge nav-portal__edge--left"
-                aria-label={`Previous: ${prevLabel}`}
-                onClick={() => walk(-1)}
+                aria-label={`Navigate to ${prevItem.label}`}
+                onClick={() => handlePanelClick(prevItem.screen, prevItem.id)}
                 tabIndex={0}
               >
-                <span className="nav-portal__edge-label">{prevLabel}</span>
+                <span className="nav-portal__edge-label">{prevItem.label}</span>
               </button>
 
               {/* Active panel — full-bleed */}
@@ -293,11 +293,11 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
               {/* Right edge indicator — walk to next room */}
               <button
                 className="nav-portal__edge nav-portal__edge--right"
-                aria-label={`Next: ${nextLabel}`}
-                onClick={() => walk(1)}
+                aria-label={`Navigate to ${nextItem.label}`}
+                onClick={() => handlePanelClick(nextItem.screen, nextItem.id)}
                 tabIndex={0}
               >
-                <span className="nav-portal__edge-label">{nextLabel}</span>
+                <span className="nav-portal__edge-label">{nextItem.label}</span>
               </button>
             </>
           );
