@@ -92,7 +92,17 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
           onClick={onClose}
           className="nav-close-btn"
         >
-          ✕
+          <svg
+            width="11"
+            height="11"
+            viewBox="0 0 11 11"
+            fill="none"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <line x1="1" y1="1" x2="10" y2="10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            <line x1="10" y1="1" x2="1" y2="10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
         </button>
       </header>
 
