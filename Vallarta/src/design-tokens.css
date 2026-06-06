@@ -90,7 +90,7 @@
 
   /* --- Nav Menu --- */
   /* Shell */
-  --nav-shell-bg:            #090806;
+  --nav-shell-bg:            #0D1C24;
   --nav-font-display:        var(--font-display);
   --nav-font-label:          var(--font-ui);
 
@@ -99,11 +99,11 @@
   --nav-subtitle-hover:      rgba(212, 154, 85, 0.75);
 
   /* Scrim system */
-  --nav-scrim-top:           rgba(5, 4, 3, 0.35);
-  --nav-scrim-heavy:         rgba(5, 4, 3, 0.88);
-  --nav-scrim-mid:           rgba(5, 4, 3, 0.42);
-  --nav-scrim-light:         rgba(5, 4, 3, 0.08);
-  --nav-veil:                rgba(5, 4, 3, 0.45);
+  --nav-scrim-top:           rgba(5, 11, 14, 0.35);
+  --nav-scrim-heavy:         rgba(5, 11, 14, 0.88);
+  --nav-scrim-mid:           rgba(5, 11, 14, 0.42);
+  --nav-scrim-light:         rgba(5, 11, 14, 0.08);
+  --nav-veil:                rgba(5, 11, 14, 0.45);
 
   /* Card grid */
   --nav-card-separator:      rgba(255, 255, 255, 0.05);
