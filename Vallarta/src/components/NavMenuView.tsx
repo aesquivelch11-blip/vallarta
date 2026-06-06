@@ -1,9 +1,13 @@
 import React, { useRef, useEffect } from 'react';
 import { ScreenType } from '../types';
 import menuImg1 from '../assets/Menu/menu-1.jpg';
+import menuImg1Webp from '../assets/Menu/menu-1.webp';
 import menuImg2 from '../assets/Menu/menu-2.jpg';
+import menuImg2Webp from '../assets/Menu/menu-2.webp';
 import menuImg3 from '../assets/Menu/menu-3.jpg';
+import menuImg3Webp from '../assets/Menu/menu-3.webp';
 import menuImg4 from '../assets/Menu/menu-4.jpg';
+import menuImg4Webp from '../assets/Menu/menu-4.webp';
 
 interface NavMenuViewProps {
   onNavigate: (screen: ScreenType, transitionStyle: 'push' | 'slide_up') => void;
@@ -12,10 +16,10 @@ interface NavMenuViewProps {
 }
 
 const menuItems = [
-  { id: 'estates',   label: 'The Estates',          subtitle: 'Portfolio Overview', screen: 'reporting'        as ScreenType, index: '01', image: menuImg1 },
-  { id: 'financial', label: 'Financial Performance', subtitle: 'Yield & Revenue',   screen: 'deep_dive'        as ScreenType, index: '02', image: menuImg2 },
-  { id: 'operations',label: 'Operations',            subtitle: 'Live Supervision',  screen: 'camera_expanded'  as ScreenType, index: '03', image: menuImg3 },
-  { id: 'calendar',  label: 'Calendar',              subtitle: 'Scheduling',        screen: 'calendar'         as ScreenType, index: '04', image: menuImg4 },
+  { id: 'estates',    label: 'The Estates',          subtitle: 'Portfolio Overview', screen: 'reporting'       as ScreenType, index: '01', image: menuImg1, imageWebp: menuImg1Webp },
+  { id: 'financial',  label: 'Financial Performance', subtitle: 'Yield & Revenue',   screen: 'deep_dive'       as ScreenType, index: '02', image: menuImg2, imageWebp: menuImg2Webp },
+  { id: 'operations', label: 'Operations',            subtitle: 'Live Supervision',  screen: 'camera_expanded' as ScreenType, index: '03', image: menuImg3, imageWebp: menuImg3Webp },
+  { id: 'calendar',   label: 'Calendar',              subtitle: 'Scheduling',        screen: 'calendar'        as ScreenType, index: '04', image: menuImg4, imageWebp: menuImg4Webp },
 ];
 
 export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
@@ -115,12 +119,14 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
             style={{ borderColor: 'var(--nav-card-separator)' }}
           >
             {/* Full-bleed photo */}
-            <img
-              src={item.image}
-              alt=""
-              aria-hidden="true"
-              className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-            />
+            <picture className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true">
+              <source srcSet={item.imageWebp} type="image/webp" />
+              <img
+                src={item.image}
+                alt=""
+                className="w-full h-full object-cover"
+              />
+            </picture>
 
             {/* Dark vignette — top and bottom */}
             <div
