@@ -244,6 +244,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
 
               {/* Active panel — full-bleed */}
               <div
+                key={active.id}
                 className={`nav-panel nav-panel--active relative h-full overflow-hidden outline-none ${selectedPanel === active.id ? 'nav-panel--selected' : ''}`}
               >
                 {/* Image skeleton fallback */}
