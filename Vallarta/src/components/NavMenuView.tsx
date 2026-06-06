@@ -286,7 +286,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
 
           return (
             <>
-              {/* Left edge indicator — walk to previous room */}
+              {/* Left edge indicator — commits to previous room */}
               <button
                 className="nav-portal__edge nav-portal__edge--left"
                 aria-label={`Navigate to ${prevItem.label}`}
@@ -360,7 +360,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
                 </div>
               </div>
 
-              {/* Right edge indicator — walk to next room */}
+              {/* Right edge indicator — commits to next room */}
               <button
                 className="nav-portal__edge nav-portal__edge--right"
                 aria-label={`Navigate to ${nextItem.label}`}
