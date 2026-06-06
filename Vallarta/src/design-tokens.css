@@ -265,12 +265,6 @@
   opacity: 0;
   animation: navPanelIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
-/* Cinematic entrance: staggered bloom (first open per session) */
-.nav-portal-grid--cinematic .nav-panel:nth-child(1) { animation-delay: 0.06s; }
-.nav-portal-grid--cinematic .nav-panel:nth-child(2) { animation-delay: 0.13s; }
-.nav-portal-grid--cinematic .nav-panel:nth-child(3) { animation-delay: 0.20s; }
-.nav-portal-grid--cinematic .nav-panel:nth-child(4) { animation-delay: 0.27s; }
-
 /* Snappy entrance: all panels in 0.1s (subsequent opens) */
 .nav-portal-grid--snappy .nav-panel {
   animation: navPanelIn 0.10s cubic-bezier(0.16, 1, 0.3, 1) forwards;
