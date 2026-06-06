@@ -146,11 +146,11 @@
 
 /* ── Nav Menu — wordmark ── */
 .nav-portal__wordmark {
-  font-family: var(--font-ui);
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
   color: var(--nav-wordmark-color);
 }
 
