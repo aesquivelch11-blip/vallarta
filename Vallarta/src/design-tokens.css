@@ -358,45 +358,62 @@
   color: #fff;
 }
 
-/* ── Nav Menu — reduced motion ── */
+/* ── Nav Menu — reduced motion: still-frame color signals ── */
 @media (prefers-reduced-motion: reduce) {
-  /* Kill all entrance animations — snap to visible immediately */
-  .nav-header {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
+  .nav-header { animation: none; opacity: 1; transform: none; }
   .nav-panel {
     animation: none;
     opacity: 1;
     transform: none;
-    /* Keep a minimal flex-grow transition — spatial signal, not motion */
-    transition: flex-grow 0.15s linear;
+    transition: flex-grow 0.05s linear;
   }
 
-  /* Kill all decorative transitions */
   .nav-panel img,
   .nav-panel:hover img,
   .nav-panel:focus-within img { transition: none; transform: none; will-change: auto; }
-  .nav-card-veil      { transition: none; }
-  .nav-card-line      { transition: none; }
-  .nav-card-content   { transition: none; transform: none; }
-  .nav-panel__subtitle { transition: none; }
-  .nav-close-btn      { transition: none; }
 
-  /* Kill content lift/sink — snap states */
+  .nav-card-veil,
+  .nav-card-line,
+  .nav-card-content,
+  .nav-panel__subtitle,
+  .nav-close-btn,
+  .nav-card__img,
+  .nav-card__img-skeleton { transition: none; }
+
   .nav-panel:hover .nav-card-content,
   .nav-panel:focus-within .nav-card-content { transform: none; }
+
   .nav-card-grid:hover .nav-panel:not(:hover) .nav-card-content,
   .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) .nav-card-content {
     transform: none;
   }
 
-  /* Keep accordion functional but instant — spatial orientation is still useful */
+  .nav-panel:hover .nav-card__index,
+  .nav-panel:focus-within .nav-card__index { color: #fff; transition: none; }
+
+  .nav-panel:hover .nav-panel__subtitle,
+  .nav-panel:focus-within .nav-panel__subtitle { color: var(--nav-subtitle-hover); transition: none; }
+
+  .nav-panel:hover .nav-panel__button,
+  .nav-panel:focus-within .nav-panel__button {
+    outline: 2px solid rgba(255, 255, 255, 0.3);
+    outline-offset: -2px;
+  }
+
+  .nav-card-grid:hover .nav-panel:not(:hover) .nav-card-veil,
+  .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) .nav-card-veil {
+    opacity: 1;
+    transition: none;
+  }
+
   .nav-card-grid:hover .nav-panel,
   .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) { flex-grow: 0.70; }
+
   .nav-card-grid:hover .nav-panel:hover,
   .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:focus-within { flex-grow: 1.90; }
+
+  .nav-panel--selected .nav-card-line { transition: none; }
+  .nav-panel--selected .nav-card__index { transition: none; }
 }
 
 /* ── Nav Menu — mobile adaptation ── */
