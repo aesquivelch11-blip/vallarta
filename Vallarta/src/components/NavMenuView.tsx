@@ -194,8 +194,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
 
             {/* Full-panel click target */}
             <button
-              className="absolute inset-0 w-full h-full bg-transparent border-none outline-none focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-white/40 cursor-pointer"
-              style={{ zIndex: 5 }}
+              className="nav-panel__button"
               onClick={() => handlePanelClick(item.screen, item.id)}
               aria-label={`Navigate to ${item.label}`}
               tabIndex={0}
