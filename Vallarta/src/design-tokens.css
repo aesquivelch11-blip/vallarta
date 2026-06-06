@@ -106,9 +106,6 @@
   --nav-scrim-light:         rgba(5, 11, 14, 0.08);
   --nav-veil:                rgba(5, 11, 14, 0.45);
 
-  /* Card grid */
-  --nav-card-separator:      rgba(255, 255, 255, 0.05);
-
   /* Header text */
   --nav-wordmark-color:      rgba(255, 255, 255, 0.5);
   --nav-title-color:         oklch(97% 0.005 75);

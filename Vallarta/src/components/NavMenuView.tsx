@@ -15,11 +15,16 @@ interface NavMenuViewProps {
   onNotify?: (message: string) => void;
 }
 
-const menuItems = [
-  { id: 'estates',    label: 'The Estates', subtitle: 'At a glance',        screen: 'reporting'       as ScreenType, index: '01', image: menuImg1, imageWebp: menuImg1Webp },
-  { id: 'financial',  label: 'Revenue',     subtitle: 'This month',         screen: 'deep_dive'       as ScreenType, index: '02', image: menuImg2, imageWebp: menuImg2Webp },
-  { id: 'operations', label: 'The Property', subtitle: 'Cameras & systems', screen: 'camera_expanded' as ScreenType, index: '03', image: menuImg3, imageWebp: menuImg3Webp },
-  { id: 'calendar',   label: 'Calendar',    subtitle: 'Who\'s arriving',    screen: 'calendar'        as ScreenType, index: '04', image: menuImg4, imageWebp: menuImg4Webp },
+interface MenuItem {
+  id: string; label: string; subtitle: string; screen: ScreenType;
+  index: string; image: string; imageWebp: string;
+}
+
+const menuItems: MenuItem[] = [
+  { id: 'estates',    label: 'The Estates', subtitle: 'At a glance',        screen: 'reporting',       index: '01', image: menuImg1, imageWebp: menuImg1Webp },
+  { id: 'financial',  label: 'Revenue',     subtitle: 'This month',         screen: 'deep_dive',       index: '02', image: menuImg2, imageWebp: menuImg2Webp },
+  { id: 'operations', label: 'The Property', subtitle: 'Cameras & systems', screen: 'camera_expanded', index: '03', image: menuImg3, imageWebp: menuImg3Webp },
+  { id: 'calendar',   label: 'Calendar',    subtitle: 'Who\'s arriving',    screen: 'calendar',        index: '04', image: menuImg4, imageWebp: menuImg4Webp },
 ];
 
 export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
@@ -51,7 +56,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
       const keyIndex = panelKeys.indexOf(e.key);
       if (keyIndex !== -1 && keyIndex < menuItems.length) {
         e.preventDefault();
-        onNavigate(menuItems[keyIndex].screen, 'push');
+        handlePanelClick(menuItems[keyIndex].screen, menuItems[keyIndex].id);
         return;
       }
 
@@ -197,7 +202,6 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
               className="nav-panel__button"
               onClick={() => handlePanelClick(item.screen, item.id)}
               aria-label={`Navigate to ${item.label}`}
-              tabIndex={0}
             />
 
             {/* Bottom-anchored content */}
