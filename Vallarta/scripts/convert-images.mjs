@@ -20,7 +20,8 @@ async function main() {
 
     try {
       await sharp(input)
-        .webp({ quality: 82 })
+        .resize(1440, undefined, { withoutEnlargement: true })
+        .webp({ quality: 88 })
         .toFile(output);
 
       const inputStat = await stat(input);
