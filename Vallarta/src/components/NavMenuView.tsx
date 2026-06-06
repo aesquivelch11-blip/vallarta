@@ -66,6 +66,25 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
         return;
       }
 
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        walk(-1);
+        return;
+      }
+
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        walk(1);
+        return;
+      }
+
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const current = menuItems[activeIndexRef.current];
+        handlePanelClick(current.screen, current.id);
+        return;
+      }
+
       const panelKeys = ['1', '2', '3', '4'];
       const keyIndex = panelKeys.indexOf(e.key);
       if (keyIndex !== -1 && keyIndex < menuItems.length) {
