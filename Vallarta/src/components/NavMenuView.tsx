@@ -16,10 +16,10 @@ interface NavMenuViewProps {
 }
 
 const menuItems = [
-  { id: 'estates',    label: 'The Estates',          subtitle: 'Portfolio Overview', screen: 'reporting'       as ScreenType, index: '01', image: menuImg1, imageWebp: menuImg1Webp },
-  { id: 'financial',  label: 'Financial Performance', subtitle: 'Yield & Revenue',   screen: 'deep_dive'       as ScreenType, index: '02', image: menuImg2, imageWebp: menuImg2Webp },
-  { id: 'operations', label: 'Operations',            subtitle: 'Live Supervision',  screen: 'camera_expanded' as ScreenType, index: '03', image: menuImg3, imageWebp: menuImg3Webp },
-  { id: 'calendar',   label: 'Calendar',              subtitle: 'Scheduling',        screen: 'calendar'        as ScreenType, index: '04', image: menuImg4, imageWebp: menuImg4Webp },
+  { id: 'estates',    label: 'The Estates', subtitle: 'At a glance',        screen: 'reporting'       as ScreenType, index: '01', image: menuImg1, imageWebp: menuImg1Webp },
+  { id: 'financial',  label: 'Revenue',     subtitle: 'This month',         screen: 'deep_dive'       as ScreenType, index: '02', image: menuImg2, imageWebp: menuImg2Webp },
+  { id: 'operations', label: 'The Property', subtitle: 'Cameras & systems', screen: 'camera_expanded' as ScreenType, index: '03', image: menuImg3, imageWebp: menuImg3Webp },
+  { id: 'calendar',   label: 'Calendar',    subtitle: 'Who\'s arriving',    screen: 'calendar'        as ScreenType, index: '04', image: menuImg4, imageWebp: menuImg4Webp },
 ];
 
 export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
