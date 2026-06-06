@@ -399,10 +399,76 @@
   .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:focus-within { flex-grow: 1.90; }
 }
 
-/* ── Nav Menu — mobile stack ── */
+/* ── Nav Menu — mobile adaptation ── */
 @media (max-width: 767px) {
-  .nav-card-grid { flex-direction: column; }
-  .nav-card-content { padding: 0 28px 36px; }
+  .nav-header {
+    height: 48px;
+    padding: 0 24px;
+  }
+
+  .nav-card__wordmark {
+    font-size: 0.5625rem;
+    letter-spacing: 0.28em;
+  }
+
+  .nav-close-btn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .nav-card-grid {
+    flex-direction: column;
+    padding-top: 48px;
+  }
+
+  .nav-panel {
+    flex: 1 1 0;
+    min-height: 0;
+    animation: none;
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .nav-card-grid:hover .nav-panel,
+  .nav-card-grid:hover .nav-panel:hover,
+  .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:focus-within,
+  .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) {
+    flex: 1 1 0;
+  }
+
+  .nav-panel .nav-card-veil,
+  .nav-card-grid:hover .nav-panel:not(:hover) .nav-card-veil,
+  .nav-card-grid:has(.nav-panel:focus-within) .nav-panel:not(:focus-within) .nav-card-veil {
+    opacity: 0;
+  }
+
+  .nav-card-line {
+    transform: scaleX(0.45);
+    opacity: 0.5;
+    transition: none;
+  }
+
+  .nav-card-content {
+    padding: 0 24px 32px;
+  }
+
+  .nav-card__label {
+    font-size: clamp(1rem, 5vw, 1.5rem);
+  }
+
+  .nav-panel__subtitle {
+    font-size: 0.5rem;
+    letter-spacing: 0.2em;
+  }
+
+  .nav-card__img {
+    object-position: center;
+  }
+
+  .nav-panel__button {
+    outline: none;
+  }
 }
 
 /* Typography System */
