@@ -27,6 +27,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const touchStartY = useRef(0);
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
+  const [selectedPanel, setSelectedPanel] = useState<string | null>(null);
 
   useEffect(() => {
     previousFocusRef.current = document.activeElement as HTMLElement;
@@ -81,6 +82,14 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
 
   const handleImageLoad = (id: string) => {
     setLoadedImages((prev) => ({ ...prev, [id]: true }));
+  };
+
+  const handlePanelClick = (screen: ScreenType, id: string) => {
+    if (selectedPanel) return;
+    setSelectedPanel(id);
+    setTimeout(() => {
+      onNavigate(screen, 'push');
+    }, 180);
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -146,7 +155,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
         {menuItems.map((item) => (
           <div
             key={item.id}
-            className="nav-panel relative h-full overflow-hidden outline-none"
+            className={`nav-panel relative h-full overflow-hidden outline-none ${selectedPanel === item.id ? 'nav-panel--selected' : ''}`}
           >
             {/* Image skeleton fallback */}
             <div
@@ -187,7 +196,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
             <button
               className="absolute inset-0 w-full h-full bg-transparent border-none outline-none focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-white/40 cursor-pointer"
               style={{ zIndex: 5 }}
-              onClick={() => onNavigate(item.screen, 'push')}
+              onClick={() => handlePanelClick(item.screen, item.id)}
               aria-label={`Navigate to ${item.label}`}
               tabIndex={0}
             />

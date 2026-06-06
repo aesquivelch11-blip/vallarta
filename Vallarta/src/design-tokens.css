@@ -331,6 +331,16 @@
   opacity: 1;
 }
 
+/* ── Nav Menu — selected click-state ── */
+.nav-panel--selected .nav-card-line {
+  transform: scaleX(1);
+  opacity: 1;
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav-panel--selected .nav-card__index {
+  color: #fff;
+}
+
 /* ── Nav Menu — reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   /* Kill all entrance animations — snap to visible immediately */
