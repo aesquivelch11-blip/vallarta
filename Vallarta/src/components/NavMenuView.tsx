@@ -27,6 +27,18 @@ const menuItems: MenuItem[] = [
   { id: 'calendar',   label: 'Calendar',    subtitle: 'Who\'s arriving',    screen: 'calendar',        index: '04', image: menuImg4, imageWebp: menuImg4Webp },
 ];
 
+const ChevronLeft = () => (
+  <svg width="10" height="14" viewBox="0 0 10 14" fill="none" aria-hidden="true">
+    <path d="M8 1L2 7l6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const ChevronRight = () => (
+  <svg width="10" height="14" viewBox="0 0 10 14" fill="none" aria-hidden="true">
+    <path d="M2 1l6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
 export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
@@ -239,6 +251,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
                 onClick={() => handlePanelClick(prevItem.screen, prevItem.id)}
                 tabIndex={0}
               >
+                <span className="nav-portal__edge-chevron"><ChevronLeft /></span>
                 <span className="nav-portal__edge-label">{prevItem.label}</span>
               </button>
 
@@ -299,6 +312,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
                 tabIndex={0}
               >
                 <span className="nav-portal__edge-label">{nextItem.label}</span>
+                <span className="nav-portal__edge-chevron"><ChevronRight /></span>
               </button>
             </>
           );
