@@ -133,11 +133,6 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes navPanelIn {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
 /* ── Nav Menu — header ── */
 .nav-header {
   animation: navHeaderIn 0.30s cubic-bezier(0.16, 1, 0.3, 1) 0.01s both;
@@ -183,70 +178,7 @@
   transform: scale(0.88);
 }
 
-/* ── Nav Menu — edge indicators ── */
-.nav-portal__edge {
-  flex: 0 0 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  outline: none;
-  z-index: 10;
-  padding: 0;
-}
 
-.nav-portal__edge-label {
-  display: block;
-  font-family: var(--font-ui);
-  font-size: 0.5rem;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.50);
-  white-space: nowrap;
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  transition: color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.nav-portal__edge-chevron {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: inherit;
-  opacity: 0.7;
-  flex-shrink: 0;
-}
-
-.nav-portal__edge--right .nav-portal__edge-label {
-  transform: none;
-}
-
-.nav-portal__edge:hover .nav-portal__edge-label {
-  color: rgba(255, 255, 255, 0.65);
-}
-
-.nav-portal__edge:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.3);
-  outline-offset: -2px;
-}
-
-@keyframes navEdgeFadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-.nav-portal-grid--cinematic .nav-portal__edge {
-  opacity: 0;
-  animation: navEdgeFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
-}
-
-.nav-portal-grid--snappy .nav-portal__edge {
-  opacity: 1;
-  transition: none;
-}
 
 /* ── Nav Menu — pagination dots ── */
 .nav-portal__pagination {
@@ -303,16 +235,11 @@
   background: rgba(255, 255, 255, 0.04);
 }
 
-/* ── Nav Menu — card accordion ── */
+/* ── Nav Menu — panel ── */
 .nav-panel {
-  flex: 1;
-  opacity: 0;
-  animation: navPanelIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-/* Snappy entrance: all panels in 0.1s (subsequent opens) */
-.nav-portal-grid--snappy .nav-panel {
-  animation: navPanelIn 0.10s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  animation-delay: 0s;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
 }
 
 /* ── Nav Menu — photo kenburns on hover ── */
@@ -471,10 +398,6 @@
   .nav-panel--selected .nav-portal-line { transition: none; }
   .nav-panel--selected .nav-portal__index { transition: none; }
 
-  .nav-portal__edge { transition: none; opacity: 1; }
-  .nav-portal__edge-label { transition: none; }
-  .nav-portal__dot { transition: none; }
-  .nav-hint-banner { animation: none; opacity: 1; transform: none; }
 }
 
 /* ── Nav Menu — mobile adaptation ── */
@@ -534,73 +457,11 @@
   .nav-panel__button {
     outline: none;
   }
-  .nav-portal__edge {
-    flex: 0 0 36px;
-  }
-  .nav-portal__edge-label {
-    font-size: 0.4375rem;
-    letter-spacing: 0.15em;
-  }
   .nav-portal__pagination { bottom: 28px; gap: 10px; }
   .nav-portal__dot { width: 5px; height: 5px; }
 }
 
-/* ── Nav Menu — keyboard hint ── */
-.nav-hint-banner {
-  padding: 8px 16px;
-  background: linear-gradient(to bottom, rgba(13, 28, 36, 0.92), rgba(13, 28, 36, 0));
-  animation: navHintIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
-}
 
-@keyframes navHintIn {
-  from { opacity: 0; transform: translateY(-6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.nav-hint-banner__text {
-  font-family: var(--font-ui);
-  font-size: 0.625rem;
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.55);
-  display: flex;
-  align-items: center;
-}
-
-.nav-kbd {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 4px;
-  font-family: var(--font-ui);
-  font-size: 0.5625rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 3px;
-  margin: 0 1px;
-}
-
-.nav-hint-banner__dismiss {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  background: none;
-  border: none;
-  color: rgba(255, 255, 255, 0.3);
-  cursor: pointer;
-  margin-left: 12px;
-  padding: 0;
-}
-
-.nav-hint-banner__dismiss:hover {
-  color: rgba(255, 255, 255, 0.65);
-}
 
 /* Typography System */
 .t-property-name {
