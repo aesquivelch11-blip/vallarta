@@ -185,6 +185,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
   const handlePanelClick = (screen: ScreenType, id: string) => {
     if (transitioningPanel) return;
     localStorage.setItem("vallarta-nav-hint-seen", "1");
+    sessionStorage.setItem("nav-last-panel", id);
     setShowHint(false);
     setTransitioningPanel(id);
     navTimeoutRef.current = setTimeout(() => {
@@ -237,7 +238,6 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
   };
 
   useEffect(() => {
-    sessionStorage.setItem("nav-last-panel", menuItems[activeIndex].id);
     if (isFirstRender.current) {
       isFirstRender.current = false;
       return;

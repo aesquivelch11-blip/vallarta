@@ -122,6 +122,7 @@
     --nav-wordmark-color: oklch(84% 0.01 72 / 0.52);
     --nav-title-color: oklch(96% 0.008 72);
     --nav-subtitle-color: oklch(89% 0.012 72 / 0.56);
+    --nav-collapsed-title-color: oklch(89% 0.012 72 / 0.46);
 
     /* Close button */
     --nav-close-color: oklch(84% 0.01 72 / 0.58);
@@ -274,7 +275,7 @@
     font-family: var(--font-ui);
     font-size: 0.75rem;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.46);
+    color: var(--nav-collapsed-title-color);
     pointer-events: none;
     z-index: 10;
     transition: color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -293,7 +294,6 @@
 .nav-panel:hover img,
 .nav-panel:focus-within img {
     transform: scale(1.02);
-    will-change: transform;
 }
 
 /* ── Nav Menu — gold bottom line sweep ── */
@@ -307,6 +307,7 @@
     transform: scaleX(0);
     transform-origin: left;
     z-index: 10;
+    pointer-events: none;
     transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .nav-panel:hover .nav-portal-line,
@@ -397,6 +398,7 @@
     opacity: 0;
     transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     pointer-events: none;
+    will-change: transform;
 }
 .nav-portal__img--loaded {
     opacity: 1;
@@ -428,7 +430,6 @@
     .nav-panel:focus-within img {
         transition: none;
         transform: none;
-        will-change: auto;
     }
 
     .nav-portal-line,
