@@ -145,6 +145,10 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
       if (keyIndex !== -1 && keyIndex < menuItems.length) {
         e.preventDefault();
         setActiveIndex(keyIndex);
+        setTimeout(() => {
+          const tabs = dialogRef.current?.querySelectorAll<HTMLElement>('[role="tab"]');
+          tabs?.[keyIndex]?.focus();
+        }, 0);
         return;
       }
 
@@ -223,9 +227,11 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
 
   const walk = (direction: -1 | 1) => {
     setActiveIndex((prev) => {
-      const next = prev + direction;
-      if (next < 0) return menuItems.length - 1;
-      if (next >= menuItems.length) return 0;
+      const next = (prev + direction + menuItems.length) % menuItems.length;
+      setTimeout(() => {
+        const tabs = dialogRef.current?.querySelectorAll<HTMLElement>('[role="tab"]');
+        tabs?.[next]?.focus();
+      }, 0);
       return next;
     });
   };
@@ -318,6 +324,8 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
       {/* ── Panel grid ── */}
       <motion.div
         className="nav-portal-grid absolute inset-0 flex flex-row"
+        role="tablist"
+        aria-label="Navigation sections"
         variants={containerVariants}
         initial="hidden"
         animate="show"
@@ -332,9 +340,12 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
           >
             <button
               type="button"
+              role="tab"
+              id={`nav-tab-${item.id}`}
               className="nav-panel__preview"
-              aria-label={i === activeIndex ? `${item.label} — click to enter` : `Preview ${item.label}`}
-              aria-pressed={i === activeIndex}
+              aria-label={item.label}
+              aria-selected={i === activeIndex}
+              tabIndex={i === activeIndex ? 0 : -1}
               onFocus={() => setActiveIndex(i)}
               onClick={() =>
                 i === activeIndex
@@ -373,6 +384,9 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
               {i === activeIndex ? (
                 <motion.div
                   key="active"
+                  role="tabpanel"
+                  id={`nav-panel-${item.id}`}
+                  aria-labelledby={`nav-tab-${item.id}`}
                   className="nav-portal-content"
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
