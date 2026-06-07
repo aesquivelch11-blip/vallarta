@@ -56,18 +56,6 @@ const layoutTransition = {
   ease: [0.76, 0, 0.24, 1] as [number, number, number, number],
 };
 
-const ChevronLeft = () => (
-  <svg width="10" height="14" viewBox="0 0 10 14" fill="none" aria-hidden="true">
-    <path d="M8 1L2 7l6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
-const ChevronRight = () => (
-  <svg width="10" height="14" viewBox="0 0 10 14" fill="none" aria-hidden="true">
-    <path d="M2 1l6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
 export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
