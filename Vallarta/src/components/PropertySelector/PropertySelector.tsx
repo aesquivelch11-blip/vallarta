@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { ScreenType } from '../../types';
 import { sampleProperties } from './propertyData';
 import DiagonalSlide from './DiagonalSlide';
@@ -13,6 +13,7 @@ interface PropertySelectorProps {
 }
 
 export default function PropertySelector({ onNavigate, onSelectProperty, onNotify }: PropertySelectorProps) {
+  const shouldReduceMotion = useReducedMotion();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0, rotX: 0, rotY: 0 });
@@ -38,7 +39,7 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
   }, []);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (isContentOpen || !isDesktop) {
+    if (isContentOpen || !isDesktop || shouldReduceMotion) {
       setTilt({ x: 0, y: 0, rotX: 0, rotY: 0 });
       return;
     }
@@ -54,7 +55,7 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
         rotY: ((clientX - cx) / cx) * 5,
       });
     });
-  }, [isContentOpen, isDesktop]);
+  }, [isContentOpen, isDesktop, shouldReduceMotion]);
 
   const total = sampleProperties.length;
 
@@ -173,24 +174,32 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
               key={currentIndex}
               className="col-start-1 row-start-1 flex items-center justify-center w-full px-4"
               custom={directionRef.current}
-              variants={{
-                initial: (dir: number) => ({
-                  x: dir * 300,
-                  opacity: 0,
-                }),
-                animate: {
-                  x: 0,
-                  opacity: 1,
-                },
-                exit: (dir: number) => ({
-                  x: dir * -300,
-                  opacity: 0,
-                }),
-              }}
+              variants={
+                shouldReduceMotion
+                  ? {
+                      initial: { opacity: 0 },
+                      animate: { opacity: 1 },
+                      exit: { opacity: 0 },
+                    }
+                  : {
+                      initial: (dir: number) => ({
+                        x: dir * 300,
+                        opacity: 0,
+                      }),
+                      animate: {
+                        x: 0,
+                        opacity: 1,
+                      },
+                      exit: (dir: number) => ({
+                        x: dir * -300,
+                        opacity: 0,
+                      }),
+                    }
+              }
               initial="initial"
               animate="animate"
               exit="exit"
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              transition={shouldReduceMotion ? { duration: 0.3 } : { duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               onClick={() => setIsContentOpen(true)}
               role="button"
               tabIndex={0}
@@ -221,27 +230,33 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
                 className="col-start-1 row-start-1"
                 initial={{ opacity: 0 }}
                 animate={
-                  isContentOpen
-                    ? {
-                        x: position === 'current' ? '-30%' : position === 'prev' ? '-80%' : '80%',
-                        y: position === 'prev' ? '-50%' : position === 'next' ? '50%' : 0,
-                        rotate: 0,
-                        opacity: position === 'current' ? 1 : 0,
-                        scale: position !== 'current' ? 0.85 : 1,
-                      }
+                  shouldReduceMotion
+                    ? { opacity: position === 'current' ? 1 : 0 }
+                    : isContentOpen
+                      ? {
+                          x: position === 'current' ? '-30%' : position === 'prev' ? '-80%' : '80%',
+                          y: position === 'prev' ? '-50%' : position === 'next' ? '50%' : 0,
+                          rotate: 0,
+                          opacity: position === 'current' ? 1 : 0,
+                          scale: position !== 'current' ? 0.85 : 1,
+                        }
+                      : {
+                          x: position === 'prev' ? '-50%' : position === 'next' ? '50%' : 0,
+                          y: position === 'prev' ? '-50%' : position === 'next' ? '50%' : 0,
+                          rotate: position === 'prev' ? -30 : position === 'next' ? 30 : 0,
+                          opacity: position === 'current' ? 1 : 0.6,
+                        }
+                }
+                exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.85 }}
+                transition={
+                  shouldReduceMotion
+                    ? { duration: 0.3 }
                     : {
-                        x: position === 'prev' ? '-50%' : position === 'next' ? '50%' : 0,
-                        y: position === 'prev' ? '-50%' : position === 'next' ? '50%' : 0,
-                        rotate: position === 'prev' ? -30 : position === 'next' ? 30 : 0,
-                        opacity: position === 'current' ? 1 : 0.6,
+                        duration: 0.8,
+                        ease: [0.16, 1, 0.3, 1],
+                        delay: position === 'current' ? 0 : 0.14,
                       }
                 }
-                exit={{ opacity: 0, scale: 0.85 }}
-                transition={{
-                  duration: 0.8,
-                  ease: [0.16, 1, 0.3, 1],
-                  delay: position === 'current' ? 0 : 0.14,
-                }}
                 onClick={() => handleSlideClick(position)}
                 onKeyDown={(e) => handleSlideKeyDown(e, position)}
                 role={position === 'current' ? 'button' : undefined}

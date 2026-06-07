@@ -27,6 +27,7 @@ const HERO_SLIDES = [
 interface FinancialReportingViewProps {
   onNavigate: (screen: ScreenType, transitionStyle: 'push' | 'slide_up') => void;
   onNotify?: (message: string) => void;
+  propertyId?: string | null;
 }
 
 const TIMELINE_START = new Date('2026-10-10');

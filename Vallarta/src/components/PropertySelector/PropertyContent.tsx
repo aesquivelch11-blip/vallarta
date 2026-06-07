@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Property } from '../../types';
 
 interface PropertyContentProps {
@@ -30,6 +30,7 @@ const fadeUp = {
 
 export default function PropertyContent({ property, isOpen, onClose, onSelect }: PropertyContentProps) {
   const closeRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -45,6 +46,23 @@ export default function PropertyContent({ property, isOpen, onClose, onSelect }:
     return () => document.removeEventListener('keydown', handler);
   }, [isOpen, onClose]);
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key !== 'Tab') return;
+    const focusable = panelRef.current?.querySelectorAll<HTMLElement>(
+      'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    if (!focusable || focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -57,6 +75,7 @@ export default function PropertyContent({ property, isOpen, onClose, onSelect }:
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          onKeyDown={handleKeyDown}
         >
           <motion.div
             className="absolute inset-0 bg-black/40"
@@ -68,6 +87,7 @@ export default function PropertyContent({ property, isOpen, onClose, onSelect }:
           />
 
           <motion.div
+            ref={panelRef}
             className="relative h-full bg-[rgba(12,12,12,0.95)] overflow-y-auto w-full lg:w-1/2"
             initial={{ x: '100%' }}
             animate={{ x: 0 }}

@@ -15,6 +15,7 @@ export default function App() {
   const [history, setHistory] = useState<ScreenType[]>(['login']);
   const [transitionStyle, setTransitionStyle] = useState<'push' | 'push_back' | 'slide_up' | 'none'>('push');
   const [hasLoaded, setHasLoaded] = useState(false);
+  const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
 
 
   // Custom Toast State
@@ -142,6 +143,7 @@ export default function App() {
             <FinancialReportingView 
               onNavigate={(screen, style) => handleNavigate(screen, style)} 
               onNotify={triggerToast}
+              propertyId={selectedPropertyId}
             />
           </div>
         );
@@ -178,6 +180,7 @@ export default function App() {
             <PropertySelector
               onNavigate={(screen, style) => handleNavigate(screen, style)}
               onSelectProperty={(propertyId) => {
+                setSelectedPropertyId(propertyId);
                 handleNavigate('reporting', 'push');
               }}
               onNotify={triggerToast}

@@ -33,8 +33,8 @@ const menuItems: MenuItem[] = [
   {
     id: "estates",
     label: "The Estates",
-    subtitle: "Overview",
-    screen: "reporting",
+    subtitle: "Select a property",
+    screen: "property_selector",
     index: "01",
     image: menuImg1,
     imageWebp: menuImg1Webp,

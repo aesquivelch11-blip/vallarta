@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
 
 interface SlideshowPaginationProps {
   total: number;
@@ -7,6 +7,8 @@ interface SlideshowPaginationProps {
 }
 
 export default function SlideshowPagination({ total, currentIndex, onJump }: SlideshowPaginationProps) {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <div
       role="tablist"
@@ -30,11 +32,15 @@ export default function SlideshowPagination({ total, currentIndex, onJump }: Sli
               backgroundColor: i === currentIndex ? '#C9B8A0' : 'rgba(255,255,255,0.3)',
             }}
             animate={i === currentIndex ? { scale: 1.3 } : { scale: 1 }}
-            transition={{
-              type: 'spring',
-              stiffness: 300,
-              damping: 15,
-            }}
+            transition={
+              shouldReduceMotion
+                ? { duration: 0.2 }
+                : {
+                    type: 'spring',
+                    stiffness: 300,
+                    damping: 15,
+                  }
+            }
           />
         </button>
       ))}
