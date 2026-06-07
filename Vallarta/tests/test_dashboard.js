@@ -85,3 +85,17 @@ assert.ok(tasks.includes('urgent'), 'must handle urgent status');
 assert.ok(tasks.includes('slice(0, 5)'), 'must limit list to 5 items');
 
 console.log('Task 8 PASS: DashboardTasks created correctly.');
+
+assert.ok(
+  fs.existsSync('src/components/Dashboard/DashboardView.tsx'),
+  'DashboardView.tsx must exist'
+);
+const view = fs.readFileSync('src/components/Dashboard/DashboardView.tsx', 'utf-8');
+assert.ok(view.includes('DashboardGallery'), 'DashboardView must include DashboardGallery');
+assert.ok(view.includes('DashboardDomainNav'), 'DashboardView must include DashboardDomainNav');
+assert.ok(view.includes('DashboardToday'), 'DashboardView must include DashboardToday');
+assert.ok(view.includes('DashboardFinancials'), 'DashboardView must include DashboardFinancials');
+assert.ok(view.includes('DashboardTasks'), 'DashboardView must include DashboardTasks');
+assert.ok(view.includes('getDashboardData'), 'DashboardView must call getDashboardData');
+
+console.log('Task 9 PASS: DashboardView assembled correctly.');
