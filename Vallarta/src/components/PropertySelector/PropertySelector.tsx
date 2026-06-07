@@ -75,10 +75,11 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
   }, [total]);
 
   const goTo = useCallback((index: number) => {
+    if (isContentOpen) return;
     directionRef.current = index > currentIndex ? 1 : -1;
     setCurrentIndex(index);
     setIsContentOpen(false);
-  }, [currentIndex]);
+  }, [currentIndex, isContentOpen]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -226,7 +227,7 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
           <AnimatePresence>
             {visibleSlides.map(({ property, position, index }) => (
               <motion.div
-                key={property.id}
+                key={property.id + position}
                 className="col-start-1 row-start-1"
                 initial={{ opacity: 0 }}
                 animate={
@@ -262,7 +263,7 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
                 role={position === 'current' ? 'button' : undefined}
                 tabIndex={position === 'current' ? 0 : undefined}
                 aria-label={position === 'current' ? `View ${property.name} details` : undefined}
-                style={{ perspective: '1200px', transformStyle: 'preserve-3d', cursor: position === 'current' ? 'pointer' : 'default' }}
+                style={{ cursor: position === 'current' ? 'pointer' : 'default' }}
               >
                 <DiagonalSlide
                   property={property}
