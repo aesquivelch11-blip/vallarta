@@ -239,6 +239,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
       role="dialog"
       aria-modal="true"
       aria-label="Navigation"
+      aria-describedby="nav-menu-hint"
       className="relative w-full h-[100dvh] overflow-hidden"
       style={{ background: "var(--nav-shell-bg)" }}
       onClick={handleShellClick}
@@ -289,6 +290,10 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
           </svg>
         </button>
       </header>
+
+      <p id="nav-menu-hint" className="nav-menu-hint">
+        Use arrow keys or swipe to preview, then open the active panel
+      </p>
 
       {/* ── Panel grid ── */}
       <motion.div
