@@ -105,6 +105,9 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   const [transitioningPanel, setTransitioningPanel] = useState<string | null>(null);
   const [liveAnnouncement, setLiveAnnouncement] = useState("");
+  const [showHint, setShowHint] = useState(
+    () => !localStorage.getItem("vallarta-nav-hint-seen"),
+  );
   const isFirstRender = useRef(true);
 
   useEffect(() => {
@@ -177,6 +180,8 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
 
   const handlePanelClick = (screen: ScreenType, id: string) => {
     if (transitioningPanel) return;
+    localStorage.setItem("vallarta-nav-hint-seen", "1");
+    setShowHint(false);
     setTransitioningPanel(id);
     navTimeoutRef.current = setTimeout(() => {
       onNavigate(screen, "push");
@@ -302,8 +307,12 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
         {liveAnnouncement}
       </div>
 
-      <p id="nav-menu-hint" className="nav-menu-hint">
-        Use arrows or swipe to browse. Click to enter.
+      <p
+        id="nav-menu-hint"
+        className={`nav-menu-hint${showHint ? "" : " nav-menu-hint--hidden"}`}
+        aria-hidden={!showHint}
+      >
+        Click a panel to enter.
       </p>
 
       {/* ── Panel grid ── */}
