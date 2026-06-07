@@ -322,7 +322,6 @@
     transition: none;
 }
 
-/* ── Nav Menu — card content (lifts on hover, dims + sinks on siblings) ── */
 .nav-portal-content {
     position: absolute;
     bottom: 0;
@@ -335,54 +334,6 @@
     transition:
         opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
         transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.nav-panel__cta {
-    display: inline-flex;
-    align-items: center;
-    justify-content: flex-start;
-    margin: 14px 0 12px;
-    padding: 0 0 4px;
-    border: none;
-    border-radius: 0;
-    border-bottom: 1px solid currentColor;
-    background: transparent;
-    color: var(--nav-accent-strong);
-    font-family: var(--font-ui);
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    pointer-events: auto;
-    transition:
-        color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.nav-panel__cta:hover,
-.nav-panel__cta:focus-visible {
-    color: var(--nav-title-color);
-    transform: translateX(2px);
-}
-
-.nav-panel__cta:focus-visible {
-    outline: 2px solid rgba(255, 255, 255, 0.55);
-    outline-offset: 4px;
-}
-
-.nav-panel__cta:active {
-    transform: translateX(1px);
-}
-
-/* ── Nav Menu — index number ── */
-.nav-portal__index {
-    display: block;
-    font-family: var(--font-ui);
-    font-size: 0.625rem;
-    font-weight: 400;
-    letter-spacing: 0.25em;
-    color: var(--nav-accent);
-    margin-bottom: 12px;
 }
 
 /* ── Nav Menu — label ── */
@@ -454,10 +405,6 @@
         transform 0.15s cubic-bezier(0.16, 1, 0.3, 1),
         opacity 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.nav-panel--selected .nav-portal__index {
-    color: #fff;
-}
-
 /* ── Nav Menu — reduced motion: still-frame color signals ── */
 @media (prefers-reduced-motion: reduce) {
     .nav-header {
@@ -493,12 +440,6 @@
         transform: none;
     }
 
-    .nav-panel:hover .nav-portal__index,
-    .nav-panel:focus-within .nav-portal__index {
-        color: #fff;
-        transition: none;
-    }
-
     .nav-panel:hover .nav-panel__subtitle,
     .nav-panel:focus-within .nav-panel__subtitle {
         color: var(--nav-subtitle-hover);
@@ -506,9 +447,6 @@
     }
 
     .nav-panel--selected .nav-portal-line {
-        transition: none;
-    }
-    .nav-panel--selected .nav-portal__index {
         transition: none;
     }
 }

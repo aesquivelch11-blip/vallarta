@@ -24,7 +24,6 @@ interface MenuItem {
   label: string;
   subtitle: string;
   screen: ScreenType;
-  index: string;
   image: string;
   imageWebp: string;
 }
@@ -33,9 +32,8 @@ const menuItems: MenuItem[] = [
   {
     id: "estates",
     label: "The Estates",
-    subtitle: "Select a property",
-    screen: "property_selector",
-    index: "01",
+    subtitle: "Overview",
+    screen: "reporting",
     image: menuImg1,
     imageWebp: menuImg1Webp,
   },
@@ -44,7 +42,6 @@ const menuItems: MenuItem[] = [
     label: "Revenue",
     subtitle: "Monthly performance",
     screen: "deep_dive",
-    index: "02",
     image: menuImg2,
     imageWebp: menuImg2Webp,
   },
@@ -53,7 +50,6 @@ const menuItems: MenuItem[] = [
     label: "The Property",
     subtitle: "Cameras and systems",
     screen: "camera_expanded",
-    index: "03",
     image: menuImg3,
     imageWebp: menuImg3Webp,
   },
@@ -62,7 +58,6 @@ const menuItems: MenuItem[] = [
     label: "Calendar",
     subtitle: "Arrivals and departures",
     screen: "calendar",
-    index: "04",
     image: menuImg4,
     imageWebp: menuImg4Webp,
   },
@@ -308,7 +303,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
       </div>
 
       <p id="nav-menu-hint" className="nav-menu-hint">
-        Use arrows or swipe to preview. Choose Open to enter.
+        Use arrows or swipe to browse. Click to enter.
       </p>
 
       {/* ── Panel grid ── */}
@@ -329,10 +324,14 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
             <button
               type="button"
               className="nav-panel__preview"
-              aria-label={i === activeIndex ? `${item.label}, active` : `Preview ${item.label}`}
+              aria-label={i === activeIndex ? `${item.label} — click to enter` : `Preview ${item.label}`}
               aria-pressed={i === activeIndex}
               onFocus={() => setActiveIndex(i)}
-              onClick={() => setActiveIndex(i)}
+              onClick={() =>
+                i === activeIndex
+                  ? handlePanelClick(item.screen, item.id)
+                  : setActiveIndex(i)
+              }
             />
 
             <div
@@ -376,19 +375,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
                     exit: { duration: 0.3, delay: 0 },
                   }}
                 >
-                  <span className="nav-portal__index" aria-hidden="true">{item.index}</span>
                   <span className="nav-portal__label">{item.label}</span>
-                  <button
-                    type="button"
-                    className="nav-panel__cta"
-                    aria-label={`Open ${item.label}`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handlePanelClick(item.screen, item.id);
-                    }}
-                  >
-                    Open
-                  </button>
                   <span className="nav-panel__subtitle">{item.subtitle}</span>
                 </motion.div>
               ) : (
