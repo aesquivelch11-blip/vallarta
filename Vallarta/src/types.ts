@@ -4,13 +4,28 @@ export type ScreenType =
   | 'reporting'
   | 'deep_dive'
   | 'camera_expanded'
-  | 'calendar';
+  | 'calendar'
+  | 'property_selector';
 
 export interface EstateMetric {
   label: string;
   value: string;
   change: string;
   trend: 'up' | 'stable' | 'down';
+}
+
+export interface Property {
+  id: string;
+  name: string;
+  location: string;
+  tagline: string;
+  imageUrl: string;
+  imageWebp?: string;
+  metrics?: {
+    bedrooms: number;
+    occupancy: string;
+    revenue: string;
+  };
 }
 
 export interface CameraFeed {

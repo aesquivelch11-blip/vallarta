@@ -7,6 +7,7 @@ import FinancialReportingView from './components/FinancialReportingView';
 import FinancialDeepDiveView from './components/FinancialDeepDiveView';
 import CameraFeedView from './components/CameraFeedView';
 import CalendarView from './components/CalendarView';
+import PropertySelector from './components/PropertySelector/PropertySelector';
 import Preloader from './components/Preloader';
 
 export default function App() {
@@ -167,6 +168,18 @@ export default function App() {
           <div key="calendar" className="w-full min-h-screen">
             <CalendarView 
               onNavigate={(screen, style) => handleNavigate(screen, style)} 
+              onNotify={triggerToast}
+            />
+          </div>
+        );
+      case 'property_selector':
+        return (
+          <div key="property_selector" className="w-full min-h-screen">
+            <PropertySelector
+              onNavigate={(screen, style) => handleNavigate(screen, style)}
+              onSelectProperty={(propertyId) => {
+                handleNavigate('reporting', 'push');
+              }}
               onNotify={triggerToast}
             />
           </div>
