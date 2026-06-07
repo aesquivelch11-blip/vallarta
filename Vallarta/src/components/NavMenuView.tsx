@@ -8,6 +8,7 @@ import menuImg3 from '../assets/Menu/menu-3.jpg';
 import menuImg3Webp from '../assets/Menu/menu-3.webp';
 import menuImg4 from '../assets/Menu/menu-4.jpg';
 import menuImg4Webp from '../assets/Menu/menu-4.webp';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface NavMenuViewProps {
   onNavigate: (screen: ScreenType, transitionStyle: 'push' | 'slide_up') => void;
@@ -26,6 +27,34 @@ const menuItems: MenuItem[] = [
   { id: 'operations', label: 'The Property', subtitle: 'Cameras & systems', screen: 'camera_expanded', index: '03', image: menuImg3, imageWebp: menuImg3Webp },
   { id: 'calendar',   label: 'Calendar',    subtitle: 'Who\'s arriving',    screen: 'calendar',        index: '04', image: menuImg4, imageWebp: menuImg4Webp },
 ];
+
+// ── Framer Motion variants ──
+
+const containerVariants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.06,
+    },
+  },
+};
+
+const panelEntranceVariants = {
+  hidden: { scaleX: 0, opacity: 0 },
+  show: {
+    scaleX: 1,
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+    },
+  },
+};
+
+const layoutTransition = {
+  duration: 0.7,
+  ease: [0.76, 0, 0.24, 1] as [number, number, number, number],
+};
 
 const ChevronLeft = () => (
   <svg width="10" height="14" viewBox="0 0 10 14" fill="none" aria-hidden="true">
@@ -59,7 +88,6 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
 
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   const [selectedPanel, setSelectedPanel] = useState<string | null>(null);
-
 
   useEffect(() => {
     previousFocusRef.current = document.activeElement as HTMLElement;
