@@ -215,7 +215,8 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
       return;
     }
 
-    if (deltaY > 80) {
+    const hasHorizontalIntent = Math.abs(deltaX) > 30;
+    if (!hasHorizontalIntent && deltaY > 120) {
       onClose();
     }
   };
