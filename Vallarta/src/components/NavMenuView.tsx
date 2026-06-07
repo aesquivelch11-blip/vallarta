@@ -258,105 +258,67 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
         </button>
       </header>
 
-      {/* ── Passageway ── */}
-      <div
+      {/* ── Panel grid ── */}
+      <motion.div
         className="nav-portal-grid absolute inset-0 flex flex-row"
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
       >
-        {(() => {
-          const active = menuItems[activeIndex];
-          const prevItem = menuItems[(activeIndex - 1 + menuItems.length) % menuItems.length];
-          const nextItem = menuItems[(activeIndex + 1) % menuItems.length];
+        {menuItems.map((item, i) => (
+          <motion.div
+            key={item.id}
+            layout
+            variants={panelEntranceVariants}
+            style={{ originX: 0 }}
+            transition={{ layout: layoutTransition }}
+            className={`nav-panel ${i === activeIndex ? 'nav-panel--active' : 'nav-panel--collapsed'} relative h-full overflow-hidden${selectedPanel === item.id ? ' nav-panel--selected' : ''}`}
+            onClick={() => {
+              if (i !== activeIndex) {
+                setActiveIndex(i);
+              } else {
+                handlePanelClick(item.screen, item.id);
+              }
+            }}
+            role="button"
+            aria-label={i === activeIndex ? `Navigate to ${item.label}` : `Expand ${item.label}`}
+            tabIndex={0}
+          >
+            {/* Photo skeleton */}
+            <div
+              className={`nav-portal__img-skeleton ${loadedImages[item.id] ? 'nav-portal__img-skeleton--hidden' : ''}`}
+              aria-hidden="true"
+            />
 
-          return (
-            <>
-              {/* Left edge indicator — commits to previous room */}
-              <button
-                className="nav-portal__edge nav-portal__edge--left"
-                aria-label={`Navigate to ${prevItem.label}`}
-                onClick={() => handlePanelClick(prevItem.screen, prevItem.id)}
-                tabIndex={0}
-              >
-                <span className="nav-portal__edge-chevron"><ChevronLeft /></span>
-                <span className="nav-portal__edge-label">{prevItem.label}</span>
-              </button>
+            {/* Full-bleed photo */}
+            <picture aria-hidden="true">
+              <source srcSet={item.imageWebp} type="image/webp" />
+              <img
+                src={item.image}
+                alt=""
+                className={`nav-portal__img ${loadedImages[item.id] ? 'nav-portal__img--loaded' : ''}`}
+                onLoad={() => handleImageLoad(item.id)}
+              />
+            </picture>
 
-              {/* Active panel — full-bleed */}
-              <div
-                key={active.id}
-                className={`nav-panel nav-panel--active relative h-full overflow-hidden outline-none ${selectedPanel === active.id ? 'nav-panel--selected' : ''}`}
-              >
-                {/* Image skeleton fallback */}
-                <div
-                  className={`nav-portal__img-skeleton ${loadedImages[active.id] ? 'nav-portal__img-skeleton--hidden' : ''}`}
-                  aria-hidden="true"
-                />
+            {/* Scrim */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                zIndex: 2,
+                background:
+                  'linear-gradient(to bottom, var(--nav-scrim-top) 0%, transparent 20%), linear-gradient(to top, var(--nav-scrim-heavy) 0%, var(--nav-scrim-mid) 36%, var(--nav-scrim-light) 65%, transparent 100%)',
+              }}
+            />
 
-                {/* Full-bleed photo */}
-                <picture aria-hidden="true">
-                  <source srcSet={active.imageWebp} type="image/webp" />
-                  <img
-                    src={active.image}
-                    alt=""
-                    className={`nav-portal__img ${loadedImages[active.id] ? 'nav-portal__img--loaded' : ''}`}
-                    onLoad={() => handleImageLoad(active.id)}
-                  />
-                </picture>
+            {/* Gold bottom line */}
+            <div className="nav-portal-line" />
 
-                {/* Dark vignette — top and bottom */}
-                <div
-                  className="absolute inset-0 pointer-events-none"
-                  style={{
-                    zIndex: 2,
-                    background: 'linear-gradient(to bottom, var(--nav-scrim-top) 0%, transparent 20%), linear-gradient(to top, var(--nav-scrim-heavy) 0%, var(--nav-scrim-mid) 36%, var(--nav-scrim-light) 65%, transparent 100%)',
-                  }}
-                />
-
-                {/* Gold bottom sweep line */}
-                <div className="nav-portal-line" />
-
-                {/* Full-panel click target */}
-                <button
-                  className="nav-panel__button"
-                  onClick={() => handlePanelClick(active.screen, active.id)}
-                  aria-label={`Navigate to ${active.label}`}
-                />
-
-                {/* Bottom-anchored content */}
-                <div className="nav-portal-content">
-                  <span className="nav-portal__index">{active.index}</span>
-                  <span className="nav-portal__label">{active.label}</span>
-                  <span className="nav-panel__subtitle">{active.subtitle}</span>
-                </div>
-
-                {/* Pagination dots */}
-                <div className="nav-portal__pagination" role="tablist" aria-label="Sections">
-                  {menuItems.map((item, i) => (
-                    <button
-                      key={item.id}
-                      role="tab"
-                      aria-selected={i === activeIndex}
-                      aria-label={item.label}
-                      className={`nav-portal__dot ${i === activeIndex ? 'nav-portal__dot--active' : ''}`}
-                      onClick={() => handlePanelClick(item.screen, item.id)}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Right edge indicator — commits to next room */}
-              <button
-                className="nav-portal__edge nav-portal__edge--right"
-                aria-label={`Navigate to ${nextItem.label}`}
-                onClick={() => handlePanelClick(nextItem.screen, nextItem.id)}
-                tabIndex={0}
-              >
-                <span className="nav-portal__edge-label">{nextItem.label}</span>
-                <span className="nav-portal__edge-chevron"><ChevronRight /></span>
-              </button>
-            </>
-          );
-        })()}
-      </div>
+            {/* Panel content — collapsed title or active content */}
+            {/* (added in Task 6) */}
+          </motion.div>
+        ))}
+      </motion.div>
     </div>
   );
 }
