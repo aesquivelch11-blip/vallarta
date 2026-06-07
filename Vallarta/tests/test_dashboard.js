@@ -49,3 +49,15 @@ assert.ok(nav.includes("'tasks'"), "nav must include 'tasks' domain");
 assert.ok(nav.includes('aria-pressed'), 'nav items must have aria-pressed');
 
 console.log('Task 5 PASS: DashboardDomainNav created correctly.');
+
+assert.ok(
+  fs.existsSync('src/components/Dashboard/DashboardToday.tsx'),
+  'DashboardToday.tsx must exist'
+);
+const today = fs.readFileSync('src/components/Dashboard/DashboardToday.tsx', 'utf-8');
+assert.ok(today.includes('arrivalsToday'), 'must reference arrivalsToday');
+assert.ok(today.includes('departuresToday'), 'must reference departuresToday');
+assert.ok(today.includes('VIEW CALENDAR'), 'must include VIEW CALENDAR nav link');
+assert.ok(today.includes('No arrivals'), 'must handle empty arrivals state');
+
+console.log('Task 6 PASS: DashboardToday created correctly.');
