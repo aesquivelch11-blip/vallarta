@@ -242,6 +242,39 @@
   cursor: pointer;
 }
 
+/* ── Nav Menu — panel flex states ── */
+.nav-panel--active {
+  flex: 1;
+  min-width: 0;
+}
+
+.nav-panel--collapsed {
+  flex: 0 0 64px;
+  flex-shrink: 0;
+}
+
+/* ── Nav Menu — collapsed bar rotated title ── */
+.nav-panel-collapsed-title {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  writing-mode: vertical-rl;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.45);
+  pointer-events: none;
+  z-index: 10;
+  transition: color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: 0.04em;
+}
+
+.nav-panel--collapsed:hover .nav-panel-collapsed-title {
+  color: rgba(255, 255, 255, 0.75);
+}
+
 /* ── Nav Menu — photo kenburns on hover ── */
 .nav-panel img {
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -265,6 +298,19 @@
 }
 .nav-panel:hover .nav-portal-line,
 .nav-panel:focus-within .nav-portal-line { transform: scaleX(1); }
+
+/* Active panel — gold line always fully swept */
+.nav-panel--active .nav-portal-line {
+  transform: scaleX(1);
+  transition: none;
+}
+
+/* Collapsed panel — gold line subtle presence */
+.nav-panel--collapsed .nav-portal-line {
+  transform: scaleX(0.15);
+  opacity: 0.5;
+  transition: none;
+}
 
 /* ── Nav Menu — card content (lifts on hover, dims + sinks on siblings) ── */
 .nav-portal-content {
@@ -321,6 +367,21 @@
 .nav-panel:hover .nav-panel__subtitle,
 .nav-panel:focus-within .nav-panel__subtitle {
   color: var(--nav-subtitle-hover);
+}
+
+/* ── Nav Menu — CTA arrow (active panel) ── */
+.nav-panel-cta-arrow {
+  display: block;
+  color: var(--nav-gold);
+  font-size: 1.125rem;
+  line-height: 1;
+  margin-bottom: 10px;
+  animation: ctaArrowPulse 2s ease-in-out infinite;
+}
+
+@keyframes ctaArrowPulse {
+  0%, 100% { opacity: 0.55; }
+  50%       { opacity: 0.80; }
 }
 
 /* ── Nav Menu — image loading skeleton ── */
@@ -399,6 +460,8 @@
   .nav-panel--selected .nav-portal__index { transition: none; }
 
   .nav-portal__dot { transition: none; }
+  .nav-panel-cta-arrow { animation: none; opacity: 0.65; }
+  .nav-portal-line { transition: none; }
 }
 
 /* ── Nav Menu — mobile adaptation ── */
@@ -413,6 +476,24 @@
     letter-spacing: 0.28em;
   }
 
+  .nav-panel--active {
+    flex: 1;
+    min-height: 0;
+  }
+
+  .nav-panel--collapsed {
+    flex: 0 0 64px;
+    width: 100%;
+  }
+
+  /* Mobile: collapsed title is horizontal, not rotated */
+  .nav-panel-collapsed-title {
+    writing-mode: horizontal-tb;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    padding: 0 20px;
+  }
+
   .nav-close-btn {
     width: 38px;
     height: 38px;
@@ -420,22 +501,7 @@
 
   .nav-portal-grid {
     flex-direction: column;
-    padding-top: 48px;
-  }
-
-  .nav-panel {
-    flex: 1 1 0;
-    min-height: 0;
-    animation: none;
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-
-  .nav-portal-line {
-    transform: scaleX(0.45);
-    opacity: 0.5;
-    transition: none;
+    padding-top: 56px; /* header height */
   }
 
   .nav-portal-content {
