@@ -337,54 +337,41 @@
         transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.nav-panel__status {
-    display: block;
-    margin-bottom: 10px;
-    font-family: var(--font-ui);
-    font-size: 0.625rem;
-    font-weight: 400;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.62);
-}
-
 .nav-panel__cta {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    margin: 18px 0 14px;
-    padding: 12px 18px;
-    border-radius: 999px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    background: rgba(255, 255, 255, 0.06);
-    color: var(--nav-title-color);
+    justify-content: flex-start;
+    margin: 14px 0 12px;
+    padding: 0 0 4px;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid currentColor;
+    background: transparent;
+    color: var(--nav-accent-strong);
     font-family: var(--font-ui);
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
     font-weight: 500;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     pointer-events: auto;
     transition:
-        border-color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-        background 0.22s cubic-bezier(0.16, 1, 0.3, 1),
         color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
         transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .nav-panel__cta:hover,
 .nav-panel__cta:focus-visible {
-    border-color: rgba(255, 255, 255, 0.34);
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
+    color: var(--nav-title-color);
+    transform: translateX(2px);
 }
 
 .nav-panel__cta:focus-visible {
     outline: 2px solid rgba(255, 255, 255, 0.55);
-    outline-offset: 3px;
+    outline-offset: 4px;
 }
 
 .nav-panel__cta:active {
-    transform: scale(0.98);
+    transform: translateX(1px);
 }
 
 /* ── Nav Menu — index number ── */
@@ -425,26 +412,6 @@
 .nav-panel:hover .nav-panel__subtitle,
 .nav-panel:focus-within .nav-panel__subtitle {
     color: var(--nav-subtitle-hover);
-}
-
-/* ── Nav Menu — CTA arrow (active panel) ── */
-.nav-panel-cta-arrow {
-    display: block;
-    color: var(--nav-gold);
-    font-size: 1.125rem;
-    line-height: 1;
-    margin-bottom: 10px;
-    animation: ctaArrowPulse 2s ease-in-out infinite;
-}
-
-@keyframes ctaArrowPulse {
-    0%,
-    100% {
-        opacity: 0.55;
-    }
-    50% {
-        opacity: 0.8;
-    }
 }
 
 /* ── Nav Menu — image loading skeleton ── */
@@ -543,11 +510,6 @@
     }
     .nav-panel--selected .nav-portal__index {
         transition: none;
-    }
-
-    .nav-panel-cta-arrow {
-        animation: none;
-        opacity: 0.65;
     }
 }
 

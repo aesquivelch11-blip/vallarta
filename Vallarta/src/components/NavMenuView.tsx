@@ -33,7 +33,7 @@ const menuItems: MenuItem[] = [
   {
     id: "estates",
     label: "The Estates",
-    subtitle: "At a glance",
+    subtitle: "Overview",
     screen: "reporting",
     index: "01",
     image: menuImg1,
@@ -42,7 +42,7 @@ const menuItems: MenuItem[] = [
   {
     id: "financial",
     label: "Revenue",
-    subtitle: "This month",
+    subtitle: "Monthly performance",
     screen: "deep_dive",
     index: "02",
     image: menuImg2,
@@ -51,7 +51,7 @@ const menuItems: MenuItem[] = [
   {
     id: "operations",
     label: "The Property",
-    subtitle: "Cameras & systems",
+    subtitle: "Cameras and systems",
     screen: "camera_expanded",
     index: "03",
     image: menuImg3,
@@ -60,7 +60,7 @@ const menuItems: MenuItem[] = [
   {
     id: "calendar",
     label: "Calendar",
-    subtitle: "Who's arriving",
+    subtitle: "Arrivals and departures",
     screen: "calendar",
     index: "04",
     image: menuImg4,
@@ -107,9 +107,10 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
   })();
 
   const [activeIndex, setActiveIndex] = useState(initialIndex);
-
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
-  const [selectedPanel, setSelectedPanel] = useState<string | null>(null);
+  const [transitioningPanel, setTransitioningPanel] = useState<string | null>(null);
+  const [liveAnnouncement, setLiveAnnouncement] = useState("");
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
     previousFocusRef.current = document.activeElement as HTMLElement;
@@ -180,8 +181,8 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
   };
 
   const handlePanelClick = (screen: ScreenType, id: string) => {
-    if (selectedPanel) return;
-    setSelectedPanel(id);
+    if (transitioningPanel) return;
+    setTransitioningPanel(id);
     navTimeoutRef.current = setTimeout(() => {
       onNavigate(screen, "push");
     }, 180);
@@ -231,6 +232,13 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
 
   useEffect(() => {
     sessionStorage.setItem("nav-last-panel", menuItems[activeIndex].id);
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    setLiveAnnouncement(
+      `${menuItems[activeIndex].label}, panel ${activeIndex + 1} of ${menuItems.length}`,
+    );
   }, [activeIndex]);
 
   return (
@@ -291,8 +299,16 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
         </button>
       </header>
 
+      <div
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {liveAnnouncement}
+      </div>
+
       <p id="nav-menu-hint" className="nav-menu-hint">
-        Use arrow keys or swipe to preview, then open the active panel
+        Use arrows or swipe to preview. Choose Open to enter.
       </p>
 
       {/* ── Panel grid ── */}
@@ -307,13 +323,13 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
             key={item.id}
             variants={panelEntranceVariants}
             style={{ originX: 0 }}
-            className={`nav-panel ${i === activeIndex ? "nav-panel--active" : "nav-panel--collapsed"} relative h-full overflow-hidden${selectedPanel === item.id ? " nav-panel--selected" : ""}`}
+            className={`nav-panel ${i === activeIndex ? "nav-panel--active" : "nav-panel--collapsed"} relative h-full overflow-hidden${transitioningPanel === item.id ? " nav-panel--selected" : ""}`}
             onMouseEnter={() => setActiveIndex(i)}
           >
             <button
               type="button"
               className="nav-panel__preview"
-              aria-label={i === activeIndex ? `Selected ${item.label}` : `Preview ${item.label}`}
+              aria-label={i === activeIndex ? `${item.label}, active` : `Preview ${item.label}`}
               aria-pressed={i === activeIndex}
               onFocus={() => setActiveIndex(i)}
               onClick={() => setActiveIndex(i)}
@@ -360,19 +376,8 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
                     exit: { duration: 0.3, delay: 0 },
                   }}
                 >
-                  <span className="nav-panel__status">Selected</span>
-                  <span className="nav-portal__index">{item.index}</span>
+                  <span className="nav-portal__index" aria-hidden="true">{item.index}</span>
                   <span className="nav-portal__label">{item.label}</span>
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.38, duration: 0.3 }}
-                    style={{ lineHeight: 1 }}
-                  >
-                    <span className="nav-panel-cta-arrow" aria-hidden="true">
-                      →
-                    </span>
-                  </motion.div>
                   <button
                     type="button"
                     className="nav-panel__cta"
@@ -382,7 +387,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
                       handlePanelClick(item.screen, item.id);
                     }}
                   >
-                    Open {item.label}
+                    Open
                   </button>
                   <span className="nav-panel__subtitle">{item.subtitle}</span>
                 </motion.div>
@@ -390,6 +395,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
                 <motion.div
                   key="collapsed"
                   className="nav-panel-collapsed-title"
+                  aria-hidden="true"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
