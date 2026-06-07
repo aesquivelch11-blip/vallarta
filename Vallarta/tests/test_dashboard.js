@@ -61,3 +61,16 @@ assert.ok(today.includes('VIEW CALENDAR'), 'must include VIEW CALENDAR nav link'
 assert.ok(today.includes('No arrivals'), 'must handle empty arrivals state');
 
 console.log('Task 6 PASS: DashboardToday created correctly.');
+
+assert.ok(
+  fs.existsSync('src/components/Dashboard/DashboardFinancials.tsx'),
+  'DashboardFinancials.tsx must exist'
+);
+const fin = fs.readFileSync('src/components/Dashboard/DashboardFinancials.tsx', 'utf-8');
+assert.ok(fin.includes('REVENUE'), 'must show REVENUE label');
+assert.ok(fin.includes('EXPENSES'), 'must show EXPENSES label');
+assert.ok(fin.includes('NET'), 'must show NET label');
+assert.ok(fin.includes('selectedPeriodIndex'), 'must track selected period');
+assert.ok(fin.includes('VIEW FINANCIALS'), 'must include VIEW FINANCIALS nav link');
+
+console.log('Task 7 PASS: DashboardFinancials created correctly.');
