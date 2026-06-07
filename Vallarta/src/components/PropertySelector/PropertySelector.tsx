@@ -4,6 +4,7 @@ import { ScreenType } from '../../types';
 import { sampleProperties } from './propertyData';
 import DiagonalSlide from './DiagonalSlide';
 import SlideshowPagination from './SlideshowPagination';
+import PropertyContent from './PropertyContent';
 
 interface PropertySelectorProps {
   onNavigate: (screen: ScreenType, transitionStyle: 'push' | 'slide_up') => void;
@@ -14,6 +15,35 @@ interface PropertySelectorProps {
 export default function PropertySelector({ onNavigate, onSelectProperty, onNotify }: PropertySelectorProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isContentOpen, setIsContentOpen] = useState(false);
+  const [tilt, setTilt] = useState({ x: 0, y: 0, rotX: 0, rotY: 0 });
+  const [isDesktop, setIsDesktop] = useState(false);
+  const tiltFrameRef = useRef(0);
+
+  useEffect(() => {
+    const check = () => setIsDesktop(window.innerWidth >= 1024);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (isContentOpen || !isDesktop) {
+      setTilt({ x: 0, y: 0, rotX: 0, rotY: 0 });
+      return;
+    }
+    cancelAnimationFrame(tiltFrameRef.current);
+    tiltFrameRef.current = requestAnimationFrame(() => {
+      const { clientX, clientY } = e;
+      const cx = window.innerWidth / 2;
+      const cy = window.innerHeight / 2;
+      setTilt({
+        x: ((clientX - cx) / cx) * 10,
+        y: ((clientY - cy) / cy) * 10,
+        rotX: ((clientY - cy) / cy) * 5,
+        rotY: ((clientX - cx) / cx) * 5,
+      });
+    });
+  }, [isContentOpen, isDesktop]);
 
   const total = sampleProperties.length;
 
@@ -100,7 +130,7 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
   const liveAnnouncement = `${sampleProperties[currentIndex].name}, property ${currentIndex + 1} of ${total}`;
 
   return (
-    <div className="w-full h-[100dvh] bg-[#0c0c0c] relative overflow-hidden">
+    <div className="w-full h-[100dvh] bg-[#0c0c0c] relative overflow-hidden" onMouseMove={handleMouseMove}>
       <div aria-live="polite" aria-atomic="true" className="sr-only">
         {liveAnnouncement}
       </div>
@@ -112,12 +142,22 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
               key={property.id}
               className="col-start-1 row-start-1"
               initial={{ opacity: 0 }}
-              animate={{
-                x: position === 'prev' ? '-50%' : position === 'next' ? '50%' : 0,
-                y: position === 'prev' ? '-50%' : position === 'next' ? '50%' : 0,
-                rotate: position === 'prev' ? -30 : position === 'next' ? 30 : 0,
-                opacity: position === 'current' ? 1 : 0.6,
-              }}
+              animate={
+                isContentOpen
+                  ? {
+                      x: position === 'current' ? '-30%' : position === 'prev' ? '-80%' : '80%',
+                      y: position === 'prev' ? '-50%' : position === 'next' ? '50%' : 0,
+                      rotate: 0,
+                      opacity: position === 'current' ? 1 : 0,
+                      scale: position !== 'current' ? 0.85 : 1,
+                    }
+                  : {
+                      x: position === 'prev' ? '-50%' : position === 'next' ? '50%' : 0,
+                      y: position === 'prev' ? '-50%' : position === 'next' ? '50%' : 0,
+                      rotate: position === 'prev' ? -30 : position === 'next' ? 30 : 0,
+                      opacity: position === 'current' ? 1 : 0.6,
+                    }
+              }
               exit={{ opacity: 0, scale: 0.85 }}
               transition={{
                 duration: 0.8,
@@ -129,13 +169,17 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
               role={position === 'current' ? 'button' : undefined}
               tabIndex={position === 'current' ? 0 : undefined}
               aria-label={position === 'current' ? `View ${property.name} details` : undefined}
-              style={{ cursor: position === 'current' ? 'pointer' : 'default' }}
+              style={{ perspective: '1200px', transformStyle: 'preserve-3d', cursor: position === 'current' ? 'pointer' : 'default' }}
             >
               <DiagonalSlide
                 property={property}
                 position={position}
                 isActive={position === 'current'}
                 displayIndex={getDisplayIndex(index)}
+                tiltX={position === 'current' ? tilt.x : 0}
+                tiltY={position === 'current' ? tilt.y : 0}
+                rotX={position === 'current' ? tilt.rotX : 0}
+                rotY={position === 'current' ? tilt.rotY : 0}
               />
             </motion.div>
           ))}
@@ -146,6 +190,13 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
         total={total}
         currentIndex={currentIndex}
         onJump={goTo}
+      />
+
+      <PropertyContent
+        property={sampleProperties[currentIndex]}
+        isOpen={isContentOpen}
+        onClose={() => setIsContentOpen(false)}
+        onSelect={() => onSelectProperty(sampleProperties[currentIndex].id)}
       />
     </div>
   );

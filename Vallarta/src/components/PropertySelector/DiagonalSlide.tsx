@@ -6,20 +6,30 @@ interface DiagonalSlideProps {
   position: 'prev' | 'current' | 'next';
   isActive: boolean;
   displayIndex: string;
+  tiltX?: number;
+  tiltY?: number;
+  rotX?: number;
+  rotY?: number;
 }
 
-export default function DiagonalSlide({ property, position, isActive, displayIndex }: DiagonalSlideProps) {
+export default function DiagonalSlide({ property, position, isActive, displayIndex, tiltX = 0, tiltY = 0, rotX = 0, rotY = 0 }: DiagonalSlideProps) {
   return (
-    <div
+    <motion.div
       className="relative select-none"
-      style={{ width: 'clamp(280px, 48vw, 560px)' }}
+      style={{ width: 'clamp(280px, 48vw, 560px)', perspective: '1200px', transformStyle: 'preserve-3d' }}
+      animate={{ x: tiltX, y: tiltY, rotateX: rotX, rotateY: rotY }}
+      transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
     >
       {position === 'current' && (
         <div className="absolute -inset-3 bg-[#141414] -z-10" />
       )}
 
       <div className="flex flex-col w-full" style={{ aspectRatio: '3/4' }}>
-        <div className="relative overflow-hidden flex-[8] min-h-0">
+        <motion.div
+          className="relative overflow-hidden flex-[8] min-h-0"
+          whileHover={isActive ? { scale: 1.05 } : undefined}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        >
           <picture className="absolute inset-0">
             <source srcSet={property.imageWebp} type="image/webp" />
             <img
@@ -35,7 +45,7 @@ export default function DiagonalSlide({ property, position, isActive, displayInd
                 'linear-gradient(to bottom, rgba(12,12,12,0.4) 0%, transparent 20%), linear-gradient(to top, rgba(12,12,12,0.8) 0%, rgba(12,12,12,0.5) 36%, transparent 100%)',
             }}
           />
-        </div>
+        </motion.div>
 
         <div className="flex-[2] flex items-end justify-between px-1 pb-3 min-h-0">
           <div>
@@ -68,6 +78,6 @@ export default function DiagonalSlide({ property, position, isActive, displayInd
           </motion.span>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
