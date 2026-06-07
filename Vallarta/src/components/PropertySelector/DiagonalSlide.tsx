@@ -3,7 +3,7 @@ import { Property } from '../../types';
 
 interface DiagonalSlideProps {
   property: Property;
-  position: 'prev' | 'current' | 'next' | 'hidden';
+  position: 'prev' | 'current' | 'next';
   isActive: boolean;
   displayIndex: string;
 }

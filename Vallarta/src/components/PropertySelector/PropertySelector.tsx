@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ScreenType } from '../../types';
 import { sampleProperties } from './propertyData';
@@ -16,13 +16,24 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
   const [isContentOpen, setIsContentOpen] = useState(false);
 
   const total = sampleProperties.length;
+
+  if (total === 0) {
+    return (
+      <div className="w-full h-[100dvh] bg-[#0c0c0c] flex items-center justify-center">
+        <p className="text-[#C9B8A0]/60 font-sans text-sm tracking-wide">No properties available</p>
+      </div>
+    );
+  }
+
   const prevIndex = (currentIndex - 1 + total) % total;
   const nextIndex = (currentIndex + 1) % total;
 
-  const prevCurrentRef = useRef(sampleProperties[currentIndex].id);
+  const justChanged = useRef(false);
 
   useEffect(() => {
-    prevCurrentRef.current = sampleProperties[currentIndex].id;
+    justChanged.current = true;
+    const timer = setTimeout(() => { justChanged.current = false; }, 100);
+    return () => clearTimeout(timer);
   }, [currentIndex]);
 
   const goNext = useCallback(() => {
@@ -36,7 +47,6 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
   }, [total]);
 
   const goTo = useCallback((index: number) => {
-    // Fade transition used when jumping >2 slides (AnimatePresence key change naturally crossfades)
     setCurrentIndex(index);
     setIsContentOpen(false);
   }, []);
@@ -50,6 +60,10 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
       if (e.key === 'ArrowRight') {
         e.preventDefault();
         goNext();
+      }
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        setIsContentOpen(true);
       }
     };
     document.addEventListener('keydown', handleKeyDown);
@@ -66,24 +80,34 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
     }
   }, [goNext, goPrev]);
 
-  const getDisplayIndex = (propertyId: string): string => {
-    const idx = sampleProperties.findIndex(p => p.id === propertyId);
-    return String(idx + 1).padStart(2, '0');
+  const handleSlideKeyDown = (e: React.KeyboardEvent, position: 'prev' | 'current' | 'next') => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleSlideClick(position);
+    }
+  };
+
+  const getDisplayIndex = (index: number): string => {
+    return String(index + 1).padStart(2, '0');
   };
 
   const visibleSlides = [
-    { property: sampleProperties[prevIndex], position: 'prev' as const },
-    { property: sampleProperties[currentIndex], position: 'current' as const },
-    { property: sampleProperties[nextIndex], position: 'next' as const },
+    { property: sampleProperties[prevIndex], position: 'prev' as const, index: prevIndex },
+    { property: sampleProperties[currentIndex], position: 'current' as const, index: currentIndex },
+    { property: sampleProperties[nextIndex], position: 'next' as const, index: nextIndex },
   ];
 
-  const wasCurrent = (id: string) => id === prevCurrentRef.current;
+  const liveAnnouncement = `${sampleProperties[currentIndex].name}, property ${currentIndex + 1} of ${total}`;
 
   return (
     <div className="w-full h-[100dvh] bg-[#0c0c0c] relative overflow-hidden">
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        {liveAnnouncement}
+      </div>
+
       <div className="grid grid-cols-1 grid-rows-1 place-items-center w-full h-full">
         <AnimatePresence>
-          {visibleSlides.map(({ property, position }) => (
+          {visibleSlides.map(({ property, position, index }) => (
             <motion.div
               key={property.id}
               className="col-start-1 row-start-1"
@@ -98,16 +122,20 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
               transition={{
                 duration: 0.8,
                 ease: [0.16, 1, 0.3, 1],
-                delay: wasCurrent(property.id) ? 0 : 0.14,
+                delay: position === 'current' ? 0 : 0.14,
               }}
               onClick={() => handleSlideClick(position)}
+              onKeyDown={(e) => handleSlideKeyDown(e, position)}
+              role={position === 'current' ? 'button' : undefined}
+              tabIndex={position === 'current' ? 0 : undefined}
+              aria-label={position === 'current' ? `View ${property.name} details` : undefined}
               style={{ cursor: position === 'current' ? 'pointer' : 'default' }}
             >
               <DiagonalSlide
                 property={property}
                 position={position}
                 isActive={position === 'current'}
-                displayIndex={getDisplayIndex(property.id)}
+                displayIndex={getDisplayIndex(index)}
               />
             </motion.div>
           ))}
