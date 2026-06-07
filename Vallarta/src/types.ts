@@ -5,7 +5,8 @@ export type ScreenType =
   | 'deep_dive'
   | 'camera_expanded'
   | 'calendar'
-  | 'property_selector';
+  | 'property_selector'
+  | 'dashboard';
 
 export interface EstateMetric {
   label: string;
@@ -21,6 +22,7 @@ export interface Property {
   tagline: string;
   imageUrl: string;
   imageWebp?: string;
+  images?: string[];        // gallery images; imageUrl is always images[0]
   metrics?: {
     bedrooms: number;
     occupancy: string;
