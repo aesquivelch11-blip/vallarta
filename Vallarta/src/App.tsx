@@ -9,6 +9,7 @@ import CameraFeedView from './components/CameraFeedView';
 import CalendarView from './components/CalendarView';
 import PropertySelector from './components/PropertySelector/PropertySelector';
 import Preloader from './components/Preloader';
+import DashboardView from './components/Dashboard/DashboardView';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<ScreenType>('login');
@@ -181,8 +182,18 @@ export default function App() {
               onNavigate={(screen, style) => handleNavigate(screen, style)}
               onSelectProperty={(propertyId) => {
                 setSelectedPropertyId(propertyId);
-                handleNavigate('reporting', 'push');
+                handleNavigate('dashboard', 'push');
               }}
+              onNotify={triggerToast}
+            />
+          </div>
+        );
+      case 'dashboard':
+        return (
+          <div key="dashboard" className="w-full min-h-screen">
+            <DashboardView
+              propertyId={selectedPropertyId}
+              onNavigate={(screen, style) => handleNavigate(screen, style)}
               onNotify={triggerToast}
             />
           </div>

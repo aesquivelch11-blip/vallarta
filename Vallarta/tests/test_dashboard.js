@@ -99,3 +99,13 @@ assert.ok(view.includes('DashboardTasks'), 'DashboardView must include Dashboard
 assert.ok(view.includes('getDashboardData'), 'DashboardView must call getDashboardData');
 
 console.log('Task 9 PASS: DashboardView assembled correctly.');
+
+const app = fs.readFileSync('src/App.tsx', 'utf-8');
+assert.ok(app.includes("case 'dashboard'"), "App.tsx must handle 'dashboard' case");
+assert.ok(app.includes('DashboardView'), 'App.tsx must import DashboardView');
+assert.ok(
+  app.includes("handleNavigate('dashboard'") || app.includes("'dashboard', 'push'"),
+  'PropertySelector must navigate to dashboard on property select'
+);
+
+console.log('Task 10 PASS: App.tsx wired to dashboard.');
