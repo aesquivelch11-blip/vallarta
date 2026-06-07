@@ -74,3 +74,14 @@ assert.ok(fin.includes('selectedPeriodIndex'), 'must track selected period');
 assert.ok(fin.includes('VIEW FINANCIALS'), 'must include VIEW FINANCIALS nav link');
 
 console.log('Task 7 PASS: DashboardFinancials created correctly.');
+
+assert.ok(
+  fs.existsSync('src/components/Dashboard/DashboardTasks.tsx'),
+  'DashboardTasks.tsx must exist'
+);
+const tasks = fs.readFileSync('src/components/Dashboard/DashboardTasks.tsx', 'utf-8');
+assert.ok(tasks.includes('All clear'), 'must show All clear when no tasks');
+assert.ok(tasks.includes('urgent'), 'must handle urgent status');
+assert.ok(tasks.includes('slice(0, 5)'), 'must limit list to 5 items');
+
+console.log('Task 8 PASS: DashboardTasks created correctly.');
