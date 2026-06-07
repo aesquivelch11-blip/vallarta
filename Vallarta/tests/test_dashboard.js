@@ -25,3 +25,15 @@ assert.ok(ddData.includes('DashboardTask'), 'must export DashboardTask interface
 assert.ok(ddData.includes('PeriodFinancials'), 'must export PeriodFinancials interface');
 
 console.log('Task 3 PASS: dashboardData.ts created correctly.');
+
+assert.ok(
+  fs.existsSync('src/components/Dashboard/DashboardGallery.tsx'),
+  'DashboardGallery.tsx must exist'
+);
+const gallery = fs.readFileSync('src/components/Dashboard/DashboardGallery.tsx', 'utf-8');
+assert.ok(gallery.includes('handleTouchStart'), 'gallery must handle touch start');
+assert.ok(gallery.includes('handleTouchEnd'), 'gallery must handle touch end');
+assert.ok(gallery.includes('useReducedMotion'), 'gallery must respect reduced motion');
+assert.ok(gallery.includes("directionRef"), 'gallery must track slide direction');
+
+console.log('Task 4 PASS: DashboardGallery created correctly.');
