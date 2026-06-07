@@ -302,8 +302,47 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
             {/* Gold bottom line */}
             <div className="nav-portal-line" />
 
-            {/* Panel content — collapsed title or active content */}
-            {/* (added in Task 6) */}
+            {/* Panel content — animated switch between collapsed title and active content */}
+            <AnimatePresence mode="wait">
+              {i === activeIndex ? (
+                <motion.div
+                  key="active"
+                  className="nav-portal-content"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{
+                    duration: 0.35,
+                    delay: 0.18,
+                    ease: [0.16, 1, 0.3, 1],
+                    exit: { duration: 0.15, delay: 0 },
+                  }}
+                >
+                  <span className="nav-portal__index">{item.index}</span>
+                  <span className="nav-portal__label">{item.label}</span>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.38, duration: 0.3 }}
+                    style={{ lineHeight: 1 }}
+                  >
+                    <span className="nav-panel-cta-arrow" aria-hidden="true">→</span>
+                  </motion.div>
+                  <span className="nav-panel__subtitle">{item.subtitle}</span>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="collapsed"
+                  className="nav-panel-collapsed-title"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {item.label}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         ))}
       </motion.div>
