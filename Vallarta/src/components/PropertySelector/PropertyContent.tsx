@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Property } from '../../types';
 
 interface PropertyContentProps {
@@ -29,6 +29,14 @@ const fadeUp = {
 };
 
 export default function PropertyContent({ property, isOpen, onClose, onSelect }: PropertyContentProps) {
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      closeRef.current?.focus();
+    }
+  }, [isOpen]);
+
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -67,6 +75,7 @@ export default function PropertyContent({ property, isOpen, onClose, onSelect }:
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
             <button
+              ref={closeRef}
               onClick={onClose}
               className="absolute top-8 left-8 z-10 text-[#C9B8A0] cursor-pointer group"
               aria-label="Close"

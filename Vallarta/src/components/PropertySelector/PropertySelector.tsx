@@ -26,6 +26,10 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
     return () => window.removeEventListener('resize', check);
   }, []);
 
+  useEffect(() => {
+    return () => cancelAnimationFrame(tiltFrameRef.current);
+  }, []);
+
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (isContentOpen || !isDesktop) {
       setTilt({ x: 0, y: 0, rotX: 0, rotY: 0 });
@@ -47,24 +51,8 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
 
   const total = sampleProperties.length;
 
-  if (total === 0) {
-    return (
-      <div className="w-full h-[100dvh] bg-[#0c0c0c] flex items-center justify-center">
-        <p className="text-[#C9B8A0]/60 font-sans text-sm tracking-wide">No properties available</p>
-      </div>
-    );
-  }
-
-  const prevIndex = (currentIndex - 1 + total) % total;
-  const nextIndex = (currentIndex + 1) % total;
-
-  const justChanged = useRef(false);
-
-  useEffect(() => {
-    justChanged.current = true;
-    const timer = setTimeout(() => { justChanged.current = false; }, 100);
-    return () => clearTimeout(timer);
-  }, [currentIndex]);
+  const prevIndex = total > 0 ? (currentIndex - 1 + total) % total : 0;
+  const nextIndex = total > 0 ? (currentIndex + 1) % total : 0;
 
   const goNext = useCallback(() => {
     setCurrentIndex(prev => (prev + 1) % total);
@@ -126,6 +114,14 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
     { property: sampleProperties[currentIndex], position: 'current' as const, index: currentIndex },
     { property: sampleProperties[nextIndex], position: 'next' as const, index: nextIndex },
   ];
+
+  if (total === 0) {
+    return (
+      <div className="w-full h-[100dvh] bg-[#0c0c0c] flex items-center justify-center">
+        <p className="text-[#C9B8A0]/60 font-sans text-sm tracking-wide">No properties available</p>
+      </div>
+    );
+  }
 
   const liveAnnouncement = `${sampleProperties[currentIndex].name}, property ${currentIndex + 1} of ${total}`;
 
