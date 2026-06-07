@@ -81,6 +81,7 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (isContentOpen) return;
       if (e.key === 'ArrowLeft') {
         e.preventDefault();
         goPrev();
@@ -96,7 +97,7 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [goNext, goPrev]);
+  }, [goNext, goPrev, isContentOpen]);
 
   const handleSlideClick = useCallback((position: 'prev' | 'current' | 'next') => {
     if (position === 'current') {
@@ -121,6 +122,7 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
+    if (isContentOpen) return;
     const deltaX = e.changedTouches[0].clientX - touchStartX.current;
     const deltaY = e.changedTouches[0].clientY - touchStartY.current;
     if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
@@ -155,6 +157,7 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
   return (
     <div
       className="w-full h-[100dvh] bg-[#0c0c0c] relative overflow-hidden"
+      style={{ touchAction: 'pan-y' }}
       onMouseMove={handleMouseMove}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
