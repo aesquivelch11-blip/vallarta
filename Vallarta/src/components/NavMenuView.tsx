@@ -61,6 +61,14 @@ const menuItems: MenuItem[] = [
     image: menuImg4,
     imageWebp: menuImg4Webp,
   },
+  {
+    id: "properties",
+    label: "Properties",
+    subtitle: "Browse and select",
+    screen: "property_selector",
+    image: menuImg1,
+    imageWebp: menuImg1Webp,
+  },
 ];
 
 // ── Framer Motion variants ──
@@ -140,7 +148,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
         return;
       }
 
-      const panelKeys = ["1", "2", "3", "4"];
+      const panelKeys = ["1", "2", "3", "4", "5"];
       const keyIndex = panelKeys.indexOf(e.key);
       if (keyIndex !== -1 && keyIndex < menuItems.length) {
         e.preventDefault();

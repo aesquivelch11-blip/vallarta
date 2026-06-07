@@ -5,7 +5,7 @@ const component = fs.readFileSync('src/components/NavMenuView.tsx', 'utf-8');
 const css = fs.readFileSync('src/design-tokens.css', 'utf-8');
 
 assert.strictEqual(
-  component.includes('Use arrow keys or swipe to preview, then open the active panel'),
+  component.includes('Use arrows or swipe to preview. Choose Open to enter.'),
   true,
   'NavMenuView should include the preview/open helper hint',
 );
