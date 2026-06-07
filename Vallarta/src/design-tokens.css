@@ -398,6 +398,7 @@
   .nav-panel--selected .nav-portal-line { transition: none; }
   .nav-panel--selected .nav-portal__index { transition: none; }
 
+  .nav-portal__dot { transition: none; }
 }
 
 /* ── Nav Menu — mobile adaptation ── */
