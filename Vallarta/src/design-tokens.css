@@ -102,32 +102,33 @@
 
     /* --- Nav Menu --- */
     /* Shell */
-    --nav-shell-bg: #0d1c24;
+    --nav-shell-bg: oklch(23% 0.008 60);
     --nav-header-height: 56px;
     --nav-font-display: var(--font-display);
     --nav-font-label: var(--font-ui);
 
-    /* Gold accent — maps to project Sunset Ochre */
-    --nav-gold: var(--color-accent-warning);
-    --nav-subtitle-hover: rgba(212, 154, 85, 0.75);
+    /* Restrained accent */
+    --nav-accent: oklch(78% 0.03 72);
+    --nav-accent-strong: oklch(90% 0.016 72);
+    --nav-subtitle-hover: oklch(90% 0.018 72 / 0.78);
 
     /* Scrim system */
-    --nav-scrim-top: rgba(5, 11, 14, 0.35);
-    --nav-scrim-heavy: rgba(5, 11, 14, 0.88);
-    --nav-scrim-mid: rgba(5, 11, 14, 0.42);
-    --nav-scrim-light: rgba(5, 11, 14, 0.08);
+    --nav-scrim-top: oklch(17% 0.006 60 / 0.24);
+    --nav-scrim-heavy: oklch(17% 0.006 60 / 0.76);
+    --nav-scrim-mid: oklch(17% 0.006 60 / 0.42);
+    --nav-scrim-light: oklch(17% 0.006 60 / 0.14);
 
     /* Header text */
-    --nav-wordmark-color: rgba(255, 255, 255, 0.5);
-    --nav-title-color: oklch(97% 0.005 75);
-    --nav-subtitle-color: rgba(255, 255, 255, 0.52);
+    --nav-wordmark-color: oklch(84% 0.01 72 / 0.52);
+    --nav-title-color: oklch(96% 0.008 72);
+    --nav-subtitle-color: oklch(89% 0.012 72 / 0.56);
 
     /* Close button */
-    --nav-close-color: rgba(255, 255, 255, 0.5);
-    --nav-close-color-hover: #fff;
-    --nav-close-border: rgba(255, 255, 255, 0.18);
-    --nav-close-border-hover: rgba(255, 255, 255, 0.55);
-    --nav-close-bg-hover: rgba(255, 255, 255, 0.06);
+    --nav-close-color: oklch(84% 0.01 72 / 0.58);
+    --nav-close-color-hover: oklch(96% 0.008 72);
+    --nav-close-border: oklch(90% 0.01 72 / 0.16);
+    --nav-close-border-hover: oklch(92% 0.012 72 / 0.34);
+    --nav-close-bg-hover: oklch(96% 0.008 72 / 0.06);
 
     /* --- Calendar Accent Colors --- */
     --cal-owner-accent: #c9b8a0; /* Estate Sand — owner stays, brand accent */
@@ -153,6 +154,7 @@
 /* ── Nav Menu — header ── */
 .nav-header {
     animation: navHeaderIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.01s both;
+    background: linear-gradient(to bottom, rgba(5, 11, 14, 0.55), transparent);
 }
 
 /* ── Nav Menu — wordmark ── */
@@ -173,13 +175,14 @@
     margin: 0;
     max-width: 18rem;
     font-family: var(--font-ui);
-    font-size: 0.5625rem;
+    font-size: 0.625rem;
     font-weight: 500;
     letter-spacing: 0.12em;
     line-height: 1.6;
     text-transform: uppercase;
     text-align: right;
-    color: rgba(255, 255, 255, 0.42);
+    color: rgba(255, 255, 255, 0.62);
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
 }
 
 /* ── Nav Menu — close button ── */
@@ -190,12 +193,12 @@
     border: 1px solid var(--nav-close-border);
     background: transparent;
     color: var(--nav-close-color);
-    font-size: 13px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     font-family: var(--nav-font-label);
+    font-size: 0.8125rem;
     font-weight: 300;
     transition:
         border-color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
@@ -207,6 +210,12 @@
     border-color: var(--nav-close-border-hover);
     color: var(--nav-close-color-hover);
     background: var(--nav-close-bg-hover);
+}
+.nav-close-btn:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.6);
+    outline-offset: 3px;
+    border-color: var(--nav-close-border-hover);
+    color: var(--nav-close-color-hover);
 }
 .nav-close-btn:active {
     transform: scale(0.88);
@@ -260,7 +269,7 @@
     font-family: var(--font-ui);
     font-size: 0.75rem;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.58);
+    color: rgba(255, 255, 255, 0.46);
     pointer-events: none;
     z-index: 10;
     transition: color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -288,8 +297,8 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: 1.5px;
-    background: var(--nav-gold);
+    height: 1px;
+    background: var(--nav-accent);
     transform: scaleX(0);
     transform-origin: left;
     z-index: 10;
@@ -308,8 +317,8 @@
 
 /* Collapsed panel — gold line subtle presence */
 .nav-panel--collapsed .nav-portal-line {
-    transform: scaleX(0.15);
-    opacity: 0.5;
+    transform: scaleX(0.08);
+    opacity: 0.22;
     transition: none;
 }
 
@@ -332,8 +341,8 @@
     display: block;
     margin-bottom: 10px;
     font-family: var(--font-ui);
-    font-size: 0.5625rem;
-    font-weight: 500;
+    font-size: 0.625rem;
+    font-weight: 400;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.62);
@@ -350,9 +359,9 @@
     background: rgba(255, 255, 255, 0.06);
     color: var(--nav-title-color);
     font-family: var(--font-ui);
-    font-size: 0.625rem;
+    font-size: 0.6875rem;
     font-weight: 500;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     pointer-events: auto;
     transition:
@@ -382,11 +391,11 @@
 .nav-portal__index {
     display: block;
     font-family: var(--font-ui);
-    font-size: 0.5625rem;
-    font-weight: 300;
+    font-size: 0.625rem;
+    font-weight: 400;
     letter-spacing: 0.25em;
-    color: var(--nav-gold);
-    margin-bottom: 14px;
+    color: var(--nav-accent);
+    margin-bottom: 12px;
 }
 
 /* ── Nav Menu — label ── */
@@ -394,7 +403,7 @@
     display: block;
     font-family: var(--font-ui);
     font-size: clamp(1.125rem, 1.8vw, 1.75rem);
-    font-weight: 500;
+    font-weight: 600;
     color: var(--nav-title-color);
     line-height: 1.05;
     letter-spacing: 0.02em;
@@ -406,9 +415,9 @@
 .nav-panel__subtitle {
     display: block;
     font-family: var(--nav-font-label);
-    font-size: 9px;
+    font-size: 0.6875rem;
     font-weight: 400;
-    letter-spacing: 3.5px;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--nav-subtitle-color);
     transition: color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -550,7 +559,7 @@
     }
 
     .nav-portal__wordmark {
-        font-size: 0.5625rem;
+        font-size: 0.6875rem;
         letter-spacing: 0.28em;
     }
 
@@ -591,7 +600,6 @@
     }
 
     .nav-panel__subtitle {
-        font-size: 0.5rem;
         letter-spacing: 0.2em;
     }
 
