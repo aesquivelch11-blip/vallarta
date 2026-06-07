@@ -18,7 +18,8 @@ export const sampleProperties: Property[] = [
     tagline: 'Oceanfront luxury with private infinity pool',
     imageUrl: propImg1,
     imageWebp: propImg1Webp,
-    metrics: { bedrooms: 4, occupancy: '78%', revenue: '$12,400' }
+    images: [propImg1, propImg2, propImg3],
+    metrics: { bedrooms: 4, occupancy: '78%', revenue: '$12,400' },
   },
   {
     id: 'villa-luna',
@@ -27,7 +28,8 @@ export const sampleProperties: Property[] = [
     tagline: 'Contemporary hillside retreat with panoramic views',
     imageUrl: propImg2,
     imageWebp: propImg2Webp,
-    metrics: { bedrooms: 3, occupancy: '92%', revenue: '$9,800' }
+    images: [propImg2, propImg3, propImg4],
+    metrics: { bedrooms: 3, occupancy: '92%', revenue: '$9,800' },
   },
   {
     id: 'casa-sol',
@@ -36,7 +38,8 @@ export const sampleProperties: Property[] = [
     tagline: 'Beachfront estate with private dock',
     imageUrl: propImg3,
     imageWebp: propImg3Webp,
-    metrics: { bedrooms: 5, occupancy: '65%', revenue: '$18,200' }
+    images: [propImg3, propImg4, propImg1],
+    metrics: { bedrooms: 5, occupancy: '65%', revenue: '$18,200' },
   },
   {
     id: 'vista-al-mar',
@@ -45,7 +48,8 @@ export const sampleProperties: Property[] = [
     tagline: 'Cliffside villa with sunset terrace',
     imageUrl: propImg4,
     imageWebp: propImg4Webp,
-    metrics: { bedrooms: 6, occupancy: '85%', revenue: '$21,500' }
+    images: [propImg4, propImg1, propImg2],
+    metrics: { bedrooms: 6, occupancy: '85%', revenue: '$21,500' },
   },
   {
     id: 'casa-brisa',
@@ -54,6 +58,7 @@ export const sampleProperties: Property[] = [
     tagline: 'Boutique casita steps from the sand',
     imageUrl: propImg5,
     imageWebp: propImg5Webp,
-    metrics: { bedrooms: 2, occupancy: '71%', revenue: '$6,100' }
-  }
+    images: [propImg5, propImg3],
+    metrics: { bedrooms: 2, occupancy: '71%', revenue: '$6,100' },
+  },
 ];
