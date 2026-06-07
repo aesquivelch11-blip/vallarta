@@ -462,8 +462,6 @@
   .nav-portal__dot { width: 5px; height: 5px; }
 }
 
-
-
 /* Typography System */
 .t-property-name {
   font-family: var(--font-display);
