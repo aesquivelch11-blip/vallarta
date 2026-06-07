@@ -107,10 +107,10 @@
     --nav-font-display: var(--font-display);
     --nav-font-label: var(--font-ui);
 
-    /* Restrained accent */
-    --nav-accent: oklch(78% 0.03 72);
-    --nav-accent-strong: oklch(90% 0.016 72);
-    --nav-subtitle-hover: oklch(90% 0.018 72 / 0.78);
+    /* Restrained accent — terracotta (Puerto Vallarta architecture) */
+    --nav-accent: oklch(72% 0.07 42);
+    --nav-accent-strong: oklch(82% 0.05 42);
+    --nav-subtitle-hover: oklch(88% 0.05 42 / 0.78);
 
     /* Scrim system */
     --nav-scrim-top: oklch(17% 0.006 60 / 0.24);
