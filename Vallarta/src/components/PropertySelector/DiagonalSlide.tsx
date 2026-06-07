@@ -10,13 +10,14 @@ interface DiagonalSlideProps {
   tiltY?: number;
   rotX?: number;
   rotY?: number;
+  isMobile?: boolean;
 }
 
-export default function DiagonalSlide({ property, position, isActive, displayIndex, tiltX = 0, tiltY = 0, rotX = 0, rotY = 0 }: DiagonalSlideProps) {
+export default function DiagonalSlide({ property, position, isActive, displayIndex, tiltX = 0, tiltY = 0, rotX = 0, rotY = 0, isMobile = false }: DiagonalSlideProps) {
   return (
     <motion.div
       className="relative select-none"
-      style={{ width: 'clamp(280px, 48vw, 560px)', perspective: '1200px', transformStyle: 'preserve-3d' }}
+      style={{ width: isMobile ? '100%' : 'clamp(280px, 48vw, 560px)', perspective: '1200px', transformStyle: 'preserve-3d' }}
       animate={{ x: tiltX, y: tiltY, rotateX: rotX, rotateY: rotY }}
       transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
     >

@@ -17,10 +17,17 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0, rotX: 0, rotY: 0 });
   const [isDesktop, setIsDesktop] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const tiltFrameRef = useRef(0);
+  const directionRef = useRef(0);
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
 
   useEffect(() => {
-    const check = () => setIsDesktop(window.innerWidth >= 1024);
+    const check = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+      setIsMobile(window.innerWidth < 768);
+    };
     check();
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
@@ -55,19 +62,22 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
   const nextIndex = total > 0 ? (currentIndex + 1) % total : 0;
 
   const goNext = useCallback(() => {
+    directionRef.current = 1;
     setCurrentIndex(prev => (prev + 1) % total);
     setIsContentOpen(false);
   }, [total]);
 
   const goPrev = useCallback(() => {
+    directionRef.current = -1;
     setCurrentIndex(prev => (prev - 1 + total) % total);
     setIsContentOpen(false);
   }, [total]);
 
   const goTo = useCallback((index: number) => {
+    directionRef.current = index > currentIndex ? 1 : -1;
     setCurrentIndex(index);
     setIsContentOpen(false);
-  }, []);
+  }, [currentIndex]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -105,6 +115,23 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
     }
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    const deltaY = e.changedTouches[0].clientY - touchStartY.current;
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+      if (deltaX > 0) {
+        goPrev();
+      } else {
+        goNext();
+      }
+    }
+  };
+
   const getDisplayIndex = (index: number): string => {
     return String(index + 1).padStart(2, '0');
   };
@@ -126,61 +153,114 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
   const liveAnnouncement = `${sampleProperties[currentIndex].name}, property ${currentIndex + 1} of ${total}`;
 
   return (
-    <div className="w-full h-[100dvh] bg-[#0c0c0c] relative overflow-hidden" onMouseMove={handleMouseMove}>
+    <div
+      className="w-full h-[100dvh] bg-[#0c0c0c] relative overflow-hidden"
+      onMouseMove={handleMouseMove}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       <div aria-live="polite" aria-atomic="true" className="sr-only">
         {liveAnnouncement}
       </div>
 
-      <div className="grid grid-cols-1 grid-rows-1 place-items-center w-full h-full">
-        <AnimatePresence>
-          {visibleSlides.map(({ property, position, index }) => (
+      {isMobile ? (
+        <div className="grid grid-cols-1 grid-rows-1 place-items-center w-full h-full overflow-hidden">
+          <AnimatePresence mode="popLayout" custom={directionRef.current}>
             <motion.div
-              key={property.id}
-              className="col-start-1 row-start-1"
-              initial={{ opacity: 0 }}
-              animate={
-                isContentOpen
-                  ? {
-                      x: position === 'current' ? '-30%' : position === 'prev' ? '-80%' : '80%',
-                      y: position === 'prev' ? '-50%' : position === 'next' ? '50%' : 0,
-                      rotate: 0,
-                      opacity: position === 'current' ? 1 : 0,
-                      scale: position !== 'current' ? 0.85 : 1,
-                    }
-                  : {
-                      x: position === 'prev' ? '-50%' : position === 'next' ? '50%' : 0,
-                      y: position === 'prev' ? '-50%' : position === 'next' ? '50%' : 0,
-                      rotate: position === 'prev' ? -30 : position === 'next' ? 30 : 0,
-                      opacity: position === 'current' ? 1 : 0.6,
-                    }
-              }
-              exit={{ opacity: 0, scale: 0.85 }}
-              transition={{
-                duration: 0.8,
-                ease: [0.16, 1, 0.3, 1],
-                delay: position === 'current' ? 0 : 0.14,
+              key={currentIndex}
+              className="col-start-1 row-start-1 flex items-center justify-center w-full px-4"
+              custom={directionRef.current}
+              variants={{
+                initial: (dir: number) => ({
+                  x: dir * 300,
+                  opacity: 0,
+                }),
+                animate: {
+                  x: 0,
+                  opacity: 1,
+                },
+                exit: (dir: number) => ({
+                  x: dir * -300,
+                  opacity: 0,
+                }),
               }}
-              onClick={() => handleSlideClick(position)}
-              onKeyDown={(e) => handleSlideKeyDown(e, position)}
-              role={position === 'current' ? 'button' : undefined}
-              tabIndex={position === 'current' ? 0 : undefined}
-              aria-label={position === 'current' ? `View ${property.name} details` : undefined}
-              style={{ perspective: '1200px', transformStyle: 'preserve-3d', cursor: position === 'current' ? 'pointer' : 'default' }}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              onClick={() => setIsContentOpen(true)}
+              role="button"
+              tabIndex={0}
+              aria-label={`View ${sampleProperties[currentIndex].name} details`}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setIsContentOpen(true);
+                }
+              }}
             >
               <DiagonalSlide
-                property={property}
-                position={position}
-                isActive={position === 'current'}
-                displayIndex={getDisplayIndex(index)}
-                tiltX={position === 'current' ? tilt.x : 0}
-                tiltY={position === 'current' ? tilt.y : 0}
-                rotX={position === 'current' ? tilt.rotX : 0}
-                rotY={position === 'current' ? tilt.rotY : 0}
+                property={sampleProperties[currentIndex]}
+                position="current"
+                isActive
+                isMobile
+                displayIndex={getDisplayIndex(currentIndex)}
               />
             </motion.div>
-          ))}
-        </AnimatePresence>
-      </div>
+          </AnimatePresence>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 grid-rows-1 place-items-center w-full h-full">
+          <AnimatePresence>
+            {visibleSlides.map(({ property, position, index }) => (
+              <motion.div
+                key={property.id}
+                className="col-start-1 row-start-1"
+                initial={{ opacity: 0 }}
+                animate={
+                  isContentOpen
+                    ? {
+                        x: position === 'current' ? '-30%' : position === 'prev' ? '-80%' : '80%',
+                        y: position === 'prev' ? '-50%' : position === 'next' ? '50%' : 0,
+                        rotate: 0,
+                        opacity: position === 'current' ? 1 : 0,
+                        scale: position !== 'current' ? 0.85 : 1,
+                      }
+                    : {
+                        x: position === 'prev' ? '-50%' : position === 'next' ? '50%' : 0,
+                        y: position === 'prev' ? '-50%' : position === 'next' ? '50%' : 0,
+                        rotate: position === 'prev' ? -30 : position === 'next' ? 30 : 0,
+                        opacity: position === 'current' ? 1 : 0.6,
+                      }
+                }
+                exit={{ opacity: 0, scale: 0.85 }}
+                transition={{
+                  duration: 0.8,
+                  ease: [0.16, 1, 0.3, 1],
+                  delay: position === 'current' ? 0 : 0.14,
+                }}
+                onClick={() => handleSlideClick(position)}
+                onKeyDown={(e) => handleSlideKeyDown(e, position)}
+                role={position === 'current' ? 'button' : undefined}
+                tabIndex={position === 'current' ? 0 : undefined}
+                aria-label={position === 'current' ? `View ${property.name} details` : undefined}
+                style={{ perspective: '1200px', transformStyle: 'preserve-3d', cursor: position === 'current' ? 'pointer' : 'default' }}
+              >
+                <DiagonalSlide
+                  property={property}
+                  position={position}
+                  isActive={position === 'current'}
+                  displayIndex={getDisplayIndex(index)}
+                  tiltX={position === 'current' ? tilt.x : 0}
+                  tiltY={position === 'current' ? tilt.y : 0}
+                  rotX={position === 'current' ? tilt.rotX : 0}
+                  rotY={position === 'current' ? tilt.rotY : 0}
+                />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+      )}
 
       <SlideshowPagination
         total={total}
