@@ -13,3 +13,15 @@ assert.ok(propData.includes('images:'), 'propertyData must include images array'
 assert.ok(propData.includes('[propImg1'), 'images array must reference propImg1');
 
 console.log('Task 2 PASS: property data includes images.');
+
+assert.ok(
+  fs.existsSync('src/components/Dashboard/dashboardData.ts'),
+  'dashboardData.ts must exist'
+);
+const ddData = fs.readFileSync('src/components/Dashboard/dashboardData.ts', 'utf-8');
+assert.ok(ddData.includes('getDashboardData'), 'must export getDashboardData');
+assert.ok(ddData.includes('DashboardData'), 'must export DashboardData interface');
+assert.ok(ddData.includes('DashboardTask'), 'must export DashboardTask interface');
+assert.ok(ddData.includes('PeriodFinancials'), 'must export PeriodFinancials interface');
+
+console.log('Task 3 PASS: dashboardData.ts created correctly.');
