@@ -57,7 +57,6 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
   const activeIndexRef = useRef(activeIndex);
   activeIndexRef.current = activeIndex;
 
-
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   const [selectedPanel, setSelectedPanel] = useState<string | null>(null);
 
@@ -132,10 +131,6 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
     };
   }, []);
 
-
-
-
-
   const handleImageLoad = (id: string) => {
     setLoadedImages((prev) => ({ ...prev, [id]: true }));
   };
@@ -190,12 +185,6 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
     });
   };
 
-  const goToPanel = (index: number) => {
-    if (index >= 0 && index < menuItems.length) {
-      setActiveIndex(index);
-    }
-  };
-
   useEffect(() => {
     sessionStorage.setItem('nav-last-panel', menuItems[activeIndex].id);
   }, [activeIndex]);
@@ -241,11 +230,9 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
         </button>
       </header>
 
-
-
       {/* ── Passageway ── */}
       <div
-        className="nav-portal-grid nav-portal-grid--cinematic absolute inset-0 flex flex-row"
+        className="nav-portal-grid absolute inset-0 flex flex-row"
       >
         {(() => {
           const active = menuItems[activeIndex];
