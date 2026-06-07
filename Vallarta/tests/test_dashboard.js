@@ -37,3 +37,15 @@ assert.ok(gallery.includes('useReducedMotion'), 'gallery must respect reduced mo
 assert.ok(gallery.includes("directionRef"), 'gallery must track slide direction');
 
 console.log('Task 4 PASS: DashboardGallery created correctly.');
+
+assert.ok(
+  fs.existsSync('src/components/Dashboard/DashboardDomainNav.tsx'),
+  'DashboardDomainNav.tsx must exist'
+);
+const nav = fs.readFileSync('src/components/Dashboard/DashboardDomainNav.tsx', 'utf-8');
+assert.ok(nav.includes("'today'"), "nav must include 'today' domain");
+assert.ok(nav.includes("'financials'"), "nav must include 'financials' domain");
+assert.ok(nav.includes("'tasks'"), "nav must include 'tasks' domain");
+assert.ok(nav.includes('aria-pressed'), 'nav items must have aria-pressed');
+
+console.log('Task 5 PASS: DashboardDomainNav created correctly.');
