@@ -1,31 +1,71 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { ScreenType } from '../types';
-import menuImg1 from '../assets/Menu/menu-1.jpg';
-import menuImg1Webp from '../assets/Menu/menu-1.webp';
-import menuImg2 from '../assets/Menu/menu-2.jpg';
-import menuImg2Webp from '../assets/Menu/menu-2.webp';
-import menuImg3 from '../assets/Menu/menu-3.jpg';
-import menuImg3Webp from '../assets/Menu/menu-3.webp';
-import menuImg4 from '../assets/Menu/menu-4.jpg';
-import menuImg4Webp from '../assets/Menu/menu-4.webp';
-import { motion, AnimatePresence } from 'motion/react';
+import React, { useRef, useEffect, useState } from "react";
+import { ScreenType } from "../types";
+import menuImg1 from "../assets/Menu/menu-1.jpg";
+import menuImg1Webp from "../assets/Menu/menu-1.webp";
+import menuImg2 from "../assets/Menu/menu-2.jpg";
+import menuImg2Webp from "../assets/Menu/menu-2.webp";
+import menuImg3 from "../assets/Menu/menu-3.jpg";
+import menuImg3Webp from "../assets/Menu/menu-3.webp";
+import menuImg4 from "../assets/Menu/menu-4.jpg";
+import menuImg4Webp from "../assets/Menu/menu-4.webp";
+import { motion, AnimatePresence } from "motion/react";
 
 interface NavMenuViewProps {
-  onNavigate: (screen: ScreenType, transitionStyle: 'push' | 'slide_up') => void;
+  onNavigate: (
+    screen: ScreenType,
+    transitionStyle: "push" | "slide_up",
+  ) => void;
   onClose: () => void;
   onNotify?: (message: string) => void;
 }
 
 interface MenuItem {
-  id: string; label: string; subtitle: string; screen: ScreenType;
-  index: string; image: string; imageWebp: string;
+  id: string;
+  label: string;
+  subtitle: string;
+  screen: ScreenType;
+  index: string;
+  image: string;
+  imageWebp: string;
 }
 
 const menuItems: MenuItem[] = [
-  { id: 'estates',    label: 'The Estates', subtitle: 'At a glance',        screen: 'reporting',       index: '01', image: menuImg1, imageWebp: menuImg1Webp },
-  { id: 'financial',  label: 'Revenue',     subtitle: 'This month',         screen: 'deep_dive',       index: '02', image: menuImg2, imageWebp: menuImg2Webp },
-  { id: 'operations', label: 'The Property', subtitle: 'Cameras & systems', screen: 'camera_expanded', index: '03', image: menuImg3, imageWebp: menuImg3Webp },
-  { id: 'calendar',   label: 'Calendar',    subtitle: 'Who\'s arriving',    screen: 'calendar',        index: '04', image: menuImg4, imageWebp: menuImg4Webp },
+  {
+    id: "estates",
+    label: "The Estates",
+    subtitle: "At a glance",
+    screen: "reporting",
+    index: "01",
+    image: menuImg1,
+    imageWebp: menuImg1Webp,
+  },
+  {
+    id: "financial",
+    label: "Revenue",
+    subtitle: "This month",
+    screen: "deep_dive",
+    index: "02",
+    image: menuImg2,
+    imageWebp: menuImg2Webp,
+  },
+  {
+    id: "operations",
+    label: "The Property",
+    subtitle: "Cameras & systems",
+    screen: "camera_expanded",
+    index: "03",
+    image: menuImg3,
+    imageWebp: menuImg3Webp,
+  },
+  {
+    id: "calendar",
+    label: "Calendar",
+    subtitle: "Who's arriving",
+    screen: "calendar",
+    index: "04",
+    image: menuImg4,
+    imageWebp: menuImg4Webp,
+  },
 ];
 
 // ── Framer Motion variants ──
@@ -40,12 +80,12 @@ const containerVariants = {
 };
 
 const panelEntranceVariants = {
-  hidden: { scaleX: 0, opacity: 0 },
+  hidden: { clipPath: "inset(0 100% 0 0)", opacity: 0 },
   show: {
-    scaleX: 1,
+    clipPath: "inset(0 0% 0 0)",
     opacity: 1,
     transition: {
-      duration: 0.5,
+      duration: 0.8,
       ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
     },
   },
@@ -61,7 +101,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const touchStartY = useRef(0);
   const touchStartX = useRef(0);
-  const lastPanelId = sessionStorage.getItem('nav-last-panel');
+  const lastPanelId = sessionStorage.getItem("nav-last-panel");
   const initialIndex = (() => {
     if (lastPanelId) {
       const idx = menuItems.findIndex((item) => item.id === lastPanelId);
@@ -83,38 +123,38 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
     const focusable = (): HTMLElement[] =>
       Array.from(
         dialogRef.current?.querySelectorAll<HTMLElement>(
-          'button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])'
-        ) ?? []
+          'button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])',
+        ) ?? [],
       );
 
     focusable()[0]?.focus();
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         onClose();
         return;
       }
 
-      if (e.key === 'ArrowLeft') {
+      if (e.key === "ArrowLeft") {
         e.preventDefault();
         walk(-1);
         return;
       }
 
-      if (e.key === 'ArrowRight') {
+      if (e.key === "ArrowRight") {
         e.preventDefault();
         walk(1);
         return;
       }
 
-      if (e.key === 'Enter') {
+      if (e.key === "Enter") {
         e.preventDefault();
         const current = menuItems[activeIndexRef.current];
         handlePanelClick(current.screen, current.id);
         return;
       }
 
-      const panelKeys = ['1', '2', '3', '4'];
+      const panelKeys = ["1", "2", "3", "4"];
       const keyIndex = panelKeys.indexOf(e.key);
       if (keyIndex !== -1 && keyIndex < menuItems.length) {
         e.preventDefault();
@@ -122,7 +162,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
         return;
       }
 
-      if (e.key !== 'Tab') return;
+      if (e.key !== "Tab") return;
       const els = focusable();
       if (els.length === 0) return;
       const first = els[0];
@@ -140,9 +180,9 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener("keydown", handleKeyDown);
       previousFocusRef.current?.focus();
     };
   }, []);
@@ -155,7 +195,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
     if (selectedPanel) return;
     setSelectedPanel(id);
     setTimeout(() => {
-      onNavigate(screen, 'push');
+      onNavigate(screen, "push");
     }, 180);
   };
 
@@ -202,7 +242,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
   };
 
   useEffect(() => {
-    sessionStorage.setItem('nav-last-panel', menuItems[activeIndex].id);
+    sessionStorage.setItem("nav-last-panel", menuItems[activeIndex].id);
   }, [activeIndex]);
 
   return (
@@ -212,7 +252,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
       aria-modal="true"
       aria-label="Navigation"
       className="relative w-full h-[100dvh] overflow-hidden"
-      style={{ background: 'var(--nav-shell-bg)' }}
+      style={{ background: "var(--nav-shell-bg)" }}
       onClick={handleShellClick}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
@@ -221,8 +261,8 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
       <header
         className="nav-header absolute top-0 left-0 right-0 z-[100] flex items-center justify-between"
         style={{
-          height: 'var(--nav-header-height)',
-          padding: '0 44px',
+          height: "var(--nav-header-height)",
+          padding: "0 44px",
         }}
       >
         <span className="nav-portal__wordmark">Vallarta Estates</span>
@@ -240,8 +280,24 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
             aria-hidden="true"
             focusable="false"
           >
-            <line x1="1" y1="1" x2="10" y2="10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-            <line x1="10" y1="1" x2="1" y2="10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            <line
+              x1="1"
+              y1="1"
+              x2="10"
+              y2="10"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+            <line
+              x1="10"
+              y1="1"
+              x2="1"
+              y2="10"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
           </svg>
         </button>
       </header>
@@ -256,11 +312,9 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
         {menuItems.map((item, i) => (
           <motion.div
             key={item.id}
-            layout
             variants={panelEntranceVariants}
             style={{ originX: 0 }}
-            transition={{ layout: layoutTransition }}
-            className={`nav-panel ${i === activeIndex ? 'nav-panel--active' : 'nav-panel--collapsed'} relative h-full overflow-hidden${selectedPanel === item.id ? ' nav-panel--selected' : ''}`}
+            className={`nav-panel ${i === activeIndex ? "nav-panel--active" : "nav-panel--collapsed"} relative h-full overflow-hidden${selectedPanel === item.id ? " nav-panel--selected" : ""}`}
             onClick={() => {
               if (i !== activeIndex) {
                 setActiveIndex(i);
@@ -269,12 +323,16 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
               }
             }}
             role="button"
-            aria-label={i === activeIndex ? `Navigate to ${item.label}` : `Expand ${item.label}`}
+            aria-label={
+              i === activeIndex
+                ? `Navigate to ${item.label}`
+                : `Expand ${item.label}`
+            }
             tabIndex={0}
           >
             {/* Photo skeleton */}
             <div
-              className={`nav-portal__img-skeleton ${loadedImages[item.id] ? 'nav-portal__img-skeleton--hidden' : ''}`}
+              className={`nav-portal__img-skeleton ${loadedImages[item.id] ? "nav-portal__img-skeleton--hidden" : ""}`}
               aria-hidden="true"
             />
 
@@ -284,7 +342,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
               <img
                 src={item.image}
                 alt=""
-                className={`nav-portal__img ${loadedImages[item.id] ? 'nav-portal__img--loaded' : ''}`}
+                className={`nav-portal__img ${loadedImages[item.id] ? "nav-portal__img--loaded" : ""}`}
                 onLoad={() => handleImageLoad(item.id)}
               />
             </picture>
@@ -295,7 +353,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
               style={{
                 zIndex: 2,
                 background:
-                  'linear-gradient(to bottom, var(--nav-scrim-top) 0%, transparent 20%), linear-gradient(to top, var(--nav-scrim-heavy) 0%, var(--nav-scrim-mid) 36%, var(--nav-scrim-light) 65%, transparent 100%)',
+                  "linear-gradient(to bottom, var(--nav-scrim-top) 0%, transparent 20%), linear-gradient(to top, var(--nav-scrim-heavy) 0%, var(--nav-scrim-mid) 36%, var(--nav-scrim-light) 65%, transparent 100%)",
               }}
             />
 
@@ -312,10 +370,10 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}
                   transition={{
-                    duration: 0.35,
+                    duration: 0.8,
                     delay: 0.18,
                     ease: [0.16, 1, 0.3, 1],
-                    exit: { duration: 0.15, delay: 0 },
+                    exit: { duration: 0.3, delay: 0 },
                   }}
                 >
                   <span className="nav-portal__index">{item.index}</span>
@@ -326,7 +384,9 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
                     transition={{ delay: 0.38, duration: 0.3 }}
                     style={{ lineHeight: 1 }}
                   >
-                    <span className="nav-panel-cta-arrow" aria-hidden="true">→</span>
+                    <span className="nav-panel-cta-arrow" aria-hidden="true">
+                      →
+                    </span>
                   </motion.div>
                   <span className="nav-panel__subtitle">{item.subtitle}</span>
                 </motion.div>
@@ -337,7 +397,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 0.2 }}
+                  transition={{ duration: 0.4 }}
                 >
                   {item.label}
                 </motion.div>
