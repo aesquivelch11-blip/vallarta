@@ -31,8 +31,8 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
   {
     id: "estates",
-    label: "The Estates",
-    subtitle: "Overview",
+    label: "Overview",
+    subtitle: "Performance at a glance",
     screen: "reporting",
     image: menuImg1,
     imageWebp: menuImg1Webp,
@@ -47,7 +47,7 @@ const menuItems: MenuItem[] = [
   },
   {
     id: "operations",
-    label: "The Property",
+    label: "Operations",
     subtitle: "Cameras and systems",
     screen: "camera_expanded",
     image: menuImg3,
