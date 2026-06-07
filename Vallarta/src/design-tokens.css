@@ -461,7 +461,6 @@
 
   .nav-portal__dot { transition: none; }
   .nav-panel-cta-arrow { animation: none; opacity: 0.65; }
-  .nav-portal-line { transition: none; }
 }
 
 /* ── Nav Menu — mobile adaptation ── */
