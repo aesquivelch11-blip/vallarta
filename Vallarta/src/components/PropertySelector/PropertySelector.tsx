@@ -36,6 +36,7 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
   }, [total]);
 
   const goTo = useCallback((index: number) => {
+    // Fade transition used when jumping >2 slides (AnimatePresence key change naturally crossfades)
     setCurrentIndex(index);
     setIsContentOpen(false);
   }, []);

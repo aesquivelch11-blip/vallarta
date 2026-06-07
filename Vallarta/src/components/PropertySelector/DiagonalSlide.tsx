@@ -60,8 +60,8 @@ export default function DiagonalSlide({ property, position, isActive, displayInd
           <motion.span
             className="font-sans text-[0.75rem] uppercase tracking-[0.20em] text-[#C9B8A0]/60 shrink-0"
             style={{ writingMode: 'vertical-rl' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
           >
             {property.location}
