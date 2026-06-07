@@ -91,16 +91,12 @@ const panelEntranceVariants = {
   },
 };
 
-const layoutTransition = {
-  duration: 0.7,
-  ease: [0.76, 0, 0.24, 1] as [number, number, number, number],
-};
-
 export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const touchStartY = useRef(0);
   const touchStartX = useRef(0);
+  const navTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastPanelId = sessionStorage.getItem("nav-last-panel");
   const initialIndex = (() => {
     if (lastPanelId) {
@@ -111,8 +107,6 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
   })();
 
   const [activeIndex, setActiveIndex] = useState(initialIndex);
-  const activeIndexRef = useRef(activeIndex);
-  activeIndexRef.current = activeIndex;
 
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   const [selectedPanel, setSelectedPanel] = useState<string | null>(null);
@@ -147,13 +141,6 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
         return;
       }
 
-      if (e.key === "Enter") {
-        e.preventDefault();
-        const current = menuItems[activeIndexRef.current];
-        handlePanelClick(current.screen, current.id);
-        return;
-      }
-
       const panelKeys = ["1", "2", "3", "4"];
       const keyIndex = panelKeys.indexOf(e.key);
       if (keyIndex !== -1 && keyIndex < menuItems.length) {
@@ -183,6 +170,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
     document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
+      if (navTimeoutRef.current) clearTimeout(navTimeoutRef.current);
       previousFocusRef.current?.focus();
     };
   }, []);
@@ -194,7 +182,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
   const handlePanelClick = (screen: ScreenType, id: string) => {
     if (selectedPanel) return;
     setSelectedPanel(id);
-    setTimeout(() => {
+    navTimeoutRef.current = setTimeout(() => {
       onNavigate(screen, "push");
     }, 180);
   };
@@ -315,28 +303,22 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
             variants={panelEntranceVariants}
             style={{ originX: 0 }}
             className={`nav-panel ${i === activeIndex ? "nav-panel--active" : "nav-panel--collapsed"} relative h-full overflow-hidden${selectedPanel === item.id ? " nav-panel--selected" : ""}`}
-            onClick={() => {
-              if (i !== activeIndex) {
-                setActiveIndex(i);
-              } else {
-                handlePanelClick(item.screen, item.id);
-              }
-            }}
-            role="button"
-            aria-label={
-              i === activeIndex
-                ? `Navigate to ${item.label}`
-                : `Expand ${item.label}`
-            }
-            tabIndex={0}
+            onMouseEnter={() => setActiveIndex(i)}
           >
-            {/* Photo skeleton */}
+            <button
+              type="button"
+              className="nav-panel__preview"
+              aria-label={i === activeIndex ? `Selected ${item.label}` : `Preview ${item.label}`}
+              aria-pressed={i === activeIndex}
+              onFocus={() => setActiveIndex(i)}
+              onClick={() => setActiveIndex(i)}
+            />
+
             <div
               className={`nav-portal__img-skeleton ${loadedImages[item.id] ? "nav-portal__img-skeleton--hidden" : ""}`}
               aria-hidden="true"
             />
 
-            {/* Full-bleed photo */}
             <picture aria-hidden="true">
               <source srcSet={item.imageWebp} type="image/webp" />
               <img
@@ -347,7 +329,6 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
               />
             </picture>
 
-            {/* Scrim */}
             <div
               className="absolute inset-0 pointer-events-none"
               style={{
@@ -357,10 +338,8 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
               }}
             />
 
-            {/* Gold bottom line */}
             <div className="nav-portal-line" />
 
-            {/* Panel content — animated switch between collapsed title and active content */}
             <AnimatePresence mode="wait">
               {i === activeIndex ? (
                 <motion.div
@@ -376,6 +355,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
                     exit: { duration: 0.3, delay: 0 },
                   }}
                 >
+                  <span className="nav-panel__status">Selected</span>
                   <span className="nav-portal__index">{item.index}</span>
                   <span className="nav-portal__label">{item.label}</span>
                   <motion.div
@@ -388,6 +368,17 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
                       →
                     </span>
                   </motion.div>
+                  <button
+                    type="button"
+                    className="nav-panel__cta"
+                    aria-label={`Open ${item.label}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handlePanelClick(item.screen, item.id);
+                    }}
+                  >
+                    Open {item.label}
+                  </button>
                   <span className="nav-panel__subtitle">{item.subtitle}</span>
                 </motion.div>
               ) : (
