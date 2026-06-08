@@ -15,6 +15,8 @@ export interface EstateMetric {
   trend: 'up' | 'stable' | 'down';
 }
 
+export type OccupancyStatus = 'available' | 'occupied' | 'maintenance' | 'reserved';
+
 export interface Property {
   id: string;
   name: string;
@@ -23,6 +25,7 @@ export interface Property {
   imageUrl: string;
   imageWebp?: string;
   images?: string[];        // gallery images; imageUrl is always images[0]
+  occupancyStatus: OccupancyStatus;
   metrics?: {
     bedrooms: number;
     occupancy: string;
