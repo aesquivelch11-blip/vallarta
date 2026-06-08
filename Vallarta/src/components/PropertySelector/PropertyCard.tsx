@@ -19,8 +19,6 @@ export default function PropertyCard({ property, onSelect }: PropertyCardProps) 
     <motion.button
       onClick={() => onSelect(property.id)}
       className="group relative w-full h-full text-left cursor-pointer overflow-hidden"
-      whileTap={{ scale: 0.97 }}
-      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
       aria-label={`View ${property.name}`}
     >
       <div className="relative w-full h-full overflow-hidden bg-[var(--color-canvas-elevated,#141414)]">

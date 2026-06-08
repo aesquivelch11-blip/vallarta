@@ -87,7 +87,6 @@ export default function PropertyFilters({
                     : 'rgba(255,255,255,0.4)',
                   transition: 'color 0.2s ease, border-color 0.2s ease',
                 }}
-                whileTap={{ scale: 0.97 }}
                 aria-pressed={isActive}
               >
                 {label}
