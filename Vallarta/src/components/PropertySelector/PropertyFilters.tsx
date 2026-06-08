@@ -32,9 +32,11 @@ export default function PropertyFilters({
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search..."
-          className="w-full bg-transparent font-sans outline-none"
+          className="w-full bg-transparent outline-none"
           style={{
+            fontFamily: 'var(--font-ui)',
             fontSize: '0.8125rem',
+            fontWeight: 400,
             letterSpacing: '0.02em',
             padding: '8px 0',
             color: 'rgba(255,255,255,0.9)',
@@ -70,8 +72,9 @@ export default function PropertyFilters({
               <motion.button
                 type="button"
                 onClick={() => onStatusChange(value)}
-                className="cursor-pointer font-sans uppercase"
+                className="cursor-pointer uppercase"
                 style={{
+                  fontFamily: 'var(--font-ui)',
                   fontSize: '0.5625rem',
                   fontWeight: isActive ? 500 : 400,
                   letterSpacing: '0.20em',
