@@ -24,6 +24,11 @@
     --color-accent-live-glow: oklch(38% 0.15 12 / 0.25);
     --color-accent-live-bg: oklch(38% 0.15 12 / 0.08);
 
+    /* --- Dashboard Task Status --- */
+    --color-task-urgent: oklch(53% 0.12 25);
+    --color-task-pending: var(--color-ink-secondary);
+    --color-task-scheduled: var(--color-ink-muted);
+
     /* --- Login Surface: Banderas Palette --- */
     --login-canvas: #faf8f5; /* Bleached Bone */
     --login-surface: #f2ece4; /* Travertine Cream */

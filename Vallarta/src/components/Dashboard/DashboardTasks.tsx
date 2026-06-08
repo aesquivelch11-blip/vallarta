@@ -15,9 +15,9 @@ const statusLabel: Record<DashboardTask['status'], string> = {
 };
 
 const statusColor: Record<DashboardTask['status'], string> = {
-  urgent: 'oklch(53% 0.12 25)',
-  pending: 'var(--color-ink-secondary)',
-  scheduled: 'var(--color-ink-muted)',
+  urgent: 'var(--color-task-urgent)',
+  pending: 'var(--color-task-pending)',
+  scheduled: 'var(--color-task-scheduled)',
 };
 
 export default function DashboardTasks({ data, onNavigate }: DashboardTasksProps) {
