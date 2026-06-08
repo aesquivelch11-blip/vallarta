@@ -56,22 +56,24 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
         }}
       >
         <h1
-          className="font-sans uppercase"
+          className="uppercase"
           style={{
+            fontFamily: 'var(--font-ui)',
             fontSize: '0.6875rem',
             fontWeight: 500,
             letterSpacing: '0.35em',
-            color: 'var(--color-ink, #F5F1E8)',
+            color: 'rgba(255,255,255,0.6)',
           }}
         >
           Properties
         </h1>
         <span
-          className="font-sans"
           style={{
+            fontFamily: 'var(--font-ui)',
             fontSize: '0.625rem',
+            fontWeight: 400,
             letterSpacing: '0.10em',
-            color: 'var(--color-ink-secondary, rgba(201,184,160,0.5))',
+            color: 'rgba(255,255,255,0.4)',
           }}
         >
           {filteredProperties.length} of {sampleProperties.length}
