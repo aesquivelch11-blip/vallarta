@@ -1,7 +1,8 @@
 import React from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Star } from 'lucide-react';
 import { ScreenType } from '../../types';
-import { DashboardData, GuestEvent } from './dashboardData';
+import { DashboardData, GuestEvent, formatTrendPercent, getTrendDirection } from './dashboardData';
+import MetricCard from './MetricCard';
 
 interface DashboardTodayProps {
   data: DashboardData;
@@ -11,7 +12,7 @@ interface DashboardTodayProps {
 function GuestList({ guests, italic }: { guests: GuestEvent[]; italic: boolean }) {
   if (guests.length === 0) return null;
   return (
-    <ul style={{ margin: '6px 0 0', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+    <ul style={{ margin: '8px 0 0', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '4px' }}>
       {guests.map(g => (
         <li
           key={g.id}
@@ -22,19 +23,21 @@ function GuestList({ guests, italic }: { guests: GuestEvent[]; italic: boolean }
             fontWeight: 400,
             color: 'var(--color-ink)',
             lineHeight: 1.3,
+            display: 'flex',
+            alignItems: 'baseline',
+            gap: '8px',
           }}
         >
-          {g.name}
+          <span>{g.name}</span>
           <span
             style={{
               fontFamily: 'var(--font-ui)',
-              fontSize: '0.625rem',
+              fontSize: '0.5625rem',
               fontStyle: 'normal',
               fontWeight: 400,
               letterSpacing: '0.12em',
               textTransform: 'uppercase',
               color: 'var(--color-ink-secondary)',
-              marginLeft: '8px',
             }}
           >
             {g.nights}n
@@ -53,8 +56,7 @@ function EmptyGuests({ label }: { label: string }) {
         fontSize: '0.75rem',
         fontWeight: 400,
         color: 'var(--color-ink-secondary)',
-        margin: '6px 0 0',
-        fontStyle: 'normal',
+        margin: '8px 0 0',
       }}
     >
       {label}
@@ -63,7 +65,21 @@ function EmptyGuests({ label }: { label: string }) {
 }
 
 export default function DashboardToday({ data, onNavigate }: DashboardTodayProps) {
-  const { occupancy, arrivalsToday, departuresToday, arrivalsTomorrow, departuresTomorrow } = data;
+  const {
+    occupancy,
+    occupancyPrev,
+    occupancyHistory,
+    arrivalsToday,
+    departuresToday,
+    arrivalsTomorrow,
+    departuresTomorrow,
+    lengthOfStay,
+    guestSatisfaction,
+  } = data;
+
+  const losPrev = 3.8;
+  const losTrendValue = formatTrendPercent(lengthOfStay.average, losPrev);
+  const losTrendDir = getTrendDirection(lengthOfStay.average, losPrev);
 
   return (
     <div
@@ -72,46 +88,106 @@ export default function DashboardToday({ data, onNavigate }: DashboardTodayProps
         flexDirection: 'column',
         height: '100%',
         padding: 'clamp(2rem, 4vw, 3rem) clamp(1.5rem, 3vw, 2.5rem)',
-        gap: 0,
       }}
     >
-      {/* Occupancy — dominant */}
-      <div style={{ marginBottom: 'clamp(2rem, 4vw, 3rem)' }}>
-        <p
-          style={{
-            fontFamily: 'var(--font-ui)',
-            fontSize: '0.625rem',
-            fontWeight: 500,
-            letterSpacing: '0.30em',
-            textTransform: 'uppercase',
-            color: 'var(--color-ink-secondary)',
-            margin: '0 0 8px',
+      {/* Metric grid: occupancy + LOS + satisfaction */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: 'clamp(24px, 4vw, 48px)',
+          marginBottom: 'clamp(2rem, 4vw, 3rem)',
+        }}
+      >
+        <MetricCard
+          label="Occupancy"
+          value={`${occupancy}%`}
+          trend={{
+            value: formatTrendPercent(occupancy, occupancyPrev),
+            direction: getTrendDirection(occupancy, occupancyPrev),
           }}
-        >
-          Occupancy
-        </p>
-        <p
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
-            fontWeight: 400,
-            letterSpacing: '-0.01em',
-            color: 'var(--color-ink)',
-            margin: 0,
-            lineHeight: 1,
-          }}
-        >
-          {occupancy}%
-        </p>
+          sparkline={occupancyHistory}
+          sparklineColor={
+            getTrendDirection(occupancy, occupancyPrev) === 'up'
+              ? 'var(--color-accent-positive)'
+              : getTrendDirection(occupancy, occupancyPrev) === 'down'
+                ? 'var(--color-accent-negative)'
+                : 'var(--color-ink-muted)'
+          }
+          valueSize="clamp(1.75rem, 3.5vw, 2.5rem)"
+        />
+
+        <MetricCard
+          label="Avg Stay"
+          value={`${lengthOfStay.average} nights`}
+          trend={{ value: losTrendValue, direction: losTrendDir }}
+          valueFont="ui"
+          valueSize="clamp(1.25rem, 2.5vw, 1.75rem)"
+        />
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <p
+            style={{
+              fontFamily: 'var(--font-ui)',
+              fontSize: '0.5625rem',
+              fontWeight: 500,
+              letterSpacing: '0.28em',
+              textTransform: 'uppercase',
+              color: 'var(--color-ink-secondary)',
+              margin: 0,
+              lineHeight: 1,
+            }}
+          >
+            Guest Rating
+          </p>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+            <p
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)',
+                fontWeight: 400,
+                letterSpacing: '-0.01em',
+                color: 'var(--color-ink)',
+                margin: 0,
+                lineHeight: 1,
+              }}
+            >
+              {guestSatisfaction.score}
+            </p>
+            <Star
+              size={14}
+              strokeWidth={1.5}
+              fill="var(--color-accent-warning)"
+              color="var(--color-accent-warning)"
+              style={{ opacity: 0.7 }}
+            />
+          </div>
+          <p
+            style={{
+              fontFamily: 'var(--font-ui)',
+              fontSize: '0.5625rem',
+              fontWeight: 400,
+              letterSpacing: '0.10em',
+              color: 'var(--color-ink-muted)',
+              margin: '2px 0 0',
+              lineHeight: 1,
+            }}
+          >
+            {guestSatisfaction.reviewCount} reviews
+          </p>
+        </div>
       </div>
 
-      {/* Arrivals — more visual weight */}
-      <div style={{ marginBottom: 'clamp(1.5rem, 3vw, 2rem)' }}>
+      {/* Divider */}
+      <div style={{ height: '1px', background: 'var(--color-border-subtle)', marginBottom: 'clamp(1.5rem, 3vw, 2rem)' }} />
+
+      {/* Arrivals */}
+      <div style={{ marginBottom: 'clamp(1.25rem, 2.5vw, 1.75rem)' }}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px' }}>
           <p
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+              fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)',
               fontWeight: 400,
               color: 'var(--color-ink)',
               margin: 0,
@@ -123,7 +199,7 @@ export default function DashboardToday({ data, onNavigate }: DashboardTodayProps
           <p
             style={{
               fontFamily: 'var(--font-ui)',
-              fontSize: '0.625rem',
+              fontSize: '0.5625rem',
               fontWeight: 500,
               letterSpacing: '0.25em',
               textTransform: 'uppercase',
@@ -142,7 +218,7 @@ export default function DashboardToday({ data, onNavigate }: DashboardTodayProps
           <p
             style={{
               fontFamily: 'var(--font-ui)',
-              fontSize: '0.625rem',
+              fontSize: '0.5625rem',
               fontWeight: 400,
               letterSpacing: '0.10em',
               textTransform: 'uppercase',
@@ -156,7 +232,7 @@ export default function DashboardToday({ data, onNavigate }: DashboardTodayProps
         )}
       </div>
 
-      {/* Departures — subordinate */}
+      {/* Departures */}
       <div style={{ marginBottom: 'auto' }}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px' }}>
           <p
