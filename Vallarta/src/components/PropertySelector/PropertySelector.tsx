@@ -48,48 +48,59 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
       </div>
 
       {/* Header */}
-      <header
-        className="sticky top-0 z-40 flex items-center justify-between"
-        style={{
-          height: '48px',
-          padding: '0 24px',
-          background: 'var(--color-canvas, #0c0c0c)',
-        }}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
       >
-        <h1
-          className="uppercase"
+        <header
+          className="sticky top-0 z-40 flex items-center justify-between"
           style={{
-            fontFamily: 'var(--font-ui)',
-            fontSize: '0.6875rem',
-            fontWeight: 500,
-            letterSpacing: '0.35em',
-            color: 'rgba(255,255,255,0.6)',
+            height: '48px',
+            padding: '0 24px',
+            background: 'var(--color-canvas, #0c0c0c)',
           }}
         >
-          Properties
-        </h1>
-        <span
-          style={{
-            fontFamily: 'var(--font-ui)',
-            fontSize: '0.625rem',
-            fontWeight: 400,
-            letterSpacing: '0.10em',
-            color: 'rgba(255,255,255,0.4)',
-          }}
-        >
-          {filteredProperties.length} of {sampleProperties.length}
-        </span>
-      </header>
+          <h1
+            className="uppercase"
+            style={{
+              fontFamily: 'var(--font-ui)',
+              fontSize: '0.6875rem',
+              fontWeight: 500,
+              letterSpacing: '0.35em',
+              color: 'rgba(255,255,255,0.6)',
+            }}
+          >
+            Properties
+          </h1>
+          <span
+            style={{
+              fontFamily: 'var(--font-ui)',
+              fontSize: '0.625rem',
+              fontWeight: 400,
+              letterSpacing: '0.10em',
+              color: 'rgba(255,255,255,0.4)',
+            }}
+          >
+            {filteredProperties.length} of {sampleProperties.length}
+          </span>
+        </header>
+      </motion.div>
 
       {/* Filters */}
-      <div style={{ padding: '0 24px 8px' }}>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+        style={{ padding: '0 24px 8px' }}
+      >
         <PropertyFilters
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
           activeStatus={activeStatus}
           onStatusChange={setActiveStatus}
         />
-      </div>
+      </motion.div>
 
       {/* Grid */}
       <div style={{ padding: 0 }}>
@@ -122,7 +133,7 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
                     }}
                     exit={{ opacity: 0 }}
                     transition={{
-                      duration: 0.5,
+                      duration: i === 2 || i === 4 ? 0.4 : 0.5,
                       ease: [0.16, 1, 0.3, 1],
                       delay: i * 0.08,
                     }}
