@@ -25,7 +25,7 @@ export default function PropertyCard({ property, onSelect }: PropertyCardProps) 
     >
       <div className="relative w-full h-full overflow-hidden bg-[var(--color-canvas-elevated,#141414)]">
         <picture>
-          <source srcSet={property.imageWebp} type="image/webp" />
+          {property.imageWebp && <source srcSet={property.imageWebp} type="image/webp" />}
           <img
             src={property.imageUrl}
             alt={property.name}
