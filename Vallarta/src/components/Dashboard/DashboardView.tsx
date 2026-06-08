@@ -7,6 +7,7 @@ import DashboardDomainNav, { Domain } from './DashboardDomainNav';
 import DashboardToday from './DashboardToday';
 import DashboardFinancials from './DashboardFinancials';
 import DashboardTasks from './DashboardTasks';
+import DashboardErrorBoundary from './DashboardErrorBoundary';
 
 interface DashboardViewProps {
   propertyId: string | null;
@@ -191,7 +192,9 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
 
             {/* Domain content */}
             <div style={{ flex: 1, overflowY: 'auto' }}>
-              {renderDomain()}
+              <DashboardErrorBoundary>
+                {renderDomain()}
+              </DashboardErrorBoundary>
             </div>
           </div>
         </div>
