@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { ScreenType } from '../../types';
-import { DashboardData, GuestEvent } from './dashboardData';
+import { DashboardData, GuestEvent, formatTrendPercent, getTrendDirection } from './dashboardData';
 
 interface DashboardTodayProps {
   data: DashboardData;
@@ -90,19 +90,40 @@ export default function DashboardToday({ data, onNavigate }: DashboardTodayProps
         >
           {occupancy}%
         </p>
-        <p
-          style={{
-            fontFamily: 'var(--font-ui)',
-            fontSize: '0.625rem',
-            fontWeight: 500,
-            letterSpacing: '0.30em',
-            textTransform: 'uppercase',
-            color: 'var(--color-ink-secondary)',
-            margin: '8px 0 0',
-          }}
-        >
-          OCCUPANCY
-        </p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '8px' }}>
+          <p
+            style={{
+              fontFamily: 'var(--font-ui)',
+              fontSize: '0.625rem',
+              fontWeight: 500,
+              letterSpacing: '0.30em',
+              textTransform: 'uppercase',
+              color: 'var(--color-ink-secondary)',
+              margin: 0,
+            }}
+          >
+            OCCUPANCY
+          </p>
+          <p
+            style={{
+              fontFamily: 'var(--font-ui)',
+              fontSize: '0.5625rem',
+              fontWeight: 500,
+              letterSpacing: '0.10em',
+              textTransform: 'uppercase',
+              color: (() => {
+                const dir = getTrendDirection(occupancy, data.occupancyPrev);
+                if (dir === 'up') return 'var(--color-accent-positive)';
+                if (dir === 'down') return 'var(--color-accent-negative)';
+                return 'var(--color-ink-muted)';
+              })(),
+              margin: 0,
+              opacity: 0.85,
+            }}
+          >
+            {formatTrendPercent(occupancy, data.occupancyPrev)}
+          </p>
+        </div>
       </div>
 
       {/* Arrivals — more visual weight */}
