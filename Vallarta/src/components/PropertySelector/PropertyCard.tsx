@@ -1,13 +1,13 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Property } from '../../types';
+import { Property, OccupancyStatus } from '../../types';
 
 interface PropertyCardProps {
   property: Property;
   onSelect: (propertyId: string) => void;
 }
 
-const STATUS_LABELS: Record<string, string> = {
+const STATUS_LABELS: Record<OccupancyStatus, string> = {
   available: 'Available',
   occupied: 'Occupied',
   maintenance: 'Maintenance',
