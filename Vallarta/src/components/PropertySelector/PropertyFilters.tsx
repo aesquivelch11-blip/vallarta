@@ -72,7 +72,7 @@ export default function PropertyFilters({
               <motion.button
                 type="button"
                 onClick={() => onStatusChange(value)}
-                className="cursor-pointer uppercase"
+                className="cursor-pointer uppercase focus-visible:outline-none"
                 style={{
                   fontFamily: 'var(--font-ui)',
                   fontSize: '0.5625rem',
@@ -86,6 +86,14 @@ export default function PropertyFilters({
                     ? 'rgba(255,255,255,0.9)'
                     : 'rgba(255,255,255,0.4)',
                   transition: 'color 0.2s ease, border-color 0.2s ease',
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderBottomColor = 'var(--color-dark-accent, #d49a55)';
+                }}
+                onBlur={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.borderBottomColor = 'transparent';
+                  }
                 }}
                 aria-pressed={isActive}
               >

@@ -18,7 +18,16 @@ export default function PropertyCard({ property, onSelect }: PropertyCardProps) 
   return (
     <motion.button
       onClick={() => onSelect(property.id)}
-      className="group relative w-full h-full text-left cursor-pointer overflow-hidden"
+      className="group relative w-full h-full text-left cursor-pointer overflow-hidden focus-visible:outline-none"
+      style={{
+        transition: 'box-shadow 0.2s ease',
+      }}
+      onFocus={(e) => {
+        e.currentTarget.style.boxShadow = 'inset 0 0 0 2px var(--color-dark-accent, #d49a55)';
+      }}
+      onBlur={(e) => {
+        e.currentTarget.style.boxShadow = 'none';
+      }}
       aria-label={`View ${property.name}`}
     >
       <div className="relative w-full h-full overflow-hidden bg-[var(--color-canvas-elevated,#141414)]">
