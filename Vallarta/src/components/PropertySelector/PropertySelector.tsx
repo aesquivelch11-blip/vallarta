@@ -91,7 +91,7 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
       </div>
 
       {/* Grid */}
-      <div style={{ padding: '0 0 0' }}>
+      <div style={{ padding: 0 }}>
         {filteredProperties.length > 0 ? (
           <div
             className="grid"
