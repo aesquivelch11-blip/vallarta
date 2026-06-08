@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScreenType } from '../../types';
 import { sampleProperties } from '../PropertySelector/propertyData';
 import { getDashboardData } from './dashboardData';
@@ -16,6 +16,12 @@ interface DashboardViewProps {
 
 export default function DashboardView({ propertyId, onNavigate, onNotify }: DashboardViewProps) {
   const [activeDomain, setActiveDomain] = useState<Domain>('today');
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 400);
+    return () => clearTimeout(timer);
+  }, []);
 
   const property = sampleProperties.find(p => p.id === propertyId) ?? sampleProperties[0];
   const data = getDashboardData(property.id);
@@ -30,6 +36,86 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
         return <DashboardTasks data={data} onNavigate={onNavigate} />;
     }
   };
+
+  if (isLoading) {
+    return (
+      <div
+        className="w-full"
+        style={{
+          minHeight: '100dvh',
+          background: 'var(--color-canvas)',
+          display: 'grid',
+          gridTemplateColumns: '1fr',
+          gridTemplateRows: 'auto 1fr',
+        }}
+      >
+        {/* Mobile skeleton */}
+        <div
+          className="lg:hidden"
+          style={{
+            height: 'clamp(180px, 30vw, 220px)',
+            background: 'var(--color-border-subtle)',
+            opacity: 0.5,
+          }}
+        />
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateRows: 'auto 1fr',
+          }}
+          className="grid-cols-1 lg:grid-cols-[58fr_42fr] lg:h-[100dvh]"
+        >
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              padding: 'clamp(2rem, 4vw, 3rem) clamp(1.5rem, 3vw, 2.5rem)',
+              gap: '16px',
+            }}
+          >
+            {/* Skeleton lines */}
+            <div style={{
+              width: '40%',
+              height: 'clamp(2rem, 4vw, 3rem)',
+              background: 'var(--color-border-subtle)',
+              borderRadius: '4px',
+              opacity: 0.6,
+            }} />
+            <div style={{
+              width: '60%',
+              height: '1rem',
+              background: 'var(--color-border-subtle)',
+              borderRadius: '4px',
+              opacity: 0.4,
+            }} />
+            <div style={{
+              width: '50%',
+              height: '1rem',
+              background: 'var(--color-border-subtle)',
+              borderRadius: '4px',
+              opacity: 0.4,
+            }} />
+            <div style={{
+              width: '30%',
+              height: '0.75rem',
+              background: 'var(--color-border-subtle)',
+              borderRadius: '4px',
+              opacity: 0.3,
+              marginTop: '16px',
+            }} />
+          </div>
+          <div
+            className="hidden lg:block"
+            style={{
+              height: '100dvh',
+              background: 'var(--color-border-subtle)',
+              opacity: 0.3,
+            }}
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
