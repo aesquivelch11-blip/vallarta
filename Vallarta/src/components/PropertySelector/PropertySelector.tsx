@@ -14,8 +14,6 @@ interface PropertySelectorProps {
 export default function PropertySelector({ onNavigate, onSelectProperty, onNotify }: PropertySelectorProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeStatus, setActiveStatus] = useState<OccupancyStatus | 'all'>('all');
-  const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
-
   const filteredProperties = useMemo(() => {
     return sampleProperties.filter((property) => {
       const matchesSearch =
@@ -32,12 +30,7 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
 
   const handleSelect = useCallback(
     (propertyId: string) => {
-      setSelectedPropertyId(propertyId);
-      // Allow React to commit the state update so the `exit` animations
-      // correctly identify the selected item, then navigate instantly.
-      setTimeout(() => {
-        onSelectProperty(propertyId);
-      }, 10);
+      onSelectProperty(propertyId);
     },
     [onSelectProperty],
   );
@@ -110,19 +103,14 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
             }}
           >
             <AnimatePresence mode="popLayout">
-              {filteredProperties.map((property, i) => {
-                const isSelected = selectedPropertyId === property.id;
-                const isAnotherSelected = selectedPropertyId !== null && !isSelected;
-
-                return (
+              {filteredProperties.map((property, i) => (
                   <motion.div
                     key={property.id}
                     layoutId={`container-${property.id}`}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ 
-                      opacity: isAnotherSelected ? 0.5 : 1,
+                      opacity: 1,
                       y: 0,
-                      zIndex: isSelected ? 50 : 1
                     }}
                     exit={{ opacity: 0 }}
                     transition={{
@@ -140,8 +128,8 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
                       onSelect={handleSelect} 
                     />
                   </motion.div>
-                );
-              })}
+                ))
+              }
             </AnimatePresence>
           </div>
         ) : (
