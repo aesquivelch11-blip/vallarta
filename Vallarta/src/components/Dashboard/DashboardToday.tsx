@@ -77,6 +77,7 @@ export default function DashboardToday({ data, onNavigate }: DashboardTodayProps
     guestSatisfaction,
   } = data;
 
+  const occupancyDir = getTrendDirection(occupancy, occupancyPrev);
   const losPrev = 3.8;
   const losTrendValue = formatTrendPercent(lengthOfStay.average, losPrev);
   const losTrendDir = getTrendDirection(lengthOfStay.average, losPrev);
@@ -104,13 +105,13 @@ export default function DashboardToday({ data, onNavigate }: DashboardTodayProps
           value={`${occupancy}%`}
           trend={{
             value: formatTrendPercent(occupancy, occupancyPrev),
-            direction: getTrendDirection(occupancy, occupancyPrev),
+            direction: occupancyDir,
           }}
           sparkline={occupancyHistory}
           sparklineColor={
-            getTrendDirection(occupancy, occupancyPrev) === 'up'
+            occupancyDir === 'up'
               ? 'var(--color-accent-positive)'
-              : getTrendDirection(occupancy, occupancyPrev) === 'down'
+              : occupancyDir === 'down'
                 ? 'var(--color-accent-negative)'
                 : 'var(--color-ink-muted)'
           }
