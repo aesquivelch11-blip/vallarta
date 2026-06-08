@@ -56,6 +56,7 @@ export default function PropertyFilters({
             <React.Fragment key={value}>
               {index > 0 && (
                 <span
+                  aria-hidden="true"
                   className="font-sans"
                   style={{
                     fontSize: '0.5625rem',
@@ -67,6 +68,7 @@ export default function PropertyFilters({
                 </span>
               )}
               <motion.button
+                type="button"
                 onClick={() => onStatusChange(value)}
                 className="cursor-pointer font-sans uppercase"
                 style={{
