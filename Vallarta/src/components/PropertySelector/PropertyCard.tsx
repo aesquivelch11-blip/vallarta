@@ -35,9 +35,17 @@ export default function PropertyCard({ property, onSelect }: PropertyCardProps) 
 
         {/* Bottom gradient overlay */}
         <div
-          className="absolute inset-0 pointer-events-none transition-opacity duration-300"
+          className="absolute inset-0 pointer-events-none"
           style={{
             background: 'linear-gradient(to top, rgba(12,12,12,0.75) 0%, rgba(12,12,12,0.2) 40%, transparent 60%)',
+            transition: 'opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1)',
+          }}
+        />
+        <div
+          className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100"
+          style={{
+            background: 'linear-gradient(to top, rgba(12,12,12,0.9) 0%, rgba(12,12,12,0.3) 40%, transparent 60%)',
+            transition: 'opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1)',
           }}
         />
 
