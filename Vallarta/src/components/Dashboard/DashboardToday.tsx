@@ -78,7 +78,7 @@ export default function DashboardToday({ data, onNavigate }: DashboardTodayProps
   } = data;
 
   const occupancyDir = getTrendDirection(occupancy, occupancyPrev);
-  const losPrev = 3.8;
+  const losPrev = 3.8; // previous period average — placeholder until historical LOS data is available
   const losTrendValue = formatTrendPercent(lengthOfStay.average, losPrev);
   const losTrendDir = getTrendDirection(lengthOfStay.average, losPrev);
 
