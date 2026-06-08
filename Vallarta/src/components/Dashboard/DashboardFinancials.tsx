@@ -62,6 +62,7 @@ export default function DashboardFinancials({ data, onNavigate }: DashboardFinan
         }}
       >
         <button
+          className="dashboard-focus"
           onClick={goNextPeriod}
           disabled={selectedPeriodIndex <= 0}
           aria-label="Next period"
@@ -90,6 +91,7 @@ export default function DashboardFinancials({ data, onNavigate }: DashboardFinan
           {period.label}
         </span>
         <button
+          className="dashboard-focus"
           onClick={goPrevPeriod}
           disabled={selectedPeriodIndex >= periods.length - 1}
           aria-label="Previous period"
@@ -158,6 +160,7 @@ export default function DashboardFinancials({ data, onNavigate }: DashboardFinan
 
       {/* Nav link */}
       <button
+        className="dashboard-link"
         onClick={() => onNavigate('reporting', 'push')}
         style={{
           marginTop: 'clamp(1.5rem, 3vw, 2rem)',

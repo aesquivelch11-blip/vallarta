@@ -667,6 +667,19 @@ body {
     color: var(--color-ink-secondary);
 }
 
+/* Dashboard focus utilities */
+.dashboard-focus:focus-visible {
+  outline: 2px solid var(--color-ink-secondary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.dashboard-link:focus-visible {
+  outline: 2px solid var(--color-ink-secondary);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
 /* Live badge */
 .live-badge {
     display: inline-flex;

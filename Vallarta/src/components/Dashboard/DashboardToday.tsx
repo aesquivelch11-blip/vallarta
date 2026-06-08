@@ -210,6 +210,7 @@ export default function DashboardToday({ data, onNavigate }: DashboardTodayProps
 
       {/* Nav link */}
       <button
+        className="dashboard-link"
         onClick={() => onNavigate('calendar', 'push')}
         style={{
           marginTop: 'clamp(1.5rem, 3vw, 2rem)',
