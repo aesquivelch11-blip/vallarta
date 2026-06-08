@@ -1,9 +1,10 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ScreenType, OccupancyStatus } from '../../types';
 import { sampleProperties } from './propertyData';
 import PropertyCard from './PropertyCard';
 import PropertyFilters from './PropertyFilters';
+import PropertySkeleton from './PropertySkeleton';
 
 interface PropertySelectorProps {
   onNavigate: (screen: ScreenType, transitionStyle: 'push' | 'slide_up' | 'morph') => void;
@@ -15,6 +16,13 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
   const [searchQuery, setSearchQuery] = useState('');
   const [activeStatus, setActiveStatus] = useState<OccupancyStatus | 'all'>('all');
   const [hoveredPropertyId, setHoveredPropertyId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 600);
+    return () => clearTimeout(timer);
+  }, []);
+
   const filteredProperties = useMemo(() => {
     return sampleProperties.filter((property) => {
       const matchesSearch =
@@ -102,97 +110,117 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
         />
       </motion.div>
 
-      {/* Grid */}
-      <div style={{ padding: 0 }}>
-        {filteredProperties.length > 0 ? (
-          <div
-            className="grid"
-            style={{
-              gridTemplateColumns: '2fr 2fr 1fr',
-              gridTemplateRows: '1fr 1fr',
-              gap: '1px',
-              height: 'calc(100dvh - 48px)',
-              width: '100%',
-              background: 'var(--color-canvas, #0c0c0c)',
-            }}
-          >
-            <AnimatePresence mode="sync">
-              {filteredProperties.map((property, i) => {
-                const isHovered = hoveredPropertyId === property.id;
-                const isAnotherHovered = hoveredPropertyId !== null && !isHovered;
+      {/* Grid / Skeleton */}
+      {isLoading ? (
+        <div
+          className="grid"
+          style={{
+            gridTemplateColumns: '2fr 2fr 1fr',
+            gridTemplateRows: '1fr 1fr',
+            gap: '1px',
+            height: 'calc(100dvh - 48px)',
+            width: '100%',
+            background: 'var(--color-canvas, #0c0c0c)',
+          }}
+        >
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} style={{ gridColumn: i === 4 ? 'span 2' : undefined }}>
+              <PropertySkeleton />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div style={{ padding: 0 }}>
+          {filteredProperties.length > 0 ? (
+            <div
+              className="grid"
+              style={{
+                gridTemplateColumns: '2fr 2fr 1fr',
+                gridTemplateRows: '1fr 1fr',
+                gap: '1px',
+                height: 'calc(100dvh - 48px)',
+                width: '100%',
+                background: 'var(--color-canvas, #0c0c0c)',
+              }}
+            >
+              <AnimatePresence mode="sync">
+                {filteredProperties.map((property, i) => {
+                  const isHovered = hoveredPropertyId === property.id;
+                  const isAnotherHovered = hoveredPropertyId !== null && !isHovered;
 
-                return (
-                  <motion.div
-                    key={property.id}
-                    layoutId={`container-${property.id}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ 
-                      opacity: isAnotherHovered ? 0.8 : 1,
-                      y: 0,
-                      zIndex: isHovered ? 10 : 1,
-                    }}
-                    exit={{ opacity: 0 }}
-                    transition={{
-                      duration: i === 2 || i === 4 ? 0.4 : 0.5,
-                      ease: [0.16, 1, 0.3, 1],
-                      delay: i * 0.08,
-                    }}
-                    style={{
-                      gridColumn: i === 3 ? 'span 2' : undefined,
-                    }}
-                    className="relative overflow-hidden"
-                    onMouseEnter={() => setHoveredPropertyId(property.id)}
-                    onMouseLeave={() => setHoveredPropertyId(null)}
-                  >
-                    <PropertyCard 
-                      property={property} 
-                      onSelect={handleSelect} 
-                    />
-                  </motion.div>
-                );
-              })}
-            </AnimatePresence>
-          </div>
-        ) : (
-          <motion.div
-            className="flex flex-col items-center justify-center"
-            style={{ height: 'calc(100dvh - 48px)' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4 }}
-          >
-            <p
-              className="font-sans text-center"
-              style={{
-                fontSize: '0.8125rem',
-                color: 'var(--color-ink-secondary, rgba(201,184,160,0.4))',
-                letterSpacing: '0.02em',
-              }}
+                  return (
+                    <motion.div
+                      key={property.id}
+                      layoutId={`container-${property.id}`}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ 
+                        opacity: isAnotherHovered ? 0.8 : 1,
+                        y: 0,
+                        zIndex: isHovered ? 10 : 1,
+                      }}
+                      exit={{ opacity: 0 }}
+                      transition={{
+                        duration: i === 2 || i === 4 ? 0.4 : 0.5,
+                        ease: [0.16, 1, 0.3, 1],
+                        delay: i * 0.08,
+                      }}
+                      style={{
+                        gridColumn: i === 3 ? 'span 2' : undefined,
+                      }}
+                      className="relative overflow-hidden"
+                      onMouseEnter={() => setHoveredPropertyId(property.id)}
+                      onMouseLeave={() => setHoveredPropertyId(null)}
+                    >
+                      <PropertyCard 
+                        property={property} 
+                        onSelect={handleSelect} 
+                      />
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
+            </div>
+          ) : (
+            <motion.div
+              className="flex flex-col items-center justify-center"
+              style={{ height: 'calc(100dvh - 48px)' }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4 }}
             >
-              No properties match your search.
-            </p>
-            <button
-              onClick={() => {
-                setSearchQuery('');
-                setActiveStatus('all');
-              }}
-              className="mt-3 font-sans uppercase cursor-pointer"
-              style={{
-                fontSize: '0.5625rem',
-                fontWeight: 500,
-                letterSpacing: '0.20em',
-                color: 'var(--color-ink, #F5F1E8)',
-                background: 'none',
-                border: 'none',
-                padding: '8px 0',
-                borderBottom: '1px solid var(--color-ink, #F5F1E8)',
-              }}
-            >
-              Clear filters
-            </button>
-          </motion.div>
-        )}
-      </div>
+              <p
+                className="font-sans text-center"
+                style={{
+                  fontSize: '0.8125rem',
+                  color: 'var(--color-ink-secondary, rgba(201,184,160,0.4))',
+                  letterSpacing: '0.02em',
+                }}
+              >
+                No properties match your search.
+              </p>
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setActiveStatus('all');
+                }}
+                className="mt-3 font-sans uppercase cursor-pointer"
+                style={{
+                  fontSize: '0.5625rem',
+                  fontWeight: 500,
+                  letterSpacing: '0.20em',
+                  color: 'var(--color-ink, #F5F1E8)',
+                  background: 'none',
+                  border: 'none',
+                  padding: '8px 0',
+                  borderBottom: '1px solid var(--color-ink, #F5F1E8)',
+                }}
+              >
+                Clear filters
+              </button>
+            </motion.div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
