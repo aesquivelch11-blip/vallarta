@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ScreenType, OccupancyStatus } from '../../types';
 import { sampleProperties } from './propertyData';
@@ -11,7 +11,7 @@ interface PropertySelectorProps {
   onNotify?: (message: string) => void;
 }
 
-export default function PropertySelector({ onNavigate, onSelectProperty, onNotify }: PropertySelectorProps) {
+export default function PropertySelector({ onSelectProperty }: PropertySelectorProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeStatus, setActiveStatus] = useState<OccupancyStatus | 'all'>('all');
   const filteredProperties = useMemo(() => {
