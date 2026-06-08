@@ -24,82 +24,70 @@ export default function PropertyFilters({
   onStatusChange,
 }: PropertyFiltersProps) {
   return (
-    <div className="flex flex-col gap-4 w-full max-w-3xl mx-auto">
+    <div className="flex flex-col gap-4 w-full">
       {/* Search */}
-      <div
-        className="relative"
-        style={{
-          background: 'var(--color-canvas-elevated, #141414)',
-          borderRadius: '8px',
-          border: '1px solid var(--color-border-subtle, rgba(255,255,255,0.06))',
-        }}
-      >
-        <svg
-          className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          style={{ color: 'var(--color-ink-secondary, rgba(201,184,160,0.4))' }}
-        >
-          <circle cx="11" cy="11" r="8" />
-          <path d="M21 21l-4.35-4.35" />
-        </svg>
+      <div className="relative">
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Search properties..."
-          className="w-full bg-transparent text-[var(--color-ink, #F5F1E8)] placeholder:text-[var(--color-ink-secondary, rgba(201,184,160,0.3))] font-sans outline-none"
+          placeholder="Search..."
+          className="w-full bg-transparent font-sans outline-none"
           style={{
             fontSize: '0.8125rem',
             letterSpacing: '0.02em',
-            padding: '12px 16px 12px 40px',
+            padding: '8px 0',
+            color: 'rgba(255,255,255,0.9)',
+            borderBottom: '1px solid rgba(255,255,255,0.12)',
           }}
-          aria-label="Search properties by name"
+          aria-label="Search properties"
         />
       </div>
 
       {/* Status filter */}
       <div
-        className="flex items-center gap-2 flex-wrap"
+        className="flex items-center gap-1 flex-wrap"
         role="group"
         aria-label="Filter by occupancy status"
       >
-        {STATUS_OPTIONS.map(({ value, label }) => {
+        {STATUS_OPTIONS.map(({ value, label }, index) => {
           const isActive = activeStatus === value;
           return (
-            <motion.button
-              key={value}
-              onClick={() => onStatusChange(value)}
-              className="cursor-pointer font-sans uppercase"
-              style={{
-                fontSize: '0.5625rem',
-                fontWeight: isActive ? 600 : 400,
-                letterSpacing: '0.20em',
-                padding: '8px 16px',
-                borderRadius: '6px',
-                border: '1px solid',
-                borderColor: isActive
-                  ? 'var(--color-ink, #F5F1E8)'
-                  : 'var(--color-border-subtle, rgba(255,255,255,0.06))',
-                background: isActive
-                  ? 'var(--color-ink, #F5F1E8)'
-                  : 'transparent',
-                color: isActive
-                  ? 'var(--color-canvas, #0c0c0c)'
-                  : 'var(--color-ink-secondary, rgba(201,184,160,0.6))',
-                transition: 'background 0.2s ease, color 0.2s ease, border-color 0.2s ease',
-              }}
-              whileTap={{ scale: 0.97 }}
-              aria-pressed={isActive}
-            >
-              {label}
-            </motion.button>
+            <React.Fragment key={value}>
+              {index > 0 && (
+                <span
+                  className="font-sans"
+                  style={{
+                    fontSize: '0.5625rem',
+                    color: 'rgba(255,255,255,0.2)',
+                    margin: '0 4px',
+                  }}
+                >
+                  ·
+                </span>
+              )}
+              <motion.button
+                onClick={() => onStatusChange(value)}
+                className="cursor-pointer font-sans uppercase"
+                style={{
+                  fontSize: '0.5625rem',
+                  fontWeight: isActive ? 500 : 400,
+                  letterSpacing: '0.20em',
+                  padding: '4px 0',
+                  background: 'none',
+                  border: 'none',
+                  borderBottom: isActive ? '1px solid var(--color-accent, #d49a55)' : '1px solid transparent',
+                  color: isActive
+                    ? 'rgba(255,255,255,0.9)'
+                    : 'rgba(255,255,255,0.4)',
+                  transition: 'color 0.2s ease, border-color 0.2s ease',
+                }}
+                whileTap={{ scale: 0.97 }}
+                aria-pressed={isActive}
+              >
+                {label}
+              </motion.button>
+            </React.Fragment>
           );
         })}
       </div>
