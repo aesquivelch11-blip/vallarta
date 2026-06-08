@@ -82,7 +82,7 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
       </header>
 
       {/* Filters */}
-      <div style={{ padding: '0 24px 24px' }}>
+      <div style={{ padding: '0 24px 8px' }}>
         <PropertyFilters
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
