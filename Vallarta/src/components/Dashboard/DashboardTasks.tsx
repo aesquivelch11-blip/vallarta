@@ -6,7 +6,6 @@ import { DashboardData, DashboardTask } from './dashboardData';
 interface DashboardTasksProps {
   data: DashboardData;
   onNavigate: (screen: ScreenType, style: 'push' | 'push_back' | 'slide_up') => void;
-  onNotify?: (message: string) => void;
 }
 
 const statusLabel: Record<DashboardTask['status'], string> = {
@@ -21,10 +20,9 @@ const statusColor: Record<DashboardTask['status'], string> = {
   scheduled: 'var(--color-ink-muted)',
 };
 
-export default function DashboardTasks({ data, onNavigate, onNotify }: DashboardTasksProps) {
+export default function DashboardTasks({ data, onNavigate }: DashboardTasksProps) {
   const { tasks } = data;
   const visible = tasks.slice(0, 5);
-  const hasMore = tasks.length > 5;
 
   return (
     <div
@@ -125,32 +123,6 @@ export default function DashboardTasks({ data, onNavigate, onNotify }: Dashboard
         </ol>
       )}
 
-      {/* View all — disabled until Tasks screen exists */}
-      {tasks.length > 0 && (
-        <button
-          onClick={() => onNotify?.('Tasks screen coming soon')}
-          style={{
-            marginTop: 'clamp(1.5rem, 3vw, 2rem)',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            fontFamily: 'var(--font-ui)',
-            fontSize: '0.625rem',
-            fontWeight: 500,
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            color: 'var(--color-ink-secondary)',
-            background: 'none',
-            border: 'none',
-            padding: 0,
-            cursor: 'pointer',
-            opacity: 0.6,
-            alignSelf: 'flex-start',
-          }}
-        >
-          VIEW ALL TASKS {hasMore && `(${tasks.length})`}
-        </button>
-      )}
     </div>
   );
 }
