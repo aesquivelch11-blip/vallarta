@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Check } from 'lucide-react';
-import { ScreenType } from '../../types';
 import { DashboardData, DashboardTask, TaskCategory, categoryLabels, formatDueDate } from './dashboardData';
 
 interface DashboardTasksProps {
   data: DashboardData;
-  onNavigate: (screen: ScreenType, style: 'push' | 'push_back' | 'slide_up') => void;
   onNotify?: (message: string) => void;
 }
 
@@ -22,7 +20,7 @@ const categoryColor: Record<TaskCategory, string> = {
   inspection: 'oklch(55% 0.08 320)',
 };
 
-export default function DashboardTasks({ data, onNavigate, onNotify }: DashboardTasksProps) {
+export default function DashboardTasks({ data, onNotify }: DashboardTasksProps) {
   const { tasks } = data;
   const visible = tasks.slice(0, 6);
   const hasMore = tasks.length > 6;

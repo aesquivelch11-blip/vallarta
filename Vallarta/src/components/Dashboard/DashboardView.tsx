@@ -27,7 +27,7 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
       case 'financials':
         return <DashboardFinancials data={data} onNavigate={onNavigate} />;
       case 'tasks':
-        return <DashboardTasks data={data} onNavigate={onNavigate} onNotify={onNotify} />;
+        return <DashboardTasks data={data} onNotify={onNotify} />;
     }
   };
 
@@ -54,10 +54,9 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: '1fr',
           gridTemplateRows: 'auto 1fr',
         }}
-        className="lg:grid-cols-[58fr_42fr] lg:h-[100dvh]"
+        className="grid-cols-1 lg:grid-cols-[58fr_42fr] lg:h-[100dvh]"
       >
         {/* Left panel */}
         <div
