@@ -227,9 +227,49 @@ export default function DashboardToday({ data, onNavigate }: DashboardTodayProps
             {departuresTomorrow.length} tomorrow
           </p>
         )}
-      </div>
+            </div>
 
-      {/* Nav link */}
+      {/* Quiet day message */}
+      {arrivalsToday.length === 0 && departuresToday.length === 0 && (
+        <div
+          style={{
+            marginTop: 'clamp(1rem, 2vw, 1.5rem)',
+            paddingTop: 'clamp(1rem, 2vw, 1.5rem)',
+            borderTop: '1px solid var(--color-border-subtle)',
+          }}
+        >
+          <p
+            style={{
+              fontFamily: 'var(--font-ui)',
+              fontSize: '0.75rem',
+              fontWeight: 400,
+              color: 'var(--color-ink-secondary)',
+              margin: 0,
+              lineHeight: 1.5,
+            }}
+          >
+            Quiet day — no arrivals or departures scheduled.
+          </p>
+          {arrivalsTomorrow.length > 0 && (
+            <p
+              style={{
+                fontFamily: 'var(--font-ui)',
+                fontSize: '0.625rem',
+                fontWeight: 400,
+                letterSpacing: '0.06em',
+                color: 'var(--color-ink-muted)',
+                margin: '8px 0 0',
+                lineHeight: 1.4,
+              }}
+            >
+              {arrivalsTomorrow.length} {arrivalsTomorrow.length === 1 ? 'guest arrives' : 'guests arrive'} tomorrow.
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Nav link */
+}
       <button
         className="dashboard-link"
         onClick={() => onNavigate('calendar', 'push')}
