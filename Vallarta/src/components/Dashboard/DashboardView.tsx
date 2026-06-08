@@ -27,7 +27,7 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
       case 'financials':
         return <DashboardFinancials data={data} onNavigate={onNavigate} />;
       case 'tasks':
-        return <DashboardTasks data={data} onNotify={onNotify} />;
+        return <DashboardTasks data={data} onNavigate={onNavigate} onNotify={onNotify} />;
     }
   };
 

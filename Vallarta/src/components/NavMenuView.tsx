@@ -1,12 +1,12 @@
 import React, { useRef, useEffect, useState } from "react";
 import { ScreenType } from "../types";
-import menuImg1 from "../assets/Menu/menu-1.jpg";
+import menuImg1 from "../assets/Menu/menu-1.webp";
 import menuImg1Webp from "../assets/Menu/menu-1.webp";
-import menuImg2 from "../assets/Menu/menu-2.jpg";
+import menuImg2 from "../assets/Menu/menu-2.webp";
 import menuImg2Webp from "../assets/Menu/menu-2.webp";
-import menuImg3 from "../assets/Menu/menu-3.jpg";
+import menuImg3 from "../assets/Menu/menu-3.webp";
 import menuImg3Webp from "../assets/Menu/menu-3.webp";
-import menuImg4 from "../assets/Menu/menu-4.jpg";
+import menuImg4 from "../assets/Menu/menu-4.webp";
 import menuImg4Webp from "../assets/Menu/menu-4.webp";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -111,7 +111,9 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
 
   const [activeIndex, setActiveIndex] = useState(initialIndex);
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
-  const [transitioningPanel, setTransitioningPanel] = useState<string | null>(null);
+  const [transitioningPanel, setTransitioningPanel] = useState<string | null>(
+    null,
+  );
   const [liveAnnouncement, setLiveAnnouncement] = useState("");
   const [showHint, setShowHint] = useState(
     () => !localStorage.getItem("vallarta-nav-hint-seen"),
@@ -154,7 +156,8 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
         e.preventDefault();
         setActiveIndex(keyIndex);
         setTimeout(() => {
-          const tabs = dialogRef.current?.querySelectorAll<HTMLElement>('[role="tab"]');
+          const tabs =
+            dialogRef.current?.querySelectorAll<HTMLElement>('[role="tab"]');
           tabs?.[keyIndex]?.focus();
         }, 0);
         return;
@@ -239,7 +242,8 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
     setActiveIndex((prev) => {
       const next = (prev + direction + menuItems.length) % menuItems.length;
       setTimeout(() => {
-        const tabs = dialogRef.current?.querySelectorAll<HTMLElement>('[role="tab"]');
+        const tabs =
+          dialogRef.current?.querySelectorAll<HTMLElement>('[role="tab"]');
         tabs?.[next]?.focus();
       }, 0);
       return next;
@@ -314,11 +318,7 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
         </button>
       </header>
 
-      <div
-        aria-live="polite"
-        aria-atomic="true"
-        className="sr-only"
-      >
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
         {liveAnnouncement}
       </div>
 

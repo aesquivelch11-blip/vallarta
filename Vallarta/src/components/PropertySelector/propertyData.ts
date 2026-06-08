@@ -1,13 +1,13 @@
 import { Property } from '../../types';
-import propImg1 from '../../assets/Menu/menu-1.jpg';
+import propImg1 from '../../assets/Menu/menu-1.webp';
 import propImg1Webp from '../../assets/Menu/menu-1.webp';
-import propImg2 from '../../assets/Menu/menu-2.jpg';
+import propImg2 from '../../assets/Menu/menu-2.webp';
 import propImg2Webp from '../../assets/Menu/menu-2.webp';
-import propImg3 from '../../assets/Menu/menu-3.jpg';
+import propImg3 from '../../assets/Menu/menu-3.webp';
 import propImg3Webp from '../../assets/Menu/menu-3.webp';
-import propImg4 from '../../assets/Menu/menu-4.jpg';
+import propImg4 from '../../assets/Menu/menu-4.webp';
 import propImg4Webp from '../../assets/Menu/menu-4.webp';
-import propImg5 from '../../assets/Menu/menu-1.jpg';
+import propImg5 from '../../assets/Menu/menu-1.webp';
 import propImg5Webp from '../../assets/Menu/menu-1.webp';
 
 export const sampleProperties: Property[] = [
