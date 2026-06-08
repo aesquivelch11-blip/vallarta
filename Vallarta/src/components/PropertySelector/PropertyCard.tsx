@@ -44,20 +44,25 @@ export default function PropertyCard({ property, onSelect }: PropertyCardProps) 
         {/* Text overlay */}
         <div className="absolute bottom-0 left-0 right-0 p-5">
           <h3
-            className="font-serif italic"
+            className="italic"
             style={{
+              fontFamily: 'var(--font-display)',
               fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)',
+              fontWeight: 400,
               color: 'rgba(255,255,255,0.9)',
               lineHeight: 1.2,
+              letterSpacing: '-0.01em',
             }}
           >
             {property.name}
           </h3>
           <div className="flex items-end justify-between mt-1">
             <span
-              className="font-sans uppercase"
+              className="uppercase"
               style={{
+                fontFamily: 'var(--font-ui)',
                 fontSize: '0.625rem',
+                fontWeight: 400,
                 letterSpacing: '0.25em',
                 color: 'rgba(255,255,255,0.5)',
               }}
@@ -65,11 +70,15 @@ export default function PropertyCard({ property, onSelect }: PropertyCardProps) 
               {property.location}
             </span>
             <span
-              className="font-sans uppercase"
+              className="uppercase"
               style={{
+                fontFamily: 'var(--font-ui)',
                 fontSize: '0.5625rem',
+                fontWeight: property.occupancyStatus === 'occupied' ? 500 : 400,
                 letterSpacing: '0.15em',
-                color: 'rgba(255,255,255,0.4)',
+                color: property.occupancyStatus === 'occupied' 
+                  ? 'rgba(255,255,255,0.7)' 
+                  : 'rgba(255,255,255,0.4)',
               }}
             >
               {STATUS_LABELS[property.occupancyStatus] ?? property.occupancyStatus}
