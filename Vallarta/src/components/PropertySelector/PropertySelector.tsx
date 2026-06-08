@@ -14,6 +14,7 @@ interface PropertySelectorProps {
 export default function PropertySelector({ onSelectProperty }: PropertySelectorProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeStatus, setActiveStatus] = useState<OccupancyStatus | 'all'>('all');
+  const [hoveredPropertyId, setHoveredPropertyId] = useState<string | null>(null);
   const filteredProperties = useMemo(() => {
     return sampleProperties.filter((property) => {
       const matchesSearch =
@@ -105,14 +106,19 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
             }}
           >
             <AnimatePresence mode="popLayout">
-              {filteredProperties.map((property, i) => (
+              {filteredProperties.map((property, i) => {
+                const isHovered = hoveredPropertyId === property.id;
+                const isAnotherHovered = hoveredPropertyId !== null && !isHovered;
+
+                return (
                   <motion.div
                     key={property.id}
                     layoutId={`container-${property.id}`}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ 
-                      opacity: 1,
+                      opacity: isAnotherHovered ? 0.8 : 1,
                       y: 0,
+                      zIndex: isHovered ? 10 : 1,
                     }}
                     exit={{ opacity: 0 }}
                     transition={{
@@ -124,14 +130,16 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
                       gridColumn: i === 3 ? 'span 2' : undefined,
                     }}
                     className="relative overflow-hidden"
+                    onMouseEnter={() => setHoveredPropertyId(property.id)}
+                    onMouseLeave={() => setHoveredPropertyId(null)}
                   >
                     <PropertyCard 
                       property={property} 
                       onSelect={handleSelect} 
                     />
                   </motion.div>
-                ))
-              }
+                );
+              })}
             </AnimatePresence>
           </div>
         ) : (
