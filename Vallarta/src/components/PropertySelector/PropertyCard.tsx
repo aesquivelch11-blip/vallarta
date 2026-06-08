@@ -37,6 +37,7 @@ export default function PropertyCard({ property, onSelect }: PropertyCardProps) 
             src={property.imageUrl}
             alt={property.name}
             className="w-full h-full object-cover"
+            loading="lazy"
           />
         </picture>
 
