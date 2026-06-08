@@ -116,7 +116,7 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
               background: 'var(--color-canvas, #0c0c0c)',
             }}
           >
-            <AnimatePresence mode="popLayout">
+            <AnimatePresence mode="sync">
               {filteredProperties.map((property, i) => {
                 const isHovered = hoveredPropertyId === property.id;
                 const isAnotherHovered = hoveredPropertyId !== null && !isHovered;
