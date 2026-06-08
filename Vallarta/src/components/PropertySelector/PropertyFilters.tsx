@@ -81,7 +81,7 @@ export default function PropertyFilters({
                   padding: '4px 0',
                   background: 'none',
                   border: 'none',
-                  borderBottom: isActive ? '1px solid var(--color-accent, #d49a55)' : '1px solid transparent',
+                  borderBottom: isActive ? '1px solid var(--color-dark-accent, #d49a55)' : '1px solid transparent',
                   color: isActive
                     ? 'rgba(255,255,255,0.9)'
                     : 'rgba(255,255,255,0.4)',
