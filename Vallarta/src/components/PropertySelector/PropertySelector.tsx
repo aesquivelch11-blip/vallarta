@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
-import { ScreenType } from '../../types';
+import React, { useState, useMemo, useCallback } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { ScreenType, OccupancyStatus } from '../../types';
 import { sampleProperties } from './propertyData';
-import DiagonalSlide from './DiagonalSlide';
-import SlideshowPagination from './SlideshowPagination';
-import PropertyContent from './PropertyContent';
+import PropertyCard from './PropertyCard';
+import PropertyFilters from './PropertyFilters';
 
 interface PropertySelectorProps {
   onNavigate: (screen: ScreenType, transitionStyle: 'push' | 'slide_up') => void;
@@ -13,286 +12,151 @@ interface PropertySelectorProps {
 }
 
 export default function PropertySelector({ onNavigate, onSelectProperty, onNotify }: PropertySelectorProps) {
-  const shouldReduceMotion = useReducedMotion();
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isContentOpen, setIsContentOpen] = useState(false);
-  const [tilt, setTilt] = useState({ x: 0, y: 0, rotX: 0, rotY: 0 });
-  const [isDesktop, setIsDesktop] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const tiltFrameRef = useRef(0);
-  const directionRef = useRef(0);
-  const touchStartX = useRef(0);
-  const touchStartY = useRef(0);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeStatus, setActiveStatus] = useState<OccupancyStatus | 'all'>('all');
 
-  useEffect(() => {
-    const check = () => {
-      setIsDesktop(window.innerWidth >= 1024);
-      setIsMobile(window.innerWidth < 768);
-    };
-    check();
-    window.addEventListener('resize', check);
-    return () => window.removeEventListener('resize', check);
-  }, []);
+  const filteredProperties = useMemo(() => {
+    return sampleProperties.filter((property) => {
+      const matchesSearch =
+        searchQuery === '' ||
+        property.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        property.location.toLowerCase().includes(searchQuery.toLowerCase());
 
-  useEffect(() => {
-    return () => cancelAnimationFrame(tiltFrameRef.current);
-  }, []);
+      const matchesStatus =
+        activeStatus === 'all' || property.occupancyStatus === activeStatus;
 
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (isContentOpen || !isDesktop || shouldReduceMotion) {
-      setTilt({ x: 0, y: 0, rotX: 0, rotY: 0 });
-      return;
-    }
-    cancelAnimationFrame(tiltFrameRef.current);
-    tiltFrameRef.current = requestAnimationFrame(() => {
-      const { clientX, clientY } = e;
-      const cx = window.innerWidth / 2;
-      const cy = window.innerHeight / 2;
-      setTilt({
-        x: ((clientX - cx) / cx) * 10,
-        y: ((clientY - cy) / cy) * 10,
-        rotX: ((clientY - cy) / cy) * 5,
-        rotY: ((clientX - cx) / cx) * 5,
-      });
+      return matchesSearch && matchesStatus;
     });
-  }, [isContentOpen, isDesktop, shouldReduceMotion]);
+  }, [searchQuery, activeStatus]);
 
-  const total = sampleProperties.length;
+  const handleSelect = useCallback(
+    (propertyId: string) => {
+      onSelectProperty(propertyId);
+    },
+    [onSelectProperty],
+  );
 
-  const prevIndex = total > 0 ? (currentIndex - 1 + total) % total : 0;
-  const nextIndex = total > 0 ? (currentIndex + 1) % total : 0;
-
-  const goNext = useCallback(() => {
-    directionRef.current = 1;
-    setCurrentIndex(prev => (prev + 1) % total);
-    setIsContentOpen(false);
-  }, [total]);
-
-  const goPrev = useCallback(() => {
-    directionRef.current = -1;
-    setCurrentIndex(prev => (prev - 1 + total) % total);
-    setIsContentOpen(false);
-  }, [total]);
-
-  const goTo = useCallback((index: number) => {
-    if (isContentOpen) return;
-    directionRef.current = index > currentIndex ? 1 : -1;
-    setCurrentIndex(index);
-    setIsContentOpen(false);
-  }, [currentIndex, isContentOpen]);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (isContentOpen) return;
-      if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        goPrev();
-      }
-      if (e.key === 'ArrowRight') {
-        e.preventDefault();
-        goNext();
-      }
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        setIsContentOpen(true);
-      }
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [goNext, goPrev, isContentOpen]);
-
-  const handleSlideClick = useCallback((position: 'prev' | 'current' | 'next') => {
-    if (position === 'current') {
-      setIsContentOpen(true);
-    } else if (position === 'next') {
-      goNext();
-    } else if (position === 'prev') {
-      goPrev();
-    }
-  }, [goNext, goPrev]);
-
-  const handleSlideKeyDown = (e: React.KeyboardEvent, position: 'prev' | 'current' | 'next') => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      handleSlideClick(position);
-    }
-  };
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-    touchStartY.current = e.touches[0].clientY;
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (isContentOpen) return;
-    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
-    const deltaY = e.changedTouches[0].clientY - touchStartY.current;
-    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
-      if (deltaX > 0) {
-        goPrev();
-      } else {
-        goNext();
-      }
-    }
-  };
-
-  const getDisplayIndex = (index: number): string => {
-    return String(index + 1).padStart(2, '0');
-  };
-
-  const visibleSlides = [
-    { property: sampleProperties[prevIndex], position: 'prev' as const, index: prevIndex },
-    { property: sampleProperties[currentIndex], position: 'current' as const, index: currentIndex },
-    { property: sampleProperties[nextIndex], position: 'next' as const, index: nextIndex },
-  ];
-
-  if (total === 0) {
-    return (
-      <div className="w-full h-[100dvh] bg-[#0c0c0c] flex items-center justify-center">
-        <p className="text-[#C9B8A0]/60 font-sans text-sm tracking-wide">No properties available</p>
-      </div>
-    );
-  }
-
-  const liveAnnouncement = `${sampleProperties[currentIndex].name}, property ${currentIndex + 1} of ${total}`;
+  const liveAnnouncement = `${filteredProperties.length} ${filteredProperties.length === 1 ? 'property' : 'properties'} shown`;
 
   return (
     <div
-      className="w-full h-[100dvh] bg-[#0c0c0c] relative overflow-hidden"
-      style={{ touchAction: 'pan-y' }}
-      onMouseMove={handleMouseMove}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
+      className="w-full min-h-[100dvh] relative overflow-y-auto"
+      style={{ background: 'var(--color-canvas, #0c0c0c)' }}
     >
       <div aria-live="polite" aria-atomic="true" className="sr-only">
         {liveAnnouncement}
       </div>
 
-      {isMobile ? (
-        <div className="grid grid-cols-1 grid-rows-1 place-items-center w-full h-full overflow-hidden">
-          <AnimatePresence mode="popLayout" custom={directionRef.current}>
-            <motion.div
-              key={currentIndex}
-              className="col-start-1 row-start-1 flex items-center justify-center w-full px-4"
-              custom={directionRef.current}
-              variants={
-                shouldReduceMotion
-                  ? {
-                      initial: { opacity: 0 },
-                      animate: { opacity: 1 },
-                      exit: { opacity: 0 },
-                    }
-                  : {
-                      initial: (dir: number) => ({
-                        x: dir * 300,
-                        opacity: 0,
-                      }),
-                      animate: {
-                        x: 0,
-                        opacity: 1,
-                      },
-                      exit: (dir: number) => ({
-                        x: dir * -300,
-                        opacity: 0,
-                      }),
-                    }
-              }
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={shouldReduceMotion ? { duration: 0.3 } : { duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              onClick={() => setIsContentOpen(true)}
-              role="button"
-              tabIndex={0}
-              aria-label={`View ${sampleProperties[currentIndex].name} details`}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  setIsContentOpen(true);
-                }
-              }}
-            >
-              <DiagonalSlide
-                property={sampleProperties[currentIndex]}
-                position="current"
-                isActive
-                isMobile
-                displayIndex={getDisplayIndex(currentIndex)}
-              />
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 grid-rows-1 place-items-center w-full h-full">
-          <AnimatePresence>
-            {visibleSlides.map(({ property, position, index }) => (
+      {/* Header */}
+      <header
+        className="sticky top-0 z-40 flex items-center justify-between"
+        style={{
+          padding: '20px 32px',
+          background: 'var(--color-canvas, #0c0c0c)',
+        }}
+      >
+        <h1
+          className="font-sans uppercase"
+          style={{
+            fontSize: '0.6875rem',
+            fontWeight: 500,
+            letterSpacing: '0.35em',
+            color: 'var(--color-ink, #F5F1E8)',
+          }}
+        >
+          Properties
+        </h1>
+        <span
+          className="font-sans"
+          style={{
+            fontSize: '0.625rem',
+            letterSpacing: '0.10em',
+            color: 'var(--color-ink-secondary, rgba(201,184,160,0.5))',
+          }}
+        >
+          {filteredProperties.length} of {sampleProperties.length}
+        </span>
+      </header>
+
+      {/* Filters */}
+      <div style={{ padding: '0 32px 24px' }}>
+        <PropertyFilters
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          activeStatus={activeStatus}
+          onStatusChange={setActiveStatus}
+        />
+      </div>
+
+      {/* Grid */}
+      <div style={{ padding: '0 32px 48px' }}>
+        <motion.div
+          className="grid gap-5"
+          style={{
+            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+          }}
+          layout
+        >
+          <AnimatePresence mode="popLayout">
+            {filteredProperties.map((property, i) => (
               <motion.div
-                key={property.id + position}
-                className="col-start-1 row-start-1"
-                initial={{ opacity: 0 }}
-                animate={
-                  shouldReduceMotion
-                    ? { opacity: position === 'current' ? 1 : 0 }
-                    : isContentOpen
-                      ? {
-                          x: position === 'current' ? '-30%' : position === 'prev' ? '-80%' : '80%',
-                          y: position === 'prev' ? '-50%' : position === 'next' ? '50%' : 0,
-                          rotate: 0,
-                          opacity: position === 'current' ? 1 : 0,
-                          scale: position !== 'current' ? 0.85 : 1,
-                        }
-                      : {
-                          x: position === 'prev' ? '-50%' : position === 'next' ? '50%' : 0,
-                          y: position === 'prev' ? '-50%' : position === 'next' ? '50%' : 0,
-                          rotate: position === 'prev' ? -30 : position === 'next' ? 30 : 0,
-                          opacity: position === 'current' ? 1 : 0.6,
-                        }
-                }
-                exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.85 }}
-                transition={
-                  shouldReduceMotion
-                    ? { duration: 0.3 }
-                    : {
-                        duration: 0.8,
-                        ease: [0.16, 1, 0.3, 1],
-                        delay: position === 'current' ? 0 : 0.14,
-                      }
-                }
-                onClick={() => handleSlideClick(position)}
-                onKeyDown={(e) => handleSlideKeyDown(e, position)}
-                role={position === 'current' ? 'button' : undefined}
-                tabIndex={position === 'current' ? 0 : undefined}
-                aria-label={position === 'current' ? `View ${property.name} details` : undefined}
-                style={{ cursor: position === 'current' ? 'pointer' : 'default' }}
+                key={property.id}
+                layout
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{
+                  duration: 0.4,
+                  delay: i * 0.05,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
               >
-                <DiagonalSlide
-                  property={property}
-                  position={position}
-                  isActive={position === 'current'}
-                  displayIndex={getDisplayIndex(index)}
-                  tiltX={position === 'current' ? tilt.x : 0}
-                  tiltY={position === 'current' ? tilt.y : 0}
-                  rotX={position === 'current' ? tilt.rotX : 0}
-                  rotY={position === 'current' ? tilt.rotY : 0}
-                />
+                <PropertyCard property={property} onSelect={handleSelect} />
               </motion.div>
             ))}
           </AnimatePresence>
-        </div>
-      )}
+        </motion.div>
 
-      <SlideshowPagination
-        total={total}
-        currentIndex={currentIndex}
-        onJump={goTo}
-      />
-
-      <PropertyContent
-        property={sampleProperties[currentIndex]}
-        isOpen={isContentOpen}
-        onClose={() => setIsContentOpen(false)}
-        onSelect={() => onSelectProperty(sampleProperties[currentIndex].id)}
-      />
+        {/* Empty state */}
+        {filteredProperties.length === 0 && (
+          <motion.div
+            className="flex flex-col items-center justify-center py-24"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4 }}
+          >
+            <p
+              className="font-sans text-center"
+              style={{
+                fontSize: '0.8125rem',
+                color: 'var(--color-ink-secondary, rgba(201,184,160,0.4))',
+                letterSpacing: '0.02em',
+              }}
+            >
+              No properties match your search.
+            </p>
+            <button
+              onClick={() => {
+                setSearchQuery('');
+                setActiveStatus('all');
+              }}
+              className="mt-3 font-sans uppercase cursor-pointer"
+              style={{
+                fontSize: '0.5625rem',
+                fontWeight: 500,
+                letterSpacing: '0.20em',
+                color: 'var(--color-ink, #F5F1E8)',
+                background: 'none',
+                border: 'none',
+                padding: '8px 0',
+                borderBottom: '1px solid var(--color-ink, #F5F1E8)',
+              }}
+            >
+              Clear filters
+            </button>
+          </motion.div>
+        )}
+      </div>
     </div>
   );
 }
