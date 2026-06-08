@@ -62,15 +62,15 @@ export default function DashboardFinancials({ data, onNavigate }: DashboardFinan
         }}
       >
         <button
-          onClick={goPrevPeriod}
-          disabled={selectedPeriodIndex >= periods.length - 1}
-          aria-label="Previous period"
+          onClick={goNextPeriod}
+          disabled={selectedPeriodIndex <= 0}
+          aria-label="Next period"
           style={{
             background: 'none',
             border: 'none',
             padding: '2px',
-            cursor: selectedPeriodIndex >= periods.length - 1 ? 'default' : 'pointer',
-            color: selectedPeriodIndex >= periods.length - 1 ? 'var(--color-border-medium)' : 'var(--color-ink-secondary)',
+            cursor: selectedPeriodIndex <= 0 ? 'default' : 'pointer',
+            color: selectedPeriodIndex <= 0 ? 'var(--color-border-medium)' : 'var(--color-ink-secondary)',
             display: 'flex',
             alignItems: 'center',
           }}
@@ -90,15 +90,15 @@ export default function DashboardFinancials({ data, onNavigate }: DashboardFinan
           {period.label}
         </span>
         <button
-          onClick={goNextPeriod}
-          disabled={selectedPeriodIndex <= 0}
-          aria-label="Next period"
+          onClick={goPrevPeriod}
+          disabled={selectedPeriodIndex >= periods.length - 1}
+          aria-label="Previous period"
           style={{
             background: 'none',
             border: 'none',
             padding: '2px',
-            cursor: selectedPeriodIndex <= 0 ? 'default' : 'pointer',
-            color: selectedPeriodIndex <= 0 ? 'var(--color-border-medium)' : 'var(--color-ink-secondary)',
+            cursor: selectedPeriodIndex >= periods.length - 1 ? 'default' : 'pointer',
+            color: selectedPeriodIndex >= periods.length - 1 ? 'var(--color-border-medium)' : 'var(--color-ink-secondary)',
             display: 'flex',
             alignItems: 'center',
           }}
