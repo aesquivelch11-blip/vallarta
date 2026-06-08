@@ -50,6 +50,29 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
         <DashboardGallery images={property.images} />
       </div>
 
+      {/* Mobile property name — visible below lg, above domain pill */}
+      <div
+        className="lg:hidden"
+        style={{
+          padding: 'clamp(1rem, 2vw, 1.5rem) clamp(1.5rem, 3vw, 2.5rem) 0',
+        }}
+      >
+        <p
+          style={{
+            fontFamily: 'var(--font-display)',
+            fontStyle: 'italic',
+            fontWeight: 400,
+            fontSize: 'clamp(1.125rem, 2.5vw, 1.375rem)',
+            letterSpacing: '-0.01em',
+            color: 'var(--color-ink)',
+            margin: 0,
+            lineHeight: 1.2,
+          }}
+        >
+          {property.name}
+        </p>
+      </div>
+
       {/* Main area — on desktop becomes a two-column grid */}
       <div
         style={{
@@ -89,10 +112,49 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
 
         {/* Right panel — gallery, desktop only */}
         <div
-          className="hidden lg:block"
+          className="hidden lg:flex lg:flex-col"
           style={{ height: '100dvh', position: 'sticky', top: 0 }}
         >
-          <DashboardGallery images={property.images} />
+          {/* Property name */}
+          <div
+            style={{
+              padding: 'clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 3vw, 2.5rem) 0 clamp(1rem, 2vw, 1.75rem)',
+            }}
+          >
+            <p
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontStyle: 'italic',
+                fontWeight: 400,
+                fontSize: 'clamp(1.25rem, 2vw, 1.625rem)',
+                letterSpacing: '-0.01em',
+                color: 'var(--color-ink)',
+                margin: 0,
+                lineHeight: 1.2,
+              }}
+            >
+              {property.name}
+            </p>
+            <p
+              style={{
+                fontFamily: 'var(--font-ui)',
+                fontWeight: 500,
+                fontSize: '0.5625rem',
+                letterSpacing: '0.25em',
+                textTransform: 'uppercase',
+                color: 'var(--color-ink-secondary)',
+                margin: '6px 0 0',
+                lineHeight: 1,
+              }}
+            >
+              {property.location}
+            </p>
+          </div>
+
+          {/* Gallery */}
+          <div style={{ flex: 1, minHeight: 0 }}>
+            <DashboardGallery images={property.images} />
+          </div>
         </div>
       </div>
     </div>
