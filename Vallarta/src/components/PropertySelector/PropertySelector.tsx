@@ -97,57 +97,57 @@ export default function PropertySelector({ onNavigate, onSelectProperty, onNotif
 
       {/* Grid */}
       <div style={{ padding: '0 0 0' }}>
-        <div
-          className="grid"
-          style={{
-            gridTemplateColumns: '2fr 2fr 1fr',
-            gridTemplateRows: '1fr 1fr',
-            gap: '1px',
-            height: 'calc(100dvh - 48px)',
-            width: '100%',
-            background: 'var(--color-canvas, #0c0c0c)',
-          }}
-        >
-          <AnimatePresence mode="popLayout">
-            {filteredProperties.map((property, i) => {
-              const isSelected = selectedPropertyId === property.id;
-              const isAnotherSelected = selectedPropertyId !== null && !isSelected;
+        {filteredProperties.length > 0 ? (
+          <div
+            className="grid"
+            style={{
+              gridTemplateColumns: '2fr 2fr 1fr',
+              gridTemplateRows: '1fr 1fr',
+              gap: '1px',
+              height: 'calc(100dvh - 48px)',
+              width: '100%',
+              background: 'var(--color-canvas, #0c0c0c)',
+            }}
+          >
+            <AnimatePresence mode="popLayout">
+              {filteredProperties.map((property, i) => {
+                const isSelected = selectedPropertyId === property.id;
+                const isAnotherSelected = selectedPropertyId !== null && !isSelected;
 
-              return (
-                <motion.div
-                  key={property.id}
-                  layoutId={`container-${property.id}`}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ 
-                    opacity: isAnotherSelected ? 0.5 : 1,
-                    y: 0,
-                    zIndex: isSelected ? 50 : 1
-                  }}
-                  exit={{ opacity: 0 }}
-                  transition={{
-                    duration: 0.5,
-                    ease: [0.16, 1, 0.3, 1],
-                    delay: i * 0.08,
-                  }}
-                  style={{
-                    gridColumn: i === 3 ? 'span 2' : undefined,
-                  }}
-                  className="relative overflow-hidden"
-                >
-                  <PropertyCard 
-                    property={property} 
-                    onSelect={handleSelect} 
-                  />
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-        </div>
-
-        {/* Empty state */}
-        {filteredProperties.length === 0 && (
+                return (
+                  <motion.div
+                    key={property.id}
+                    layoutId={`container-${property.id}`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ 
+                      opacity: isAnotherSelected ? 0.5 : 1,
+                      y: 0,
+                      zIndex: isSelected ? 50 : 1
+                    }}
+                    exit={{ opacity: 0 }}
+                    transition={{
+                      duration: 0.5,
+                      ease: [0.16, 1, 0.3, 1],
+                      delay: i * 0.08,
+                    }}
+                    style={{
+                      gridColumn: i === 3 ? 'span 2' : undefined,
+                    }}
+                    className="relative overflow-hidden"
+                  >
+                    <PropertyCard 
+                      property={property} 
+                      onSelect={handleSelect} 
+                    />
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          </div>
+        ) : (
           <motion.div
-            className="flex flex-col items-center justify-center py-24"
+            className="flex flex-col items-center justify-center"
+            style={{ height: 'calc(100dvh - 48px)' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4 }}
