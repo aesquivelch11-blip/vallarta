@@ -48,6 +48,20 @@ export default function DashboardTasks({ data, onNavigate }: DashboardTasksProps
         >
           {tasks.length > 0 ? `${tasks.length} open` : 'All clear'}
         </p>
+        {tasks.length === 0 && (
+          <p
+            style={{
+              fontFamily: 'var(--font-ui)',
+              fontSize: '0.75rem',
+              fontWeight: 400,
+              color: 'var(--color-ink-secondary)',
+              margin: '10px 0 0',
+              lineHeight: 1.5,
+            }}
+          >
+            No pending tasks for this property.
+          </p>
+        )}
       </div>
 
       {/* Numbered list */}
