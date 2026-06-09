@@ -1,11 +1,12 @@
 # src/research/markets.py
 import json
 import re
-import anthropic
+from google import genai
+from google.genai import types
 from datetime import datetime, timezone
 from src.models import PredictionRecord, MatchFixture
 
-MODEL = "claude-sonnet-4-6"
+MODEL = "gemini-2.0-flash"
 
 _SYSTEM = """You are a prediction market researcher for WC2026.
 Given matches, search Polymarket and Kalshi for current market-implied probabilities.
@@ -19,29 +20,28 @@ For each match return a JSON array. Each element:
 Return ONLY valid JSON array. No markdown fences."""
 
 
-# Single-call design: markets data is fetched in one request (no batching).
-# max_uses=5 spans all fixtures — suitable for small fixture lists (e.g., a single group).
-# For full tournament coverage, call per-group or increase max_uses proportionally.
+# Single-call design: markets data fetched in one request (no batching).
 def fetch_market_predictions(fixtures: list[MatchFixture], api_key: str) -> list[PredictionRecord]:
-    client = anthropic.Anthropic(api_key=api_key)
+    client = genai.Client(api_key=api_key)
     match_list = "\n".join(
         f"- {f.match_id}: {f.team_a} vs {f.team_b} ({f.date})" for f in fixtures
     )
     try:
-        response = client.messages.create(
+        response = client.models.generate_content(
             model=MODEL,
-            max_tokens=4096,
-            system=_SYSTEM,
-            tools=[{"type": "web_search_20250305", "name": "web_search", "max_uses": 5}],
-            messages=[{"role": "user", "content": f"Find prediction market odds for:\n{match_list}"}],
-            betas=["web-search-2025-03-05"],
+            contents=f"Find prediction market odds for:\n{match_list}",
+            config=types.GenerateContentConfig(
+                system_instruction=_SYSTEM,
+                tools=[types.Tool(google_search=types.GoogleSearch())],
+                max_output_tokens=4096,
+            )
         )
-    except anthropic.APIError as e:
+    except Exception as e:
         print(f"Warning: Failed to fetch market predictions: {e}")
         return []
-    text = next((b.text for b in response.content if getattr(b, "type", None) == "text"), "")
+    text = response.text or ""
     if not text:
-        print("Warning: No text block in markets API response")
+        print("Warning: No text in markets API response")
         return []
     return _parse(text)
 
