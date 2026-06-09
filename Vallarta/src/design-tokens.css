@@ -162,6 +162,44 @@
     --cal-btn-text-dark: #1a1a1a;
     --cal-error: rgba(248, 113, 113, 0.85);
     --cal-error-border: rgba(248, 113, 113, 0.25);
+
+    /* --- Property Selector Redesign: Light Coastal Theme --- */
+    /* Light canvas */
+    --ps-canvas: #faf8f5; /* Bleached Bone */
+    --ps-surface: #f2ece4; /* Travertine Cream */
+    --ps-ink: #242424; /* Obsidian Charcoal */
+    --ps-ink-secondary: #7e7a74; /* Weathered Timber */
+    --ps-ink-muted: #9a9590;
+
+    /* Status accent colors (OKLCH) */
+    --ps-status-available: oklch(72% 0.08 155); /* Sage green */
+    --ps-status-occupied: oklch(55% 0.06 80); /* Warm ochre */
+    --ps-status-maintenance: oklch(62% 0.12 70); /* Terracotta */
+    --ps-status-reserved: oklch(65% 0.05 260); /* Soft blue */
+
+    /* Status accent hover (brighter) */
+    --ps-status-available-hover: oklch(78% 0.1 155);
+    --ps-status-occupied-hover: oklch(60% 0.08 80);
+    --ps-status-maintenance-hover: oklch(68% 0.14 70);
+    --ps-status-reserved-hover: oklch(70% 0.07 260);
+
+    /* Grid dimensions */
+    --ps-grid-gap: 2px;
+    --ps-card-pad-x: clamp(24px, 3vw, 40px);
+    --ps-card-pad-y: clamp(20px, 2.5vw, 32px);
+    --ps-card-pad-bottom: clamp(32px, 4vw, 56px);
+
+    /* Typography */
+    --ps-name-size: clamp(2rem, 4.5vw, 3.5rem);
+    --ps-location-size: 0.5625rem;
+    --ps-location-tracking: 0.3em;
+
+    /* Motion */
+    --ps-ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ps-ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
+    --ps-duration-slow: 1.2s;
+    --ps-duration-base: 0.6s;
+    --ps-duration-fast: 0.3s;
 }
 
 /* ── Nav Menu — entry animations ── */
