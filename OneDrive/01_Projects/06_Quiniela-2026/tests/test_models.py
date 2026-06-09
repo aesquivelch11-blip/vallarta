@@ -9,7 +9,7 @@ def test_recent_form_fields():
 def test_team_stats_squad_flags_default_empty():
     f = RecentForm(matches=10, wins=6, draws=2, losses=2,
                    goals_scored_avg=1.8, goals_conceded_avg=0.9)
-    ts = TeamStats(team="Brazil", elo_rating=2100, fifa_rank=1, recent_form=f)
+    ts = TeamStats(team="Brazil", elo_rating=2100, recent_form=f)
     assert ts.squad_flags == []
 
 def test_prediction_record_fields():

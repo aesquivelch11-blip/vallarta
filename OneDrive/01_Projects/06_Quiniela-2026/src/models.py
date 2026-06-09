@@ -19,8 +19,7 @@ class RecentForm:
 @dataclass
 class TeamStats:
     team: str
-    elo_rating: float  # Changed from int to float for type safety (e.g. 2100.5)
-    fifa_rank: int
+    elo_rating: float
     recent_form: RecentForm
     squad_flags: list[str] = field(default_factory=list)
 
