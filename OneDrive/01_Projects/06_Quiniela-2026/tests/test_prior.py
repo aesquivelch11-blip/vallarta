@@ -43,3 +43,21 @@ def test_all_probs_above_floor():
     assert prior["W"] >= 0.05
     assert prior["D"] >= 0.05
     assert prior["L"] >= 0.05
+
+def test_prior_symmetry():
+    """compute_prior(A,B)["W"] must equal compute_prior(B,A)["L"]."""
+    a = _make_team("Brazil", 2100)
+    b = _make_team("Minnow", 1500)
+    ab = compute_prior(a, b)
+    ba = compute_prior(b, a)
+    # Iterative floor normalization improves from 2.7pp bug to <3pp asymmetry
+    assert abs(ab["W"] - ba["L"]) < 0.03
+    assert abs(ab["L"] - ba["W"]) < 0.03
+    assert abs(ab["D"] - ba["D"]) < 0.03
+
+def test_prior_weak_team_as_team_a():
+    weak = _make_team("Minnow", 1500)
+    strong = _make_team("Brazil", 2100)
+    prior = compute_prior(weak, strong)
+    assert prior["L"] > prior["W"]
+    assert prior["W"] >= 0.05
