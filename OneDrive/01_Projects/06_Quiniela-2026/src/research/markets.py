@@ -60,7 +60,7 @@ def _parse(text: str) -> list[PredictionRecord]:
             continue
         try:
             records.append(PredictionRecord(
-                source_id=f"market_{item['match_id']}_{ts[:16].replace(':', '')}",
+                source_id=f"market_{item['match_id']}_{ts[:19].replace(':', '').replace('-', '').replace('T', '_')}",
                 source_type="prediction_market",
                 source_url=item.get("source_url", ""),
                 timestamp=ts,

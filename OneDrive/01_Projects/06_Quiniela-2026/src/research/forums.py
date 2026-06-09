@@ -18,13 +18,16 @@ _PREDICT_SYSTEM = """Given a Reddit post discussing a WC2026 match, extract the 
 Return JSON: {match_id, team_a, team_b, outcome (W/D/L from team_a), confidence_pct (0.0-1.0), raw_text}.
 If no clear prediction exists, return null. No markdown fences."""
 
+# Call volume: len(fixtures) × len(SUBREDDITS) × posts_per_subreddit scoring calls,
+# plus up to the same number of extraction calls for qualifying posts.
+# Default (1 fixture, 6 subreddits, 20 posts) = up to 240 LLM calls. Scale accordingly.
 def fetch_forum_predictions(
     fixtures: list[MatchFixture],
     reddit_client_id: str,
     reddit_client_secret: str,
     anthropic_api_key: str,
     quality_threshold: int = 7,
-    posts_per_match: int = 20,
+    posts_per_subreddit: int = 20,  # renamed from posts_per_match: limit applies per subreddit, not per match
 ) -> list[PredictionRecord]:
     reddit = praw.Reddit(
         client_id=reddit_client_id,
@@ -39,7 +42,7 @@ def fetch_forum_predictions(
         for sub_name in SUBREDDITS:
             sub = reddit.subreddit(sub_name)
             try:
-                posts = list(sub.search(query, limit=posts_per_match, sort="top"))
+                posts = list(sub.search(query, limit=posts_per_subreddit, sort="top"))
             except Exception:
                 continue
             for post in posts:

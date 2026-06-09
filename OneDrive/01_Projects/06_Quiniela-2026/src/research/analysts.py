@@ -61,7 +61,7 @@ def _parse(text: str) -> list[PredictionRecord]:
             continue
         try:
             records.append(PredictionRecord(
-                source_id=f"analyst_{item['match_id']}_{ts[:16].replace(':', '')}",
+                source_id=f"analyst_{item['match_id']}_{ts[:19].replace(':', '').replace('-', '').replace('T', '_')}",
                 source_type="analyst",
                 source_url=item.get("source_url", ""),
                 timestamp=ts,
@@ -73,6 +73,7 @@ def _parse(text: str) -> list[PredictionRecord]:
                 confidence_pct=min(1.0, max(0.0, float(item.get("confidence_pct", 0.5)))),
                 raw_text=item.get("raw_text", ""),
             ))
-        except (KeyError, ValueError):
+        except (KeyError, ValueError) as e:
+            print(f"Warning: Skipping malformed analyst record: {e!r}")
             continue
     return records
