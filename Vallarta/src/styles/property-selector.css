@@ -72,16 +72,25 @@
   transition: transform var(--ps-duration-base) var(--ps-ease-out);
 }
 
-/* Aspect ratios per tier */
-.ps-grid--gallery .ps-card--tall .ps-card__image-wrap { aspect-ratio: 3 / 4; }
-.ps-grid--gallery .ps-card--short .ps-card__image-wrap { aspect-ratio: 3 / 4; }
-.ps-grid--collection .ps-card--tall .ps-card__image-wrap { aspect-ratio: 4 / 5; }
-.ps-grid--collection .ps-card--short .ps-card__image-wrap { aspect-ratio: 4 / 5; }
+/* Aspect ratios per tier — asymmetric */
+.ps-grid--gallery .ps-card--tall .ps-card__image-wrap { aspect-ratio: 2 / 3; }
+.ps-grid--gallery .ps-card--short .ps-card__image-wrap { aspect-ratio: 4 / 3; }
+.ps-grid--collection .ps-card--tall .ps-card__image-wrap { aspect-ratio: 3 / 4; }
+.ps-grid--collection .ps-card--short .ps-card__image-wrap { aspect-ratio: 1 / 1; }
 .ps-grid--catalog .ps-card__image-wrap { aspect-ratio: 1 / 1; }
 
 /* Tall cards span 2 rows */
 .ps-card--tall {
   grid-row: span 2;
+}
+
+/* Smooth layout transitions */
+.ps-card__image-wrap {
+  transition: aspect-ratio var(--ps-duration-base) var(--ps-ease-out);
+}
+
+.ps-card {
+  transition: grid-row var(--ps-duration-base) var(--ps-ease-out);
 }
 
 /* ── Gradient overlay (text ON image) ── */
@@ -141,22 +150,48 @@
               transform var(--ps-duration-fast) var(--ps-ease-out);
 }
 
-/* ── Status line (hover only) ── */
+/* ── Status dot (always visible) ── */
 .ps-card__status {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 3px;
-  height: 100%;
-  opacity: 0;
-  transition: opacity var(--ps-duration-base) var(--ps-ease-out);
+  top: clamp(12px, 1.5vw, 20px);
+  right: clamp(12px, 1.5vw, 20px);
   z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.ps-card__status--available { background: var(--ps-status-available); }
-.ps-card__status--occupied { background: var(--ps-status-occupied); }
-.ps-card__status--maintenance { background: var(--ps-status-maintenance); }
-.ps-card__status--reserved { background: var(--ps-status-reserved); }
+.ps-card__status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.15);
+}
+
+.ps-card__status-dot--available { background: var(--ps-status-available); }
+.ps-card__status-dot--occupied { background: var(--ps-status-occupied); }
+.ps-card__status-dot--maintenance { background: var(--ps-status-maintenance); }
+.ps-card__status-dot--reserved { background: var(--ps-status-reserved); }
+
+.ps-card__status-label {
+  font-family: var(--font-ui);
+  font-size: 0.5625rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  padding: 4px 8px;
+  border-radius: 2px;
+  opacity: 0;
+  transform: translateX(4px);
+  transition: opacity var(--ps-duration-fast) var(--ps-ease-out),
+              transform var(--ps-duration-fast) var(--ps-ease-out);
+  pointer-events: none;
+  white-space: nowrap;
+}
 
 /* ── Hover states ── */
 @media (hover: hover) {
@@ -169,8 +204,9 @@
     transform: translateY(0);
   }
 
-  .ps-card:hover .ps-card__status {
+  .ps-card:hover .ps-card__status-label {
     opacity: 1;
+    transform: translateX(0);
   }
 }
 
@@ -186,8 +222,8 @@
   animation: ps-shimmer 1.5s infinite;
 }
 
-.ps-grid--gallery .ps-skeleton__image { aspect-ratio: 3 / 4; }
-.ps-grid--collection .ps-skeleton__image { aspect-ratio: 4 / 5; }
+.ps-grid--gallery .ps-skeleton__image { aspect-ratio: 4 / 3; }
+.ps-grid--collection .ps-skeleton__image { aspect-ratio: 1 / 1; }
 .ps-grid--catalog .ps-skeleton__image { aspect-ratio: 1 / 1; }
 
 .ps-skeleton__name {
@@ -308,12 +344,10 @@
     transform: none;
   }
 
-  .ps-card__status {
+  .ps-card__status-label {
     transition: none;
-  }
-
-  .ps-card:hover .ps-card__status {
     opacity: 1;
+    transform: none;
   }
 }
 
@@ -449,6 +483,26 @@
 .ps-header__tier-btn--active {
   color: var(--ps-ink);
   border-bottom-color: var(--ps-status-available);
+}
+
+.ps-header__tier-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  vertical-align: middle;
+  opacity: 0.5;
+  transition: opacity var(--ps-duration-instant) var(--ps-ease-out);
+}
+
+.ps-header__tier-btn--active .ps-header__tier-btn-icon {
+  opacity: 1;
+}
+
+.ps-header__tier-btn-label {
+  vertical-align: middle;
 }
 
 /* ── Responsive header ── */
