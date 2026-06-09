@@ -38,7 +38,7 @@ def _require_env(key: str) -> str:
 
 
 def run() -> None:
-    anthropic_key = _require_env("ANTHROPIC_API_KEY")
+    gemini_key = _require_env("GEMINI_API_KEY")
     fd_key        = _require_env("FOOTBALL_DATA_API_KEY")
     reddit_cid    = _require_env("REDDIT_CLIENT_ID")
     reddit_csec   = _require_env("REDDIT_CLIENT_SECRET")
@@ -65,7 +65,7 @@ def run() -> None:
     print(f"  {len(elo_ratings)} teams rated.")
 
     print("[3/6] Fetching recent form and squad flags...")
-    squad_flags = fetch_squad_flags(all_teams, api_key=anthropic_key)
+    squad_flags = fetch_squad_flags(all_teams, api_key=gemini_key)
     stats: dict[str, TeamStats] = {}
     for team in all_teams:
         form = fetch_recent_form(team, api_key=fd_key)
@@ -78,11 +78,11 @@ def run() -> None:
     print(f"  Stats built for {len(stats)} teams.")
 
     print("[4/6] Fetching analyst predictions via Claude + web search...")
-    analyst_records = fetch_analyst_predictions(fixtures, api_key=anthropic_key)
+    analyst_records = fetch_analyst_predictions(fixtures, api_key=gemini_key)
     print(f"  {len(analyst_records)} analyst records.")
 
     print("[5/6] Fetching prediction market odds...")
-    market_records = fetch_market_predictions(fixtures, api_key=anthropic_key)
+    market_records = fetch_market_predictions(fixtures, api_key=gemini_key)
     print(f"  {len(market_records)} market records.")
 
     print("[6/6] Fetching forum predictions...")
@@ -90,7 +90,7 @@ def run() -> None:
         fixtures,
         reddit_client_id=reddit_cid,
         reddit_client_secret=reddit_csec,
-        anthropic_api_key=anthropic_key,
+        gemini_api_key=gemini_key,
     )
     print(f"  {len(forum_records)} forum records.")
 
