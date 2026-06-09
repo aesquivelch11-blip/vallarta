@@ -12,10 +12,17 @@ interface PropertySelectorProps {
   onNotify?: (message: string) => void;
 }
 
+const PARALLAX_CLASSES = [
+  'ew-parallax-fast',
+  '',
+  'ew-parallax-slow',
+  '',
+  'ew-parallax-fast',
+];
+
 export default function PropertySelector({ onSelectProperty }: PropertySelectorProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeStatus, setActiveStatus] = useState<OccupancyStatus | 'all'>('all');
-  const [hoveredPropertyId, setHoveredPropertyId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -47,60 +54,53 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
   const liveAnnouncement = `${filteredProperties.length} ${filteredProperties.length === 1 ? 'property' : 'properties'} shown`;
 
   return (
-    <div
-      className="w-full min-h-[100dvh] relative overflow-hidden"
-      style={{ background: 'var(--color-canvas, #0c0c0c)' }}
-    >
+    <div className="w-full ew-canvas relative">
       <div aria-live="polite" aria-atomic="true" className="sr-only">
         {liveAnnouncement}
       </div>
 
-      {/* Header */}
+      {/* Floating header — inside canvas frame, top-left */}
       <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+        className="flex items-baseline justify-between"
+        style={{
+          marginBottom: 'clamp(16px, 2vw, 28px)',
+          padding: '0',
+        }}
       >
-        <header
-          className="sticky top-0 z-40 flex items-center justify-between"
+        <h1
+          className="uppercase"
           style={{
-            height: '48px',
-            padding: '0 24px',
-            background: 'var(--color-canvas, #0c0c0c)',
+            fontFamily: 'var(--font-ui)',
+            fontSize: 'var(--ew-header-size)',
+            fontWeight: 500,
+            letterSpacing: 'var(--ew-header-tracking)',
+            color: 'rgba(255,255,255,0.5)',
           }}
         >
-          <h1
-            className="uppercase"
-            style={{
-              fontFamily: 'var(--font-ui)',
-              fontSize: '0.6875rem',
-              fontWeight: 500,
-              letterSpacing: '0.35em',
-              color: 'rgba(255,255,255,0.6)',
-            }}
-          >
-            Properties
-          </h1>
-          <span
-            style={{
-              fontFamily: 'var(--font-ui)',
-              fontSize: '0.625rem',
-              fontWeight: 400,
-              letterSpacing: '0.10em',
-              color: 'rgba(255,255,255,0.4)',
-            }}
-          >
-            {filteredProperties.length} of {sampleProperties.length}
-          </span>
-        </header>
+          Properties
+        </h1>
+        <span
+          style={{
+            fontFamily: 'var(--font-ui)',
+            fontSize: '0.5625rem',
+            fontWeight: 400,
+            letterSpacing: '0.15em',
+            color: 'rgba(255,255,255,0.3)',
+          }}
+        >
+          {filteredProperties.length} of {sampleProperties.length}
+        </span>
       </motion.div>
 
       {/* Filters */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.3, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        style={{ padding: '0 24px 8px' }}
+        transition={{ duration: 0.3, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+        style={{ marginBottom: 'clamp(12px, 1.5vw, 20px)' }}
       >
         <PropertyFilters
           searchQuery={searchQuery}
@@ -110,80 +110,46 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
         />
       </motion.div>
 
-      {/* Grid / Skeleton */}
+      {/* Editorial Wall Grid */}
       {isLoading ? (
-        <div
-          className="grid"
-          style={{
-            gridTemplateColumns: '2fr 2fr 1fr',
-            gridTemplateRows: '1fr 1fr',
-            gap: '1px',
-            height: 'calc(100dvh - 48px)',
-            width: '100%',
-            background: 'var(--color-canvas, #0c0c0c)',
-          }}
-        >
+        <div className="ew-grid">
           {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} style={{ gridColumn: i === 4 ? 'span 2' : undefined }}>
-              <PropertySkeleton />
-            </div>
+            <PropertySkeleton key={i} />
           ))}
         </div>
       ) : (
-        <div style={{ padding: 0 }}>
+        <div>
           {filteredProperties.length > 0 ? (
-            <div
-              className="grid"
-              style={{
-                gridTemplateColumns: '2fr 2fr 1fr',
-                gridTemplateRows: '1fr 1fr',
-                gap: '1px',
-                height: 'calc(100dvh - 48px)',
-                width: '100%',
-                background: 'var(--color-canvas, #0c0c0c)',
-              }}
-            >
+            <div className="ew-grid">
               <AnimatePresence mode="sync">
-                {filteredProperties.map((property, i) => {
-                  const isHovered = hoveredPropertyId === property.id;
-                  const isAnotherHovered = hoveredPropertyId !== null && !isHovered;
-
-                  return (
-                    <motion.div
-                      key={property.id}
-                      layoutId={`container-${property.id}`}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ 
-                        opacity: isAnotherHovered ? 0.8 : 1,
-                        y: 0,
-                        zIndex: isHovered ? 10 : 1,
-                      }}
-                      exit={{ opacity: 0 }}
-                      transition={{
-                        duration: i === 2 || i === 4 ? 0.4 : 0.5,
-                        ease: [0.16, 1, 0.3, 1],
-                        delay: i * 0.08,
-                      }}
-                      style={{
-                        gridColumn: i === 3 ? 'span 2' : undefined,
-                      }}
-                      className="relative overflow-hidden"
-                      onMouseEnter={() => setHoveredPropertyId(property.id)}
-                      onMouseLeave={() => setHoveredPropertyId(null)}
-                    >
-                      <PropertyCard 
-                        property={property} 
-                        onSelect={handleSelect} 
+                {filteredProperties.map((property, i) => (
+                  <motion.div
+                    key={property.id}
+                    className="relative overflow-hidden"
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{
+                      duration: 0.5,
+                      ease: [0.16, 1, 0.3, 1],
+                      delay: i * 0.07,
+                    }}
+                  >
+                    <div className="ew-card-hover-target">
+                      <PropertyCard
+                        property={property}
+                        onSelect={handleSelect}
+                        parallaxClass={PARALLAX_CLASSES[i] || ''}
                       />
-                    </motion.div>
-                  );
-                })}
+                    </div>
+                  </motion.div>
+                ))}
               </AnimatePresence>
             </div>
           ) : (
             <motion.div
               className="flex flex-col items-center justify-center"
-              style={{ height: 'calc(100dvh - 48px)' }}
+              style={{ height: 'calc(100dvh - var(--ew-frame) * 2 - 120px)' }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4 }}
@@ -192,7 +158,7 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
                 className="font-sans text-center"
                 style={{
                   fontSize: '0.8125rem',
-                  color: 'var(--color-ink-secondary, rgba(201,184,160,0.4))',
+                  color: 'rgba(255,255,255,0.35)',
                   letterSpacing: '0.02em',
                 }}
               >
@@ -208,11 +174,11 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
                   fontSize: '0.5625rem',
                   fontWeight: 500,
                   letterSpacing: '0.20em',
-                  color: 'var(--color-ink, #F5F1E8)',
+                  color: 'rgba(255,255,255,0.7)',
                   background: 'none',
                   border: 'none',
                   padding: '8px 0',
-                  borderBottom: '1px solid var(--color-ink, #F5F1E8)',
+                  borderBottom: '1px solid rgba(255,255,255,0.3)',
                 }}
               >
                 Clear filters
