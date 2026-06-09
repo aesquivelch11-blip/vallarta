@@ -26,6 +26,7 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
   const [phase, setPhase] = useState<'wordmark' | 'grid' | 'ready'>('wordmark');
   const [tier, setTier] = useState<TierLevel>(getInitialTier);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const lenisRef = useRef<Lenis | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -93,7 +94,10 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
 
   const handleSelect = useCallback(
     (propertyId: string) => {
-      onSelectProperty(propertyId);
+      setSelectedId(propertyId);
+      setTimeout(() => {
+        onSelectProperty(propertyId);
+      }, 800);
     },
     [onSelectProperty],
   );
@@ -160,12 +164,18 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
                     key={property.id}
                     className="ps-grid-cell"
                     initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    animate={
+                      selectedId === null
+                        ? { opacity: 1, y: 0 }
+                        : selectedId === property.id
+                          ? { opacity: 1, y: 0, scale: 1.05 }
+                          : { opacity: 0, filter: 'blur(8px)' }
+                    }
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{
-                      duration: 0.5,
-                      ease: [0.0, 0.0, 0.2, 1],
-                      delay: i * 0.08,
+                      duration: 0.8,
+                      ease: [0.4, 0.0, 0.2, 1],
+                      delay: selectedId === null ? i * 0.08 : 0,
                     }}
                   >
                     <PropertyCard
