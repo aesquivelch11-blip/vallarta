@@ -24,8 +24,10 @@ export interface Property {
   tagline: string;
   imageUrl: string;
   imageWebp?: string;
-  images?: string[];        // gallery images; imageUrl is always images[0]
+  images?: string[];
   occupancyStatus: OccupancyStatus;
+  pricePerNight: number;
+  propertyType: string;
   metrics?: {
     bedrooms: number;
     occupancy: string;
