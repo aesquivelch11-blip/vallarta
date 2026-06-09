@@ -251,3 +251,38 @@ input:-webkit-autofill:focus {
     animation: none !important;
   }
 }
+
+/* ── Editorial Wall — Mobile ── */
+@media (max-width: 768px) {
+  .ew-canvas {
+    padding: clamp(16px, 4vw, 32px);
+  }
+
+  .ew-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    height: auto;
+    min-height: calc(100dvh - clamp(16px, 4vw, 32px) * 2);
+  }
+
+  .ew-grid > *:nth-child(3) {
+    grid-row: auto;
+  }
+
+  .ew-grid > *:nth-child(5) {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 480px) {
+  .ew-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .ew-grid > *:nth-child(3),
+  .ew-grid > *:nth-child(5) {
+    grid-column: auto;
+    grid-row: auto;
+  }
+}
