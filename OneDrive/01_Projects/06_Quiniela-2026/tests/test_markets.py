@@ -49,3 +49,15 @@ def test_fetch_market_predictions_skips_invalid(mocker):
 
     records = fetch_market_predictions(SAMPLE_FIXTURES, api_key="test")
     assert len(records) == 0
+
+def test_fetch_market_predictions_confidence_bounds(mocker):
+    mock_client = MagicMock()
+    mock_message = MagicMock()
+    mock_message.content = [MagicMock(type="text", text=MOCK_MARKET_JSON)]
+    mock_client.messages.create.return_value = mock_message
+    mocker.patch("src.research.markets.anthropic.Anthropic", return_value=mock_client)
+
+    records = fetch_market_predictions(SAMPLE_FIXTURES, api_key="test")
+    for r in records:
+        assert r.outcome in ("W", "D", "L")
+        assert 0.0 <= r.confidence_pct <= 1.0

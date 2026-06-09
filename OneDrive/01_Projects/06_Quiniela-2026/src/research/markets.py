@@ -19,6 +19,9 @@ For each match return a JSON array. Each element:
 Return ONLY valid JSON array. No markdown fences."""
 
 
+# Single-call design: markets data is fetched in one request (no batching).
+# max_uses=5 spans all fixtures — suitable for small fixture lists (e.g., a single group).
+# For full tournament coverage, call per-group or increase max_uses proportionally.
 def fetch_market_predictions(fixtures: list[MatchFixture], api_key: str) -> list[PredictionRecord]:
     client = anthropic.Anthropic(api_key=api_key)
     match_list = "\n".join(
@@ -69,6 +72,7 @@ def _parse(text: str) -> list[PredictionRecord]:
                 confidence_pct=min(1.0, max(0.0, float(item.get("confidence_pct", 0.5)))),
                 raw_text=item.get("raw_text", ""),
             ))
-        except (KeyError, ValueError):
+        except (KeyError, ValueError) as e:
+            print(f"Warning: Skipping malformed market record: {e!r}")
             continue
     return records
