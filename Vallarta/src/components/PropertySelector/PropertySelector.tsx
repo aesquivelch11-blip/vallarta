@@ -1,5 +1,6 @@
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
+import Lenis from 'lenis';
 import { ScreenType } from '../../types';
 import { sampleProperties } from './propertyData';
 import PropertyCard from './PropertyCard';
@@ -25,10 +26,44 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
   const [isLoading, setIsLoading] = useState(true);
   const [tier, setTier] = useState<TierLevel>(getInitialTier);
   const [searchQuery, setSearchQuery] = useState('');
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const lenisRef = useRef<Lenis | null>(null);
+  const canvasRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 600);
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    });
+
+    lenisRef.current = lenis;
+
+    function onScroll({ progress }: { progress: number }) {
+      setScrollProgress(progress * 100);
+    }
+
+    lenis.on('scroll', onScroll);
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+      lenisRef.current = null;
+    };
   }, []);
 
   useEffect(() => {
@@ -65,10 +100,12 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
   const liveAnnouncement = `${filteredProperties.length} properties shown`;
 
   return (
-    <div className="ps-canvas">
+    <div className="ps-canvas" ref={canvasRef}>
       <div aria-live="polite" aria-atomic="true" className="sr-only">
         {liveAnnouncement}
       </div>
+
+      <div className="ps-progress" style={{ width: `${scrollProgress}%` }} />
 
       <StickyHeader tier={tier} onTierChange={handleTierChange} onSearch={handleSearch} />
 
