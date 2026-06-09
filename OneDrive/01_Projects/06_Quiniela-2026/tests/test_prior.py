@@ -4,7 +4,7 @@ from src.models import TeamStats, RecentForm
 def _make_team(name: str, elo: int, wins: int = 5, draws: int = 3, losses: int = 2) -> TeamStats:
     form = RecentForm(matches=10, wins=wins, draws=draws, losses=losses,
                       goals_scored_avg=1.5, goals_conceded_avg=1.0)
-    return TeamStats(team=name, elo_rating=elo, fifa_rank=1, recent_form=form)
+    return TeamStats(team=name, elo_rating=elo, recent_form=form)
 
 def test_prior_sums_to_one():
     a = _make_team("Brazil", 2100)
