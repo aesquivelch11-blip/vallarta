@@ -1,27 +1,18 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Property, OccupancyStatus } from '../../types';
+import { Property } from '../../types';
 
 interface PropertyCardProps {
   property: Property;
   onSelect: (propertyId: string) => void;
+  parallaxClass?: string;
 }
 
-const STATUS_LABELS: Record<OccupancyStatus, string> = {
-  available: 'Available',
-  occupied: 'Occupied',
-  maintenance: 'Maintenance',
-  reserved: 'Reserved',
-};
-
-export default function PropertyCard({ property, onSelect }: PropertyCardProps) {
+export default function PropertyCard({ property, onSelect, parallaxClass }: PropertyCardProps) {
   return (
     <motion.button
       onClick={() => onSelect(property.id)}
       className="group relative w-full h-full text-left cursor-pointer overflow-hidden focus-visible:outline-none"
-      style={{
-        transition: 'box-shadow 0.2s ease',
-      }}
       onFocus={(e) => {
         e.currentTarget.style.boxShadow = 'inset 0 0 0 2px var(--color-dark-accent, #d49a55)';
       }}
@@ -30,76 +21,75 @@ export default function PropertyCard({ property, onSelect }: PropertyCardProps) 
       }}
       aria-label={`View ${property.name}`}
     >
-      <div className="relative w-full h-full overflow-hidden bg-[var(--color-canvas-elevated,#141414)]">
-        <picture>
-          {property.imageWebp && <source srcSet={property.imageWebp} type="image/webp" />}
-          <img
-            src={property.imageUrl}
-            alt={property.name}
-            className="w-full h-full object-cover"
-            loading="lazy"
-          />
-        </picture>
+      {/* Status micro-dot — top right */}
+      <div
+        className={`ew-status-dot ew-status-dot--${property.occupancyStatus}`}
+        aria-label={property.occupancyStatus}
+      />
 
-        {/* Bottom gradient overlay */}
+      <div className="relative w-full h-full overflow-hidden bg-[var(--color-canvas-elevated,#141414)]">
+        {/* Image with parallax */}
+        <div className={`absolute inset-0 ${parallaxClass || ''}`}>
+          <picture>
+            {property.imageWebp && <source srcSet={property.imageWebp} type="image/webp" />}
+            <img
+              src={property.imageUrl}
+              alt={property.name}
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
+          </picture>
+        </div>
+
+        {/* Bottom gradient — tighter, asymmetric */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'linear-gradient(to top, rgba(12,12,12,0.75) 0%, rgba(12,12,12,0.2) 40%, transparent 60%)',
+            background: 'linear-gradient(to top, rgba(12,12,12,0.82) 0%, rgba(12,12,12,0.15) 35%, transparent 55%)',
             transition: 'opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1)',
           }}
         />
         <div
           className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100"
           style={{
-            background: 'linear-gradient(to top, rgba(12,12,12,0.9) 0%, rgba(12,12,12,0.3) 40%, transparent 60%)',
+            background: 'linear-gradient(to top, rgba(12,12,12,0.88) 0%, rgba(12,12,12,0.25) 35%, transparent 55%)',
             transition: 'opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1)',
           }}
         />
 
-        {/* Text overlay */}
-        <div className="absolute bottom-0 left-0 right-0 p-5">
+        {/* Text overlay — asymmetric padding, bottom-left anchored */}
+        <div
+          className="absolute bottom-0 left-0"
+          style={{
+            padding: `0 var(--ew-card-pad-x) var(--ew-card-pad-bottom)`,
+          }}
+        >
           <h3
             className="italic"
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)',
+              fontSize: 'var(--ew-name-size)',
               fontWeight: 400,
-              color: 'rgba(255,255,255,0.9)',
-              lineHeight: 1.2,
-              letterSpacing: '-0.01em',
+              color: 'rgba(255,255,255,0.94)',
+              lineHeight: 0.95,
+              letterSpacing: '-0.02em',
             }}
           >
             {property.name}
           </h3>
-          <div className="flex items-end justify-between mt-1">
-            <span
-              className="uppercase"
-              style={{
-                fontFamily: 'var(--font-ui)',
-                fontSize: '0.625rem',
-                fontWeight: 400,
-                letterSpacing: '0.25em',
-                color: 'rgba(255,255,255,0.5)',
-              }}
-            >
-              {property.location}
-            </span>
-            <span
-              className="uppercase"
-              style={{
-                fontFamily: 'var(--font-ui)',
-                fontSize: '0.5625rem',
-                fontWeight: property.occupancyStatus === 'occupied' ? 500 : 400,
-                letterSpacing: '0.15em',
-                color: property.occupancyStatus === 'occupied' 
-                  ? 'rgba(255,255,255,0.7)' 
-                  : 'rgba(255,255,255,0.4)',
-              }}
-            >
-              {STATUS_LABELS[property.occupancyStatus] ?? property.occupancyStatus}
-            </span>
-          </div>
+          <span
+            className="uppercase block"
+            style={{
+              fontFamily: 'var(--font-ui)',
+              fontSize: 'var(--ew-location-size)',
+              fontWeight: 400,
+              letterSpacing: 'var(--ew-location-tracking)',
+              color: 'rgba(255,255,255,0.4)',
+              marginTop: '8px',
+            }}
+          >
+            {property.location}
+          </span>
         </div>
       </div>
     </motion.button>
