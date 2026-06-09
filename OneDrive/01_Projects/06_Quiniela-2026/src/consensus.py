@@ -3,7 +3,7 @@ from src.models import PredictionRecord, ConsensusRecord, MatchFixture, TeamStat
 from src.stats.prior import compute_prior
 
 _WEIGHTS: dict[str, float] = {"analyst": 1.0, "informed_fan": 0.6}
-_CONTRARIAN_THRESHOLD = 0.15
+_CONTRARIAN_THRESHOLD = 0.40
 
 def build_consensus(
     fixtures: list[MatchFixture],
@@ -79,7 +79,7 @@ def _contrarian(
     if not market_records:
         return False, ""
     best = max(market_records, key=lambda r: r.confidence_pct)
-    if best.outcome != consensus_outcome and best.confidence_pct > _CONTRARIAN_THRESHOLD:
+    if best.outcome != consensus_outcome and best.confidence_pct >= _CONTRARIAN_THRESHOLD:
         detail = (f"Markets favor {best.outcome} ({best.confidence_pct:.0%}) "
                   f"vs expert consensus {consensus_outcome} ({consensus_conf:.0%})")
         return True, detail
