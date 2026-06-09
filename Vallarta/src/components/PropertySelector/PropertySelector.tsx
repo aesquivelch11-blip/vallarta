@@ -8,7 +8,7 @@ import PropertySkeleton from './PropertySkeleton';
 import StickyHeader, { TierLevel } from './StickyHeader';
 
 interface PropertySelectorProps {
-  onNavigate: (screen: ScreenType, transitionStyle: 'push' | 'slide_up' | 'morph') => void;
+  onNavigate: (screen: ScreenType, transitionStyle: 'push' | 'push_back' | 'slide_up') => void;
   onSelectProperty: (propertyId: string) => void;
   onNotify?: (message: string) => void;
 }
