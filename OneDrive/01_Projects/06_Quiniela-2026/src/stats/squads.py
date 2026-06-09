@@ -38,7 +38,11 @@ def _fetch_batch(client: anthropic.Anthropic, batch: list[str]) -> dict[str, lis
 
 def fetch_squad_flags(teams: list[str], api_key: str) -> dict[str, list[str]]:
     teams = list(dict.fromkeys(teams))  # deduplicate, preserve order
-    client = anthropic.Anthropic(api_key=api_key)
+    try:
+        client = anthropic.Anthropic(api_key=api_key)
+    except anthropic.APIError as e:
+        print(f"Warning: Failed to initialize Anthropic client for squad flags: {e}")
+        return {team: [] for team in teams}
     results: dict[str, list[str]] = {}
     for i in range(0, len(teams), _BATCH_SIZE):
         batch = teams[i : i + _BATCH_SIZE]
