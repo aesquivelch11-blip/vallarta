@@ -1,13 +1,17 @@
 import requests
 from bs4 import BeautifulSoup
 
-ELO_URL = "http://www.eloratings.net/"
+ELO_URL = "https://www.eloratings.net/"
 
 def fetch_elo_ratings() -> dict[str, float]:
     """Scrape eloratings.net. Returns {team_name: elo_rating}."""
-    resp = requests.get(ELO_URL, timeout=15,
-                        headers={"User-Agent": "quiniela2026/1.0"})
-    resp.raise_for_status()
+    try:
+        resp = requests.get(ELO_URL, timeout=15,
+                            headers={"User-Agent": "quiniela2026/1.0"})
+        resp.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        print(f"Warning: Failed to fetch ELO ratings: {e}")
+        return {}
     soup = BeautifulSoup(resp.text, "html.parser")
 
     ratings: dict[str, float] = {}
