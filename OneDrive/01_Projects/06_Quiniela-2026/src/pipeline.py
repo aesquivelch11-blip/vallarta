@@ -37,7 +37,7 @@ def run() -> None:
 
     run_date   = date.today().isoformat()
     output_dir = Path("output")
-    output_dir.mkdir(exist_ok=True)
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     # ── Phase 1: GATHER ───────────────────────────────────────────────────────
 
@@ -47,7 +47,7 @@ def run() -> None:
     fixtures = fetch_fixtures(api_key=fd_key)
     if not fixtures:
         print("ERROR: No fixtures returned. Verify FOOTBALL_DATA_API_KEY.")
-        return
+        raise SystemExit(1)
     print(f"  {len(fixtures)} fixtures loaded.")
 
     all_teams = sorted({t for f in fixtures for t in (f.team_a, f.team_b)})
@@ -98,7 +98,6 @@ def run() -> None:
     report = render_report(consensus, run_date=run_date)
     print(report[:500])  # preview
 
-    output_dir.mkdir(exist_ok=True)
     raw_path = output_dir / f"{run_date}_raw_data.json"
     consensus_path = output_dir / f"{run_date}_consensus.json"
     report_path = output_dir / f"{run_date}_quiniela_report.md"
