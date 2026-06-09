@@ -55,13 +55,14 @@ def _parse(text: str) -> list[PredictionRecord]:
         print(f"Warning: Failed to parse analyst JSON: {e!r}")
         return []
     ts = datetime.now(timezone.utc).isoformat()
+    ts_part = ts[:19].replace(':', '').replace('-', '').replace('T', '_')
     records = []
-    for item in data:
+    for idx, item in enumerate(data):
         if item.get("outcome") not in ("W", "D", "L"):
             continue
         try:
             records.append(PredictionRecord(
-                source_id=f"analyst_{item['match_id']}_{ts[:19].replace(':', '').replace('-', '').replace('T', '_')}",
+                source_id=f"analyst_{item['match_id']}_{ts_part}_{idx}",
                 source_type="analyst",
                 source_url=item.get("source_url", ""),
                 timestamp=ts,

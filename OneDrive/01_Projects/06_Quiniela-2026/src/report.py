@@ -29,7 +29,7 @@ def render_report(records: list[ConsensusRecord], run_date: str) -> str:
     contrarians = [r for r in records if r.contrarian_flag]
     lines += ["", "## Contrarian Watchlist", ""]
     if contrarians:
-        lines.append("Picks where prediction markets diverge >15pp from expert consensus:\n")
+        lines.append("Picks where the leading market-implied outcome differs from expert consensus (market confidence ≥ 40%):\n")
         for r in contrarians:
             lines.append(f"- **{r.match_id}** ({r.team_a} vs {r.team_b}): {r.contrarian_detail}")
     else:

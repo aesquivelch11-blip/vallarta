@@ -29,11 +29,19 @@ from src.report import render_report
 from src.models import TeamStats
 
 
+def _require_env(key: str) -> str:
+    val = os.environ.get(key)
+    if not val:
+        print(f"ERROR: Required environment variable '{key}' is not set. Check your .env file.")
+        raise SystemExit(1)
+    return val
+
+
 def run() -> None:
-    anthropic_key = os.environ["ANTHROPIC_API_KEY"]
-    fd_key        = os.environ["FOOTBALL_DATA_API_KEY"]
-    reddit_cid    = os.environ["REDDIT_CLIENT_ID"]
-    reddit_csec   = os.environ["REDDIT_CLIENT_SECRET"]
+    anthropic_key = _require_env("ANTHROPIC_API_KEY")
+    fd_key        = _require_env("FOOTBALL_DATA_API_KEY")
+    reddit_cid    = _require_env("REDDIT_CLIENT_ID")
+    reddit_csec   = _require_env("REDDIT_CLIENT_SECRET")
 
     run_date   = date.today().isoformat()
     output_dir = Path("output")
@@ -102,9 +110,9 @@ def run() -> None:
     consensus_path = output_dir / f"{run_date}_consensus.json"
     report_path = output_dir / f"{run_date}_quiniela_report.md"
 
-    raw_path.write_text(json.dumps([asdict(r) for r in all_records], indent=2))
-    consensus_path.write_text(json.dumps([asdict(c) for c in consensus], indent=2))
-    report_path.write_text(report)
+    raw_path.write_text(json.dumps([asdict(r) for r in all_records], indent=2), encoding="utf-8")
+    consensus_path.write_text(json.dumps([asdict(c) for c in consensus], indent=2), encoding="utf-8")
+    report_path.write_text(report, encoding="utf-8")
 
     print(f"\nDone. Open your report:\n  {report_path}")
 

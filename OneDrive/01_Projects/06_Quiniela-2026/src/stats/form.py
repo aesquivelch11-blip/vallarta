@@ -43,7 +43,9 @@ def fetch_recent_form(team_name: str, api_key: str, n_matches: int = 10) -> Rece
         else:
             losses += 1
 
-    total = wins + draws + losses or 1
+    total = wins + draws + losses
+    if total == 0:
+        return _empty_form()
     return RecentForm(
         matches=total,
         wins=wins,
