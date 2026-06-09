@@ -1,5 +1,6 @@
 # src/research/analysts.py
 import json
+import re
 import anthropic
 from datetime import datetime, timezone
 from src.models import PredictionRecord, MatchFixture
@@ -22,7 +23,10 @@ def fetch_analyst_predictions(fixtures: list[MatchFixture], api_key: str) -> lis
     all_records: list[PredictionRecord] = []
     for i in range(0, len(fixtures), BATCH_SIZE):
         batch = fixtures[i:i + BATCH_SIZE]
-        all_records.extend(_fetch_batch(client, batch))
+        try:
+            all_records.extend(_fetch_batch(client, batch))
+        except anthropic.APIError as e:
+            print(f"Warning: Failed to fetch analyst predictions for batch {[f.match_id for f in batch]}: {e}")
     return all_records
 
 def _fetch_batch(client: anthropic.Anthropic, fixtures: list[MatchFixture]) -> list[PredictionRecord]:
@@ -33,15 +37,20 @@ def _fetch_batch(client: anthropic.Anthropic, fixtures: list[MatchFixture]) -> l
         model=MODEL,
         max_tokens=4096,
         system=_SYSTEM,
-        tools=[{"type": "web_search_20250305", "name": "web_search"}],
+        tools=[{"type": "web_search_20250305", "name": "web_search", "max_uses": 5}],
         messages=[{"role": "user", "content": f"Research analyst predictions for:\n{match_list}"}],
+        betas=["web-search-2025-03-05"],
     )
     text = next((b.text for b in response.content if getattr(b, "type", None) == "text"), "")
+    if not text:
+        print("Warning: No text block in analyst API response")
+        return []
     return _parse(text)
 
 def _parse(text: str) -> list[PredictionRecord]:
+    clean = re.sub(r"^```(?:json)?\s*|\s*```$", "", text.strip(), flags=re.DOTALL)
     try:
-        data = json.loads(text.strip())
+        data = json.loads(clean)
     except json.JSONDecodeError:
         return []
     ts = datetime.now(timezone.utc).isoformat()
@@ -51,7 +60,7 @@ def _parse(text: str) -> list[PredictionRecord]:
             continue
         try:
             records.append(PredictionRecord(
-                source_id=f"analyst_{item['match_id']}_{ts[:10]}",
+                source_id=f"analyst_{item['match_id']}_{ts[:16].replace(':', '')}",
                 source_type="analyst",
                 source_url=item.get("source_url", ""),
                 timestamp=ts,
