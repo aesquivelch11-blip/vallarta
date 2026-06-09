@@ -1,12 +1,13 @@
 # src/research/analysts.py
 import json
 import re
-import anthropic
+from google import genai
+from google.genai import types
 from datetime import datetime, timezone
 from src.models import PredictionRecord, MatchFixture
 
-MODEL = "claude-sonnet-4-6"
-BATCH_SIZE = 6  # one group per API call
+MODEL = "gemini-2.0-flash"
+BATCH_SIZE = 6
 
 _SYSTEM = """You are a football analytics researcher aggregating expert predictions for WC2026.
 Given group stage matches, search for analyst and expert predictions from reputable sources
@@ -19,31 +20,32 @@ For each match return a JSON array. Each element must have:
 Return ONLY valid JSON array. No markdown fences. No explanation outside the array."""
 
 def fetch_analyst_predictions(fixtures: list[MatchFixture], api_key: str) -> list[PredictionRecord]:
-    client = anthropic.Anthropic(api_key=api_key)
+    client = genai.Client(api_key=api_key)
     all_records: list[PredictionRecord] = []
     for i in range(0, len(fixtures), BATCH_SIZE):
         batch = fixtures[i:i + BATCH_SIZE]
         try:
             all_records.extend(_fetch_batch(client, batch))
-        except anthropic.APIError as e:
+        except Exception as e:
             print(f"Warning: Failed to fetch analyst predictions for batch {[f.match_id for f in batch]}: {e}")
     return all_records
 
-def _fetch_batch(client: anthropic.Anthropic, fixtures: list[MatchFixture]) -> list[PredictionRecord]:
+def _fetch_batch(client: genai.Client, fixtures: list[MatchFixture]) -> list[PredictionRecord]:
     match_list = "\n".join(
         f"- {f.match_id}: {f.team_a} vs {f.team_b} ({f.date})" for f in fixtures
     )
-    response = client.messages.create(
+    response = client.models.generate_content(
         model=MODEL,
-        max_tokens=4096,
-        system=_SYSTEM,
-        tools=[{"type": "web_search_20250305", "name": "web_search", "max_uses": 5}],
-        messages=[{"role": "user", "content": f"Research analyst predictions for:\n{match_list}"}],
-        betas=["web-search-2025-03-05"],
+        contents=f"Research analyst predictions for:\n{match_list}",
+        config=types.GenerateContentConfig(
+            system_instruction=_SYSTEM,
+            tools=[types.Tool(google_search=types.GoogleSearch())],
+            max_output_tokens=4096,
+        )
     )
-    text = next((b.text for b in response.content if getattr(b, "type", None) == "text"), "")
+    text = response.text or ""
     if not text:
-        print("Warning: No text block in analyst API response")
+        print("Warning: No text in analyst API response")
         return []
     return _parse(text)
 

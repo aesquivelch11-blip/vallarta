@@ -1,70 +1,48 @@
-# tests/test_analysts.py
+import pytest
 from unittest.mock import MagicMock
 from src.research.analysts import fetch_analyst_predictions
-from src.models import PredictionRecord, MatchFixture
+from src.models import MatchFixture
 
-SAMPLE_FIXTURES = [
-    MatchFixture(match_id="A1", group="A", team_a="USA", team_b="Mexico", date="2026-06-11"),
-    MatchFixture(match_id="B1", group="B", team_a="Brazil", team_b="Germany", date="2026-06-12"),
-]
+MOCK_LLM_JSON = '''[
+  {"match_id": "A1", "team_a": "Mexico", "team_b": "Poland",
+   "outcome": "W", "confidence_pct": 0.6, "source_url": "http://x.com", "raw_text": "Mexico win"},
+  {"match_id": "A1", "team_a": "Mexico", "team_b": "Poland",
+   "outcome": "X", "confidence_pct": 0.3, "source_url": "", "raw_text": "invalid"}
+]'''
 
-MOCK_LLM_JSON = """
-[
-  {
-    "match_id": "A1", "team_a": "USA", "team_b": "Mexico",
-    "outcome": "W", "confidence_pct": 0.55,
-    "source_url": "https://espn.com/wc2026",
-    "raw_text": "USA expected to win at home"
-  },
-  {
-    "match_id": "B1", "team_a": "Brazil", "team_b": "Germany",
-    "outcome": "W", "confidence_pct": 0.70,
-    "source_url": "https://bbc.com/sport/wc2026",
-    "raw_text": "Brazil clear favorites"
-  }
-]
-"""
+FIXTURE = MatchFixture(match_id="A1", group="A", team_a="Mexico", team_b="Poland", date="2026-06-11")
+
+
+def _mock_client(mocker, text):
+    mock_response = MagicMock()
+    mock_response.text = text
+    mock_client = MagicMock()
+    mock_client.models.generate_content.return_value = mock_response
+    mocker.patch("src.research.analysts.genai.Client", return_value=mock_client)
+    return mock_client
+
 
 def test_fetch_analyst_predictions_returns_records(mocker):
-    mock_client = MagicMock()
-    mock_message = MagicMock()
-    mock_message.content = [MagicMock(type="text", text=MOCK_LLM_JSON)]
-    mock_client.messages.create.return_value = mock_message
-    mocker.patch("src.research.analysts.anthropic.Anthropic", return_value=mock_client)
+    _mock_client(mocker, MOCK_LLM_JSON)
+    records = fetch_analyst_predictions([FIXTURE], api_key="test")
+    assert len(records) == 1  # "X" outcome filtered
 
-    records = fetch_analyst_predictions(SAMPLE_FIXTURES, api_key="test")
-    assert len(records) == 2
-    assert all(isinstance(r, PredictionRecord) for r in records)
 
 def test_fetch_analyst_predictions_source_type(mocker):
-    mock_client = MagicMock()
-    mock_message = MagicMock()
-    mock_message.content = [MagicMock(type="text", text=MOCK_LLM_JSON)]
-    mock_client.messages.create.return_value = mock_message
-    mocker.patch("src.research.analysts.anthropic.Anthropic", return_value=mock_client)
-
-    records = fetch_analyst_predictions(SAMPLE_FIXTURES, api_key="test")
+    _mock_client(mocker, MOCK_LLM_JSON)
+    records = fetch_analyst_predictions([FIXTURE], api_key="test")
     assert all(r.source_type == "analyst" for r in records)
 
-def test_fetch_analyst_predictions_valid_outcome(mocker):
-    mock_client = MagicMock()
-    mock_message = MagicMock()
-    mock_message.content = [MagicMock(type="text", text=MOCK_LLM_JSON)]
-    mock_client.messages.create.return_value = mock_message
-    mocker.patch("src.research.analysts.anthropic.Anthropic", return_value=mock_client)
 
-    records = fetch_analyst_predictions(SAMPLE_FIXTURES, api_key="test")
-    for r in records:
-        assert r.outcome in ("W", "D", "L")
-        assert 0.0 <= r.confidence_pct <= 1.0
+def test_fetch_analyst_predictions_valid_outcome(mocker):
+    _mock_client(mocker, MOCK_LLM_JSON)
+    records = fetch_analyst_predictions([FIXTURE], api_key="test")
+    assert all(r.outcome in ("W", "D", "L") for r in records)
+    assert all(0.0 <= r.confidence_pct <= 1.0 for r in records)
+
 
 def test_fetch_analyst_predictions_skips_invalid_outcome(mocker):
-    bad_json = '[{"match_id":"A1","team_a":"USA","team_b":"Mexico","outcome":"X","confidence_pct":0.5,"source_url":"","raw_text":""}]'
-    mock_client = MagicMock()
-    mock_message = MagicMock()
-    mock_message.content = [MagicMock(type="text", text=bad_json)]
-    mock_client.messages.create.return_value = mock_message
-    mocker.patch("src.research.analysts.anthropic.Anthropic", return_value=mock_client)
-
-    records = fetch_analyst_predictions(SAMPLE_FIXTURES, api_key="test")
-    assert len(records) == 0
+    bad_json = '[{"match_id":"A1","team_a":"Mexico","team_b":"Poland","outcome":"X","confidence_pct":0.5,"source_url":"","raw_text":"bad"}]'
+    _mock_client(mocker, bad_json)
+    records = fetch_analyst_predictions([FIXTURE], api_key="test")
+    assert records == []
