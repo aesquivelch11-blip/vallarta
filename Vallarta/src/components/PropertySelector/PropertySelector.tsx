@@ -160,29 +160,33 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
             <div className={gridClass}>
               <AnimatePresence mode="sync">
                 {filteredProperties.map((property, i) => (
-                  <motion.div
-                    key={property.id}
-                    className="ps-grid-cell"
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={
-                      selectedId === null
-                        ? { opacity: 1, y: 0 }
-                        : selectedId === property.id
-                          ? { opacity: 1, y: 0, scale: 1.05 }
-                          : { opacity: 0, filter: 'blur(8px)' }
-                    }
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{
-                      duration: 0.8,
-                      ease: [0.4, 0.0, 0.2, 1],
-                      delay: selectedId === null ? i * 0.08 : 0,
-                    }}
-                  >
-                    <PropertyCard
-                      property={property}
-                      onSelect={handleSelect}
-                      index={i}
-                    />
+              <motion.div
+                key={property.id}
+                className="ps-grid-cell"
+                layout
+                initial={{ opacity: 0, y: 16 }}
+                animate={
+                  selectedId === null
+                    ? { opacity: 1, y: 0 }
+                    : selectedId === property.id
+                      ? { opacity: 1, y: 0, scale: 1.05 }
+                      : { opacity: 0, filter: 'blur(8px)' }
+                }
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{
+                  layout: { duration: 0.6, ease: [0.4, 0.0, 0.2, 1] },
+                  opacity: { duration: 0.8, ease: [0.4, 0.0, 0.2, 1], delay: selectedId === null ? i * 0.08 : 0 },
+                  y: { duration: 0.8, ease: [0.4, 0.0, 0.2, 1], delay: selectedId === null ? i * 0.08 : 0 },
+                  scale: { duration: 0.8, ease: [0.4, 0.0, 0.2, 1] },
+                  filter: { duration: 0.8, ease: [0.4, 0.0, 0.2, 1] },
+                }}
+              >
+                <PropertyCard
+                  property={property}
+                  onSelect={handleSelect}
+                  index={i}
+                  tier={tier}
+                />
                   </motion.div>
                 ))}
               </AnimatePresence>
