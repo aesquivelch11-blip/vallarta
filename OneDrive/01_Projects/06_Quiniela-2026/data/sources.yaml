@@ -1,0 +1,24 @@
+analyst_sources:
+  - name: ESPN FC WC2026 predictions
+    url: https://www.espn.com/soccer/story/_/id/world-cup-2026-predictions
+  - name: BBC Sport WC2026 preview
+    url: https://www.bbc.com/sport/football/world-cup/2026
+  - name: The Athletic WC2026
+    url: https://theathletic.com/world-cup-2026/
+  - name: FiveThirtyEight Soccer
+    url: https://fivethirtyeight.com/soccer/world-cup/
+
+reddit_subreddits:
+  - soccer
+  - WorldCup
+  - FIFA
+  - ussoccer
+  - brasil
+  - argentina
+  - soccerplayer
+
+market_sources:
+  - name: Polymarket WC2026
+    query: "Polymarket World Cup 2026 winner odds"
+  - name: Kalshi WC2026
+    query: "Kalshi World Cup 2026 winner predictions market"
