@@ -1,3 +1,4 @@
+import { useRef, useEffect, useState } from 'react';
 import { Property } from '../../types';
 
 interface PropertyCardProps {
@@ -8,6 +9,32 @@ interface PropertyCardProps {
 
 export default function PropertyCard({ property, onSelect, index }: PropertyCardProps) {
   const isTall = index % 3 === 0;
+  const imageRef = useRef<HTMLDivElement>(null);
+  const [revealed, setRevealed] = useState(false);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      setRevealed(true);
+      return;
+    }
+
+    const el = imageRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setRevealed(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 },
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <button
@@ -16,7 +43,14 @@ export default function PropertyCard({ property, onSelect, index }: PropertyCard
       style={{ '--i': index } as React.CSSProperties}
       aria-label={`View ${property.name}, ${property.location}`}
     >
-      <div className="ps-card__image-wrap">
+      <div
+        ref={imageRef}
+        className="ps-card__image-wrap"
+        style={{
+          clipPath: revealed ? 'inset(0 0 0 0)' : 'inset(100% 0 0 0)',
+          transition: revealed ? `clip-path var(--ps-duration-base) var(--ps-ease-out)` : 'none',
+        }}
+      >
         <picture>
           {property.imageWebp && <source srcSet={property.imageWebp} type="image/webp" />}
           <img
