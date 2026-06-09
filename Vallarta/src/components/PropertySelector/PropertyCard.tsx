@@ -19,12 +19,12 @@ export default function PropertyCard({ property, onSelect, parallaxClass }: Prop
       onBlur={(e) => {
         e.currentTarget.style.boxShadow = 'none';
       }}
-      aria-label={`View ${property.name}`}
+      aria-label={`View ${property.name} — ${property.occupancyStatus}`}
     >
       {/* Status micro-dot — top right */}
       <div
         className={`ew-status-dot ew-status-dot--${property.occupancyStatus}`}
-        aria-label={property.occupancyStatus}
+        aria-hidden="true"
       />
 
       <div className="relative w-full h-full overflow-hidden bg-[var(--color-canvas-elevated,#141414)]">
