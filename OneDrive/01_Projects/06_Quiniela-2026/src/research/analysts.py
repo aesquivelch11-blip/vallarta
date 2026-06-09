@@ -51,7 +51,8 @@ def _parse(text: str) -> list[PredictionRecord]:
     clean = re.sub(r"^```(?:json)?\s*|\s*```$", "", text.strip(), flags=re.DOTALL)
     try:
         data = json.loads(clean)
-    except json.JSONDecodeError:
+    except json.JSONDecodeError as e:
+        print(f"Warning: Failed to parse analyst JSON: {e!r}")
         return []
     ts = datetime.now(timezone.utc).isoformat()
     records = []
