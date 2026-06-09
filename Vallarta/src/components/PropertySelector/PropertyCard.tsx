@@ -1,14 +1,29 @@
 import { useRef, useEffect, useState } from 'react';
 import { Property } from '../../types';
+import { TierLevel } from './StickyHeader';
 
 interface PropertyCardProps {
   property: Property;
   onSelect: (propertyId: string) => void;
   index: number;
+  tier: TierLevel;
 }
 
-export default function PropertyCard({ property, onSelect, index }: PropertyCardProps) {
-  const isTall = index % 3 === 0;
+const STATUS_LABELS: Record<string, string> = {
+  available: 'Available',
+  occupied: 'Occupied',
+  maintenance: 'Maintenance',
+  reserved: 'Reserved',
+};
+
+function isTallCard(index: number, tier: TierLevel): boolean {
+  if (tier === 'catalog') return false;
+  if (tier === 'gallery') return index % 3 === 0;
+  return index % 5 === 0 || index % 5 === 3;
+}
+
+export default function PropertyCard({ property, onSelect, index, tier }: PropertyCardProps) {
+  const tall = isTallCard(index, tier);
   const imageRef = useRef<HTMLDivElement>(null);
   const [revealed, setRevealed] = useState(false);
 
@@ -39,7 +54,7 @@ export default function PropertyCard({ property, onSelect, index }: PropertyCard
   return (
     <button
       onClick={() => onSelect(property.id)}
-      className={`ps-card ${isTall ? 'ps-card--tall' : 'ps-card--short'}`}
+      className={`ps-card ${tall ? 'ps-card--tall' : 'ps-card--short'}`}
       style={{ '--i': index } as React.CSSProperties}
       aria-label={`View ${property.name}, ${property.location}`}
     >
@@ -48,7 +63,9 @@ export default function PropertyCard({ property, onSelect, index }: PropertyCard
         className="ps-card__image-wrap"
         style={{
           clipPath: revealed ? 'inset(0 0 0 0)' : 'inset(100% 0 0 0)',
-          transition: revealed ? `clip-path var(--ps-duration-base) var(--ps-ease-out)` : 'none',
+          transition: revealed
+            ? `clip-path var(--ps-duration-base) var(--ps-ease-out), aspect-ratio var(--ps-duration-base) var(--ps-ease-out)`
+            : 'none',
         }}
       >
         <picture>
@@ -61,7 +78,10 @@ export default function PropertyCard({ property, onSelect, index }: PropertyCard
           />
         </picture>
         <div className="ps-card__gradient" />
-        <div className={`ps-card__status ps-card__status--${property.occupancyStatus}`} />
+        <div className="ps-card__status">
+          <span className={`ps-card__status-dot ps-card__status-dot--${property.occupancyStatus}`} />
+          <span className="ps-card__status-label">{STATUS_LABELS[property.occupancyStatus]}</span>
+        </div>
         <div className="ps-card__overlay">
           <h3 className="ps-card__name">{property.name}</h3>
           <p className="ps-card__location">{property.location}</p>
