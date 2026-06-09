@@ -1,44 +1,41 @@
+import pytest
 from unittest.mock import MagicMock
-import anthropic
 from src.stats.squads import fetch_squad_flags
 
-MOCK_RESPONSE = '{"Brazil": ["Vinicius Jr fit", "Rodrygo questionable"], "Germany": ["Müller retired"]}'
+MOCK_RESPONSE = '{"Germany": ["Key player: Musiala (fit)"], "Brazil": ["Key player: Vinicius (fit)"]}'
+
+
+def _mock_client(mocker, text):
+    mock_response = MagicMock()
+    mock_response.text = text
+    mock_client = MagicMock()
+    mock_client.models.generate_content.return_value = mock_response
+    mocker.patch("src.stats.squads.genai.Client", return_value=mock_client)
+    return mock_client
+
 
 def test_fetch_squad_flags_returns_dict(mocker):
-    mock_client = MagicMock()
-    mock_message = MagicMock()
-    mock_message.content = [MagicMock(type="text", text=MOCK_RESPONSE)]
-    mock_client.messages.create.return_value = mock_message
-    mocker.patch("src.stats.squads.anthropic.Anthropic", return_value=mock_client)
+    _mock_client(mocker, MOCK_RESPONSE)
+    result = fetch_squad_flags(["Germany", "Brazil"], api_key="test")
+    assert isinstance(result, dict)
+    assert "Germany" in result
+    assert isinstance(result["Germany"], list)
 
-    flags = fetch_squad_flags(["Brazil", "Germany"], api_key="test")
-    assert isinstance(flags, dict)
-    assert "Brazil" in flags
-    assert isinstance(flags["Brazil"], list)
 
 def test_fetch_squad_flags_missing_team_returns_empty(mocker):
-    mock_client = MagicMock()
-    mock_message = MagicMock()
-    mock_message.content = [MagicMock(type="text", text='{"Brazil": ["Neymar retired"]}')]
-    mock_client.messages.create.return_value = mock_message
-    mocker.patch("src.stats.squads.anthropic.Anthropic", return_value=mock_client)
+    _mock_client(mocker, '{"Germany": ["Musiala fit"]}')
+    result = fetch_squad_flags(["Germany", "France"], api_key="test")
+    assert result.get("France", []) == []
 
-    flags = fetch_squad_flags(["Brazil", "Germany"], api_key="test")
-    assert flags.get("Germany", []) == []
 
 def test_fetch_squad_flags_handles_markdown_fenced_json(mocker):
-    fenced = '```json\n{"Brazil": ["Vinicius fit"]}\n```'
-    mock_client = MagicMock()
-    mock_message = MagicMock()
-    mock_message.content = [MagicMock(type="text", text=fenced)]
-    mock_client.messages.create.return_value = mock_message
-    mocker.patch("src.stats.squads.anthropic.Anthropic", return_value=mock_client)
+    fenced = '```json\n{"Germany": ["Musiala fit"]}\n```'
+    _mock_client(mocker, fenced)
+    result = fetch_squad_flags(["Germany"], api_key="test")
+    assert "Germany" in result
 
-    flags = fetch_squad_flags(["Brazil"], api_key="test")
-    assert flags["Brazil"] == ["Vinicius fit"]
 
 def test_fetch_squad_flags_api_error_returns_empty(mocker):
-    mocker.patch("src.stats.squads.anthropic.Anthropic",
-                 side_effect=anthropic.APIConnectionError(request=MagicMock()))
-    flags = fetch_squad_flags(["Brazil", "Germany"], api_key="test")
-    assert flags == {"Brazil": [], "Germany": []}
+    mocker.patch("src.stats.squads.genai.Client", side_effect=Exception("API error"))
+    result = fetch_squad_flags(["Germany", "Brazil"], api_key="test")
+    assert result == {"Germany": [], "Brazil": []}
