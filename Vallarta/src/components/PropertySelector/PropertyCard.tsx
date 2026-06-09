@@ -59,7 +59,7 @@ export default function PropertyCard({ property, onSelect, parallaxClass }: Prop
 
         {/* Text overlay — asymmetric padding, bottom-left anchored */}
         <div
-          className="absolute bottom-0 left-0"
+          className="absolute bottom-0 left-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-1"
           style={{
             padding: `0 var(--ew-card-pad-x) var(--ew-card-pad-bottom)`,
           }}

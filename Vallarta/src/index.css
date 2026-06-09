@@ -176,6 +176,8 @@ input:-webkit-autofill:focus {
   height: var(--ew-status-dot-size);
   border-radius: 50%;
   z-index: 5;
+  animation: ew-dot-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.3s;
 }
 
 .ew-status-dot--available {
@@ -196,6 +198,18 @@ input:-webkit-autofill:focus {
 .ew-status-dot--reserved {
   background: var(--status-reserved-glow);
   box-shadow: 0 0 6px var(--status-reserved-glow);
+}
+
+/* Status dot entry animation */
+@keyframes ew-dot-in {
+  from {
+    opacity: 0;
+    scale: 0;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
 }
 
 /* ── Scroll-driven parallax (progressive enhancement) ── */
@@ -232,5 +246,8 @@ input:-webkit-autofill:focus {
   }
   .ew-card-hover-target:hover {
     transform: none !important;
+  }
+  .ew-status-dot {
+    animation: none !important;
   }
 }
