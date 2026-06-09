@@ -47,3 +47,9 @@ def test_match_fixture_fields():
     mf = MatchFixture(match_id="A1", group="A", team_a="USA",
                       team_b="Mexico", date="2026-06-11")
     assert mf.group == "A"
+
+def test_recent_form_integrity_check():
+    import pytest
+    with pytest.raises(AssertionError):
+        RecentForm(matches=10, wins=6, draws=2, losses=3,  # 6+2+3=11 != 10
+                   goals_scored_avg=1.8, goals_conceded_avg=0.9)
