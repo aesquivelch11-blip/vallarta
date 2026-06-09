@@ -19,28 +19,27 @@ def compute_prior(team_a: TeamStats, team_b: TeamStats) -> dict[str, float]:
     # Draw probability: closer Elo → higher (max 0.25 at delta=0, min 0.18 at |delta|>=210)
     draw_raw = 0.25 + max(-0.07, -abs(elo_delta) / 3000)
 
-    # Compute raw values — l_raw MUST use raw w, not floored w, to preserve symmetry
-    w_raw = base_win + form_adj
-    l_raw = 1.0 - w_raw - draw_raw
+    # Scale win/loss by (1-draw) so w_raw + l_raw + draw_raw = 1 and l_raw(A,B) = w_raw(B,A)
+    # This is the only construction that guarantees exact symmetry after floor redistribution.
+    p_win = base_win + form_adj
+    vals = [p_win * (1.0 - draw_raw), draw_raw, (1.0 - p_win) * (1.0 - draw_raw)]
+    keys = ["W", "D", "L"]
 
-    # Floor all three independently, then iteratively normalize with floor maintenance
-    w = max(FLOOR, w_raw)
-    d = max(FLOOR, draw_raw)
-    l = max(FLOOR, l_raw)
+    # Proportional floor redistribution: raise below-floor values to FLOOR,
+    # reduce above-floor values proportionally. Preserves symmetry and sums to 1.
+    for _ in range(20):
+        below = [v < FLOOR for v in vals]
+        if not any(below):
+            break
+        deficit = sum(FLOOR - v for v, b in zip(vals, below) if b)
+        above_total = sum(v for v, b in zip(vals, below) if not b)
+        vals = [
+            FLOOR if b else v - deficit * v / above_total
+            for v, b in zip(vals, below)
+        ]
 
-    # Iteratively normalize while maintaining floor
-    for _ in range(10):
-        total = w + d + l
-        w = max(FLOOR, w / total)
-        d = max(FLOOR, d / total)
-        l = max(FLOOR, l / total)
-
-    total = w + d + l
-    return {
-        "W": round(w / total, 4),
-        "D": round(d / total, 4),
-        "L": round(l / total, 4),
-    }
+    total = sum(vals)
+    return {k: round(v / total, 4) for k, v in zip(keys, vals)}
 
 
 def _form_score(team: TeamStats) -> float:
