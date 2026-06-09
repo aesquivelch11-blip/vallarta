@@ -23,7 +23,7 @@ function getInitialTier(): TierLevel {
 }
 
 export default function PropertySelector({ onSelectProperty }: PropertySelectorProps) {
-  const [isLoading, setIsLoading] = useState(true);
+  const [phase, setPhase] = useState<'wordmark' | 'grid' | 'ready'>('wordmark');
   const [tier, setTier] = useState<TierLevel>(getInitialTier);
   const [searchQuery, setSearchQuery] = useState('');
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -31,11 +31,24 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
   const canvasRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 600);
-    return () => clearTimeout(timer);
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      setPhase('ready');
+      return;
+    }
+
+    const t1 = setTimeout(() => setPhase('grid'), 400);
+    const t2 = setTimeout(() => setPhase('ready'), 1000);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
   }, []);
 
   useEffect(() => {
+    if (phase !== 'ready') return;
+
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
@@ -64,7 +77,7 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
       lenis.destroy();
       lenisRef.current = null;
     };
-  }, []);
+  }, [phase]);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, tier);
@@ -107,46 +120,65 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
 
       <div className="ps-progress" style={{ width: `${scrollProgress}%` }} />
 
-      <StickyHeader tier={tier} onTierChange={handleTierChange} onSearch={handleSearch} />
+      <AnimatePresence>
+        {phase === 'wordmark' && (
+          <motion.div
+            key="hero-wordmark"
+            className="ps-hero"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.5, ease: [0.0, 0.0, 0.2, 1] }}
+          >
+            <div className="ps-hero__wordmark">Vallarta</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {isLoading ? (
-        <div className={gridClass}>
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <PropertySkeleton key={i} index={i - 1} />
-          ))}
-        </div>
-      ) : filteredProperties.length === 0 ? (
-        <div className="ps-empty">
-          <p className="ps-empty__text">No properties match your search.</p>
-          <button className="ps-empty__cta" onClick={() => handleSearch('')}>
-            Clear search
-          </button>
-        </div>
-      ) : (
-        <div className={gridClass}>
-          <AnimatePresence mode="sync">
-            {filteredProperties.map((property, i) => (
-              <motion.div
-                key={property.id}
-                className="ps-grid-cell"
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{
-                  duration: 0.5,
-                  ease: [0.0, 0.0, 0.2, 1],
-                  delay: i * 0.08,
-                }}
-              >
-                <PropertyCard
-                  property={property}
-                  onSelect={handleSelect}
-                  index={i}
-                />
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </div>
+      {(phase === 'grid' || phase === 'ready') && (
+        <>
+          <motion.div
+            initial={{ opacity: 0, y: -56 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: [0.0, 0.0, 0.2, 1] }}
+          >
+            <StickyHeader tier={tier} onTierChange={handleTierChange} onSearch={handleSearch} />
+          </motion.div>
+
+          {filteredProperties.length === 0 ? (
+            <div className="ps-empty">
+              <p className="ps-empty__text">No properties match your search.</p>
+              <button className="ps-empty__cta" onClick={() => handleSearch('')}>
+                Clear search
+              </button>
+            </div>
+          ) : (
+            <div className={gridClass}>
+              <AnimatePresence mode="sync">
+                {filteredProperties.map((property, i) => (
+                  <motion.div
+                    key={property.id}
+                    className="ps-grid-cell"
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{
+                      duration: 0.5,
+                      ease: [0.0, 0.0, 0.2, 1],
+                      delay: i * 0.08,
+                    }}
+                  >
+                    <PropertyCard
+                      property={property}
+                      onSelect={handleSelect}
+                      index={i}
+                    />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
