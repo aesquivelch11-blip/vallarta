@@ -9,10 +9,49 @@ interface StickyHeaderProps {
   onSearch: (query: string) => void;
 }
 
-const TIERS: { id: TierLevel; label: string }[] = [
-  { id: 'gallery', label: 'Gallery' },
-  { id: 'collection', label: 'Collection' },
-  { id: 'catalog', label: 'Catalog' },
+const TIERS: { id: TierLevel; label: string; icon: React.ReactNode }[] = [
+  {
+    id: 'gallery',
+    label: 'Large',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.2" />
+        <rect x="9" y="1" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.2" />
+        <rect x="1" y="9" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.2" />
+        <rect x="9" y="9" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.2" />
+      </svg>
+    ),
+  },
+  {
+    id: 'collection',
+    label: 'Medium',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="4" height="4" rx="0.8" stroke="currentColor" strokeWidth="1.2" />
+        <rect x="6" y="1" width="4" height="4" rx="0.8" stroke="currentColor" strokeWidth="1.2" />
+        <rect x="11" y="1" width="4" height="4" rx="0.8" stroke="currentColor" strokeWidth="1.2" />
+        <rect x="1" y="6" width="4" height="4" rx="0.8" stroke="currentColor" strokeWidth="1.2" />
+        <rect x="6" y="6" width="4" height="4" rx="0.8" stroke="currentColor" strokeWidth="1.2" />
+        <rect x="11" y="6" width="4" height="4" rx="0.8" stroke="currentColor" strokeWidth="1.2" />
+      </svg>
+    ),
+  },
+  {
+    id: 'catalog',
+    label: 'Compact',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="3" height="3" rx="0.6" stroke="currentColor" strokeWidth="1" />
+        <rect x="5" y="1" width="3" height="3" rx="0.6" stroke="currentColor" strokeWidth="1" />
+        <rect x="9" y="1" width="3" height="3" rx="0.6" stroke="currentColor" strokeWidth="1" />
+        <rect x="13" y="1" width="2" height="3" rx="0.6" stroke="currentColor" strokeWidth="1" />
+        <rect x="1" y="5" width="3" height="3" rx="0.6" stroke="currentColor" strokeWidth="1" />
+        <rect x="5" y="5" width="3" height="3" rx="0.6" stroke="currentColor" strokeWidth="1" />
+        <rect x="9" y="5" width="3" height="3" rx="0.6" stroke="currentColor" strokeWidth="1" />
+        <rect x="13" y="5" width="2" height="3" rx="0.6" stroke="currentColor" strokeWidth="1" />
+      </svg>
+    ),
+  },
 ];
 
 export default function StickyHeader({ tier, onTierChange, onSearch }: StickyHeaderProps) {
@@ -80,7 +119,8 @@ export default function StickyHeader({ tier, onTierChange, onSearch }: StickyHea
               role="radio"
               aria-checked={tier === t.id}
             >
-              {t.label}
+              <span className="ps-header__tier-btn-icon">{t.icon}</span>
+              <span className="ps-header__tier-btn-label">{t.label}</span>
             </button>
           ))}
         </div>
