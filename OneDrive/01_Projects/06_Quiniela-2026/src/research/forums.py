@@ -2,11 +2,12 @@
 import json
 import re
 import praw
-import anthropic
+from google import genai
+from google.genai import types
 from datetime import datetime, timezone
 from src.models import PredictionRecord, MatchFixture
 
-MODEL = "claude-sonnet-4-6"
+MODEL = "gemini-2.0-flash"
 SUBREDDITS = ["soccer", "WorldCup", "FIFA", "ussoccer", "brasil", "argentina"]
 
 _QUALITY_SYSTEM = """Rate this Reddit post's football domain knowledge 0-10.
@@ -25,7 +26,7 @@ def fetch_forum_predictions(
     fixtures: list[MatchFixture],
     reddit_client_id: str,
     reddit_client_secret: str,
-    anthropic_api_key: str,
+    gemini_api_key: str,
     quality_threshold: int = 7,
     posts_per_subreddit: int = 20,  # renamed from posts_per_match: limit applies per subreddit, not per match
 ) -> list[PredictionRecord]:
@@ -34,15 +35,14 @@ def fetch_forum_predictions(
         client_secret=reddit_client_secret,
         user_agent="quiniela2026/1.0 (research pipeline)",
     )
-    llm = anthropic.Anthropic(api_key=anthropic_api_key)
+    llm = genai.Client(api_key=gemini_api_key)
     records: list[PredictionRecord] = []
 
     for fixture in fixtures:
-        query = f"{fixture.team_a} vs {fixture.team_b} World Cup 2026"
         for sub_name in SUBREDDITS:
             sub = reddit.subreddit(sub_name)
             try:
-                posts = list(sub.search(query, limit=posts_per_subreddit, sort="top"))
+                posts = list(sub.hot(limit=posts_per_subreddit))
             except Exception:
                 continue
             for post in posts:
@@ -53,37 +53,41 @@ def fetch_forum_predictions(
                         records.append(record)
     return records
 
-def _score_post_quality(client: anthropic.Anthropic, text: str) -> int:
+def _score_post_quality(client: genai.Client, text: str) -> int:
     try:
-        resp = client.messages.create(
+        response = client.models.generate_content(
             model=MODEL,
-            max_tokens=10,
-            system=_QUALITY_SYSTEM,
-            messages=[{"role": "user", "content": text[:2000]}],
+            contents=text[:2000],
+            config=types.GenerateContentConfig(
+                system_instruction=_QUALITY_SYSTEM,
+                max_output_tokens=10,
+            )
         )
-        return int(resp.content[0].text.strip())
-    except anthropic.APIError:
-        return 0
-    except (ValueError, IndexError):
+        score_text = response.text or "0"
+        return int(score_text.strip())
+    except Exception:
         return 0
 
 def _post_to_prediction(
-    client: anthropic.Anthropic,
+    client: genai.Client,
     post: object,
     fixture: MatchFixture,
 ) -> PredictionRecord | None:
     text = f"Match: {fixture.match_id} — {fixture.team_a} vs {fixture.team_b}\n\n{post.title}\n{post.selftext}"
     try:
-        resp = client.messages.create(
+        response = client.models.generate_content(
             model=MODEL,
-            max_tokens=256,
-            system=_PREDICT_SYSTEM,
-            messages=[{"role": "user", "content": text[:3000]}],
+            contents=text[:3000],
+            config=types.GenerateContentConfig(
+                system_instruction=_PREDICT_SYSTEM,
+                max_output_tokens=256,
+            )
         )
-    except anthropic.APIError as e:
+        llm_text = response.text or ""
+    except Exception as e:
         print(f"Warning: API error in forum prediction extraction: {e}")
         return None
-    raw = resp.content[0].text.strip()
+    raw = llm_text.strip()
     if raw.lower() == "null":
         return None
     clean = re.sub(r"^```(?:json)?\s*|\s*```$", "", raw, flags=re.DOTALL)

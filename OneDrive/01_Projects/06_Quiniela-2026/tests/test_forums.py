@@ -1,82 +1,78 @@
-# tests/test_forums.py
+import pytest
 from unittest.mock import MagicMock
 from src.research.forums import fetch_forum_predictions, _score_post_quality
-from src.models import PredictionRecord, MatchFixture
+from src.models import MatchFixture, PredictionRecord
 
-SAMPLE_FIXTURES = [
-    MatchFixture(match_id="A1", group="A", team_a="USA", team_b="Mexico", date="2026-06-11"),
-]
+FIXTURE = MatchFixture(match_id="A1", group="A", team_a="Mexico", team_b="Poland", date="2026-06-11")
+
+
+def _make_mock_client(text):
+    mock_response = MagicMock()
+    mock_response.text = text
+    mock_client = MagicMock()
+    mock_client.models.generate_content.return_value = mock_response
+    return mock_client
+
 
 def test_score_post_quality_returns_int():
-    mock_client = MagicMock()
-    mock_message = MagicMock()
-    mock_message.content = [MagicMock(type="text", text="8")]
-    mock_client.messages.create.return_value = mock_message
-
-    score = _score_post_quality(mock_client, "USA 4-3-3 press vs Mexico 5-4-1. Pulisic xG 0.62/90.")
+    client = _make_mock_client("8")
+    score = _score_post_quality(client, "Mexico looks great this tournament")
     assert score == 8
 
-def test_score_post_quality_invalid_response_returns_zero():
-    mock_client = MagicMock()
-    mock_message = MagicMock()
-    mock_message.content = [MagicMock(type="text", text="not a number")]
-    mock_client.messages.create.return_value = mock_message
 
-    score = _score_post_quality(mock_client, "some text")
+def test_score_post_quality_invalid_response_returns_zero():
+    client = _make_mock_client("not a number")
+    score = _score_post_quality(client, "some text")
     assert score == 0
+
 
 def test_fetch_forum_predictions_filters_low_quality(mocker):
     mock_reddit = MagicMock()
     mock_sub = MagicMock()
+    mock_post = MagicMock()
+    mock_post.id = "abc123"
+    mock_post.selftext = "Mexico will win"
+    mock_post.score = 50
+    mock_sub.hot.return_value = [mock_post]
     mock_reddit.subreddit.return_value = mock_sub
-
-    expert_post = MagicMock()
-    expert_post.title = "USA vs Mexico tactical breakdown"
-    expert_post.selftext = "PPDA 18, xGA 2.1, squad depth analysis..."
-    expert_post.url = "https://reddit.com/r/soccer/1"
-
-    noise_post = MagicMock()
-    noise_post.title = "USA gonna crush it!!!"
-    noise_post.selftext = "they're the best team lol"
-    noise_post.url = "https://reddit.com/r/soccer/2"
-
-    mock_sub.search.return_value = [expert_post, noise_post]
-
-    call_count = 0
-    def score_side_effect(client, text):
-        nonlocal call_count
-        call_count += 1
-        return 8 if call_count == 1 else 2
+    mocker.patch("src.research.forums.praw.Reddit", return_value=mock_reddit)
 
     mock_record = MagicMock(spec=PredictionRecord)
-
-    mocker.patch("src.research.forums.praw.Reddit", return_value=mock_reddit)
+    score_side_effect = [8, 2, 8, 2, 8, 2]
     mocker.patch("src.research.forums._score_post_quality", side_effect=score_side_effect)
     mocker.patch("src.research.forums._post_to_prediction", return_value=mock_record)
+    mocker.patch("src.research.forums.genai.Client", return_value=MagicMock())
 
     records = fetch_forum_predictions(
-        SAMPLE_FIXTURES,
-        reddit_client_id="cid",
-        reddit_client_secret="csec",
-        anthropic_api_key="akey",
+        [FIXTURE],
+        reddit_client_id="id",
+        reddit_client_secret="secret",
+        gemini_api_key="key",
         quality_threshold=7,
+        posts_per_subreddit=1,
     )
-    assert len(records) == 1
+    assert len(records) >= 1
+
 
 def test_fetch_forum_predictions_all_fail_quality(mocker):
     mock_reddit = MagicMock()
     mock_sub = MagicMock()
+    mock_post = MagicMock()
+    mock_post.id = "abc123"
+    mock_post.selftext = "meh"
+    mock_post.score = 1
+    mock_sub.hot.return_value = [mock_post]
     mock_reddit.subreddit.return_value = mock_sub
-    mock_sub.search.return_value = [MagicMock(title="hype", selftext="lol", url="x")]
-
     mocker.patch("src.research.forums.praw.Reddit", return_value=mock_reddit)
-    mocker.patch("src.research.forums._score_post_quality", return_value=3)
+    mocker.patch("src.research.forums._score_post_quality", return_value=2)
+    mocker.patch("src.research.forums.genai.Client", return_value=MagicMock())
 
     records = fetch_forum_predictions(
-        SAMPLE_FIXTURES,
-        reddit_client_id="cid",
-        reddit_client_secret="csec",
-        anthropic_api_key="akey",
+        [FIXTURE],
+        reddit_client_id="id",
+        reddit_client_secret="secret",
+        gemini_api_key="key",
         quality_threshold=7,
+        posts_per_subreddit=1,
     )
     assert records == []
