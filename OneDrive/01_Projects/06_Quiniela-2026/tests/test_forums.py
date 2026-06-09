@@ -7,7 +7,7 @@ SAMPLE_FIXTURES = [
     MatchFixture(match_id="A1", group="A", team_a="USA", team_b="Mexico", date="2026-06-11"),
 ]
 
-def test_score_post_quality_returns_int(mocker):
+def test_score_post_quality_returns_int():
     mock_client = MagicMock()
     mock_message = MagicMock()
     mock_message.content = [MagicMock(type="text", text="8")]
@@ -16,7 +16,7 @@ def test_score_post_quality_returns_int(mocker):
     score = _score_post_quality(mock_client, "USA 4-3-3 press vs Mexico 5-4-1. Pulisic xG 0.62/90.")
     assert score == 8
 
-def test_score_post_quality_invalid_response_returns_zero(mocker):
+def test_score_post_quality_invalid_response_returns_zero():
     mock_client = MagicMock()
     mock_message = MagicMock()
     mock_message.content = [MagicMock(type="text", text="not a number")]

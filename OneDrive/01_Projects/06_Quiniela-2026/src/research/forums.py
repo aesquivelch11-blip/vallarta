@@ -51,14 +51,16 @@ def fetch_forum_predictions(
     return records
 
 def _score_post_quality(client: anthropic.Anthropic, text: str) -> int:
-    resp = client.messages.create(
-        model=MODEL,
-        max_tokens=10,
-        system=_QUALITY_SYSTEM,
-        messages=[{"role": "user", "content": text[:2000]}],
-    )
     try:
+        resp = client.messages.create(
+            model=MODEL,
+            max_tokens=10,
+            system=_QUALITY_SYSTEM,
+            messages=[{"role": "user", "content": text[:2000]}],
+        )
         return int(resp.content[0].text.strip())
+    except anthropic.APIError:
+        return 0
     except (ValueError, IndexError):
         return 0
 
@@ -68,12 +70,16 @@ def _post_to_prediction(
     fixture: MatchFixture,
 ) -> PredictionRecord | None:
     text = f"Match: {fixture.match_id} — {fixture.team_a} vs {fixture.team_b}\n\n{post.title}\n{post.selftext}"
-    resp = client.messages.create(
-        model=MODEL,
-        max_tokens=256,
-        system=_PREDICT_SYSTEM,
-        messages=[{"role": "user", "content": text[:3000]}],
-    )
+    try:
+        resp = client.messages.create(
+            model=MODEL,
+            max_tokens=256,
+            system=_PREDICT_SYSTEM,
+            messages=[{"role": "user", "content": text[:3000]}],
+        )
+    except anthropic.APIError as e:
+        print(f"Warning: API error in forum prediction extraction: {e}")
+        return None
     raw = resp.content[0].text.strip()
     if raw.lower() == "null":
         return None
@@ -84,7 +90,7 @@ def _post_to_prediction(
             return None
         ts = datetime.now(timezone.utc).isoformat()
         return PredictionRecord(
-            source_id=f"forum_{fixture.match_id}_{ts[:16].replace(':', '')}",
+            source_id=f"forum_{fixture.match_id}_{post.id}",
             source_type="informed_fan",
             source_url=getattr(post, "url", ""),
             timestamp=ts,
