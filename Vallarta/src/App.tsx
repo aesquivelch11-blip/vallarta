@@ -9,6 +9,7 @@ import CameraFeedView from './components/CameraFeedView';
 import CalendarView from './components/CalendarView';
 import Preloader from './components/Preloader';
 import DashboardView from './components/Dashboard/DashboardView';
+import PropertySelector from './components/PropertySelector/PropertySelector';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<ScreenType>('login');
@@ -175,10 +176,16 @@ export default function App() {
           </div>
         );
       case 'property_selector':
-        // PropertySelector: rebuild from scratch
         return (
-          <div key="property_selector" className="w-full min-h-screen flex items-center justify-center">
-            <p className="text-[#242424]/50 font-serif">Property Selector — Under Reconstruction</p>
+          <div key="property_selector" className="w-full min-h-screen">
+            <PropertySelector
+              onNavigate={(screen, style) => handleNavigate(screen, style)}
+              onSelectProperty={(propertyId) => {
+                setSelectedPropertyId(propertyId);
+                handleNavigate('dashboard', 'push');
+              }}
+              onNotify={triggerToast}
+            />
           </div>
         );
       case 'dashboard':
