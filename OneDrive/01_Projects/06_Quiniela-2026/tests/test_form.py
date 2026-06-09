@@ -54,3 +54,17 @@ def test_fetch_fixtures_returns_match_fixtures(mocker):
     assert fixtures[0].team_a == "USA"
     assert fixtures[0].team_b == "Mexico"
     assert fixtures[0].group == "A"
+
+def test_fetch_recent_form_unknown_team_returns_empty(mocker):
+    mocker.patch("src.stats.form.requests.get",
+                 return_value=MagicMock(json=lambda: {"teams": []},
+                                        raise_for_status=MagicMock()))
+    form = fetch_recent_form("Atlantis FC", api_key="test")
+    assert form.matches == 1 and form.draws == 1
+
+def test_fetch_recent_form_network_error_returns_empty(mocker):
+    import requests as req_lib
+    mocker.patch("src.stats.form.requests.get",
+                 side_effect=req_lib.exceptions.ConnectionError("down"))
+    form = fetch_recent_form("Brazil", api_key="test")
+    assert isinstance(form, RecentForm)
