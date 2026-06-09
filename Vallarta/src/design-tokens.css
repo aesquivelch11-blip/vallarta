@@ -24,6 +24,12 @@
     --color-accent-live-glow: oklch(38% 0.15 12 / 0.25);
     --color-accent-live-bg: oklch(38% 0.15 12 / 0.08);
 
+    /* --- Status Ambient --- */
+    --status-available-glow: oklch(72% 0.08 155 / 0.5);
+    --status-occupied-glow: oklch(55% 0.06 80 / 0.4);
+    --status-maintenance-glow: oklch(62% 0.12 70 / 0.45);
+    --status-reserved-glow: oklch(65% 0.05 260 / 0.35);
+
     /* --- Dashboard Task Status --- */
     --color-task-urgent: oklch(53% 0.12 25);
     --color-task-pending: var(--color-ink-secondary);
@@ -50,6 +56,19 @@
     --radius-panel: 20px;
     --radius-card: 16px;
     --radius-pill: 9999px;
+
+    /* --- Editorial Wall --- */
+    --ew-frame: clamp(32px, 5vw, 80px);
+    --ew-gap: 2px;
+    --ew-card-pad-x: clamp(24px, 3vw, 40px);
+    --ew-card-pad-y: clamp(20px, 2.5vw, 32px);
+    --ew-card-pad-bottom: clamp(32px, 4vw, 56px);
+    --ew-status-dot-size: 6px;
+    --ew-name-size: clamp(2rem, 4.5vw, 3.5rem);
+    --ew-location-size: 0.5625rem;
+    --ew-location-tracking: 0.3em;
+    --ew-header-size: 0.625rem;
+    --ew-header-tracking: 0.35em;
 
     /* --- Material --- */
     --shadow-contact: 0 1px 2px rgba(0, 0, 0, 0.04);
