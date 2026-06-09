@@ -3,6 +3,18 @@ from bs4 import BeautifulSoup
 
 ELO_URL = "https://www.eloratings.net/"
 
+TEAM_NAME_MAP: dict[str, str] = {
+    "United States": "USA",
+    "Korea Republic": "South Korea",
+    "Korea DPR": "North Korea",
+    "Iran": "IR Iran",
+    "Czech Republic": "Czechia",
+    "Cape Verde Islands": "Cape Verde",
+    "Trinidad & Tobago": "Trinidad and Tobago",
+    "Bosnia-Herzegovina": "Bosnia and Herzegovina",
+    "Northern Ireland": "Northern Ireland",
+}
+
 def fetch_elo_ratings() -> dict[str, float]:
     """Scrape eloratings.net. Returns {team_name: elo_rating}."""
     try:
@@ -25,7 +37,8 @@ def fetch_elo_ratings() -> dict[str, float]:
             team = team_cell.get_text(strip=True)
             try:
                 rating = float(rating_cell.get_text(strip=True).replace(",", ""))
-                ratings[team] = rating
+                normalized = TEAM_NAME_MAP.get(team, team)
+                ratings[normalized] = rating
             except ValueError:
                 continue
     return ratings
