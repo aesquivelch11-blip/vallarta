@@ -163,6 +163,37 @@
     --cal-error: rgba(248, 113, 113, 0.85);
     --cal-error-border: rgba(248, 113, 113, 0.25);
 
+    /* --- Property Selector v2 --- */
+    /* Canvas */
+    --ps-canvas: #f7f5f2;
+    --ps-surface: #efe9e1;
+    --ps-ink: #1a1a1a;
+    --ps-ink-secondary: #6b6560;
+    --ps-ink-muted: #9a9590;
+
+    /* Status accent colors */
+    --ps-status-available: oklch(72% 0.08 155);
+    --ps-status-occupied: oklch(55% 0.06 80);
+    --ps-status-maintenance: oklch(62% 0.12 70);
+    --ps-status-reserved: oklch(65% 0.05 260);
+
+    /* Grid */
+    --ps-grid-gap: 16px;
+    --ps-header-height: 56px;
+
+    /* Typography */
+    --ps-name-size: clamp(1.25rem, 2.5vw, 2rem);
+    --ps-location-size: 0.625rem;
+    --ps-location-tracking: 0.30em;
+    --ps-tagline-size: 0.75rem;
+
+    /* Motion */
+    --ps-ease-out: cubic-bezier(0.0, 0.0, 0.2, 1);
+    --ps-ease-in-out: cubic-bezier(0.4, 0.0, 0.2, 1);
+    --ps-duration-instant: 150ms;
+    --ps-duration-fast: 300ms;
+    --ps-duration-base: 600ms;
+    --ps-duration-slow: 800ms;
 }
 
 /* ── Nav Menu — entry animations ── */
