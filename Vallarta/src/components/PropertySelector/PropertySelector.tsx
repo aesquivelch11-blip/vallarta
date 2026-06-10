@@ -125,7 +125,7 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
         {liveAnnouncement}
       </div>
 
-      <div className="ps-progress" style={{ width: `${scrollProgress}%` }} />
+      <div className="ps-progress" style={{ transform: `scaleX(${scrollProgress / 100})`, transformOrigin: 'left center' }} />
 
       <AnimatePresence>
         {phase === 'wordmark' && (

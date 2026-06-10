@@ -256,8 +256,10 @@
   height: 2px;
   background: var(--ps-status-available);
   z-index: 100;
-  width: 0%;
-  transition: width 100ms linear;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 100ms linear;
 }
 
 /* ── Empty state ── */

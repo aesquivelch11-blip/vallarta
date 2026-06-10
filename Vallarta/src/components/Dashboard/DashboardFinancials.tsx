@@ -61,8 +61,16 @@ export default function DashboardFinancials({ data, onNavigate }: DashboardFinan
           <p style={{ ...labelStyle, fontSize: '0.625rem', letterSpacing: '0.32em' }}>NET</p>
           <AnimatedFigure value={net} formatter={formatCurrency} style={{ ...figureStyle, fontSize: 'clamp(2rem, 4vw, 3rem)', marginTop: '10px', color: isNegative ? 'var(--color-accent-negative)' : 'var(--color-ink)' }} />
           {/* Budget bar */}
-          <div style={{ width: '100%', height: '2px', background: 'var(--color-border-subtle)', marginTop: '8px', borderRadius: '1px', overflow: 'hidden' }}>
-            <div style={{ width: `${budgetProgress * 100}%`, height: '100%', background: 'var(--color-accent-positive)', borderRadius: '1px', transition: 'width 0.6s var(--ease-out-expo)' }} />
+            <div style={{ width: '100%', height: '2px', background: 'var(--color-border-subtle)', marginTop: '8px', borderRadius: '1px', overflow: 'hidden' }}>
+              <div style={{
+                width: '100%',
+                height: '100%',
+                background: 'var(--color-accent-positive)',
+                borderRadius: '1px',
+                transform: `scaleX(${budgetProgress})`,
+                transformOrigin: 'left center',
+                transition: 'transform 0.6s var(--ease-out-expo)',
+              }} />
           </div>
           <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.5rem', fontWeight: 400, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--color-ink-muted)', margin: '4px 0 0' }}>
             {Math.round(budgetProgress * 100)}% of ${data.budgetTarget.toLocaleString()} budget

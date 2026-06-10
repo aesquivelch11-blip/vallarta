@@ -43,7 +43,7 @@ export default function PropertyTitleCard({ name, location }: PropertyTitleCardP
           height: '2px',
           background: ambient.accent,
           borderRadius: '2px',
-          transition: 'width 0.8s var(--ease-out-expo)',
+          transition: 'background-color 0.4s ease',
         }}
       />
       <p
