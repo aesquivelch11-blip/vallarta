@@ -29,7 +29,7 @@ export default function DashboardFinancials({ data, onNavigate }: DashboardFinan
   const yoyData = data.revenueHistory;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', padding: '0 clamp(1.5rem, 3vw, 2.5rem) clamp(2rem, 4vw, 3rem)', gap: 'clamp(1.5rem, 3vw, 2rem)', justifyContent: 'flex-start' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', padding: 'clamp(0.75rem, 1.5vw, 1.25rem) clamp(1.5rem, 3vw, 2.5rem) clamp(2rem, 4vw, 3rem)', gap: 'clamp(1.5rem, 3vw, 2rem)', justifyContent: 'flex-start' }}>
       {/* Period selector */}
       <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
         <button className="dashboard-focus" onClick={goNextPeriod} disabled={selectedPeriodIndex <= 0} aria-label="Next period" style={{ background: 'none', border: 'none', padding: '2px', cursor: selectedPeriodIndex <= 0 ? 'default' : 'pointer', color: selectedPeriodIndex <= 0 ? 'var(--color-border-medium)' : 'var(--color-ink-secondary)', display: 'flex', alignItems: 'center' }}>

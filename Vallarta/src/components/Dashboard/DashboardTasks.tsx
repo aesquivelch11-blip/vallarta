@@ -30,7 +30,7 @@ export default function DashboardTasks({ data, onNavigate }: DashboardTasksProps
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        padding: '0 clamp(1.5rem, 3vw, 2.5rem) clamp(2rem, 4vw, 3rem)',
+        padding: 'clamp(0.75rem, 1.5vw, 1.25rem) clamp(1.5rem, 3vw, 2.5rem) clamp(2rem, 4vw, 3rem)',
         justifyContent: 'flex-start',
       }}
     >
