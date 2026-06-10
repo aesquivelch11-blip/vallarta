@@ -115,63 +115,62 @@ export default function DashboardGallery({ images, propertyName, propertyLocatio
         </AnimatePresence>
 
         {propertyName && (
-          <div
-            aria-hidden="true"
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'linear-gradient(to top, rgba(0,0,0,0.52) 0%, transparent 42%)',
-              pointerEvents: 'none',
-              zIndex: 2,
-            }}
-          />
-        )}
-
-        {propertyName && (
-          <div
-            aria-hidden="true"
-            style={{
-              position: 'absolute',
-              bottom: 'clamp(1.25rem, 2.5vw, 2rem)',
-              left: 'clamp(1rem, 2vw, 1.75rem)',
-              zIndex: 3,
-              pointerEvents: 'none',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '6px',
-            }}
-          >
-            <p
+          <>
+            <div
+              aria-hidden="true"
               style={{
-                fontFamily: 'var(--font-display)',
-                fontStyle: 'italic',
-                fontWeight: 400,
-                fontSize: 'clamp(1.25rem, 2vw, 1.625rem)',
-                letterSpacing: '-0.01em',
-                color: 'rgba(255,255,255,0.94)',
-                margin: 0,
-                lineHeight: 1.1,
+                position: 'absolute',
+                inset: 0,
+                background: 'linear-gradient(to top, rgba(0,0,0,0.52) 0%, transparent 42%)',
+                pointerEvents: 'none',
+                zIndex: 2,
+              }}
+            />
+            <div
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                bottom: 'clamp(1.25rem, 2.5vw, 2rem)',
+                left: 'clamp(1rem, 2vw, 1.75rem)',
+                zIndex: 3,
+                pointerEvents: 'none',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '6px',
               }}
             >
-              {propertyName}
-            </p>
-            {propertyLocation && (
               <p
                 style={{
-                  fontFamily: 'var(--font-ui)',
-                  fontWeight: 500,
-                  fontSize: '0.5625rem',
-                  letterSpacing: '0.25em',
-                  textTransform: 'uppercase',
-                  color: 'rgba(255,255,255,0.55)',
+                  fontFamily: 'var(--font-display)',
+                  fontStyle: 'italic',
+                  fontWeight: 400,
+                  fontSize: 'clamp(1.25rem, 2vw, 1.625rem)',
+                  letterSpacing: '-0.01em',
+                  color: 'rgba(255,255,255,0.94)',
                   margin: 0,
-                  lineHeight: 1,
+                  lineHeight: 1.1,
                 }}
               >
-                {propertyLocation}
+                {propertyName}
               </p>
-            )}
-          </div>
+              {propertyLocation && (
+                <p
+                  style={{
+                    fontFamily: 'var(--font-ui)',
+                    fontWeight: 500,
+                    fontSize: '0.5625rem',
+                    letterSpacing: '0.25em',
+                    textTransform: 'uppercase',
+                    color: 'rgba(255,255,255,0.55)',
+                    margin: 0,
+                    lineHeight: 1,
+                  }}
+                >
+                  {propertyLocation}
+                </p>
+              )}
+            </div>
+          </>
         )}
 
         {total > 1 && (
