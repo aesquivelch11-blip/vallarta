@@ -93,8 +93,6 @@ export default function DashboardGallery({ images, propertyId, propertyName }: D
       <div
         className="relative w-full h-full overflow-hidden"
         onClick={handleFrameClick}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
         style={{ cursor: total > 1 ? 'pointer' : 'default', borderRadius: '4px' }}
       >
         <AnimatePresence custom={directionRef.current} mode="wait">
@@ -118,7 +116,6 @@ export default function DashboardGallery({ images, propertyId, propertyName }: D
           />
         </AnimatePresence>
 
-        {/* Counter — anchored to image, not panel */}
         {total > 1 && (
           <span
             style={{
