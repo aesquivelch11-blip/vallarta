@@ -21,8 +21,8 @@ const urgentTasks: DashboardTask[] = [
 describe('StatusCards', () => {
   it('renders all 4 category cards', () => {
     const { container } = render(<StatusCards tasks={emptyTasks} />);
-    const cards = container.querySelectorAll('div > div');
-    expect(cards.length).toBeGreaterThanOrEqual(4);
+    const cards = container.querySelectorAll('[style*="border-radius: 8px"]');
+    expect(cards).toHaveLength(4);
   });
 
   it('shows All clear when no tasks exist', () => {
@@ -48,11 +48,10 @@ describe('StatusCards', () => {
     expect(container.textContent).toContain('Inspection');
   });
 
-  it('uses grid layout with 3 columns', () => {
+  it('grid uses 2-column layout', () => {
     const { container } = render(<StatusCards tasks={emptyTasks} />);
-    const grid = container.firstChild as HTMLElement;
-    expect(grid).toHaveStyle('display: grid');
-    expect(grid).toHaveStyle('grid-template-columns: 1fr 1fr 1fr');
+    const grid = container.firstElementChild as HTMLElement;
+    expect(grid.style.gridTemplateColumns).toBe('1fr 1fr');
   });
 
   it('renders status dot indicators', () => {

@@ -18,7 +18,7 @@ export default function StatusCards({ tasks }: StatusCardsProps) {
   };
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 'clamp(0.75rem, 1.5vw, 1rem)' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'clamp(0.75rem, 1.5vw, 1rem)' }}>
       {categories.map(cat => {
         const status = getStatus(cat);
         return (
