@@ -1,6 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface DashboardGalleryProps {
   images: string[];
@@ -11,7 +10,6 @@ interface DashboardGalleryProps {
 export default function DashboardGallery({ images, propertyId, propertyName }: DashboardGalleryProps) {
   const shouldReduceMotion = useReducedMotion();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [hovered, setHovered] = useState(false);
   const directionRef = useRef(0);
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
@@ -120,129 +118,13 @@ export default function DashboardGallery({ images, propertyId, propertyName }: D
           />
         </AnimatePresence>
 
-        <div
-          style={{
-            position: 'absolute',
-            top: 0, left: 0, right: 0, bottom: 0,
-            background: 'linear-gradient(to bottom, rgba(15,26,26,0.3) 0%, rgba(15,26,26,0.6) 100%)',
-            pointerEvents: 'none',
-            opacity: 0,
-            transition: 'opacity 0.4s ease',
-          }}
-          className="dark-mode-overlay"
-        />
-
-        <motion.p
-          layoutId={`property-title-${propertyId}`}
-          className="absolute top-3 left-4"
-          style={{
-            fontFamily: 'var(--font-ui)',
-            fontSize: '0.625rem',
-            fontWeight: 500,
-            letterSpacing: '0.20em',
-            textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.55)',
-            pointerEvents: 'none',
-            userSelect: 'none',
-            zIndex: 4,
-          }}
-        >
-          {propertyName}
-        </motion.p>
-
-        {/* Hover chevrons */}
+        {/* Counter — anchored to image, not panel */}
         {total > 1 && (
-          <>
-            <button
-              onClick={(e) => { e.stopPropagation(); goPrev(); }}
-              aria-label="Previous image"
-              style={{
-                position: 'absolute',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                left: '12px',
-                background: 'rgba(15, 26, 26, 0.35)',
-                border: 'none',
-                borderRadius: '50%',
-                width: '32px',
-                height: '32px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                color: 'rgba(255,255,255,0.85)',
-                zIndex: 6,
-                opacity: hovered ? 1 : 0,
-                transition: 'opacity 0.2s ease, background 0.2s ease',
-              }}
-            >
-              <ChevronLeft size={14} strokeWidth={1.5} />
-            </button>
-            <button
-              onClick={(e) => { e.stopPropagation(); goNext(); }}
-              aria-label="Next image"
-              style={{
-                position: 'absolute',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                right: '12px',
-                background: 'rgba(15, 26, 26, 0.35)',
-                border: 'none',
-                borderRadius: '50%',
-                width: '32px',
-                height: '32px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                color: 'rgba(255,255,255,0.85)',
-                zIndex: 6,
-                opacity: hovered ? 1 : 0,
-                transition: 'opacity 0.2s ease, background 0.2s ease',
-              }}
-            >
-              <ChevronRight size={14} strokeWidth={1.5} />
-            </button>
-          </>
-        )}
-
-        {/* Dot navigation strip */}
-        {total > 1 && (
-          <div
+          <span
             style={{
               position: 'absolute',
               bottom: '10px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              display: 'flex',
-              gap: '4px',
-              alignItems: 'center',
-              pointerEvents: 'none',
-              zIndex: 5,
-            }}
-          >
-            {images.map((_, i) => (
-              <div
-                key={i}
-                data-gallery-dot
-                data-active={i === currentIndex ? 'true' : 'false'}
-                style={{
-                  width: i === currentIndex ? '14px' : '4px',
-                  height: '3px',
-                  borderRadius: '2px',
-                  background: 'rgba(255,255,255,0.8)',
-                  opacity: i === currentIndex ? 1 : 0.4,
-                  transition: 'width 0.3s var(--ease-out-expo), opacity 0.3s ease',
-                }}
-              />
-            ))}
-          </div>
-        )}
-
-        {total > 1 && (
-          <span
-            className="absolute bottom-3 right-4"
-            style={{
+              right: '12px',
               fontFamily: 'var(--font-ui)',
               fontSize: '0.625rem',
               fontWeight: 500,

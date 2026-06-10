@@ -1,3 +1,53 @@
+# Phase 2: Rebuild DashboardToday — Editorial Single-Column Layout
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** Rewrite DashboardToday as a clean, editorial, single-column flow. No cards, no grids, no sparklines, no badges. The layout reads as a narrative: Property Identity → Occupancy (dominant) → Arrivals (italic guest names) → Departures (upright, smaller) → Quiet Day Message → Nav Links. This phase depends on Phase 1 (deletion of MetricCard, MetricGrid, StatusCards, UrgentAlert, GuestFlowStrip, PropertyTitleCard, RevparSnapshot).
+
+**Architecture:** Complete rewrite of DashboardToday.tsx. All removed components are replaced with inline elements. Spacing is generous between sections, tight within sections. The layout uses flexbox (1D) — no grid needed. All data comes from the existing `DashboardData` interface and `dashboardData.ts` helpers.
+
+**Tech Stack:** React 18, TypeScript, CSS custom properties, lucide-react, motion/react (for ambient provider context)
+
+**Design Principles:**
+- **$impeccable distill**: Remove cards, borders, decorations. Use spacing and alignment for grouping.
+- **$impeccable layout**: Tight grouping for related elements (8-12px), generous separation between sections (48-96px). Flexbox for 1D flow.
+- **Hospitality reference sites**: Restraint is the luxury signal. One dominant number (occupancy). Typography is architecture. Human language ("Quiet day", "No arrivals").
+
+---
+
+## File Map
+
+| File | Responsibility | Action |
+|---|---|---|
+| `src/components/Dashboard/DashboardToday.tsx` | Today domain — complete rewrite | **Rewrite** |
+| `tests/components/Dashboard/DashboardToday.test.tsx` | Tests for Today domain | **Create** |
+
+---
+
+## Task 1: Rewrite DashboardToday.tsx
+
+**Files:**
+- Modify: `src/components/Dashboard/DashboardToday.tsx`
+
+**What to remove:**
+- All imports of deleted components (MetricGrid, MetricCard, PropertyTitleCard, RevparSnapshot, GuestFlowStrip, UrgentAlert)
+- All card-based layouts
+- All grid-based layouts
+- All sparklines and trend badges
+- The "Zone A / Zone B / Zone C" structure
+
+**What to build:**
+- Property Identity (italic name + uppercase location)
+- Occupancy (dominant EB Garamond figure, trend delta in text)
+- Arrivals (numeral anchor + italic guest names + "n" suffix)
+- Departures (smaller numeral, upright names, reduced opacity)
+- Tomorrow hints (subordinate, muted)
+- Quiet day message (when both arrivals and departures are empty)
+- Nav links (Calendar →, Financials →)
+
+- [ ] **Step 1: Replace the entire file**
+
+```tsx
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { ScreenType } from '../../types';
@@ -349,3 +399,174 @@ export default function DashboardToday({ data, propertyName, propertyLocation, o
     </div>
   );
 }
+```
+
+- [ ] **Step 2: Verify TypeScript compiles**
+
+Run: `npx tsc --noEmit`
+
+Expected: Zero errors.
+
+- [ ] **Step 3: Write tests**
+
+Create `tests/components/Dashboard/DashboardToday.test.tsx`:
+
+```tsx
+import { render, cleanup } from '@testing-library/react';
+import { describe, it, expect, afterEach, vi } from 'vitest';
+import DashboardToday from '../../../src/components/Dashboard/DashboardToday';
+import { getDashboardData } from '../../../src/components/Dashboard/dashboardData';
+
+const mockNavigate = vi.fn();
+const mockDomainChange = vi.fn();
+const data = getDashboardData('casa-palmeras');
+
+afterEach(cleanup);
+
+describe('DashboardToday', () => {
+  it('renders property name in italic', () => {
+    const { container } = render(
+      <DashboardToday
+        data={data}
+        propertyName="Casa Palmeras"
+        propertyLocation="Puerto Vallarta"
+        onNavigate={mockNavigate}
+        onDomainChange={mockDomainChange}
+      />
+    );
+    const nameEl = container.querySelector('p[style*="font-style: italic"]');
+    expect(nameEl).toBeTruthy();
+    expect(nameEl?.textContent).toContain('Casa Palmeras');
+  });
+
+  it('renders location in uppercase tracked label', () => {
+    const { container } = render(
+      <DashboardToday data={data} propertyName="Casa Palmeras" propertyLocation="Puerto Vallarta" onNavigate={mockNavigate} />
+    );
+    expect(container.textContent).toContain('Puerto Vallarta');
+  });
+
+  it('renders occupancy as dominant figure', () => {
+    const { container } = render(
+      <DashboardToday data={data} propertyName="Casa Palmeras" propertyLocation="PV" onNavigate={mockNavigate} />
+    );
+    expect(container.textContent).toContain('78%');
+    expect(container.textContent).toContain('OCCUPANCY');
+  });
+
+  it('renders occupancy trend', () => {
+    const { container } = render(
+      <DashboardToday data={data} propertyName="Casa Palmeras" propertyLocation="PV" onNavigate={mockNavigate} />
+    );
+    expect(container.textContent).toContain('+5%');
+  });
+
+  it('renders arrivals with guest names in italic', () => {
+    const { container } = render(
+      <DashboardToday data={data} propertyName="Casa Palmeras" propertyLocation="PV" onNavigate={mockNavigate} />
+    );
+    expect(container.textContent).toContain('Elena Rosenthal');
+    expect(container.textContent).toContain('2');
+    expect(container.textContent).toContain('Arriving');
+  });
+
+  it('renders departures with upright names', () => {
+    const { container } = render(
+      <DashboardToday data={data} propertyName="Casa Palmeras" propertyLocation="PV" onNavigate={mockNavigate} />
+    );
+    expect(container.textContent).toContain('James Whitfield');
+    expect(container.textContent).toContain('Departing');
+  });
+
+  it('renders tomorrow hints', () => {
+    const { container } = render(
+      <DashboardToday data={data} propertyName="Casa Palmeras" propertyLocation="PV" onNavigate={mockNavigate} />
+    );
+    expect(container.textContent).toContain('guest arrives tomorrow');
+  });
+
+  it('does not render any cards or borders', () => {
+    const { container } = render(
+      <DashboardToday data={data} propertyName="Casa Palmeras" propertyLocation="PV" onNavigate={mockNavigate} />
+    );
+    const cards = container.querySelectorAll('[style*="border-radius: 8px"]');
+    expect(cards.length).toBe(0);
+  });
+
+  it('does not render metric cards, sparklines, or badges', () => {
+    const { container } = render(
+      <DashboardToday data={data} propertyName="Casa Palmeras" propertyLocation="PV" onNavigate={mockNavigate} />
+    );
+    expect(container.querySelector('svg')).toBeNull(); // no sparklines
+    expect(container.textContent).not.toContain('Revenue MTD');
+    expect(container.textContent).not.toContain('Satisfaction');
+  });
+
+  it('renders quiet day message when no activity', () => {
+    const quietData = { ...data, arrivalsToday: [], departuresToday: [] };
+    const { container } = render(
+      <DashboardToday data={quietData} propertyName="Casa Palmeras" propertyLocation="PV" onNavigate={mockNavigate} />
+    );
+    expect(container.textContent).toContain('Quiet day');
+  });
+});
+```
+
+- [ ] **Step 4: Run tests**
+
+Run: `rtk vitest run tests/components/Dashboard/DashboardToday.test.tsx`
+
+Expected: PASS (10 tests)
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add src/components/Dashboard/DashboardToday.tsx tests/components/Dashboard/DashboardToday.test.tsx
+git commit -m "feat: rebuild DashboardToday as editorial single-column layout"
+```
+
+---
+
+## Self-Review
+
+### Spec Coverage
+
+| Requirement | Task | Covered |
+|---|---|---|
+| Property name in italic | Task 1 | ✅ |
+| Location in uppercase label | Task 1 | ✅ |
+| Occupancy as dominant figure | Task 1 | ✅ |
+| Occupancy trend as text (no badge) | Task 1 | ✅ |
+| Arrivals with italic names | Task 1 | ✅ |
+| Departures with upright names | Task 1 | ✅ |
+| Arrivals > departures in visual weight | Task 1 | ✅ |
+| Tomorrow hints subordinate | Task 1 | ✅ |
+| Quiet day message | Task 1 | ✅ |
+| Nav links (Calendar, Financials) | Task 1 | ✅ |
+| No cards, no grids, no sparklines | Task 1 | ✅ |
+
+### Placeholder Scan
+
+- No "TBD", "TODO", or placeholders.
+- All steps contain actual commands and complete code.
+- No references to undefined types or functions.
+
+### Type Consistency
+
+- `DashboardTodayProps` interface uses existing types: `DashboardData`, `ScreenType`, `Domain`.
+- `formatTrendPercent` and `getTrendDirection` are imported from `dashboardData.ts`.
+- `onNavigate` and `onDomainChange` props match the call site in `DashboardView.tsx`.
+
+---
+
+## Execution Handoff
+
+**Plan complete.**
+
+**Execution options:**
+
+**1. Subagent-Driven** — Dispatch a subagent to execute this phase.
+
+**2. Inline Execution** — Execute all tasks in this session.
+
+**Which approach?**
