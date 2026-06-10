@@ -9,6 +9,7 @@ import DashboardToday from './DashboardToday';
 import DashboardFinancials from './DashboardFinancials';
 import DashboardTasks from './DashboardTasks';
 import DashboardErrorBoundary from './DashboardErrorBoundary';
+import { AmbientProvider } from './AmbientColorProvider';
 
 interface DashboardViewProps {
   propertyId: string | null;
@@ -154,29 +155,6 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
         <DashboardGallery images={property.images} />
       </div>
 
-      {/* Mobile property name — visible below lg, above domain pill */}
-      <div
-        className="lg:hidden"
-        style={{
-          padding: 'clamp(1rem, 2vw, 1.5rem) clamp(1.5rem, 3vw, 2.5rem) 0',
-        }}
-      >
-        <p
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontStyle: 'italic',
-            fontWeight: 400,
-            fontSize: 'clamp(1.125rem, 2.5vw, 1.375rem)',
-            letterSpacing: '-0.01em',
-            color: 'var(--color-ink)',
-            margin: 0,
-            lineHeight: 1.2,
-          }}
-        >
-          {property.name}
-        </p>
-      </div>
-
       {/* Main area — on desktop becomes a two-column grid */}
       <div
         style={{
@@ -243,7 +221,9 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
             {/* Domain content */}
             <div style={{ flex: 1, overflowY: activeDomain === 'today' ? 'hidden' : 'auto', display: 'flex', flexDirection: 'column' }}>
               <DashboardErrorBoundary>
-                {renderDomain()}
+                <AmbientProvider value={data.ambientColors}>
+                  {renderDomain()}
+                </AmbientProvider>
               </DashboardErrorBoundary>
             </div>
           </div>
@@ -256,11 +236,7 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
         >
           {/* Gallery — now fills full height with property name overlay */}
           <div style={{ flex: 1, minHeight: 0 }}>
-            <DashboardGallery
-              images={property.images}
-              propertyName={property.name}
-              propertyLocation={property.location}
-            />
+            <DashboardGallery images={property.images} />
           </div>
         </div>
       </div>
