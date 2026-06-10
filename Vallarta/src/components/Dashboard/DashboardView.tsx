@@ -205,7 +205,9 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
           </div>
 
           {/* Mobile: domain pill above content */}
-          <DashboardDomainNav active={activeDomain} onChange={setActiveDomain} />
+          <div className="lg:hidden">
+            <DashboardDomainNav active={activeDomain} onChange={setActiveDomain} />
+          </div>
 
           {/* Domain content + vertical strip (desktop wraps both) */}
           <div
@@ -216,10 +218,12 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
             }}
           >
             {/* Desktop vertical domain strip */}
-            <DashboardDomainNav active={activeDomain} onChange={setActiveDomain} />
+            <div className="hidden lg:block">
+              <DashboardDomainNav active={activeDomain} onChange={setActiveDomain} />
+            </div>
 
             {/* Domain content */}
-            <div style={{ flex: 1, overflowY: activeDomain === 'today' ? 'hidden' : 'auto', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ flex: 1, overflowY: activeDomain === 'today' ? 'hidden' : 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
               <DashboardErrorBoundary>
                 <AmbientProvider value={data.ambientColors}>
                   {renderDomain()}
