@@ -57,7 +57,7 @@ export default function DashboardToday({ data, propertyName, propertyLocation, o
   ];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', padding: 'clamp(1.5rem, 3vw, 2rem) clamp(1.5rem, 3vw, 2.5rem)', gap: 'clamp(1rem, 2vw, 1.5rem)', overflow: 'hidden' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', padding: '0 clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 3vw, 2rem)', gap: 'clamp(1rem, 2vw, 1.5rem)', overflow: 'hidden', justifyContent: 'flex-start' }}>
       {/* Zone A: Hero Snapshot - 40% */}
       <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: 'clamp(1.5rem, 3vw, 2.5rem)', minHeight: 0 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
