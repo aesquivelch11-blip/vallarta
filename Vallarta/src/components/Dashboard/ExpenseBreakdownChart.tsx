@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { ExpenseCategory } from './dashboardData';
 
+const EXPENSE_COLORS = [
+  'var(--color-accent-positive)',      // Shadowed Agave green
+  'oklch(0.65 0.07 52)',               // Warm ochre — Sunset Ochre family
+  'oklch(0.55 0.04 195)',              // Muted teal — Banderas Bay
+  'oklch(0.72 0.04 28)',               // Sand/tan — Bone family
+  'var(--color-ink-secondary)',        // Neutral muted
+];
+
 interface ExpenseBreakdownChartProps {
   data: ExpenseCategory[];
 }
 
 export default function ExpenseBreakdownChart({ data }: ExpenseBreakdownChartProps) {
-  const [animatedWidths, setAnimatedWidths] = useState<number[]>(data.map(() => 0));
+  const [animatedScales, setAnimatedScales] = useState<number[]>(data.map(() => 0));
   const maxAmount = Math.max(...data.map(d => d.amount));
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setAnimatedWidths(data.map(d => (d.amount / maxAmount) * 100));
+      setAnimatedScales(data.map(d => d.amount / maxAmount));
     }, 200);
     return () => clearTimeout(timer);
   }, [data, maxAmount]);
@@ -31,11 +39,13 @@ export default function ExpenseBreakdownChart({ data }: ExpenseBreakdownChartPro
           <div style={{ width: '100%', height: '6px', background: 'var(--color-border-subtle)', borderRadius: '2px', overflow: 'hidden' }}>
             <div
               style={{
-                width: `${animatedWidths[i]}%`,
+                width: '100%',
                 height: '100%',
-                background: 'var(--color-accent-positive)',
+                background: EXPENSE_COLORS[i % EXPENSE_COLORS.length],
                 borderRadius: '2px',
-                transition: 'width 0.6s var(--ease-out-expo)',
+                transform: `scaleX(${animatedScales[i]})`,
+                transformOrigin: 'left center',
+                transition: 'transform 0.6s var(--ease-out-expo)',
               }}
             />
           </div>

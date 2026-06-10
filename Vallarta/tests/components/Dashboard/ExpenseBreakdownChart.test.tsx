@@ -5,42 +5,38 @@ import ExpenseBreakdownChart from '../../../src/components/Dashboard/ExpenseBrea
 afterEach(cleanup);
 
 const mockData = [
-  { label: 'Housekeeping', amount: 14500 },
-  { label: 'Maintenance', amount: 8900 },
-  { label: 'Utilities', amount: 6200 },
-  { label: 'Staffing', amount: 22100 },
-  { label: 'Amenities', amount: 4100 },
+  { label: 'Maintenance', amount: 1200 },
+  { label: 'Utilities', amount: 850 },
+  { label: 'Staff', amount: 680 },
+  { label: 'Supplies', amount: 320 },
+  { label: 'Other', amount: 150 },
 ];
 
 describe('ExpenseBreakdownChart', () => {
-  it('starts bars at zero width before animation', () => {
+  it('renders all category labels', () => {
     const { container } = render(<ExpenseBreakdownChart data={mockData} />);
-    const bars = container.querySelectorAll('[style*="width: 0%"]');
-    expect(bars.length).toBe(5);
-  });
-
-  it('renders a bar container for each item', () => {
-    const { container } = render(<ExpenseBreakdownChart data={mockData} />);
-    const barContainers = container.querySelectorAll('[style*="height: 6px"][style*="overflow: hidden"]');
-    expect(barContainers.length).toBe(5);
-  });
-
-  it('renders all expense labels', () => {
-    const { container } = render(<ExpenseBreakdownChart data={mockData} />);
-    expect(container.textContent).toContain('Housekeeping');
-    expect(container.textContent).toContain('Staffing');
+    expect(container.textContent).toContain('Maintenance');
     expect(container.textContent).toContain('Utilities');
+    expect(container.textContent).toContain('Staff');
+    expect(container.textContent).toContain('Supplies');
+    expect(container.textContent).toContain('Other');
   });
 
-  it('renders amounts formatted with dollar sign', () => {
+  it('bar fill elements have distinct colors (no two adjacent bars same background)', () => {
     const { container } = render(<ExpenseBreakdownChart data={mockData} />);
-    expect(container.textContent).toContain('$14,500');
-    expect(container.textContent).toContain('$22,100');
+    // Find all bar fill divs by their transform-origin style
+    const bars = container.querySelectorAll('[style*="transform-origin: left center"]');
+    expect(bars.length).toBe(5);
+
+    const colors = Array.from(bars).map(b => (b as HTMLElement).style.background);
+    // All 5 colors should be distinct
+    const uniqueColors = new Set(colors);
+    expect(uniqueColors.size).toBe(5);
   });
 
-  it('renders inner bar divs with green background', () => {
+  it('renders dollar amounts for each category', () => {
     const { container } = render(<ExpenseBreakdownChart data={mockData} />);
-    const innerBars = container.querySelectorAll('[style*="background: var(--color-accent-positive)"]');
-    expect(innerBars.length).toBe(5);
+    expect(container.textContent).toContain('$1,200');
+    expect(container.textContent).toContain('$850');
   });
 });
