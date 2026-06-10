@@ -10,6 +10,7 @@ import DashboardFinancials from './DashboardFinancials';
 import DashboardOperations from './DashboardOperations';
 import DashboardPerformance from './DashboardPerformance';
 import DashboardErrorBoundary from './DashboardErrorBoundary';
+import DarkModeToggle from './DarkModeToggle';
 import { AmbientProvider } from './AmbientColorProvider';
 import { motion } from 'motion/react';
 
@@ -175,7 +176,7 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
             overflow: 'hidden',
           }}
         >
-          {/* Dashboard header — back + menu */}
+          {/* Dashboard header — back + toggle + menu */}
           <div
             style={{
               display: 'flex',
@@ -197,15 +198,18 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
               Back
             </button>
 
-            <button
-              className="dashboard-focus"
-              onClick={() => onNavigate('nav_menu', 'push')}
-              style={headerBtnStyle}
-              aria-label="Open navigation menu"
-            >
-              Menu
-              <ChevronRight size={12} strokeWidth={1.5} />
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <DarkModeToggle />
+              <button
+                className="dashboard-focus"
+                onClick={() => onNavigate('nav_menu', 'push')}
+                style={headerBtnStyle}
+                aria-label="Open navigation menu"
+              >
+                Menu
+                <ChevronRight size={12} strokeWidth={1.5} />
+              </button>
+            </div>
           </div>
 
           {/* Mobile: domain pill above content */}
