@@ -4,7 +4,7 @@ import { ScreenType } from '../../types';
 import { Domain } from './DashboardDomainNav';
 import { DashboardData, formatCurrency, formatTrendPercent, getTrendDirection } from './dashboardData';
 import PropertyTitleCard from './PropertyTitleCard';
-import PropertyHealthScore from './PropertyHealthScore';
+import RevparSnapshot from './RevparSnapshot';
 import MetricGrid from './MetricGrid';
 import GuestFlowStrip from './GuestFlowStrip';
 import UrgentAlert from './UrgentAlert';
@@ -26,10 +26,6 @@ export default function DashboardToday({ data, propertyName, propertyLocation, o
   const occTrend = formatTrendPercent(data.occupancy, data.occupancyPrev);
   const occDirection = getTrendDirection(data.occupancy, data.occupancyPrev);
   const urgentTask = data.tasks.find(t => t.status === 'urgent') ?? null;
-
-  const healthScore = Math.round(
-    (data.occupancy * 0.4) + (data.guestSatisfaction.score * 10 * 0.3) + (Math.min(currentPeriod.revenue / data.budgetTarget, 1) * 100 * 0.3)
-  );
 
   const metrics = [
     {
@@ -62,7 +58,13 @@ export default function DashboardToday({ data, propertyName, propertyLocation, o
       <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: 'clamp(1.5rem, 3vw, 2.5rem)', minHeight: 0 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <PropertyTitleCard name={propertyName} location={propertyLocation} />
-          <PropertyHealthScore score={healthScore} />
+          <RevparSnapshot
+            revenue={currentPeriod.revenue}
+            daysInPeriod={30}
+            sparklineData={data.occupancyHistory}
+            trend={revTrend}
+            trendDirection={revDirection}
+          />
         </div>
         <MetricGrid metrics={metrics} />
       </div>
