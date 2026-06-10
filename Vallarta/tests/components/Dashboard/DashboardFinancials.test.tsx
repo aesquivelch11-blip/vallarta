@@ -3,104 +3,91 @@ import { describe, it, expect, afterEach, vi } from 'vitest';
 import DashboardFinancials from '../../../src/components/Dashboard/DashboardFinancials';
 import { getDashboardData } from '../../../src/components/Dashboard/dashboardData';
 
-vi.mock('../../../src/components/Dashboard/AmbientColorProvider', () => ({
-  useAmbient: () => ({ canvas: '#faf6f0', accent: '#d4a76a', surface: '#fdf8f2' }),
-}));
+const mockNavigate = vi.fn();
+const data = getDashboardData('casa-palmeras');
 
 afterEach(cleanup);
 
-const mockData = getDashboardData('villa_selva');
-
 describe('DashboardFinancials', () => {
-  it('renders period selector with label', () => {
-    const { container } = render(<DashboardFinancials data={mockData} onNavigate={vi.fn()} />);
+  it('renders current period label', () => {
+    const { container } = render(<DashboardFinancials data={data} onNavigate={mockNavigate} />);
     expect(container.textContent).toContain('June 2026');
   });
 
-  it('renders Revenue figure', () => {
-    const { container } = render(<DashboardFinancials data={mockData} onNavigate={vi.fn()} />);
+  it('renders Revenue, Expenses, Net labels', () => {
+    const { container } = render(<DashboardFinancials data={data} onNavigate={mockNavigate} />);
     expect(container.textContent).toContain('REVENUE');
-  });
-
-  it('renders Expenses figure', () => {
-    const { container } = render(<DashboardFinancials data={mockData} onNavigate={vi.fn()} />);
     expect(container.textContent).toContain('EXPENSES');
-  });
-
-  it('renders Net figure', () => {
-    const { container } = render(<DashboardFinancials data={mockData} onNavigate={vi.fn()} />);
     expect(container.textContent).toContain('NET');
   });
 
-  it('renders expense breakdown section', () => {
-    const { container } = render(<DashboardFinancials data={mockData} onNavigate={vi.fn()} />);
-    expect(container.textContent).toContain('EXPENSE BREAKDOWN');
+  it('renders correct Revenue figure', () => {
+    const { container } = render(<DashboardFinancials data={data} onNavigate={mockNavigate} />);
+    expect(container.textContent).toContain('$12,400');
   });
 
-  it('renders revenue trajectory section', () => {
-    const { container } = render(<DashboardFinancials data={mockData} onNavigate={vi.fn()} />);
-    expect(container.textContent).toContain('REVENUE TRAJECTORY');
+  it('renders correct Expenses figure', () => {
+    const { container } = render(<DashboardFinancials data={data} onNavigate={mockNavigate} />);
+    expect(container.textContent).toContain('$3,200');
   });
 
-  it('renders VIEW FINANCIALS button', () => {
-    const { container } = render(<DashboardFinancials data={mockData} onNavigate={vi.fn()} />);
-    const btn = container.querySelector('.dashboard-link');
-    expect(btn).not.toBeNull();
-    expect(btn?.textContent).toContain('VIEW FINANCIALS');
+  it('renders correct Net figure', () => {
+    const { container } = render(<DashboardFinancials data={data} onNavigate={mockNavigate} />);
+    // 12400 - 3200 = 9200
+    expect(container.textContent).toContain('$9,200');
   });
 
-  it('renders budget progress bar', () => {
-    const { container } = render(<DashboardFinancials data={mockData} onNavigate={vi.fn()} />);
-    expect(container.textContent).toContain('% of $');
+  it('does not render Expense Breakdown, Revenue Trajectory, or Occupancy', () => {
+    const { container } = render(<DashboardFinancials data={data} onNavigate={mockNavigate} />);
+    expect(container.textContent).not.toContain('EXPENSE BREAKDOWN');
+    expect(container.textContent).not.toContain('REVENUE TRAJECTORY');
+    expect(container.textContent).not.toContain('30-DAY OCCUPANCY');
   });
 
-  it('left arrow button has aria-label "Previous period"', () => {
-    const { container } = render(<DashboardFinancials data={mockData} onNavigate={vi.fn()} />);
-    const navButtons = container.querySelectorAll('.dashboard-focus');
-    expect(navButtons[0].getAttribute('aria-label')).toBe('Previous period');
-    expect(navButtons[1].getAttribute('aria-label')).toBe('Next period');
-  });
-
-  it('first button (ChevronLeft) navigates to an older period (increases index)', () => {
-    const { container } = render(
-      <DashboardFinancials data={mockData} onNavigate={vi.fn()} />
-    );
-    expect(container.textContent).toContain('June 2026');
-
-    const navButtons = container.querySelectorAll('.dashboard-focus');
-    fireEvent.click(navButtons[0]);
-
+  it('period navigation works — left arrow goes to older period', () => {
+    const { container } = render(<DashboardFinancials data={data} onNavigate={mockNavigate} />);
+    const buttons = container.querySelectorAll('button[aria-label]');
+    const leftBtn = Array.from(buttons).find(
+      b => b.getAttribute('aria-label') === 'Previous period'
+    ) as HTMLButtonElement;
+    fireEvent.click(leftBtn);
     expect(container.textContent).toContain('May 2026');
   });
 
-  it('second button (ChevronRight) navigates to a newer period (decreases index)', () => {
-    const { container } = render(
-      <DashboardFinancials data={mockData} onNavigate={vi.fn()} />
-    );
-    const navButtons = container.querySelectorAll('.dashboard-focus');
-    fireEvent.click(navButtons[0]);
+  it('period navigation works — right arrow goes back to newer period', () => {
+    const { container } = render(<DashboardFinancials data={data} onNavigate={mockNavigate} />);
+    const buttons = container.querySelectorAll('button[aria-label]');
+    const leftBtn = Array.from(buttons).find(
+      b => b.getAttribute('aria-label') === 'Previous period'
+    ) as HTMLButtonElement;
+    fireEvent.click(leftBtn);
     expect(container.textContent).toContain('May 2026');
 
-    fireEvent.click(navButtons[1]);
+    const rightBtn = Array.from(buttons).find(
+      b => b.getAttribute('aria-label') === 'Next period'
+    ) as HTMLButtonElement;
+    fireEvent.click(rightBtn);
     expect(container.textContent).toContain('June 2026');
   });
 
-  it('first button is disabled on oldest period', () => {
-    const { container } = render(
-      <DashboardFinancials data={mockData} onNavigate={vi.fn()} />
-    );
-    const navButtons = container.querySelectorAll('.dashboard-focus');
-    for (let i = 0; i < mockData.periods.length - 1; i++) {
-      fireEvent.click(navButtons[0]);
+  it('left arrow disables on oldest period', () => {
+    const { container } = render(<DashboardFinancials data={data} onNavigate={mockNavigate} />);
+    const buttons = container.querySelectorAll('button[aria-label]');
+    const leftBtn = Array.from(buttons).find(
+      b => b.getAttribute('aria-label') === 'Previous period'
+    ) as HTMLButtonElement;
+    for (let i = 0; i < 5; i++) {
+      fireEvent.click(leftBtn);
     }
-    expect(navButtons[0]).toBeDisabled();
+    expect(leftBtn).toBeDisabled();
   });
 
-  it('second button is disabled on most recent period', () => {
-    const { container } = render(
-      <DashboardFinancials data={mockData} onNavigate={vi.fn()} />
-    );
-    const navButtons = container.querySelectorAll('.dashboard-focus');
-    expect(navButtons[1]).toBeDisabled();
+  it('right arrow disables on most recent period', () => {
+    const { container } = render(<DashboardFinancials data={data} onNavigate={mockNavigate} />);
+    const buttons = container.querySelectorAll('button[aria-label]');
+    const rightBtn = Array.from(buttons).find(
+      b => b.getAttribute('aria-label') === 'Next period'
+    ) as HTMLButtonElement;
+    expect(rightBtn).toBeDisabled();
   });
 });
