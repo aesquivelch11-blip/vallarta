@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { ScreenType } from '../../types';
 import { sampleProperties } from '../PropertySelector/propertyData';
 import { getDashboardData } from './dashboardData';
@@ -30,7 +31,7 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
   const renderDomain = () => {
     switch (activeDomain) {
       case 'today':
-        return <DashboardToday data={data} onNavigate={onNavigate} />;
+        return <DashboardToday data={data} onNavigate={onNavigate} onDomainChange={setActiveDomain} />;
       case 'financials':
         return <DashboardFinancials data={data} onNavigate={onNavigate} />;
       case 'tasks':
@@ -176,6 +177,67 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
             overflow: 'hidden',
           }}
         >
+          {/* Dashboard header — back + menu */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '0 clamp(1.5rem, 3vw, 2.5rem)',
+              height: '52px',
+              borderBottom: '1px solid var(--color-border-subtle)',
+              flexShrink: 0,
+            }}
+          >
+            <button
+              className="dashboard-focus"
+              onClick={() => onNavigate('property_selector', 'push_back')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '5px',
+                background: 'none',
+                border: 'none',
+                padding: '8px 0',
+                cursor: 'pointer',
+                fontFamily: 'var(--font-ui)',
+                fontSize: '0.5625rem',
+                fontWeight: 500,
+                letterSpacing: '0.22em',
+                textTransform: 'uppercase',
+                color: 'var(--color-ink-secondary)',
+              }}
+              aria-label="Back to property selector"
+            >
+              <ChevronLeft size={12} strokeWidth={1.5} />
+              Back
+            </button>
+
+            <button
+              className="dashboard-focus"
+              onClick={() => onNavigate('nav_menu', 'push')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '5px',
+                background: 'none',
+                border: 'none',
+                padding: '8px 0',
+                cursor: 'pointer',
+                fontFamily: 'var(--font-ui)',
+                fontSize: '0.5625rem',
+                fontWeight: 500,
+                letterSpacing: '0.22em',
+                textTransform: 'uppercase',
+                color: 'var(--color-ink-secondary)',
+              }}
+              aria-label="Open navigation menu"
+            >
+              Menu
+              <ChevronRight size={12} strokeWidth={1.5} />
+            </button>
+          </div>
+
           {/* Mobile: domain pill above content */}
           <DashboardDomainNav active={activeDomain} onChange={setActiveDomain} />
 
@@ -191,7 +253,7 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
             <DashboardDomainNav active={activeDomain} onChange={setActiveDomain} />
 
             {/* Domain content */}
-            <div style={{ flex: 1, overflowY: 'auto' }}>
+            <div style={{ flex: 1, overflowY: activeDomain === 'today' ? 'hidden' : 'auto', display: 'flex', flexDirection: 'column' }}>
               <DashboardErrorBoundary>
                 {renderDomain()}
               </DashboardErrorBoundary>

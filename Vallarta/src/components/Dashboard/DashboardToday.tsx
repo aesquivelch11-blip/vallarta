@@ -2,10 +2,13 @@ import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { ScreenType } from '../../types';
 import { DashboardData, GuestEvent, formatTrendPercent, getTrendDirection } from './dashboardData';
+import TrendBadge from './TrendBadge';
+import Sparkline from './Sparkline';
 
 interface DashboardTodayProps {
   data: DashboardData;
   onNavigate: (screen: ScreenType, style: 'push' | 'push_back' | 'slide_up') => void;
+  onDomainChange?: (domain: 'today' | 'financials' | 'tasks') => void;
 }
 
 function GuestList({ guests, italic }: { guests: GuestEvent[]; italic: boolean }) {
@@ -62,7 +65,7 @@ function EmptyGuests({ label }: { label: string }) {
   );
 }
 
-export default function DashboardToday({ data, onNavigate }: DashboardTodayProps) {
+export default function DashboardToday({ data, onNavigate, onDomainChange }: DashboardTodayProps) {
   const { occupancy, arrivalsToday, departuresToday, arrivalsTomorrow, departuresTomorrow } = data;
 
   return (
@@ -77,52 +80,49 @@ export default function DashboardToday({ data, onNavigate }: DashboardTodayProps
     >
       {/* Occupancy — dominant */}
       <div style={{ marginBottom: 'clamp(2rem, 4vw, 3rem)' }}>
-        <p
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
-            fontWeight: 400,
-            letterSpacing: '-0.01em',
-            color: 'var(--color-ink)',
-            margin: 0,
-            lineHeight: 1,
-          }}
-        >
-          {occupancy}%
-        </p>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '8px' }}>
-          <p
-            style={{
-              fontFamily: 'var(--font-ui)',
-              fontSize: '0.625rem',
-              fontWeight: 500,
-              letterSpacing: '0.30em',
-              textTransform: 'uppercase',
-              color: 'var(--color-ink-secondary)',
-              margin: 0,
-            }}
-          >
-            OCCUPANCY
-          </p>
-          <p
-            style={{
-              fontFamily: 'var(--font-ui)',
-              fontSize: '0.5625rem',
-              fontWeight: 500,
-              letterSpacing: '0.10em',
-              textTransform: 'uppercase',
-              color: (() => {
-                const dir = getTrendDirection(occupancy, data.occupancyPrev);
-                if (dir === 'up') return 'var(--color-accent-positive)';
-                if (dir === 'down') return 'var(--color-accent-negative)';
-                return 'var(--color-ink-muted)';
-              })(),
-              margin: 0,
-              opacity: 0.85,
-            }}
-          >
-            {formatTrendPercent(occupancy, data.occupancyPrev)}
-          </p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+          <div>
+            <p
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
+                fontWeight: 400,
+                letterSpacing: '-0.01em',
+                color: 'var(--color-ink)',
+                margin: 0,
+                lineHeight: 1,
+              }}
+            >
+              {occupancy}%
+            </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '8px' }}>
+              <p
+                style={{
+                  fontFamily: 'var(--font-ui)',
+                  fontSize: '0.625rem',
+                  fontWeight: 500,
+                  letterSpacing: '0.30em',
+                  textTransform: 'uppercase',
+                  color: 'var(--color-ink-secondary)',
+                  margin: 0,
+                }}
+              >
+                OCCUPANCY
+              </p>
+              <TrendBadge 
+                value={formatTrendPercent(occupancy, data.occupancyPrev)} 
+                direction={getTrendDirection(occupancy, data.occupancyPrev)} 
+              />
+            </div>
+          </div>
+          <div style={{ opacity: 0.4 }}>
+            <Sparkline
+              data={data.occupancyHistory}
+              width={120}
+              height={40}
+              color="var(--color-ink-muted)"
+            />
+          </div>
         </div>
       </div>
 
