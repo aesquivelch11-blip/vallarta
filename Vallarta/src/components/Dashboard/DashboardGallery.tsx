@@ -115,6 +115,18 @@ export default function DashboardGallery({ images, propertyId, propertyName }: D
           />
         </AnimatePresence>
 
+        <div
+          style={{
+            position: 'absolute',
+            top: 0, left: 0, right: 0, bottom: 0,
+            background: 'linear-gradient(to bottom, rgba(15,26,26,0.3) 0%, rgba(15,26,26,0.6) 100%)',
+            pointerEvents: 'none',
+            opacity: 0,
+            transition: 'opacity 0.4s ease',
+          }}
+          className="dark-mode-overlay"
+        />
+
         <motion.p
           layoutId={`property-title-${propertyId}`}
           className="absolute top-3 left-4"

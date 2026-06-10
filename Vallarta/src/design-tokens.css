@@ -1998,6 +1998,10 @@ body::before {
     color: rgba(255, 255, 255, 0.55);
 }
 
+[data-theme="dark"] .dark-mode-overlay {
+  opacity: 1;
+}
+
 .cal-booking-row__status--cancelled {
     color: rgba(255, 255, 255, 0.3);
     text-decoration: line-through;
