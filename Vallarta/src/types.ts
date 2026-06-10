@@ -6,7 +6,8 @@ export type ScreenType =
   | 'camera_expanded'
   | 'calendar'
   | 'property_selector'
-  | 'dashboard';
+  | 'dashboard'
+  | 'performance'; // NEW
 
 export interface EstateMetric {
   label: string;

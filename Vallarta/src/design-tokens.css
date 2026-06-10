@@ -194,6 +194,11 @@
     --ps-duration-fast: 300ms;
     --ps-duration-base: 600ms;
     --ps-duration-slow: 800ms;
+
+    /* --- Ambient Color Tokens --- */
+    --color-ambient-canvas: var(--color-canvas);
+    --color-ambient-accent: var(--color-accent-positive);
+    --color-ambient-surface: var(--color-surface);
 }
 
 /* ── Nav Menu — entry animations ── */
@@ -2358,4 +2363,37 @@ body::before {
     .hero__arrow {
         transition: none;
     }
+}
+
+/* ── Dark Mode ── */
+[data-theme="dark"] {
+    --color-canvas: #0f1a1a;
+    --color-surface: rgba(255, 255, 255, 0.05);
+    --color-surface-solid: #1a2a2a;
+    --color-ink: #f2ece4;
+    --color-ink-secondary: #9a9590;
+    --color-ink-muted: #6a6a6a;
+    --color-border-subtle: rgba(255, 255, 255, 0.06);
+    --color-border-medium: rgba(255, 255, 255, 0.1);
+    --color-accent-positive: #3a6b4a;
+    --color-accent-warning: #d49a55;
+    --color-accent-live: #c45a5a;
+    --color-accent-live-bg: rgba(196, 90, 90, 0.08);
+    --color-task-urgent: #c45a5a;
+    --color-task-pending: #9a9590;
+    --color-task-scheduled: #6a6a6a;
+    --color-ambient-canvas: #0f1a1a;
+    --color-ambient-accent: #d49a55;
+    --color-ambient-surface: #1a2a2a;
+    --login-canvas: #0f1a1a;
+    --login-surface: #1a2a2a;
+    --login-ink: #f2ece4;
+    --login-ink-secondary: #9a9590;
+    --login-ink-muted: #9a9590;
+    --login-border: rgba(255, 255, 255, 0.12);
+    --login-border-focus: rgba(255, 255, 255, 0.35);
+    --login-accent: #d49a55;
+    --login-accent-hover: #bf8a4a;
+    --login-error: #c45a5a;
+    --login-error-bg: rgba(196, 90, 90, 0.08);
 }

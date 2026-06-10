@@ -404,7 +404,6 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
                     duration: 0.8,
                     delay: 0.18,
                     ease: [0.16, 1, 0.3, 1],
-                    exit: { duration: 0.3, delay: 0 },
                   }}
                 >
                   <span className="nav-portal__label">{item.label}</span>

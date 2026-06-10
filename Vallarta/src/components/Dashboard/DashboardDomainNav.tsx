@@ -8,7 +8,7 @@ interface DashboardDomainNavProps {
   onChange: (domain: Domain) => void;
 }
 
-const domains: { id: Domain; label: string; Icon: React.FC<{ size?: number; strokeWidth?: number }> }[] = [
+const domains: { id: Domain; label: string; Icon: React.FC<{ size?: number; strokeWidth?: number; style?: React.CSSProperties }> }[] = [
   { id: 'today', label: 'Today', Icon: Sun },
   { id: 'financials', label: 'Financials', Icon: TrendingUp },
   { id: 'tasks', label: 'Tasks', Icon: ClipboardList },

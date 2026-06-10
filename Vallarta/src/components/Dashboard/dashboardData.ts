@@ -41,6 +41,22 @@ export interface ExpenseCategory {
   amount: number;
 }
 
+export interface AmbientColors {
+  canvas: string;
+  accent: string;
+  surface: string;
+}
+
+export interface GuestLogEntry {
+  id: string;
+  timestamp: string;
+  type: 'arrival' | 'departure' | 'task_completed' | 'maintenance' | 'note';
+  description: string;
+  guestName?: string;
+  nights?: number;
+  assignee?: string;
+}
+
 export interface DashboardData {
   occupancy: number;
   occupancyPrev: number;
@@ -54,6 +70,10 @@ export interface DashboardData {
   tasks: DashboardTask[];
   periods: PeriodFinancials[];
   expenseBreakdown: ExpenseCategory[];
+  ambientColors: AmbientColors;
+  revenueHistory: number[];
+  budgetTarget: number;
+  guestLog: GuestLogEntry[];
 }
 
 const mockData: Record<string, DashboardData> = {
@@ -92,6 +112,18 @@ const mockData: Record<string, DashboardData> = {
       { label: 'Supplies', amount: 320 },
       { label: 'Other', amount: 150 },
     ],
+    ambientColors: {
+      canvas: '#faf6f0',
+      accent: '#d4a76a',
+      surface: '#fdf8f2',
+    },
+    revenueHistory: [10100, 8900, 11200, 9600, 10800, 12400],
+    budgetTarget: 15000,
+    guestLog: [
+      { id: 'g1', timestamp: '2026-06-07T15:14:00', type: 'arrival', description: 'Elena Rosenthal checked in', guestName: 'Elena Rosenthal', nights: 5 },
+      { id: 'g2', timestamp: '2026-06-07T15:14:00', type: 'arrival', description: 'Marco & Lucia Ferrara checked in', guestName: 'Marco & Lucia Ferrara', nights: 3 },
+      { id: 'g3', timestamp: '2026-06-07T11:00:00', type: 'task_completed', description: 'Pool filter cartridge replaced', assignee: 'Carlos' },
+    ],
   },
   'villa-luna': {
     occupancy: 92,
@@ -121,6 +153,16 @@ const mockData: Record<string, DashboardData> = {
       { label: 'Staff', amount: 480 },
       { label: 'Supplies', amount: 280 },
       { label: 'Other', amount: 140 },
+    ],
+    ambientColors: {
+      canvas: '#f5f8f5',
+      accent: '#5a8a7a',
+      surface: '#f0f5f2',
+    },
+    revenueHistory: [9400, 8200, 10500, 8900, 11200, 9800],
+    budgetTarget: 12000,
+    guestLog: [
+      { id: 'g1', timestamp: '2026-06-07T16:00:00', type: 'arrival', description: 'Valentina Cruz checked in', guestName: 'Valentina Cruz', nights: 6 },
     ],
   },
   'casa-sol': {
@@ -154,6 +196,17 @@ const mockData: Record<string, DashboardData> = {
       { label: 'Supplies', amount: 520 },
       { label: 'Other', amount: 330 },
     ],
+    ambientColors: {
+      canvas: '#f8f5f0',
+      accent: '#b8a07a',
+      surface: '#f5f0e8',
+    },
+    revenueHistory: [14900, 12400, 16800, 14100, 15600, 18200],
+    budgetTarget: 20000,
+    guestLog: [
+      { id: 'g1', timestamp: '2026-06-07T10:30:00', type: 'departure', description: 'The Okafor Family checked out', guestName: 'The Okafor Family', nights: 10 },
+      { id: 'g2', timestamp: '2026-06-07T09:00:00', type: 'task_completed', description: 'Dock safety inspection completed', assignee: 'Miguel' },
+    ],
   },
   'vista-al-mar': {
     occupancy: 85,
@@ -184,6 +237,17 @@ const mockData: Record<string, DashboardData> = {
       { label: 'Supplies', amount: 620 },
       { label: 'Other', amount: 380 },
     ],
+    ambientColors: {
+      canvas: '#f0f5f8',
+      accent: '#6a8a9a',
+      surface: '#e8f0f5',
+    },
+    revenueHistory: [18200, 15600, 20100, 17400, 19800, 21500],
+    budgetTarget: 25000,
+    guestLog: [
+      { id: 'g1', timestamp: '2026-06-07T14:00:00', type: 'arrival', description: 'Isabelle & Jean-Paul Moreau checked in', guestName: 'Isabelle & Jean-Paul Moreau', nights: 9 },
+      { id: 'g2', timestamp: '2026-06-07T11:00:00', type: 'departure', description: 'Dr. Amara Nwosu checked out', guestName: 'Dr. Amara Nwosu', nights: 4 },
+    ],
   },
   'casa-brisa': {
     occupancy: 71,
@@ -212,6 +276,16 @@ const mockData: Record<string, DashboardData> = {
       { label: 'Staff', amount: 300 },
       { label: 'Supplies', amount: 150 },
       { label: 'Other', amount: 90 },
+    ],
+    ambientColors: {
+      canvas: '#f8f8f5',
+      accent: '#8a8a7a',
+      surface: '#f2f2e8',
+    },
+    revenueHistory: [5500, 4800, 5900, 5200, 5800, 6100],
+    budgetTarget: 8000,
+    guestLog: [
+      { id: 'g1', timestamp: '2026-06-07T12:00:00', type: 'departure', description: 'Lucas Mendes checked out', guestName: 'Lucas Mendes', nights: 3 },
     ],
   },
 };
