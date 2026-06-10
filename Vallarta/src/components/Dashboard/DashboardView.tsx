@@ -155,7 +155,7 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
         className="lg:hidden"
         style={{ height: 'clamp(180px, 30vw, 220px)' }}
       >
-        <DashboardGallery images={property.images} />
+        <DashboardGallery images={property.images} propertyId={property.id} propertyName={property.name} />
       </div>
 
       {/* Main area — on desktop becomes a two-column grid */}
@@ -243,7 +243,7 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
         >
           {/* Gallery — now fills full height with property name overlay */}
           <div style={{ flex: 1, minHeight: 0 }}>
-            <DashboardGallery images={property.images} />
+            <DashboardGallery images={property.images} propertyId={property.id} propertyName={property.name} />
           </div>
         </div>
       </div>

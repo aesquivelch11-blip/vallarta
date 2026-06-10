@@ -3,9 +3,11 @@ import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 
 interface DashboardGalleryProps {
   images: string[];
+  propertyId: string;
+  propertyName: string;
 }
 
-export default function DashboardGallery({ images }: DashboardGalleryProps) {
+export default function DashboardGallery({ images, propertyId, propertyName }: DashboardGalleryProps) {
   const shouldReduceMotion = useReducedMotion();
   const [currentIndex, setCurrentIndex] = useState(0);
   const directionRef = useRef(0);
@@ -95,6 +97,7 @@ export default function DashboardGallery({ images }: DashboardGalleryProps) {
         <AnimatePresence custom={directionRef.current} mode="wait">
           <motion.img
             key={currentIndex}
+            layoutId={`property-image-${propertyId}`}
             src={images[currentIndex]}
             alt=""
             className="absolute inset-0 w-full h-full"
@@ -111,6 +114,24 @@ export default function DashboardGallery({ images }: DashboardGalleryProps) {
             }
           />
         </AnimatePresence>
+
+        <motion.p
+          layoutId={`property-title-${propertyId}`}
+          className="absolute top-3 left-4"
+          style={{
+            fontFamily: 'var(--font-ui)',
+            fontSize: '0.625rem',
+            fontWeight: 500,
+            letterSpacing: '0.20em',
+            textTransform: 'uppercase',
+            color: 'rgba(255,255,255,0.55)',
+            pointerEvents: 'none',
+            userSelect: 'none',
+            zIndex: 4,
+          }}
+        >
+          {propertyName}
+        </motion.p>
 
         {total > 1 && (
           <span
