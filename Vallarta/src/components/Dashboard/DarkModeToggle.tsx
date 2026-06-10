@@ -29,7 +29,7 @@ export default function DarkModeToggle() {
       aria-label="Toggle dark mode"
       className="dashboard-focus"
     >
-      {isDark ? <Moon size={16} strokeWidth={1.5} /> : <Sun size={16} strokeWidth={1.5} />}
+      {isDark ? <Sun size={16} strokeWidth={1.5} /> : <Moon size={16} strokeWidth={1.5} />}
     </button>
   );
 }

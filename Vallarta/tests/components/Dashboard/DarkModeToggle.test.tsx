@@ -16,17 +16,17 @@ describe('DarkModeToggle', () => {
     expect(button).toHaveAttribute('aria-label', 'Toggle dark mode');
   });
 
-  it('renders Sun icon by default (light mode)', () => {
+  it('renders Moon icon in light mode (action target)', () => {
     const { container } = render(<DarkModeToggle />);
-    const svg = container.querySelector('.lucide-sun');
+    const svg = container.querySelector('.lucide-moon');
     expect(svg).toBeInTheDocument();
   });
 
-  it('renders Moon icon after clicking toggle', () => {
+  it('renders Sun icon after clicking toggle (switch to dark)', () => {
     const { container } = render(<DarkModeToggle />);
     const button = container.querySelector('button')!;
     fireEvent.click(button);
-    const svg = container.querySelector('.lucide-moon');
+    const svg = container.querySelector('.lucide-sun');
     expect(svg).toBeInTheDocument();
   });
 
@@ -52,10 +52,10 @@ describe('DarkModeToggle', () => {
     expect(localStorage.getItem('theme')).toBe('dark');
   });
 
-  it('restores dark mode from localStorage', () => {
+  it('restores dark mode from localStorage (shows Sun to switch back)', () => {
     localStorage.setItem('theme', 'dark');
     const { container } = render(<DarkModeToggle />);
-    const svg = container.querySelector('.lucide-moon');
+    const svg = container.querySelector('.lucide-sun');
     expect(svg).toBeInTheDocument();
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
   });
@@ -66,16 +66,16 @@ describe('DarkModeToggle', () => {
     expect(button).toHaveClass('dashboard-focus');
   });
 
-  it('toggles between sun and moon icons when clicked', () => {
+  it('toggles between moon and sun icons when clicked (action target)', () => {
     const { container } = render(<DarkModeToggle />);
     const button = container.querySelector('button')!;
-    expect(container.querySelector('.lucide-sun')).toBeInTheDocument();
-    expect(container.querySelector('.lucide-moon')).not.toBeInTheDocument();
-    fireEvent.click(button);
     expect(container.querySelector('.lucide-moon')).toBeInTheDocument();
     expect(container.querySelector('.lucide-sun')).not.toBeInTheDocument();
     fireEvent.click(button);
     expect(container.querySelector('.lucide-sun')).toBeInTheDocument();
     expect(container.querySelector('.lucide-moon')).not.toBeInTheDocument();
+    fireEvent.click(button);
+    expect(container.querySelector('.lucide-moon')).toBeInTheDocument();
+    expect(container.querySelector('.lucide-sun')).not.toBeInTheDocument();
   });
 });

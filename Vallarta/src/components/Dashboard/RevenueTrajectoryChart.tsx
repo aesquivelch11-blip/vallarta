@@ -41,8 +41,8 @@ export default function RevenueTrajectoryChart({ data, labels }: RevenueTrajecto
         />
         {labels && (
           <>
-            <text x={padding} y={height - 4} style={{ fontFamily: 'var(--font-display)', fontSize: '10px', fill: 'var(--color-ink-secondary)' }}>{labels[0]}</text>
-            <text x={width - padding - 30} y={height - 4} style={{ fontFamily: 'var(--font-display)', fontSize: '10px', fill: 'var(--color-ink-secondary)' }}>{labels[labels.length - 1]}</text>
+            <text x={padding} y={height - 4} style={{ fontFamily: 'var(--font-ui)', fontSize: '9px', letterSpacing: '0.08em', fill: 'var(--color-ink-secondary)' }}>{labels[0]}</text>
+            <text x={width - padding - 30} y={height - 4} style={{ fontFamily: 'var(--font-ui)', fontSize: '9px', letterSpacing: '0.08em', fill: 'var(--color-ink-secondary)' }}>{labels[labels.length - 1]}</text>
           </>
         )}
       </svg>

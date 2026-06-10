@@ -7,7 +7,6 @@ export type ScreenType =
   | 'calendar'
   | 'property_selector'
   | 'dashboard'
-  | 'performance'; // NEW
 
 export interface EstateMetric {
   label: string;

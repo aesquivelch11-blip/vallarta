@@ -72,4 +72,16 @@ describe('DashboardView', () => {
     act(() => { vi.advanceTimersByTime(400); });
     expect(container.textContent).not.toContain('Performance');
   });
+
+  it('DarkModeToggle shows Moon icon in light mode (action target convention)', () => {
+    localStorage.setItem('theme', 'light');
+    const { container } = render(
+      <DashboardView propertyId="casa-del-sol" onNavigate={mockNavigate} onNotify={mockNotify} />
+    );
+    act(() => { vi.advanceTimersByTime(400); });
+    const toggle = container.querySelector('[aria-label="Toggle dark mode"]');
+    expect(toggle).toBeInTheDocument();
+    const svgChildren = toggle?.querySelectorAll('svg > *');
+    expect(svgChildren?.length).toBe(1);
+  });
 });
