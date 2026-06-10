@@ -1,4 +1,4 @@
-import { render, cleanup } from '@testing-library/react';
+import { render, cleanup, fireEvent } from '@testing-library/react';
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import DashboardFinancials from '../../../src/components/Dashboard/DashboardFinancials';
 import { getDashboardData } from '../../../src/components/Dashboard/dashboardData';
@@ -54,11 +54,53 @@ describe('DashboardFinancials', () => {
     expect(container.textContent).toContain('% of $');
   });
 
-  it('period navigation buttons are present', () => {
+  it('left arrow button has aria-label "Previous period"', () => {
     const { container } = render(<DashboardFinancials data={mockData} onNavigate={vi.fn()} />);
-    const leftChevron = container.querySelector('[aria-label="Next period"]');
-    const rightChevron = container.querySelector('[aria-label="Previous period"]');
-    expect(leftChevron).not.toBeNull();
-    expect(rightChevron).not.toBeNull();
+    const navButtons = container.querySelectorAll('.dashboard-focus');
+    expect(navButtons[0].getAttribute('aria-label')).toBe('Previous period');
+    expect(navButtons[1].getAttribute('aria-label')).toBe('Next period');
+  });
+
+  it('first button (ChevronLeft) navigates to an older period (increases index)', () => {
+    const { container } = render(
+      <DashboardFinancials data={mockData} onNavigate={vi.fn()} />
+    );
+    expect(container.textContent).toContain('June 2026');
+
+    const navButtons = container.querySelectorAll('.dashboard-focus');
+    fireEvent.click(navButtons[0]);
+
+    expect(container.textContent).toContain('May 2026');
+  });
+
+  it('second button (ChevronRight) navigates to a newer period (decreases index)', () => {
+    const { container } = render(
+      <DashboardFinancials data={mockData} onNavigate={vi.fn()} />
+    );
+    const navButtons = container.querySelectorAll('.dashboard-focus');
+    fireEvent.click(navButtons[0]);
+    expect(container.textContent).toContain('May 2026');
+
+    fireEvent.click(navButtons[1]);
+    expect(container.textContent).toContain('June 2026');
+  });
+
+  it('first button is disabled on oldest period', () => {
+    const { container } = render(
+      <DashboardFinancials data={mockData} onNavigate={vi.fn()} />
+    );
+    const navButtons = container.querySelectorAll('.dashboard-focus');
+    for (let i = 0; i < mockData.periods.length - 1; i++) {
+      fireEvent.click(navButtons[0]);
+    }
+    expect(navButtons[0]).toBeDisabled();
+  });
+
+  it('second button is disabled on most recent period', () => {
+    const { container } = render(
+      <DashboardFinancials data={mockData} onNavigate={vi.fn()} />
+    );
+    const navButtons = container.querySelectorAll('.dashboard-focus');
+    expect(navButtons[1]).toBeDisabled();
   });
 });
