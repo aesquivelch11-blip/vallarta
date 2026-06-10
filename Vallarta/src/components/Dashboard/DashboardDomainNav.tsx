@@ -1,7 +1,7 @@
 import React from 'react';
-import { Sun, TrendingUp, ClipboardList } from 'lucide-react';
+import { Sun, TrendingUp, ClipboardList, BarChart3 } from 'lucide-react';
 
-export type Domain = 'today' | 'financials' | 'tasks';
+export type Domain = 'today' | 'financials' | 'tasks' | 'performance';
 
 interface DashboardDomainNavProps {
   active: Domain;
@@ -12,6 +12,7 @@ const domains: { id: Domain; label: string; Icon: React.FC<{ size?: number; stro
   { id: 'today', label: 'Today', Icon: Sun },
   { id: 'financials', label: 'Financials', Icon: TrendingUp },
   { id: 'tasks', label: 'Tasks', Icon: ClipboardList },
+  { id: 'performance', label: 'Performance', Icon: BarChart3 },
 ];
 
 export default function DashboardDomainNav({ active, onChange }: DashboardDomainNavProps) {

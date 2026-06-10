@@ -8,6 +8,7 @@ import DashboardDomainNav, { Domain } from './DashboardDomainNav';
 import DashboardToday from './DashboardToday';
 import DashboardFinancials from './DashboardFinancials';
 import DashboardOperations from './DashboardOperations';
+import DashboardPerformance from './DashboardPerformance';
 import DashboardErrorBoundary from './DashboardErrorBoundary';
 import { AmbientProvider } from './AmbientColorProvider';
 
@@ -53,6 +54,8 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
         return <DashboardFinancials data={data} onNavigate={onNavigate} />;
       case 'tasks':
         return <DashboardOperations data={data} onNavigate={onNavigate} />;
+      case 'performance':
+        return <DashboardPerformance data={data} />;
     }
   };
 
