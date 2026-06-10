@@ -4,6 +4,7 @@ import { ScreenType } from '../../types';
 import { DashboardData, formatCurrency, formatTrendPercent, getTrendDirection } from './dashboardData';
 import ExpenseBreakdownChart from './ExpenseBreakdownChart';
 import RevenueTrajectoryChart from './RevenueTrajectoryChart';
+import OccupancyHeatmap from './OccupancyHeatmap';
 import AnimatedFigure from './AnimatedFigure';
 
 interface DashboardFinancialsProps {
@@ -79,13 +80,36 @@ export default function DashboardFinancials({ data, onNavigate }: DashboardFinan
       </div>
 
       {/* Revenue Trajectory */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: 'auto' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <p style={{ ...labelStyle, fontSize: '0.625rem', letterSpacing: '0.32em' }}>REVENUE TRAJECTORY</p>
         <RevenueTrajectoryChart data={data.revenueHistory} labels={yoyLabels} />
       </div>
 
+      {/* Divider */}
+      <div style={{ height: '1px', background: 'var(--color-border-subtle)' }} />
+
+      {/* Occupancy Heatmap */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <p style={{ ...labelStyle, fontSize: '0.625rem', letterSpacing: '0.32em' }}>30-DAY OCCUPANCY</p>
+        <OccupancyHeatmap data={Array.from({ length: 30 }, (_, i) => {
+          const base = data.occupancy;
+          const variance = Math.sin(i * 0.3) * 15;
+          return Math.max(0, Math.min(100, Math.round(base + variance)));
+        })} />
+      </div>
+
       {/* Nav link */}
-      <button className="dashboard-link" onClick={() => onNavigate('reporting', 'push')} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontFamily: 'var(--font-ui)', fontSize: '0.625rem', fontWeight: 500, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-ink-secondary)', background: 'none', border: 'none', padding: 0, cursor: 'pointer', alignSelf: 'flex-start' }}>
+      <button
+        className="dashboard-link"
+        onClick={() => onNavigate('reporting', 'push')}
+        style={{
+          display: 'inline-flex', alignItems: 'center', gap: '6px',
+          fontFamily: 'var(--font-ui)', fontSize: '0.625rem', fontWeight: 500,
+          letterSpacing: '0.22em', textTransform: 'uppercase',
+          color: 'var(--color-ink-secondary)', background: 'none', border: 'none',
+          padding: 0, cursor: 'pointer', alignSelf: 'flex-start', marginTop: 'auto',
+        }}
+      >
         VIEW FINANCIALS <ArrowRight size={11} strokeWidth={1.5} />
       </button>
     </div>

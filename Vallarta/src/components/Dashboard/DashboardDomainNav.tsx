@@ -1,7 +1,7 @@
 import React from 'react';
-import { Sun, TrendingUp, ClipboardList, BarChart3 } from 'lucide-react';
+import { Sun, TrendingUp, ClipboardList } from 'lucide-react';
 
-export type Domain = 'today' | 'financials' | 'tasks' | 'performance';
+export type Domain = 'today' | 'financials' | 'tasks';
 
 interface DashboardDomainNavProps {
   active: Domain;
@@ -12,7 +12,6 @@ const domains: { id: Domain; label: string; Icon: React.FC<{ size?: number; stro
   { id: 'today', label: 'Today', Icon: Sun },
   { id: 'financials', label: 'Financials', Icon: TrendingUp },
   { id: 'tasks', label: 'Tasks', Icon: ClipboardList },
-  { id: 'performance', label: 'Performance', Icon: BarChart3 },
 ];
 
 export default function DashboardDomainNav({ active, onChange }: DashboardDomainNavProps) {
@@ -21,15 +20,11 @@ export default function DashboardDomainNav({ active, onChange }: DashboardDomain
       {/* Desktop: vertical strip */}
       <nav
         className="hidden lg:flex flex-col items-center gap-1 py-10"
-        style={{
-          width: '72px',
-          borderRight: '1px solid var(--color-border-subtle)',
-        }}
+        style={{ width: '72px', borderRight: '1px solid var(--color-border-subtle)' }}
         aria-label="Dashboard sections"
       >
-        {domains.map(({ id, label, Icon }, i) => {
+        {domains.map(({ id, label, Icon }) => {
           const isActive = active === id;
-          const isFirst = i === 0;
           return (
             <button
               key={id}
@@ -37,7 +32,6 @@ export default function DashboardDomainNav({ active, onChange }: DashboardDomain
               aria-pressed={isActive}
               aria-label={label}
               style={{
-                marginTop: isFirst ? 0 : '4px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -52,14 +46,14 @@ export default function DashboardDomainNav({ active, onChange }: DashboardDomain
               }}
             >
               <Icon
-                size={isFirst ? 17 : 15}
+                size={15}
                 strokeWidth={isActive ? 2 : 1.5}
                 style={{ color: isActive ? 'var(--color-ink)' : 'var(--color-ink-secondary)' }}
               />
               <span
                 style={{
                   fontFamily: 'var(--font-ui)',
-                  fontSize: isFirst ? '0.5625rem' : '0.5rem',
+                  fontSize: '0.5rem',
                   fontWeight: isActive ? 600 : 400,
                   letterSpacing: '0.12em',
                   textTransform: 'uppercase',
