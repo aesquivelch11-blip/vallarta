@@ -3,9 +3,11 @@ import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 
 interface DashboardGalleryProps {
   images: string[];
+  propertyName?: string;
+  propertyLocation?: string;
 }
 
-export default function DashboardGallery({ images }: DashboardGalleryProps) {
+export default function DashboardGallery({ images, propertyName, propertyLocation }: DashboardGalleryProps) {
   const shouldReduceMotion = useReducedMotion();
   const [currentIndex, setCurrentIndex] = useState(0);
   const directionRef = useRef(0);
@@ -112,6 +114,66 @@ export default function DashboardGallery({ images }: DashboardGalleryProps) {
           />
         </AnimatePresence>
 
+        {propertyName && (
+          <div
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(to top, rgba(0,0,0,0.52) 0%, transparent 42%)',
+              pointerEvents: 'none',
+              zIndex: 2,
+            }}
+          />
+        )}
+
+        {propertyName && (
+          <div
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              bottom: 'clamp(1.25rem, 2.5vw, 2rem)',
+              left: 'clamp(1rem, 2vw, 1.75rem)',
+              zIndex: 3,
+              pointerEvents: 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '6px',
+            }}
+          >
+            <p
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontStyle: 'italic',
+                fontWeight: 400,
+                fontSize: 'clamp(1.25rem, 2vw, 1.625rem)',
+                letterSpacing: '-0.01em',
+                color: 'rgba(255,255,255,0.94)',
+                margin: 0,
+                lineHeight: 1.1,
+              }}
+            >
+              {propertyName}
+            </p>
+            {propertyLocation && (
+              <p
+                style={{
+                  fontFamily: 'var(--font-ui)',
+                  fontWeight: 500,
+                  fontSize: '0.5625rem',
+                  letterSpacing: '0.25em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(255,255,255,0.55)',
+                  margin: 0,
+                  lineHeight: 1,
+                }}
+              >
+                {propertyLocation}
+              </p>
+            )}
+          </div>
+        )}
+
         {total > 1 && (
           <span
             className="absolute bottom-3 right-4"
@@ -124,6 +186,7 @@ export default function DashboardGallery({ images }: DashboardGalleryProps) {
               color: 'rgba(255,255,255,0.55)',
               pointerEvents: 'none',
               userSelect: 'none',
+              zIndex: 4,
             }}
           >
             {counter}

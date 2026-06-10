@@ -254,45 +254,13 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
           className="hidden lg:flex lg:flex-col"
           style={{ height: '100dvh', position: 'sticky', top: 0 }}
         >
-          {/* Property name */}
-          <div
-            style={{
-              padding: 'clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 3vw, 2.5rem) 0 clamp(1rem, 2vw, 1.75rem)',
-            }}
-          >
-            <p
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontStyle: 'italic',
-                fontWeight: 400,
-                fontSize: 'clamp(1.25rem, 2vw, 1.625rem)',
-                letterSpacing: '-0.01em',
-                color: 'var(--color-ink)',
-                margin: 0,
-                lineHeight: 1.2,
-              }}
-            >
-              {property.name}
-            </p>
-            <p
-              style={{
-                fontFamily: 'var(--font-ui)',
-                fontWeight: 500,
-                fontSize: '0.5625rem',
-                letterSpacing: '0.25em',
-                textTransform: 'uppercase',
-                color: 'var(--color-ink-secondary)',
-                margin: '6px 0 0',
-                lineHeight: 1,
-              }}
-            >
-              {property.location}
-            </p>
-          </div>
-
-          {/* Gallery */}
+          {/* Gallery — now fills full height with property name overlay */}
           <div style={{ flex: 1, minHeight: 0 }}>
-            <DashboardGallery images={property.images} />
+            <DashboardGallery
+              images={property.images}
+              propertyName={property.name}
+              propertyLocation={property.location}
+            />
           </div>
         </div>
       </div>
