@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from 'react';
+import { motion } from 'motion/react';
 import { Property } from '../../types';
 import { TierLevel } from './StickyHeader';
 
@@ -70,7 +71,8 @@ export default function PropertyCard({ property, onSelect, index, tier }: Proper
       >
         <picture>
           {property.imageWebp && <source srcSet={property.imageWebp} type="image/webp" />}
-          <img
+          <motion.img
+            layoutId={`property-image-${property.id}`}
             src={property.imageUrl}
             alt={property.name}
             className="ps-card__image"
@@ -83,7 +85,7 @@ export default function PropertyCard({ property, onSelect, index, tier }: Proper
           <span className="ps-card__status-label">{STATUS_LABELS[property.occupancyStatus]}</span>
         </div>
         <div className="ps-card__overlay">
-          <h3 className="ps-card__name">{property.name}</h3>
+          <motion.h3 className="ps-card__name" layoutId={`property-title-${property.id}`}>{property.name}</motion.h3>
           <p className="ps-card__location">{property.location}</p>
           <p className="ps-card__tagline">{property.tagline}</p>
         </div>
