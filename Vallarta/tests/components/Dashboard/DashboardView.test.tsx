@@ -34,4 +34,13 @@ describe('DashboardView', () => {
     const ambientProvider = container.querySelector('[data-testid="ambient-provider"]');
     expect(ambientProvider).toBeInTheDocument();
   });
+
+  it('renders DarkModeToggle in the header', () => {
+    const { container } = render(
+      <DashboardView propertyId="casa-del-sol" onNavigate={mockNavigate} onNotify={mockNotify} />
+    );
+    act(() => { vi.advanceTimersByTime(400); });
+    const toggle = container.querySelector('[aria-label="Toggle dark mode"]');
+    expect(toggle).toBeInTheDocument();
+  });
 });

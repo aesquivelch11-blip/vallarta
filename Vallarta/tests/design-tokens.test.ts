@@ -28,4 +28,9 @@ describe('design-tokens.css', () => {
   it('uses ease-out-quart for metric-card hover', () => {
     expect(css).toContain('var(--ease-out-quart)');
   });
+
+  it('contains dark mode overlay CSS rule', () => {
+    expect(css).toContain('[data-theme="dark"] .dark-mode-overlay');
+    expect(css).toContain('opacity: 1');
+  });
 });

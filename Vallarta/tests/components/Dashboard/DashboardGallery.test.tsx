@@ -48,4 +48,20 @@ describe('DashboardGallery', () => {
     );
     expect(container.textContent).not.toContain('/');
   });
+
+  it('renders dark mode overlay div', () => {
+    const { container } = render(
+      <DashboardGallery images={testImages} propertyId="casa-del-sol" propertyName="Casa del Sol" />
+    );
+    const overlay = container.querySelector('.dark-mode-overlay');
+    expect(overlay).toBeInTheDocument();
+  });
+
+  it('dark mode overlay starts with opacity 0', () => {
+    const { container } = render(
+      <DashboardGallery images={testImages} propertyId="casa-del-sol" propertyName="Casa del Sol" />
+    );
+    const overlay = container.querySelector('.dark-mode-overlay') as HTMLElement;
+    expect(overlay.style.opacity).toBe('0');
+  });
 });

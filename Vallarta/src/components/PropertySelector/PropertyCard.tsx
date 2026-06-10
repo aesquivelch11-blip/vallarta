@@ -55,7 +55,7 @@ export default function PropertyCard({ property, onSelect, index, tier }: Proper
   return (
     <button
       onClick={() => onSelect(property.id)}
-      className={`ps-card ${tall ? 'ps-card--tall' : 'ps-card--short'}`}
+      className={`ps-card dashboard-focus ${tall ? 'ps-card--tall' : 'ps-card--short'}`}
       style={{ '--i': index } as React.CSSProperties}
       aria-label={`View ${property.name}, ${property.location}`}
     >
