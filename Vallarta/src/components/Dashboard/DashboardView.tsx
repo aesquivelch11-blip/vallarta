@@ -20,6 +20,22 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
   const [activeDomain, setActiveDomain] = useState<Domain>('today');
   const [isLoading, setIsLoading] = useState(true);
 
+  const headerBtnStyle: React.CSSProperties = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '5px',
+    background: 'none',
+    border: 'none',
+    padding: '8px 0',
+    cursor: 'pointer',
+    fontFamily: 'var(--font-ui)',
+    fontSize: '0.5625rem',
+    fontWeight: 500,
+    letterSpacing: '0.22em',
+    textTransform: 'uppercase',
+    color: 'var(--color-ink-secondary)',
+  };
+
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 400);
     return () => clearTimeout(timer);
@@ -192,21 +208,7 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
             <button
               className="dashboard-focus"
               onClick={() => onNavigate('property_selector', 'push_back')}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '5px',
-                background: 'none',
-                border: 'none',
-                padding: '8px 0',
-                cursor: 'pointer',
-                fontFamily: 'var(--font-ui)',
-                fontSize: '0.5625rem',
-                fontWeight: 500,
-                letterSpacing: '0.22em',
-                textTransform: 'uppercase',
-                color: 'var(--color-ink-secondary)',
-              }}
+              style={headerBtnStyle}
               aria-label="Back to property selector"
             >
               <ChevronLeft size={12} strokeWidth={1.5} />
@@ -216,21 +218,7 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
             <button
               className="dashboard-focus"
               onClick={() => onNavigate('nav_menu', 'push')}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '5px',
-                background: 'none',
-                border: 'none',
-                padding: '8px 0',
-                cursor: 'pointer',
-                fontFamily: 'var(--font-ui)',
-                fontSize: '0.5625rem',
-                fontWeight: 500,
-                letterSpacing: '0.22em',
-                textTransform: 'uppercase',
-                color: 'var(--color-ink-secondary)',
-              }}
+              style={headerBtnStyle}
               aria-label="Open navigation menu"
             >
               Menu
