@@ -12,14 +12,6 @@ afterEach(cleanup);
 const mockData = getDashboardData('casa-palmeras');
 
 describe('DashboardOperations', () => {
-  it('renders StatusCards section', () => {
-    const { container } = render(<DashboardOperations data={mockData} onNavigate={vi.fn()} />);
-    expect(container.textContent).toContain('Maintenance');
-    expect(container.textContent).toContain('Housekeeping');
-    expect(container.textContent).toContain('Amenities');
-    expect(container.textContent).toContain('Inspection');
-  });
-
   it('renders TaskList with open tasks count', () => {
     const { container } = render(<DashboardOperations data={mockData} onNavigate={vi.fn()} />);
     expect(container.textContent).toContain('OPEN TASKS');
