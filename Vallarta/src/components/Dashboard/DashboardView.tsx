@@ -47,7 +47,7 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
   const renderDomain = () => {
     switch (activeDomain) {
       case 'today':
-        return <DashboardToday data={data} onNavigate={onNavigate} onDomainChange={setActiveDomain} />;
+        return <DashboardToday data={data} propertyName={property.name} propertyLocation={property.location} onNavigate={onNavigate} onDomainChange={setActiveDomain} />;
       case 'financials':
         return <DashboardFinancials data={data} onNavigate={onNavigate} />;
       case 'tasks':
