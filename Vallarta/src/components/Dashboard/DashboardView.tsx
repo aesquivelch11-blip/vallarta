@@ -11,6 +11,7 @@ import DashboardOperations from './DashboardOperations';
 import DashboardPerformance from './DashboardPerformance';
 import DashboardErrorBoundary from './DashboardErrorBoundary';
 import { AmbientProvider } from './AmbientColorProvider';
+import { motion } from 'motion/react';
 
 interface DashboardViewProps {
   propertyId: string | null;
@@ -228,9 +229,16 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
             {/* Domain content */}
             <div style={{ flex: 1, overflowY: activeDomain === 'today' ? 'hidden' : 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
               <DashboardErrorBoundary>
-                <AmbientProvider value={data.ambientColors}>
-                  {renderDomain()}
-                </AmbientProvider>
+                <motion.div
+                  key={activeDomain}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, ease: [0.25, 1, 0.5, 1], staggerChildren: 0.03 }}
+                >
+                  <AmbientProvider value={data.ambientColors}>
+                    {renderDomain()}
+                  </AmbientProvider>
+                </motion.div>
               </DashboardErrorBoundary>
             </div>
           </div>
