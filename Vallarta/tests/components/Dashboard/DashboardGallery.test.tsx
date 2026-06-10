@@ -64,4 +64,37 @@ describe('DashboardGallery', () => {
     const overlay = container.querySelector('.dark-mode-overlay') as HTMLElement;
     expect(overlay.style.opacity).toBe('0');
   });
+
+  it('renders dot navigation indicators when multiple images', () => {
+    const { container } = render(
+      <DashboardGallery images={testImages} propertyId="casa-del-sol" propertyName="Casa del Sol" />
+    );
+    const dots = container.querySelectorAll('[data-gallery-dot]');
+    expect(dots).toHaveLength(3);
+  });
+
+  it('first dot is active (wider) on initial render', () => {
+    const { container } = render(
+      <DashboardGallery images={testImages} propertyId="casa-del-sol" propertyName="Casa del Sol" />
+    );
+    const dots = container.querySelectorAll('[data-gallery-dot]');
+    const firstDot = dots[0] as HTMLElement;
+    expect(firstDot.getAttribute('data-active')).toBe('true');
+  });
+
+  it('renders no dots for single image', () => {
+    const { container } = render(
+      <DashboardGallery images={['/single.jpg']} propertyId="casa-del-sol" propertyName="Casa del Sol" />
+    );
+    const dots = container.querySelectorAll('[data-gallery-dot]');
+    expect(dots).toHaveLength(0);
+  });
+
+  it('outer container is not aria-hidden', () => {
+    const { container } = render(
+      <DashboardGallery images={testImages} propertyId="casa-del-sol" propertyName="Casa del Sol" />
+    );
+    const outer = container.firstElementChild;
+    expect(outer?.getAttribute('aria-hidden')).not.toBe('true');
+  });
 });
