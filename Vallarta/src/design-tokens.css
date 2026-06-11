@@ -9,7 +9,7 @@
     --color-surface: rgba(255, 255, 255, 0.72);
     --color-surface-solid: #f2ece4; /* Travertine Cream — solid surface */
     --color-ink: #242424; /* Obsidian Charcoal — primary body copy */
-    --color-ink-secondary: #7e7a74; /* Weathered Timber — secondary text */
+    --color-ink-secondary: #77736d; /* Weathered Timber — secondary text, WCAG AA compliant */
     --color-ink-muted: #7a7570; /* Weathered Timber muted — WCAG AA compliant for tertiary text */
     --color-border-subtle: rgba(36, 36, 36, 0.06);
     --color-border-medium: rgba(36, 36, 36, 0.1);
@@ -171,11 +171,18 @@
     --ps-ink-secondary: #6b6560;
     --ps-ink-muted: #9a9590;
 
+    /* Noise texture */
+    --ps-noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+
     /* Status accent colors */
     --ps-status-available: oklch(72% 0.08 155);
+    --ps-status-available-glow: oklch(72% 0.08 155 / 0.4);
     --ps-status-occupied: oklch(55% 0.06 80);
+    --ps-status-occupied-glow: oklch(55% 0.06 80 / 0.3);
     --ps-status-maintenance: oklch(62% 0.12 70);
+    --ps-status-maintenance-glow: oklch(62% 0.12 70 / 0.35);
     --ps-status-reserved: oklch(65% 0.05 260);
+    --ps-status-reserved-glow: oklch(65% 0.05 260 / 0.3);
 
     /* Grid */
     --ps-grid-gap: 16px;
@@ -188,8 +195,8 @@
     --ps-tagline-size: 0.75rem;
 
     /* Motion */
-    --ps-ease-out: cubic-bezier(0.0, 0.0, 0.2, 1);
-    --ps-ease-in-out: cubic-bezier(0.4, 0.0, 0.2, 1);
+    --ps-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ps-ease-in-out: cubic-bezier(0.4, 0.0, 0.6, 1);
     --ps-duration-instant: 150ms;
     --ps-duration-fast: 300ms;
     --ps-duration-base: 600ms;
