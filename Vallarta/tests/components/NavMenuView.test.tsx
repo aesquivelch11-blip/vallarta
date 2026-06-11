@@ -63,9 +63,12 @@ describe('NavMenuView — Bottom Bar', () => {
   });
 
   it('clicking a tab calls onNavigate with the correct screen', () => {
+    vi.useFakeTimers();
     const { getByLabelText } = renderNav();
     fireEvent.click(getByLabelText('Navigate to Revenue'));
+    vi.advanceTimersByTime(200);
     expect(mockNavigate).toHaveBeenCalledWith('deep_dive', 'push');
+    vi.useRealTimers();
   });
 
   it('ArrowRight key navigates to next tab and updates aria-selected', () => {
