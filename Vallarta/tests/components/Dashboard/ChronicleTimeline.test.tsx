@@ -67,8 +67,8 @@ describe('ChronicleTimeline', () => {
 
   it('renders last event without bottom border', () => {
     const { container } = render(<ChronicleTimeline events={mockEvents} />);
-    const rows = Array.from(container.querySelectorAll('[style]')) as HTMLElement[];
-    const lastRow = rows[rows.length - 1];
-    expect(lastRow.style.borderBottom).toBe('none');
+    const rows = container.querySelectorAll('[style*="border-bottom"]');
+    const lastRow = rows[rows.length - 1] as HTMLElement;
+    expect(lastRow.style.borderBottomStyle).toBe('none');
   });
 });

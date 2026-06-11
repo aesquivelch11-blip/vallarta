@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import { GuestLogEntry } from './dashboardData';
 
 interface ChronicleTimelineProps {
@@ -12,25 +13,59 @@ export default function ChronicleTimeline({ events }: ChronicleTimelineProps) {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '0', maxHeight: '200px', overflowY: 'auto' }}>
-      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.5625rem', fontWeight: 500, letterSpacing: '0.32em', textTransform: 'uppercase', color: 'var(--color-ink-secondary)', margin: '0 0 12px' }}>
-        CHRONICLE
-      </p>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
       {events.map((event, i) => (
-        <div key={event.id} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', padding: '8px 0', borderBottom: i < events.length - 1 ? '1px solid var(--color-border-subtle)' : 'none' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
-            <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'var(--color-ink-secondary)', opacity: 0.5 }} />
-            {i < events.length - 1 && <div style={{ width: '1px', flex: 1, background: 'var(--color-border-subtle)', marginTop: '4px' }} />}
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-            <p style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: '0.625rem', fontWeight: 400, color: 'var(--color-ink-secondary)', margin: 0, lineHeight: 1.2 }}>
-              {formatTime(event.timestamp)}
-            </p>
-            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.75rem', fontWeight: 400, color: 'var(--color-ink)', margin: 0, lineHeight: 1.4 }}>
-              {event.description}
-            </p>
-          </div>
-        </div>
+        <motion.div
+          key={event.id}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.25,
+            delay: i * 0.045,
+            ease: [0.16, 1, 0.3, 1] as const,
+          }}
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '72px 1fr',
+            gap: '0 14px',
+            alignItems: 'baseline',
+            padding: '9px 0',
+            borderBottom:
+              i < events.length - 1
+                ? '1px solid var(--color-border-subtle)'
+                : 'none',
+          }}
+        >
+          {/* Time column: fixed-width tabular mono */}
+          <p
+            style={{
+              fontFamily: 'var(--font-ui)',
+              fontSize: '0.5625rem',
+              fontWeight: 400,
+              letterSpacing: '0.06em',
+              color: 'var(--color-ink-muted)',
+              fontVariantNumeric: 'tabular-nums',
+              margin: 0,
+              lineHeight: 1.5,
+            }}
+          >
+            {formatTime(event.timestamp)}
+          </p>
+
+          {/* Description column */}
+          <p
+            style={{
+              fontFamily: 'var(--font-ui)',
+              fontSize: '0.75rem',
+              fontWeight: 400,
+              color: 'var(--color-ink)',
+              margin: 0,
+              lineHeight: 1.4,
+            }}
+          >
+            {event.description}
+          </p>
+        </motion.div>
       ))}
     </div>
   );
