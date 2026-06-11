@@ -354,7 +354,7 @@
     position: absolute;
     inset: 0;
     z-index: 0;
-    background: oklch(18% 0.006 60);
+    background: #1a2b35;
     pointer-events: none;
     transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -371,7 +371,7 @@
     pointer-events: none;
     background:
         linear-gradient(to bottom, var(--nav-scrim-top) 0%, transparent 18%),
-        linear-gradient(to top, oklch(14% 0.005 60 / 0.85) 0%, var(--nav-scrim-mid) 28%, transparent 60%);
+        linear-gradient(to top, rgba(14, 26, 34, 0.85) 0%, var(--nav-scrim-mid) 28%, transparent 60%);
 }
 
 /* ── Nav Menu — warm grain overlay (fixed, non-scrolling) ── */
@@ -437,7 +437,7 @@
 
 @media (hover: hover) and (pointer: fine) {
     .nav-bottom-tab:hover {
-        color: oklch(88% 0.01 72 / 0.72);
+        color: rgba(250, 248, 245, 0.72);
     }
 }
 
