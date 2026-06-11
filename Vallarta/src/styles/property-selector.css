@@ -189,11 +189,12 @@
               transform var(--ps-duration-fast) var(--ps-ease-out);
 }
 
-/* ── Status dot (always visible) ── */
+/* ── Status dot (always visible) — top-left ── */
 .ps-card__status {
   position: absolute;
   top: clamp(12px, 1.5vw, 20px);
-  right: clamp(12px, 1.5vw, 20px);
+  left: clamp(12px, 1.5vw, 20px);
+  right: auto;
   z-index: 3;
   display: flex;
   align-items: center;
@@ -208,10 +209,25 @@
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.15);
 }
 
-.ps-card__status-dot--available { background: var(--ps-status-available); }
-.ps-card__status-dot--occupied { background: var(--ps-status-occupied); }
-.ps-card__status-dot--maintenance { background: var(--ps-status-maintenance); }
-.ps-card__status-dot--reserved { background: var(--ps-status-reserved); }
+.ps-card__status-dot--available {
+  background: var(--ps-status-available);
+  box-shadow: 0 0 8px var(--ps-status-available-glow);
+}
+
+.ps-card__status-dot--occupied {
+  background: var(--ps-status-occupied);
+  box-shadow: 0 0 6px var(--ps-status-occupied-glow);
+}
+
+.ps-card__status-dot--maintenance {
+  background: var(--ps-status-maintenance);
+  box-shadow: 0 0 6px var(--ps-status-maintenance-glow);
+}
+
+.ps-card__status-dot--reserved {
+  background: var(--ps-status-reserved);
+  box-shadow: 0 0 6px var(--ps-status-reserved-glow);
+}
 
 .ps-card__status-label {
   font-family: var(--font-ui);
@@ -225,7 +241,7 @@
   padding: 4px 8px;
   border-radius: 2px;
   opacity: 0;
-  transform: translateX(4px);
+  transform: translateX(-4px);
   transition: opacity var(--ps-duration-fast) var(--ps-ease-out),
               transform var(--ps-duration-fast) var(--ps-ease-out);
   pointer-events: none;
