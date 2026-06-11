@@ -41,7 +41,7 @@ export default function NavImagePanel({ items, activeIndex }: NavImagePanelProps
           animate={{ clipPath: 'inset(0 0% 0 0)' }}
           exit={
             shouldReduce
-              ? { opacity: 0 }
+              ? { opacity: 0, transition: { duration: 0 } }
               : { opacity: 0, transition: { duration: 0.18, ease: [0.23, 1, 0.32, 1] } }
           }
           transition={
