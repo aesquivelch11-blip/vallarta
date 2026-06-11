@@ -137,18 +137,18 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: clamp(16px, 2vw, 28px);
+  padding: clamp(20px, 2.5vw, 32px);
   z-index: 2;
 }
 
 /* Property type label */
 .ps-card__type {
   font-family: var(--font-ui);
-  font-size: 0.625rem;
+  font-size: 0.5625rem;
   font-weight: 600;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.6);
   margin: 0 0 8px 0;
   line-height: 1.5;
 }
@@ -180,11 +180,11 @@
   font-size: var(--ps-tagline-size);
   font-weight: 400;
   font-style: italic;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.75);
   margin: 4px 0 0 0;
   line-height: 1.4;
   opacity: 0;
-  transform: translateY(4px);
+  transform: translateY(8px);
   transition: opacity var(--ps-duration-fast) var(--ps-ease-out),
               transform var(--ps-duration-fast) var(--ps-ease-out);
 }
