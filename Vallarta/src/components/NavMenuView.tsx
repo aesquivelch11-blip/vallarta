@@ -86,6 +86,8 @@ export default function NavMenuView({
   const isFirstRender = useRef(true);
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
 
   // Save active panel on change; announce for screen readers
   useEffect(() => {
@@ -129,7 +131,7 @@ export default function NavMenuView({
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { onClose(); return; }
+      if (e.key === 'Escape') { onCloseRef.current(); return; }
       if (e.key === 'ArrowLeft') { e.preventDefault(); walk(-1); return; }
       if (e.key === 'ArrowRight') { e.preventDefault(); walk(1); return; }
 
