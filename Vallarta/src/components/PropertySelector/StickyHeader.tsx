@@ -57,13 +57,25 @@ const TIERS: { id: TierLevel; label: string; icon: React.ReactNode }[] = [
 export default function StickyHeader({ tier, onTierChange, onSearch }: StickyHeaderProps) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
   const inputRef = useRef<HTMLInputElement>(null);
+  const tierContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (searchOpen && inputRef.current) {
       inputRef.current.focus();
     }
   }, [searchOpen]);
+
+  useEffect(() => {
+    if (!tierContainerRef.current) return;
+
+    const activeBtn = tierContainerRef.current.querySelector('.ps-header__tier-btn--active') as HTMLElement | null;
+    if (activeBtn) {
+      const { offsetLeft, offsetWidth } = activeBtn;
+      setIndicatorStyle({ left: offsetLeft, width: offsetWidth });
+    }
+  }, [tier]);
 
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);
@@ -110,7 +122,7 @@ export default function StickyHeader({ tier, onTierChange, onSearch }: StickyHea
           </button>
         )}
 
-        <div className="ps-header__tier" role="radiogroup" aria-label="Card size">
+        <div className="ps-header__tier" ref={tierContainerRef} role="radiogroup" aria-label="Card size">
           {TIERS.map((t) => (
             <button
               key={t.id}
@@ -123,6 +135,13 @@ export default function StickyHeader({ tier, onTierChange, onSearch }: StickyHea
               <span className="ps-header__tier-btn-label">{t.label}</span>
             </button>
           ))}
+          <div
+            className="ps-header__tier-indicator"
+            style={{
+              transform: `translateX(${indicatorStyle.left}px)`,
+              width: `${indicatorStyle.width}px`,
+            }}
+          />
         </div>
       </div>
     </header>

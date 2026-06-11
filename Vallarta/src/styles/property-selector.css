@@ -508,6 +508,7 @@
   display: flex;
   align-items: center;
   gap: 0;
+  position: relative;
 }
 
 .ps-header__tier-btn {
@@ -519,11 +520,10 @@
   color: var(--ps-ink-muted);
   background: none;
   border: none;
-  border-bottom: 2px solid transparent;
   padding: 8px 12px;
   cursor: pointer;
-  transition: color var(--ps-duration-instant) var(--ps-ease-out),
-              border-color var(--ps-duration-instant) var(--ps-ease-out);
+  transition: color var(--ps-duration-instant) var(--ps-ease-out);
+  position: relative;
 }
 
 .ps-header__tier-btn:hover {
@@ -532,7 +532,16 @@
 
 .ps-header__tier-btn--active {
   color: var(--ps-ink);
-  border-bottom-color: var(--ps-status-available);
+}
+
+.ps-header__tier-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: var(--color-accent-warning);
+  transition: transform var(--ps-duration-fast) var(--ps-ease-out),
+              width var(--ps-duration-fast) var(--ps-ease-out);
 }
 
 .ps-header__tier-btn-icon {
@@ -582,9 +591,17 @@
 
 .ps-hero__wordmark {
   font-family: var(--font-display);
-  font-size: clamp(4rem, 12vw, 10rem);
+  font-size: clamp(5rem, 14vw, 12rem);
   font-weight: 400;
   letter-spacing: -0.05em;
   color: var(--ps-ink);
   line-height: 1;
+  clip-path: inset(100% 0 0 0);
+  animation: ps-wordmark-reveal 0.8s var(--ps-ease-out) forwards;
+}
+
+@keyframes ps-wordmark-reveal {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
 }
