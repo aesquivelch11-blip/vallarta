@@ -1,127 +1,114 @@
-import React, { useRef, useEffect, useState } from "react";
-import { ScreenType } from "../types";
-import menuImg1 from "../assets/Menu/menu-1.webp";
-import menuImg1Webp from "../assets/Menu/menu-1.webp";
-import menuImg2 from "../assets/Menu/menu-2.webp";
-import menuImg2Webp from "../assets/Menu/menu-2.webp";
-import menuImg3 from "../assets/Menu/menu-3.webp";
-import menuImg3Webp from "../assets/Menu/menu-3.webp";
-import menuImg4 from "../assets/Menu/menu-4.webp";
-import menuImg4Webp from "../assets/Menu/menu-4.webp";
-import { motion, AnimatePresence } from "motion/react";
+import React, { useRef, useEffect, useState } from 'react';
+import { ScreenType } from '../types';
+import menuImg1 from '../assets/Menu/menu-1.webp';
+import menuImg2 from '../assets/Menu/menu-2.webp';
+import menuImg3 from '../assets/Menu/menu-3.webp';
+import menuImg4 from '../assets/Menu/menu-4.webp';
+import NavImagePanel from './NavMenu/NavImagePanel';
+import NavBottomBar from './NavMenu/NavBottomBar';
 
 interface NavMenuViewProps {
-  onNavigate: (
-    screen: ScreenType,
-    transitionStyle: "push" | "slide_up",
-  ) => void;
+  onNavigate: (screen: ScreenType, transitionStyle: 'push' | 'slide_up') => void;
   onClose: () => void;
   onNotify?: (message: string) => void;
+  previousScreen?: ScreenType;
 }
 
-interface MenuItem {
-  id: string;
-  label: string;
-  subtitle: string;
-  screen: ScreenType;
-  image: string;
-  imageWebp: string;
-}
+// Static metrics — replace with real data via props when available
+const NAV_METRICS: Record<string, string> = {
+  estates: '94% · 3 alerts',
+  financial: 'MXN 142K · +8%',
+  operations: '2 tasks overdue',
+  calendar: '3 arrivals',
+  properties: '5 properties',
+};
 
-const menuItems: MenuItem[] = [
+const menuItems = [
   {
-    id: "estates",
-    label: "Overview",
-    subtitle: "Performance at a glance",
-    screen: "reporting",
+    id: 'estates',
+    label: 'Overview',
+    screen: 'reporting' as ScreenType,
     image: menuImg1,
-    imageWebp: menuImg1Webp,
+    imageWebp: menuImg1,
+    metric: NAV_METRICS.estates,
   },
   {
-    id: "financial",
-    label: "Revenue",
-    subtitle: "Monthly performance",
-    screen: "deep_dive",
+    id: 'financial',
+    label: 'Revenue',
+    screen: 'deep_dive' as ScreenType,
     image: menuImg2,
-    imageWebp: menuImg2Webp,
+    imageWebp: menuImg2,
+    metric: NAV_METRICS.financial,
   },
   {
-    id: "operations",
-    label: "Operations",
-    subtitle: "Cameras and systems",
-    screen: "camera_expanded",
+    id: 'operations',
+    label: 'Operations',
+    screen: 'camera_expanded' as ScreenType,
     image: menuImg3,
-    imageWebp: menuImg3Webp,
+    imageWebp: menuImg3,
+    metric: NAV_METRICS.operations,
   },
   {
-    id: "calendar",
-    label: "Calendar",
-    subtitle: "Arrivals and departures",
-    screen: "calendar",
+    id: 'calendar',
+    label: 'Calendar',
+    screen: 'calendar' as ScreenType,
     image: menuImg4,
-    imageWebp: menuImg4Webp,
+    imageWebp: menuImg4,
+    metric: NAV_METRICS.calendar,
   },
   {
-    id: "properties",
-    label: "Properties",
-    subtitle: "Browse and select",
-    screen: "property_selector",
+    id: 'properties',
+    label: 'Properties',
+    screen: 'property_selector' as ScreenType,
     image: menuImg1,
-    imageWebp: menuImg1Webp,
+    imageWebp: menuImg1,
+    metric: NAV_METRICS.properties,
   },
 ];
 
-// ── Framer Motion variants ──
+const initialIndex = (() => {
+  const lastId = sessionStorage.getItem('nav-last-panel');
+  if (!lastId) return 0;
+  const idx = menuItems.findIndex(m => m.id === lastId);
+  return idx === -1 ? 0 : idx;
+})();
 
-const containerVariants = {
-  hidden: {},
-  show: {
-    transition: {
-      staggerChildren: 0.06,
-    },
-  },
-};
-
-const panelEntranceVariants = {
-  hidden: { clipPath: "inset(0 100% 0 0)", opacity: 0 },
-  show: {
-    clipPath: "inset(0 0% 0 0)",
-    opacity: 1,
-    transition: {
-      duration: 0.8,
-      ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
-    },
-  },
-};
-
-export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
-  const dialogRef = useRef<HTMLDivElement>(null);
-  const previousFocusRef = useRef<HTMLElement | null>(null);
-  const touchStartY = useRef(0);
-  const touchStartX = useRef(0);
-  const navTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const lastPanelId = sessionStorage.getItem("nav-last-panel");
-  const initialIndex = (() => {
-    if (lastPanelId) {
-      const idx = menuItems.findIndex((item) => item.id === lastPanelId);
-      return idx === -1 ? 0 : idx;
-    }
-    return 0;
-  })();
-
+export default function NavMenuView({
+  onNavigate,
+  onClose,
+  previousScreen,
+}: NavMenuViewProps) {
   const [activeIndex, setActiveIndex] = useState(initialIndex);
-  const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
-  const [transitioningPanel, setTransitioningPanel] = useState<string | null>(
-    null,
-  );
-  const [liveAnnouncement, setLiveAnnouncement] = useState("");
-  const [showHint, setShowHint] = useState(
-    () => !localStorage.getItem("vallarta-nav-hint-seen"),
-  );
+  const [liveAnnouncement, setLiveAnnouncement] = useState('');
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const prevFocusRef = useRef<HTMLElement | null>(null);
+  const navTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isFirstRender = useRef(true);
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
 
+  // Save active panel on change; announce for screen readers
   useEffect(() => {
-    previousFocusRef.current = document.activeElement as HTMLElement;
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    sessionStorage.setItem('nav-last-panel', menuItems[activeIndex].id);
+    setLiveAnnouncement(
+      `${menuItems[activeIndex].label}, ${activeIndex + 1} of ${menuItems.length}`,
+    );
+  }, [activeIndex]);
+
+  // Focus trap + keyboard navigation
+  useEffect(() => {
+    prevFocusRef.current = document.activeElement as HTMLElement;
+
+    // Focus the active tab on mount
+    const focusActiveTab = () => {
+      const tabs = dialogRef.current?.querySelectorAll<HTMLElement>('[role="tab"]');
+      tabs?.[activeIndex]?.focus();
+    };
+    focusActiveTab();
 
     const focusable = (): HTMLElement[] =>
       Array.from(
@@ -130,78 +117,58 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
         ) ?? [],
       );
 
-    focusable()[0]?.focus();
+    const walk = (dir: -1 | 1) => {
+      setActiveIndex(prev => {
+        const next = (prev + dir + menuItems.length) % menuItems.length;
+        setTimeout(() => {
+          const tabs = dialogRef.current?.querySelectorAll<HTMLElement>('[role="tab"]');
+          tabs?.[next]?.focus();
+        }, 0);
+        return next;
+      });
+    };
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        onClose();
-        return;
-      }
+      if (e.key === 'Escape') { onClose(); return; }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); walk(-1); return; }
+      if (e.key === 'ArrowRight') { e.preventDefault(); walk(1); return; }
 
-      if (e.key === "ArrowLeft") {
+      const digit = ['1', '2', '3', '4', '5'].indexOf(e.key);
+      if (digit !== -1 && digit < menuItems.length) {
         e.preventDefault();
-        walk(-1);
-        return;
-      }
-
-      if (e.key === "ArrowRight") {
-        e.preventDefault();
-        walk(1);
-        return;
-      }
-
-      const panelKeys = ["1", "2", "3", "4", "5"];
-      const keyIndex = panelKeys.indexOf(e.key);
-      if (keyIndex !== -1 && keyIndex < menuItems.length) {
-        e.preventDefault();
-        setActiveIndex(keyIndex);
+        setActiveIndex(digit);
         setTimeout(() => {
-          const tabs =
-            dialogRef.current?.querySelectorAll<HTMLElement>('[role="tab"]');
-          tabs?.[keyIndex]?.focus();
+          const tabs = dialogRef.current?.querySelectorAll<HTMLElement>('[role="tab"]');
+          tabs?.[digit]?.focus();
         }, 0);
         return;
       }
 
-      if (e.key !== "Tab") return;
+      if (e.key !== 'Tab') return;
       const els = focusable();
-      if (els.length === 0) return;
-      const first = els[0];
-      const last = els[els.length - 1];
+      if (!els.length) return;
       if (e.shiftKey) {
-        if (document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        }
+        if (document.activeElement === els[0]) { e.preventDefault(); els[els.length - 1].focus(); }
       } else {
-        if (document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
-        }
+        if (document.activeElement === els[els.length - 1]) { e.preventDefault(); els[0].focus(); }
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener('keydown', handleKeyDown);
       if (navTimeoutRef.current) clearTimeout(navTimeoutRef.current);
-      previousFocusRef.current?.focus();
+      prevFocusRef.current?.focus();
     };
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleImageLoad = (id: string) => {
-    setLoadedImages((prev) => ({ ...prev, [id]: true }));
-  };
-
-  const handlePanelClick = (screen: ScreenType, id: string) => {
-    if (transitioningPanel) return;
-    localStorage.setItem("vallarta-nav-hint-seen", "1");
-    sessionStorage.setItem("nav-last-panel", id);
-    setShowHint(false);
-    setTransitioningPanel(id);
+  const handleTabConfirm = (screen: ScreenType, id: string) => {
+    if (navTimeoutRef.current) return; // debounce double-tap
+    sessionStorage.setItem('nav-last-panel', id);
     navTimeoutRef.current = setTimeout(() => {
-      onNavigate(screen, "push");
-    }, 180);
+      navTimeoutRef.current = null;
+      onNavigate(screen, 'push');
+    }, 160);
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -210,55 +177,19 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
-    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
-    const deltaY = e.changedTouches[0].clientY - touchStartY.current;
-    const isMobile = window.innerWidth < 768;
-
-    if (isMobile) {
-      if (Math.abs(deltaY) > 50) {
-        walk(deltaY < 0 ? 1 : -1);
-      }
-      return;
-    }
-
-    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
-      walk(deltaX > 0 ? -1 : 1);
-      return;
-    }
-
-    const hasHorizontalIntent = Math.abs(deltaX) > 30;
-    if (!hasHorizontalIntent && deltaY > 120) {
-      onClose();
-    }
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    const dy = e.changedTouches[0].clientY - touchStartY.current;
+    if (Math.abs(dx) < Math.abs(dy) || Math.abs(dx) < 48) return;
+    setActiveIndex(prev =>
+      dx < 0
+        ? Math.min(prev + 1, menuItems.length - 1)
+        : Math.max(prev - 1, 0),
+    );
   };
 
   const handleShellClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
+    if (e.target === e.currentTarget) onClose();
   };
-
-  const walk = (direction: -1 | 1) => {
-    setActiveIndex((prev) => {
-      const next = (prev + direction + menuItems.length) % menuItems.length;
-      setTimeout(() => {
-        const tabs =
-          dialogRef.current?.querySelectorAll<HTMLElement>('[role="tab"]');
-        tabs?.[next]?.focus();
-      }, 0);
-      return next;
-    });
-  };
-
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-    setLiveAnnouncement(
-      `${menuItems[activeIndex].label}, panel ${activeIndex + 1} of ${menuItems.length}`,
-    );
-  }, [activeIndex]);
 
   return (
     <div
@@ -266,23 +197,21 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
       role="dialog"
       aria-modal="true"
       aria-label="Navigation"
-      aria-describedby="nav-menu-hint"
-      className="relative w-full h-[100dvh] overflow-hidden"
-      style={{ background: "var(--nav-shell-bg)" }}
+      className="relative w-full"
+      style={{ minHeight: '100dvh', background: 'var(--nav-shell-bg)', overflow: 'hidden' }}
       onClick={handleShellClick}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* ── Header ── */}
+      {/* Full-bleed image with clip-path wipe */}
+      <NavImagePanel items={menuItems} activeIndex={activeIndex} />
+
+      {/* Header */}
       <header
         className="nav-header absolute top-0 left-0 right-0 z-[100] flex items-center justify-between"
-        style={{
-          height: "var(--nav-header-height)",
-          padding: "0 44px",
-        }}
+        style={{ height: 'var(--nav-header-height)', padding: '0 44px' }}
       >
         <span className="nav-portal__wordmark">Vallarta Estates</span>
-
         <button
           aria-label="Close menu"
           onClick={onClose}
@@ -296,136 +225,25 @@ export default function NavMenuView({ onNavigate, onClose }: NavMenuViewProps) {
             aria-hidden="true"
             focusable="false"
           >
-            <line
-              x1="1"
-              y1="1"
-              x2="10"
-              y2="10"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-            <line
-              x1="10"
-              y1="1"
-              x2="1"
-              y2="10"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
+            <line x1="1" y1="1" x2="10" y2="10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            <line x1="10" y1="1" x2="1" y2="10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
           </svg>
         </button>
       </header>
 
+      {/* Screen-reader live region */}
       <div aria-live="polite" aria-atomic="true" className="sr-only">
         {liveAnnouncement}
       </div>
 
-      <p
-        id="nav-menu-hint"
-        className={`nav-menu-hint${showHint ? "" : " nav-menu-hint--hidden"}`}
-        aria-hidden={!showHint}
-      >
-        Click a panel to enter.
-      </p>
-
-      {/* ── Panel grid ── */}
-      <motion.div
-        className="nav-portal-grid absolute inset-0 flex flex-row"
-        role="tablist"
-        aria-label="Navigation sections"
-        variants={containerVariants}
-        initial="hidden"
-        animate="show"
-      >
-        {menuItems.map((item, i) => (
-          <motion.div
-            key={item.id}
-            variants={panelEntranceVariants}
-            style={{ originX: 0 }}
-            className={`nav-panel ${i === activeIndex ? "nav-panel--active" : "nav-panel--collapsed"} relative h-full overflow-hidden${transitioningPanel === item.id ? " nav-panel--selected" : ""}`}
-            onMouseEnter={() => setActiveIndex(i)}
-          >
-            <button
-              type="button"
-              role="tab"
-              id={`nav-tab-${item.id}`}
-              className="nav-panel__preview"
-              aria-label={item.label}
-              aria-selected={i === activeIndex}
-              tabIndex={i === activeIndex ? 0 : -1}
-              onFocus={() => setActiveIndex(i)}
-              onClick={() =>
-                i === activeIndex
-                  ? handlePanelClick(item.screen, item.id)
-                  : setActiveIndex(i)
-              }
-            />
-
-            <div
-              className={`nav-portal__img-skeleton ${loadedImages[item.id] ? "nav-portal__img-skeleton--hidden" : ""}`}
-              aria-hidden="true"
-            />
-
-            <picture aria-hidden="true">
-              <source srcSet={item.imageWebp} type="image/webp" />
-              <img
-                src={item.image}
-                alt=""
-                className={`nav-portal__img ${loadedImages[item.id] ? "nav-portal__img--loaded" : ""}`}
-                onLoad={() => handleImageLoad(item.id)}
-              />
-            </picture>
-
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                zIndex: 2,
-                background:
-                  "linear-gradient(to bottom, var(--nav-scrim-top) 0%, transparent 20%), linear-gradient(to top, var(--nav-scrim-heavy) 0%, var(--nav-scrim-mid) 36%, var(--nav-scrim-light) 65%, transparent 100%)",
-              }}
-            />
-
-            <div className="nav-portal-line" />
-
-            <AnimatePresence mode="wait">
-              {i === activeIndex ? (
-                <motion.div
-                  key="active"
-                  role="tabpanel"
-                  id={`nav-panel-${item.id}`}
-                  aria-labelledby={`nav-tab-${item.id}`}
-                  className="nav-portal-content"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }}
-                  transition={{
-                    duration: 0.8,
-                    delay: 0.18,
-                    ease: [0.16, 1, 0.3, 1],
-                  }}
-                >
-                  <span className="nav-portal__label">{item.label}</span>
-                  <span className="nav-panel__subtitle">{item.subtitle}</span>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="collapsed"
-                  className="nav-panel-collapsed-title"
-                  aria-hidden="true"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4 }}
-                >
-                  {item.label}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
-        ))}
-      </motion.div>
+      {/* Bottom tab bar */}
+      <NavBottomBar
+        items={menuItems}
+        activeIndex={activeIndex}
+        previousScreen={previousScreen}
+        onTabChange={setActiveIndex}
+        onTabConfirm={handleTabConfirm}
+      />
     </div>
   );
 }

@@ -9,7 +9,7 @@ vi.mock('motion/react', () => ({
     div: ({ children, className, style, ...rest }: React.HTMLAttributes<HTMLDivElement> & { children?: React.ReactNode }) =>
       <div className={className} style={style}>{children}</div>,
     button: ({ children, className, style, onClick, ...rest }: React.ButtonHTMLAttributes<HTMLButtonElement> & { children?: React.ReactNode }) =>
-      <button className={className} style={style} onClick={onClick}>{children}</button>,
+      <button className={className} style={style} onClick={onClick} {...rest}>{children}</button>,
   },
   AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   useReducedMotion: () => false,
