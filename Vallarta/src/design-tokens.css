@@ -172,7 +172,7 @@
     --ps-ink-muted: #9a9590;
 
     /* Noise texture */
-    --ps-noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    --ps-noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
 
     /* Status accent colors */
     --ps-status-available: oklch(72% 0.08 155);
@@ -195,12 +195,12 @@
     --ps-tagline-size: 0.75rem;
 
     /* Motion */
-    --ps-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-    --ps-ease-in-out: cubic-bezier(0.4, 0.0, 0.6, 1);
+    --ps-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ps-ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
     --ps-duration-instant: 150ms;
-    --ps-duration-fast: 300ms;
-    --ps-duration-base: 600ms;
-    --ps-duration-slow: 800ms;
+    --ps-duration-fast: 250ms;
+    --ps-duration-base: 500ms;
+    --ps-duration-slow: 700ms;
 
     /* --- Ambient Color Tokens --- */
     --color-ambient-canvas: var(--color-canvas);
