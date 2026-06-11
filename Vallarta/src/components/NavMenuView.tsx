@@ -6,6 +6,7 @@ import menuImg3 from '../assets/Menu/menu-3.webp';
 import menuImg4 from '../assets/Menu/menu-4.webp';
 import NavImagePanel from './NavMenu/NavImagePanel';
 import NavBottomBar from './NavMenu/NavBottomBar';
+import NavEditorialTitle from './NavMenu/NavEditorialTitle';
 
 interface NavMenuViewProps {
   onNavigate: (screen: ScreenType, transitionStyle: 'push' | 'slide_up') => void;
@@ -210,8 +211,8 @@ export default function NavMenuView({
 
       {/* Header */}
       <header
-        className="nav-header absolute top-0 left-0 right-0 z-[100] flex items-center justify-between"
-        style={{ height: 'var(--nav-header-height)', padding: '0 44px' }}
+        className="nav-header absolute top-0 left-0 right-0 flex items-center justify-between"
+        style={{ height: 'var(--nav-header-height)', padding: '0 56px' }}
       >
         <span className="nav-portal__wordmark">Vallarta Estates</span>
         <button
@@ -237,6 +238,12 @@ export default function NavMenuView({
       <div aria-live="polite" aria-atomic="true" className="sr-only">
         {liveAnnouncement}
       </div>
+
+      {/* Film-grain texture overlay */}
+      <div className="nav-grain" aria-hidden="true" />
+
+      {/* Editorial section title */}
+      <NavEditorialTitle label={menuItems[activeIndex].label} />
 
       {/* Bottom tab bar */}
       <NavBottomBar
