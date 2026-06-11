@@ -134,19 +134,15 @@
     /* Restrained accent — terracotta (Puerto Vallarta architecture) */
     --nav-accent: oklch(72% 0.07 42);
     --nav-accent-strong: oklch(82% 0.05 42);
-    --nav-subtitle-hover: oklch(88% 0.05 42 / 0.78);
 
     /* Scrim system */
-    --nav-scrim-top: oklch(17% 0.006 60 / 0.24);
-    --nav-scrim-heavy: oklch(17% 0.006 60 / 0.76);
-    --nav-scrim-mid: oklch(17% 0.006 60 / 0.42);
-    --nav-scrim-light: oklch(17% 0.006 60 / 0.14);
+    --nav-scrim-top: oklch(17% 0.006 60 / 0.28);
+    --nav-scrim-heavy: oklch(17% 0.006 60 / 0.72);
+    --nav-scrim-mid: oklch(17% 0.006 60 / 0.38);
+    --nav-scrim-light: oklch(17% 0.006 60 / 0.12);
 
     /* Header text */
     --nav-wordmark-color: oklch(84% 0.01 72 / 0.52);
-    --nav-title-color: oklch(96% 0.008 72);
-    --nav-subtitle-color: oklch(89% 0.012 72 / 0.56);
-    --nav-collapsed-title-color: oklch(89% 0.012 72 / 0.46);
 
     /* Close button */
     --nav-close-color: oklch(84% 0.01 72 / 0.58);
@@ -154,6 +150,15 @@
     --nav-close-border: oklch(90% 0.01 72 / 0.16);
     --nav-close-border-hover: oklch(92% 0.012 72 / 0.34);
     --nav-close-bg-hover: oklch(96% 0.008 72 / 0.06);
+
+    /* Bottom bar */
+    --nav-bottom-bar-height: 80px;
+    --nav-bottom-bar-bg: oklch(14% 0.005 60 / 0.86);
+    --nav-tab-color: oklch(78% 0.01 72 / 0.48);
+    --nav-tab-active-color: oklch(96% 0.008 72);
+    --nav-tab-metric-color: oklch(68% 0.01 72 / 0.40);
+    --nav-tab-metric-active-color: oklch(80% 0.012 72 / 0.60);
+    --nav-tab-current-dot: oklch(72% 0.07 42);
 
     /* --- Calendar Accent Colors --- */
     --cal-owner-accent: #c9b8a0; /* Estate Sand — owner stays, brand accent */
@@ -223,7 +228,7 @@
 /* ── Nav Menu — header ── */
 .nav-header {
     animation: navHeaderIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.01s both;
-    background: linear-gradient(to bottom, rgba(5, 11, 14, 0.55), transparent);
+    background: linear-gradient(to bottom, oklch(14% 0.005 60 / 0.60), transparent);
 }
 
 /* ── Nav Menu — wordmark ── */
@@ -234,29 +239,6 @@
     letter-spacing: 0.35em;
     text-transform: uppercase;
     color: var(--nav-wordmark-color);
-}
-
-.nav-menu-hint {
-    position: absolute;
-    top: calc(var(--nav-header-height) + 14px);
-    right: 44px;
-    z-index: 100;
-    margin: 0;
-    max-width: 18rem;
-    font-family: var(--font-ui);
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    line-height: 1.6;
-    text-transform: uppercase;
-    text-align: right;
-    color: rgba(255, 255, 255, 0.62);
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
-}
-
-.nav-menu-hint--hidden {
-    opacity: 0;
-    pointer-events: none;
 }
 
 /* ── Nav Menu — close button ── */
@@ -271,9 +253,6 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-family: var(--nav-font-label);
-    font-size: 0.8125rem;
-    font-weight: 300;
     transition:
         border-color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
         color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
@@ -295,237 +274,170 @@
     transform: scale(0.88);
 }
 
-/* ── Nav Menu — panel ── */
-.nav-panel {
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    transition: flex 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.nav-panel__preview {
+/* ── Nav Menu — full-bleed image layer ── */
+.nav-image-layer {
     position: absolute;
     inset: 0;
-    z-index: 4;
-    border: none;
-    background: transparent;
-    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    will-change: clip-path;
 }
 
-.nav-panel__preview:focus-visible {
-    outline: 3px solid rgba(255, 255, 255, 0.72);
-    outline-offset: -3px;
-}
-
-.nav-panel__preview:active {
-    background: rgba(255, 255, 255, 0.03);
-}
-
-/* ── Nav Menu — panel flex states ── */
-.nav-panel--active {
-    flex: 1;
-    min-width: 0;
-}
-
-.nav-panel--collapsed {
-    flex: 0 0 64px;
-    flex-shrink: 0;
-}
-
-/* ── Nav Menu — collapsed bar rotated title ── */
-.nav-panel-collapsed-title {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    writing-mode: vertical-rl;
-    font-family: var(--font-ui);
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--nav-collapsed-title-color);
-    pointer-events: none;
-    z-index: 10;
-    transition: color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-}
-
-.nav-panel--collapsed:hover .nav-panel-collapsed-title {
-    color: rgba(255, 255, 255, 0.75);
-}
-
-/* ── Nav Menu — photo kenburns on hover ── */
-.nav-panel img {
-    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.nav-panel:hover img,
-.nav-panel:focus-within img {
-    transform: scale(1.02);
-}
-
-/* ── Nav Menu — gold bottom line sweep ── */
-.nav-portal-line {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: var(--nav-accent);
-    transform: scaleX(0);
-    transform-origin: left;
-    z-index: 10;
-    pointer-events: none;
-    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.nav-panel:hover .nav-portal-line,
-.nav-panel:focus-within .nav-portal-line {
-    transform: scaleX(1);
-}
-
-/* Active panel — gold line always fully swept */
-.nav-panel--active .nav-portal-line {
-    transform: scaleX(1);
-    transition: none;
-}
-
-/* Collapsed panel — gold line subtle presence */
-.nav-panel--collapsed .nav-portal-line {
-    transform: scaleX(0.08);
-    opacity: 0.22;
-    transition: none;
-}
-
-.nav-portal-content {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 0 40px 48px;
-    z-index: 10;
-    pointer-events: none;
-    transform: translateY(0);
-    transition:
-        opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* ── Nav Menu — label ── */
-.nav-portal__label {
-    display: block;
-    font-family: var(--font-ui);
-    font-size: clamp(1.125rem, 1.8vw, 1.75rem);
-    font-weight: 600;
-    color: var(--nav-title-color);
-    line-height: 1.05;
-    letter-spacing: 0.02em;
-    margin-bottom: 11px;
-    text-wrap: pretty;
-}
-
-/* ── Nav Menu — card subtitle color on hover ── */
-.nav-panel__subtitle {
-    display: block;
-    font-family: var(--nav-font-label);
-    font-size: 0.6875rem;
-    font-weight: 400;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--nav-subtitle-color);
-    transition: color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.nav-panel:hover .nav-panel__subtitle,
-.nav-panel:focus-within .nav-panel__subtitle {
-    color: var(--nav-subtitle-hover);
-}
-
-/* ── Nav Menu — image loading skeleton ── */
-.nav-portal__img-skeleton {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    background: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.03) 0%,
-        rgba(255, 255, 255, 0.06) 50%,
-        rgba(255, 255, 255, 0.03) 100%
-    );
-    pointer-events: none;
-    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.nav-portal__img-skeleton--hidden {
-    opacity: 0;
-}
-
-.nav-portal__img {
+.nav-image-layer img {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     opacity: 0;
-    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-image-layer img.loaded {
+    opacity: 1;
+}
+
+/* Subtle Ken Burns on the active image */
+@media (prefers-reduced-motion: no-preference) {
+    .nav-image-layer img.loaded {
+        animation: navKenBurns 14s ease-in-out infinite alternate;
+    }
+}
+
+@keyframes navKenBurns {
+    from { transform: scale(1); }
+    to   { transform: scale(1.04); }
+}
+
+/* ── Nav Menu — image loading skeleton ── */
+.nav-img-skeleton {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: oklch(18% 0.006 60);
     pointer-events: none;
-    will-change: transform;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.nav-portal__img--loaded {
-    opacity: 1;
-}
-
-/* ── Nav Menu — selected click-state ── */
-.nav-panel--selected .nav-portal-line {
-    transform: scaleX(1);
-    opacity: 1;
-    transition:
-        transform 0.15s cubic-bezier(0.16, 1, 0.3, 1),
-        opacity 0.15s cubic-bezier(0.16, 1, 0.3, 1);
-}
-/* ── Nav Menu — reduced motion: still-frame color signals ── */
-@media (prefers-reduced-motion: reduce) {
-    .nav-header {
-        animation: none;
-        opacity: 1;
-        transform: none;
-    }
-    .nav-panel {
-        animation: none;
-        opacity: 1;
-        transform: none;
-    }
-
-    .nav-panel img,
-    .nav-panel:hover img,
-    .nav-panel:focus-within img {
-        transition: none;
-        transform: none;
-    }
-
-    .nav-portal-line,
-    .nav-portal-content,
-    .nav-panel__subtitle,
-    .nav-close-btn,
-    .nav-portal__img,
-    .nav-portal__img-skeleton {
-        transition: none;
-    }
-
-    .nav-panel:hover .nav-portal-content,
-    .nav-panel:focus-within .nav-portal-content {
-        transform: none;
-    }
-
-    .nav-panel:hover .nav-panel__subtitle,
-    .nav-panel:focus-within .nav-panel__subtitle {
-        color: var(--nav-subtitle-hover);
-        transition: none;
-    }
-
-    .nav-panel--selected .nav-portal-line {
-        transition: none;
-    }
+.nav-img-skeleton.hidden {
+    opacity: 0;
+    pointer-events: none;
 }
 
-/* ── Nav Menu — mobile adaptation ── */
+/* ── Nav Menu — scrim overlay ── */
+.nav-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background:
+        linear-gradient(to bottom, var(--nav-scrim-top) 0%, transparent 18%),
+        linear-gradient(to top, oklch(14% 0.005 60 / 0.85) 0%, var(--nav-scrim-mid) 28%, transparent 60%);
+}
+
+/* ── Nav Menu — bottom bar ── */
+.nav-bottom-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--nav-bottom-bar-height);
+    z-index: 10;
+    display: flex;
+    align-items: stretch;
+    background: var(--nav-bottom-bar-bg);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border-top: 1px solid oklch(100% 0 0 / 0.07);
+}
+
+/* ── Nav Menu — bottom tab ── */
+.nav-bottom-tab {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 0 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--nav-tab-color);
+    transition: color 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .nav-bottom-tab:hover {
+        color: oklch(88% 0.01 72 / 0.72);
+    }
+}
+
+.nav-bottom-tab:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.55);
+    outline-offset: -2px;
+    border-radius: 4px;
+}
+
+.nav-bottom-tab[aria-selected="true"] {
+    color: var(--nav-tab-active-color);
+}
+
+/* ── Nav Menu — active indicator line (positioned by Motion layoutId) ── */
+.nav-tab-indicator {
+    position: absolute;
+    top: 0;
+    left: 8px;
+    right: 8px;
+    height: 1.5px;
+    background: var(--nav-accent);
+    border-radius: 0 0 2px 2px;
+}
+
+/* ── Nav Menu — tab label ── */
+.nav-tab-label {
+    font-family: var(--font-ui);
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+/* ── Nav Menu — tab metric ── */
+.nav-tab-metric {
+    font-family: var(--font-ui);
+    font-size: 0.5625rem;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    color: var(--nav-tab-metric-color);
+    transition: color 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.nav-bottom-tab[aria-selected="true"] .nav-tab-metric {
+    color: var(--nav-tab-metric-active-color);
+}
+
+/* ── Nav Menu — "you are here" dot ── */
+.nav-tab-current-dot {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--nav-tab-current-dot);
+}
+
+/* ── Nav Menu — mobile ── */
 @media (max-width: 767px) {
     .nav-header {
         height: 48px;
@@ -537,56 +449,47 @@
         letter-spacing: 0.28em;
     }
 
-    .nav-panel--active {
-        flex: 1;
-        min-height: 0;
-    }
-
-    .nav-panel--collapsed {
-        flex: 0 0 64px;
-        width: 100%;
-    }
-
-    /* Mobile: collapsed title is horizontal, not rotated */
-    .nav-panel-collapsed-title {
-        writing-mode: horizontal-tb;
-        font-size: 0.75rem;
-        letter-spacing: 0.06em;
-        padding: 0 20px;
-    }
-
     .nav-close-btn {
         width: 38px;
         height: 38px;
     }
 
-    .nav-portal-grid {
-        flex-direction: column;
-        padding-top: 56px; /* header height */
+    .nav-bottom-bar {
+        height: 72px;
     }
 
-    .nav-portal-content {
-        padding: 0 24px 32px;
+    .nav-tab-label {
+        font-size: 0.5625rem;
+        letter-spacing: 0.12em;
     }
 
-    .nav-portal__label {
-        font-size: clamp(1rem, 5vw, 1.5rem);
+    .nav-tab-metric {
+        font-size: 0.5rem;
+    }
+}
+
+/* ── Nav Menu — reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+    .nav-header {
+        animation: none;
+        opacity: 1;
+        transform: none;
     }
 
-    .nav-panel__subtitle {
-        letter-spacing: 0.2em;
+    .nav-image-layer img.loaded {
+        animation: none;
     }
 
-    .nav-portal__img {
-        object-position: center;
+    .nav-close-btn {
+        transition: none;
     }
 
-    .nav-menu-hint {
-        top: calc(var(--nav-header-height) + 10px);
-        left: 24px;
-        right: 24px;
-        max-width: none;
-        text-align: left;
+    .nav-bottom-tab {
+        transition: none;
+    }
+
+    .nav-tab-metric {
+        transition: none;
     }
 }
 
