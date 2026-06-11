@@ -125,40 +125,44 @@
     --color-dark-accent: #d49a55; /* Sunset Ochre */
 
     /* --- Nav Menu --- */
-    /* Shell */
-    --nav-shell-bg: oklch(23% 0.008 60);
-    --nav-header-height: 56px;
+    /* Shell — warm Banderas Midnight instead of cool gray */
+    --nav-shell-bg: #162732;
+    --nav-header-height: 72px;
     --nav-font-display: var(--font-display);
     --nav-font-label: var(--font-ui);
 
-    /* Restrained accent — terracotta (Puerto Vallarta architecture) */
-    --nav-accent: oklch(72% 0.07 42);
-    --nav-accent-strong: oklch(82% 0.05 42);
+    /* Accent — Sunset Ochre (brand signature) replaces restrained terracotta */
+    --nav-accent: #d49a55;
+    --nav-accent-strong: #e8b06a;
 
-    /* Scrim system */
-    --nav-scrim-top: oklch(17% 0.006 60 / 0.28);
-    --nav-scrim-heavy: oklch(17% 0.006 60 / 0.72);
-    --nav-scrim-mid: oklch(17% 0.006 60 / 0.38);
-    --nav-scrim-light: oklch(17% 0.006 60 / 0.12);
+    /* Scrim system — warm-tinted */
+    --nav-scrim-top: rgba(22, 39, 50, 0.28);
+    --nav-scrim-heavy: rgba(22, 39, 50, 0.72);
+    --nav-scrim-mid: rgba(22, 39, 50, 0.38);
+    --nav-scrim-light: rgba(22, 39, 50, 0.12);
 
     /* Header text */
-    --nav-wordmark-color: oklch(84% 0.01 72 / 0.52);
+    --nav-wordmark-color: rgba(250, 248, 245, 0.52);
 
     /* Close button */
-    --nav-close-color: oklch(84% 0.01 72 / 0.58);
-    --nav-close-color-hover: oklch(96% 0.008 72);
-    --nav-close-border: oklch(90% 0.01 72 / 0.16);
-    --nav-close-border-hover: oklch(92% 0.012 72 / 0.34);
-    --nav-close-bg-hover: oklch(96% 0.008 72 / 0.06);
+    --nav-close-color: rgba(250, 248, 245, 0.58);
+    --nav-close-color-hover: rgba(250, 248, 245, 0.96);
+    --nav-close-border: rgba(250, 248, 245, 0.16);
+    --nav-close-border-hover: rgba(250, 248, 245, 0.34);
+    --nav-close-bg-hover: rgba(250, 248, 245, 0.06);
 
-    /* Bottom bar */
-    --nav-bottom-bar-height: 80px;
-    --nav-bottom-bar-bg: oklch(14% 0.005 60 / 0.86);
-    --nav-tab-color: oklch(78% 0.01 72 / 0.48);
-    --nav-tab-active-color: oklch(96% 0.008 72);
-    --nav-tab-metric-color: oklch(68% 0.01 72 / 0.40);
-    --nav-tab-metric-active-color: oklch(80% 0.012 72 / 0.60);
-    --nav-tab-current-dot: oklch(72% 0.07 42);
+    /* Bottom bar — floating island */
+    --nav-bottom-bar-height: 88px;
+    --nav-bottom-bar-bg: rgba(14, 26, 34, 0.86);
+    --nav-tab-color: rgba(250, 248, 245, 0.48);
+    --nav-tab-active-color: rgba(250, 248, 245, 0.96);
+    --nav-tab-metric-color: rgba(250, 248, 245, 0.40);
+    --nav-tab-metric-active-color: rgba(250, 248, 245, 0.60);
+    --nav-tab-current-dot: #d49a55;
+
+    /* Editorial title */
+    --nav-title-color: rgba(250, 248, 245, 0.94);
+    --nav-eyebrow-color: rgba(250, 248, 245, 0.40);
 
     /* --- Calendar Accent Colors --- */
     --cal-owner-accent: #c9b8a0; /* Estate Sand — owner stays, brand accent */
@@ -225,19 +229,54 @@
     }
 }
 
+/* ── Nav Menu — warm film-grain overlay ── */
+@keyframes navGrainShift {
+    0%, 100% { transform: translate(0, 0); }
+    10% { transform: translate(-2%, -2%); }
+    30% { transform: translate(1%, -3%); }
+    50% { transform: translate(-1%, 2%); }
+    70% { transform: translate(3%, 1%); }
+    90% { transform: translate(-2%, 3%); }
+}
+
+/* ── Nav Menu — staggered tab entry ── */
+@keyframes navTabSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Nav Menu — editorial title entry ── */
+@keyframes navTitleIn {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* ── Nav Menu — header ── */
 .nav-header {
     animation: navHeaderIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.01s both;
-    background: linear-gradient(to bottom, oklch(14% 0.005 60 / 0.60), transparent);
+    background: linear-gradient(to bottom, rgba(22, 39, 50, 0.60), transparent);
+    z-index: 40;
 }
 
 /* ── Nav Menu — wordmark ── */
 .nav-portal__wordmark {
-    font-family: var(--font-ui);
-    font-size: 0.6875rem;
-    font-weight: 500;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.125rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
     color: var(--nav-wordmark-color);
 }
 
@@ -280,7 +319,7 @@
     inset: 0;
     width: 100%;
     height: 100%;
-    will-change: clip-path;
+    will-change: transform, opacity;
 }
 
 .nav-image-layer img {
@@ -301,7 +340,7 @@
 /* Subtle Ken Burns on the active image */
 @media (prefers-reduced-motion: no-preference) {
     .nav-image-layer img.loaded {
-        animation: navKenBurns 14s ease-in-out infinite alternate;
+        animation: navKenBurns 14s cubic-bezier(0.32, 0.72, 0, 1) infinite alternate;
     }
 }
 
@@ -335,20 +374,42 @@
         linear-gradient(to top, oklch(14% 0.005 60 / 0.85) 0%, var(--nav-scrim-mid) 28%, transparent 60%);
 }
 
-/* ── Nav Menu — bottom bar ── */
-.nav-bottom-bar {
+/* ── Nav Menu — warm grain overlay (fixed, non-scrolling) ── */
+.nav-grain {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+    animation: navGrainShift 8s steps(10) infinite;
+}
+
+/* Outer shell — double-bezel wrapper */
+.nav-bottom-bar-shell {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: var(--nav-bottom-bar-height);
-    z-index: 10;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 30;
+    padding: 6px;
+    background: rgba(250, 248, 245, 0.04);
+    border: 1px solid rgba(250, 248, 245, 0.08);
+    border-radius: 2rem;
+}
+
+/* Inner core — the actual tab bar */
+.nav-bottom-bar {
     display: flex;
     align-items: stretch;
+    height: var(--nav-bottom-bar-height);
     background: var(--nav-bottom-bar-bg);
-    backdrop-filter: blur(20px) saturate(140%);
-    -webkit-backdrop-filter: blur(20px) saturate(140%);
-    border-top: 1px solid oklch(100% 0 0 / 0.07);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    border-radius: calc(2rem - 6px);
+    box-shadow: inset 0 1px 1px rgba(250, 248, 245, 0.08);
+    overflow: hidden;
 }
 
 /* ── Nav Menu — bottom tab ── */
@@ -367,6 +428,11 @@
     color: var(--nav-tab-color);
     transition: color 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     -webkit-tap-highlight-color: transparent;
+}
+
+/* Staggered entry — each tab gets a delay via inline style */
+.nav-bottom-tab--entering {
+    animation: navTabSlideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -437,6 +503,46 @@
     background: var(--nav-tab-current-dot);
 }
 
+/* ── Nav Menu — editorial title ── */
+.nav-editorial-title {
+    position: absolute;
+    bottom: 140px;
+    left: 44px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+    animation: navTitleIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+.nav-eyebrow-tag {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    padding: 4px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(250, 248, 245, 0.12);
+    background: rgba(250, 248, 245, 0.04);
+    font-family: var(--font-ui);
+    font-size: 0.5625rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--nav-eyebrow-color);
+}
+
+.nav-editorial-heading {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--nav-title-color);
+    margin: 0;
+}
+
 /* ── Nav Menu — mobile ── */
 @media (max-width: 767px) {
     .nav-header {
@@ -466,6 +572,26 @@
     .nav-tab-metric {
         font-size: 0.5rem;
     }
+
+    .nav-bottom-bar-shell {
+        bottom: 16px;
+        left: 16px;
+        right: 16px;
+        transform: none;
+    }
+
+    .nav-bottom-bar {
+        height: 72px;
+    }
+
+    .nav-editorial-title {
+        bottom: 120px;
+        left: 24px;
+    }
+
+    .nav-editorial-heading {
+        font-size: clamp(1.75rem, 8vw, 2.5rem);
+    }
 }
 
 /* ── Nav Menu — reduced motion ── */
@@ -494,6 +620,22 @@
 
     .nav-tab-metric {
         transition: none;
+    }
+
+    .nav-grain {
+        animation: none;
+    }
+
+    .nav-bottom-tab--entering {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+
+    .nav-editorial-title {
+        animation: none;
+        opacity: 1;
+        transform: none;
     }
 }
 
