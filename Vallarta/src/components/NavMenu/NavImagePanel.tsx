@@ -37,17 +37,17 @@ export default function NavImagePanel({ items, activeIndex }: NavImagePanelProps
         <motion.div
           key={activeIndex}
           className="nav-image-layer"
-          initial={shouldReduce ? false : { clipPath: 'inset(0 100% 0 0)' }}
-          animate={{ clipPath: 'inset(0 0% 0 0)' }}
+          initial={shouldReduce ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
           exit={
             shouldReduce
               ? { opacity: 0, transition: { duration: 0 } }
-              : { opacity: 0, transition: { duration: 0.18, ease: [0.23, 1, 0.32, 1] } }
+              : { opacity: 0, transition: { duration: 0.25, ease: [0.23, 1, 0.32, 1] } }
           }
           transition={
             shouldReduce
               ? { duration: 0 }
-              : { duration: 0.45, ease: [0.23, 1, 0.32, 1] }
+              : { duration: 0.55, ease: [0.23, 1, 0.32, 1] }
           }
         >
           <picture>
@@ -55,7 +55,7 @@ export default function NavImagePanel({ items, activeIndex }: NavImagePanelProps
             <img
               src={item.image}
               alt=""
-              className={loadedIds[item.id] ? 'loaded' : ''}
+              className={`cinematic-grade${loadedIds[item.id] ? ' loaded' : ''}`}
               onLoad={() => handleLoad(item.id)}
             />
           </picture>
