@@ -480,6 +480,10 @@
         animation: none;
     }
 
+    .nav-img-skeleton {
+        transition: none;
+    }
+
     .nav-close-btn {
         transition: none;
     }
