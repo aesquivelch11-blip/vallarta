@@ -85,9 +85,14 @@ export default function PropertyCard({ property, onSelect, index, tier }: Proper
           <span className="ps-card__status-label">{STATUS_LABELS[property.occupancyStatus]}</span>
         </div>
         <div className="ps-card__overlay">
+          {property.propertyType && (
+            <p className="ps-card__type">{property.propertyType}</p>
+          )}
           <motion.h3 className="ps-card__name" layoutId={`property-title-${property.id}`}>{property.name}</motion.h3>
           <p className="ps-card__location">{property.location}</p>
-          <p className="ps-card__tagline">{property.tagline}</p>
+          {property.tagline && (
+            <p className="ps-card__tagline">{property.tagline}</p>
+          )}
         </div>
       </div>
     </button>

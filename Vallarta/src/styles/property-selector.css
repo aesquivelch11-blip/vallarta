@@ -80,12 +80,19 @@
   text-align: left;
   display: block;
   overflow: hidden;
+  transition: transform var(--ps-duration-base) var(--ps-ease-out);
+}
+
+/* Active press state */
+.ps-card:active {
+  transform: scale(0.99);
 }
 
 .ps-card__image-wrap {
   position: relative;
   width: 100%;
   overflow: hidden;
+  transition: aspect-ratio var(--ps-duration-base) var(--ps-ease-out);
 }
 
 .ps-card__image {
@@ -108,28 +115,23 @@
   grid-row: span 2;
 }
 
-/* Smooth layout transitions */
-.ps-card__image-wrap {
-  transition: aspect-ratio var(--ps-duration-base) var(--ps-ease-out);
-}
-
 .ps-card {
-  transition: grid-row var(--ps-duration-base) var(--ps-ease-out);
+  transition: grid-row var(--ps-duration-base) var(--ps-ease-out), transform var(--ps-duration-base) var(--ps-ease-out);
 }
 
-/* ── Gradient overlay (text ON image) ── */
+/* ── Gradient overlay (softer, text ON image) ── */
 .ps-card__gradient {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to bottom,
     transparent 40%,
-    rgba(0, 0, 0, 0.55) 100%
+    rgba(0, 0, 0, 0.35) 100%
   );
   pointer-events: none;
 }
 
-/* ── Text overlay ── */
+/* ── Text overlay section ── */
 .ps-card__overlay {
   position: absolute;
   bottom: 0;
@@ -137,6 +139,18 @@
   right: 0;
   padding: clamp(16px, 2vw, 28px);
   z-index: 2;
+}
+
+/* Property type label */
+.ps-card__type {
+  font-family: var(--font-ui);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 8px 0;
+  line-height: 1.5;
 }
 
 .ps-card__name {
@@ -165,6 +179,7 @@
   font-family: var(--font-display);
   font-size: var(--ps-tagline-size);
   font-weight: 400;
+  font-style: italic;
   color: rgba(255, 255, 255, 0.6);
   margin: 4px 0 0 0;
   line-height: 1.4;
@@ -220,7 +235,7 @@
 /* ── Hover states ── */
 @media (hover: hover) {
   .ps-card:hover .ps-card__image {
-    transform: scale(1.06);
+    transform: scale(1.03);
   }
 
   .ps-card:hover .ps-card__tagline {
