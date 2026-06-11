@@ -395,6 +395,10 @@
     opacity: 1;
     transform: none;
   }
+
+  .ps-progress {
+    transition: none;
+  }
 }
 
 /* ── Sticky Header ── */
