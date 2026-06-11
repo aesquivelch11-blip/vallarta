@@ -6,6 +6,16 @@
   position: relative;
 }
 
+.ps-canvas::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: var(--ps-noise);
+  opacity: 0.025;
+}
+
 /* ── Grid: 3-tier layout ── */
 .ps-grid {
   display: grid;
@@ -308,8 +318,8 @@
   position: fixed;
   top: 0;
   left: 0;
-  height: 2px;
-  background: var(--ps-status-available);
+  height: 1px;
+  background: var(--color-accent-warning);
   z-index: 100;
   width: 100%;
   transform: scaleX(0);
