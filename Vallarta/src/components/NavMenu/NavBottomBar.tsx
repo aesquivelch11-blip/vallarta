@@ -27,9 +27,9 @@ export default function NavBottomBar({
   const [hasEntered, setHasEntered] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setHasEntered(true), 600);
+    const timer = setTimeout(() => setHasEntered(true), (items.length - 1) * 80 + 600);
     return () => clearTimeout(timer);
-  }, []);
+  }, [items.length]);
 
   return (
     <div className="nav-bottom-bar-shell">
