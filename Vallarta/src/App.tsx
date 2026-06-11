@@ -128,16 +128,21 @@ export default function App() {
             </AnimatePresence>
           </div>
         );
-      case 'nav_menu':
+      case 'nav_menu': {
+        const navPreviousScreen = history
+          .filter(s => s !== 'nav_menu' && s !== 'login')
+          .at(-1) as ScreenType | undefined;
         return (
           <div key="nav_menu" className="w-full min-h-screen">
             <NavMenuView
               onNavigate={(screen, style) => handleNavigate(screen, style)}
               onClose={handleCloseNavMenu}
               onNotify={triggerToast}
+              previousScreen={navPreviousScreen}
             />
           </div>
         );
+      }
       case 'reporting':
         return (
           <div key="reporting" className="w-full min-h-screen">
