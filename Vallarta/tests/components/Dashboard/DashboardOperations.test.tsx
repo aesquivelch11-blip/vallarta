@@ -12,33 +12,42 @@ afterEach(cleanup);
 const mockData = getDashboardData('casa-palmeras');
 
 describe('DashboardOperations', () => {
-  it('renders TaskList with open tasks count', () => {
+  it('does not render OPEN TASKS label', () => {
     const { container } = render(<DashboardOperations data={mockData} onNavigate={vi.fn()} />);
-    expect(container.textContent).toContain('OPEN TASKS');
+    expect(container.textContent).not.toContain('OPEN TASKS');
   });
 
-  it('renders Chronicle Timeline', () => {
+  it('does not render CHRONICLE heading', () => {
     const { container } = render(<DashboardOperations data={mockData} onNavigate={vi.fn()} />);
-    expect(container.textContent).toContain('CHRONICLE');
+    expect(container.textContent).not.toContain('CHRONICLE');
   });
 
-  it('renders guest log events from data', () => {
+  it('renders guest log event descriptions', () => {
     const { container } = render(<DashboardOperations data={mockData} onNavigate={vi.fn()} />);
     expect(container.textContent).toContain('Elena Rosenthal checked in');
   });
 
-  it('renders task descriptions from data', () => {
+  it('renders task descriptions', () => {
     const { container } = render(<DashboardOperations data={mockData} onNavigate={vi.fn()} />);
     expect(container.textContent).toContain('Replace pool filter cartridge');
   });
 
-  it('renders with empty data gracefully', () => {
-    const emptyData: DashboardData = {
-      ...mockData,
-      tasks: [],
-      guestLog: [],
-    };
+  it('has two distinct layout zones', () => {
+    const { container } = render(<DashboardOperations data={mockData} onNavigate={vi.fn()} />);
+    const outerDiv = container.firstChild as HTMLElement;
+    expect(outerDiv.childNodes.length).toBe(2);
+  });
+
+  it('chronicle zone has tinted background', () => {
+    const { container } = render(<DashboardOperations data={mockData} onNavigate={vi.fn()} />);
+    const outerDiv = container.firstChild as HTMLElement;
+    const chronicleZone = outerDiv.childNodes[1] as HTMLElement;
+    expect(chronicleZone.style.background).toBeTruthy();
+  });
+
+  it('renders "All clear." when no tasks', () => {
+    const emptyData: DashboardData = { ...mockData, tasks: [], guestLog: [] };
     const { container } = render(<DashboardOperations data={emptyData} onNavigate={vi.fn()} />);
-    expect(container.textContent).toContain('ALL CLEAR');
+    expect(container.textContent).toContain('All clear.');
   });
 });
