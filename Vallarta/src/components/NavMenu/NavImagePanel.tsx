@@ -10,13 +10,15 @@ interface NavImageItem {
 interface NavImagePanelProps {
   items: NavImageItem[];
   activeIndex: number;
+  direction?: 'next' | 'prev';
 }
 
-export default function NavImagePanel({ items, activeIndex }: NavImagePanelProps) {
+export default function NavImagePanel({ items, activeIndex, direction = 'next' }: NavImagePanelProps) {
   const [loadedIds, setLoadedIds] = useState<Record<string, boolean>>({});
   const [currentLayer, setCurrentLayer] = useState(activeIndex);
   const [prevLayer, setPrevLayer] = useState<number | null>(null);
   const [phase, setPhase] = useState<'idle' | 'exiting' | 'entering' | 'enter-done'>('idle');
+  const [transitionDirection, setTransitionDirection] = useState<'next' | 'prev'>('next');
   const timers = useRef<number[]>([]);
   const rafId = useRef(0);
   const prefersReduced = useRef(
@@ -43,25 +45,23 @@ export default function NavImagePanel({ items, activeIndex }: NavImagePanelProps
       return;
     }
 
+    const dir = direction || (activeIndex > currentLayer ? 'next' : 'prev');
+    setTransitionDirection(dir);
     setPrevLayer(currentLayer);
-    setPhase('exiting');
+    setCurrentLayer(activeIndex);
+    setPhase('entering');
 
-    rafId.current = requestAnimationFrame(() => {
-      setCurrentLayer(activeIndex);
-      setPhase('entering');
-
-      timers.current.push(
-        window.setTimeout(() => {
-          setPhase('enter-done');
-          timers.current.push(
-            window.setTimeout(() => {
-              setPrevLayer(null);
-              setPhase('idle');
-            }, 250),
-          );
-        }, 310),
-      );
-    });
+    timers.current.push(
+      window.setTimeout(() => {
+        setPhase('enter-done');
+        timers.current.push(
+          window.setTimeout(() => {
+            setPrevLayer(null);
+            setPhase('idle');
+          }, 250),
+        );
+      }, 550),
+    );
 
     return () => {
       timers.current.forEach(clearTimeout);
@@ -89,7 +89,7 @@ export default function NavImagePanel({ items, activeIndex }: NavImagePanelProps
     }
 
     return (
-      <div key={`${layer}-${index}`} className={layerClass}>
+      <div key={`${layer}-${index}`} className={layerClass} data-direction={transitionDirection} style={{ transition: 'clip-path 550ms ease' }}>
         <picture>
           <source srcSet={item.imageWebp} type="image/webp" />
           <img

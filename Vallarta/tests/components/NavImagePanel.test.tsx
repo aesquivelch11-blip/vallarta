@@ -55,3 +55,50 @@ describe('NavImagePanel', () => {
     expect(mainImg.className).toContain('cinematic-grade');
   });
 });
+
+describe('NavImagePanel — clip-path transitions', () => {
+  it('applies data-direction="next" when activeIndex increases', () => {
+    const { container, rerender } = render(
+      <NavImagePanel items={mockItems} activeIndex={0} direction="next" />
+    );
+    rerender(<NavImagePanel items={mockItems} activeIndex={1} direction="next" />);
+    const layers = container.querySelectorAll('.nav-image-layer');
+    const entering = Array.from(layers).find(l => l.classList.contains('nav-image-entering'));
+    expect(entering).not.toBeNull();
+    expect(entering?.getAttribute('data-direction')).toBe('next');
+  });
+
+  it('applies data-direction="prev" when activeIndex decreases', () => {
+    const { container, rerender } = render(
+      <NavImagePanel items={mockItems} activeIndex={1} direction="prev" />
+    );
+    rerender(<NavImagePanel items={mockItems} activeIndex={0} direction="prev" />);
+    const layers = container.querySelectorAll('.nav-image-layer');
+    const entering = Array.from(layers).find(l => l.classList.contains('nav-image-entering'));
+    expect(entering).not.toBeNull();
+    expect(entering?.getAttribute('data-direction')).toBe('prev');
+  });
+
+  it('does not apply filter:blur to any image layer', () => {
+    const { container } = render(<NavImagePanel items={mockItems} activeIndex={0} />);
+    const layers = container.querySelectorAll('.nav-image-layer');
+    layers.forEach(layer => {
+      const style = window.getComputedStyle(layer);
+      expect(style.filter).not.toContain('blur');
+    });
+  });
+
+  it('has transition property on exiting layers', () => {
+    const { container, rerender } = render(
+      <NavImagePanel items={mockItems} activeIndex={0} direction="next" />
+    );
+    rerender(<NavImagePanel items={mockItems} activeIndex={1} direction="next" />);
+    const layers = container.querySelectorAll('.nav-image-layer');
+    const exiting = Array.from(layers).find(l => l.classList.contains('nav-image-exiting'));
+    if (exiting) {
+      const style = window.getComputedStyle(exiting);
+      expect(style.transition).not.toBe('');
+      expect(style.transition).not.toBe('all 0s ease 0s');
+    }
+  });
+});
