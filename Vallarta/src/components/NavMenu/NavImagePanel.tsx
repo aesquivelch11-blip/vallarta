@@ -22,6 +22,7 @@ export default function NavImagePanel({ items, activeIndex }: NavImagePanelProps
   };
 
   const item = items[activeIndex];
+  if (!item) return null;
 
   return (
     <div
@@ -33,21 +34,29 @@ export default function NavImagePanel({ items, activeIndex }: NavImagePanelProps
         className={`nav-img-skeleton${loadedIds[item.id] ? ' hidden' : ''}`}
       />
 
-      <AnimatePresence mode="sync">
+      <AnimatePresence mode="wait">
         <motion.div
           key={activeIndex}
           className="nav-image-layer"
-          initial={shouldReduce ? false : { opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={
+            shouldReduce
+              ? false
+              : { filter: 'blur(8px)', scale: 0.98 }
+          }
+          animate={
+            shouldReduce
+              ? { opacity: 1 }
+              : { filter: 'blur(0px)', scale: 1 }
+          }
           exit={
             shouldReduce
               ? { opacity: 0, transition: { duration: 0 } }
-              : { opacity: 0, transition: { duration: 0.25, ease: [0.23, 1, 0.32, 1] } }
+              : { filter: 'blur(8px)', scale: 0.98, transition: { duration: 0.15, ease: 'easeOut' } }
           }
           transition={
             shouldReduce
               ? { duration: 0 }
-              : { duration: 0.55, ease: [0.23, 1, 0.32, 1] }
+              : { duration: 0.25, ease: 'easeOut' }
           }
         >
           <picture>
