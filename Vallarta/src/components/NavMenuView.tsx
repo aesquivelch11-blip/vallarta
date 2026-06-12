@@ -17,7 +17,6 @@ interface NavMenuViewProps {
 
 // Static metrics — replace with real data via props when available
 const NAV_METRICS: Record<string, string> = {
-  estates: '94% · 3 alerts',
   financial: 'MXN 142K · +8%',
   operations: '2 tasks overdue',
   calendar: '3 arrivals',
@@ -25,14 +24,6 @@ const NAV_METRICS: Record<string, string> = {
 };
 
 const menuItems = [
-  {
-    id: 'estates',
-    label: 'Overview',
-    screen: 'reporting' as ScreenType,
-    image: menuImg1,
-    imageWebp: menuImg1,
-    metric: NAV_METRICS.estates,
-  },
   {
     id: 'financial',
     label: 'Revenue',

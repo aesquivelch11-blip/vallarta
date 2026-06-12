@@ -41,9 +41,8 @@ afterEach(() => {
 });
 
 describe('NavMenuView — Bottom Bar', () => {
-  it('renders all 5 tab labels', () => {
+  it('renders all 4 tab labels', () => {
     const { container } = renderNav();
-    expect(container.textContent).toContain('Overview');
     expect(container.textContent).toContain('Revenue');
     expect(container.textContent).toContain('Operations');
     expect(container.textContent).toContain('Calendar');
@@ -83,7 +82,7 @@ describe('NavMenuView — Bottom Bar', () => {
     const { getAllByRole } = renderNav();
     fireEvent.keyDown(document, { key: 'ArrowLeft' });
     const tabs = getAllByRole('tab');
-    expect(tabs[4].getAttribute('aria-selected')).toBe('true');
+    expect(tabs[3].getAttribute('aria-selected')).toBe('true');
   });
 
   it('number key 2 activates the second tab (Revenue)', () => {
