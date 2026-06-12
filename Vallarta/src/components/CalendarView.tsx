@@ -1,5 +1,5 @@
 // src/components/CalendarView.tsx
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'motion/react';
 import { ScreenType } from '../types';
 import {
@@ -9,7 +9,7 @@ import {
 } from './calendar/bookingUtils';
 import CalendarGrid from './calendar/CalendarGrid';
 import BookingList from './calendar/BookingList';
-import BookingDrawer, { DrawerMode } from './calendar/BookingDrawer';
+import BookingPanel, { PanelMode } from './calendar/BookingPanel';
 
 interface CalendarViewProps {
   onNavigate: (screen: ScreenType, transitionStyle: 'push' | 'push_back' | 'slide_up') => void;
@@ -25,8 +25,8 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
 
   const [bookings, setBookings] = useState<Booking[]>(SEED_BOOKINGS);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
-  const [showDrawer, setShowDrawer] = useState(false);
-  const [drawerMode, setDrawerMode] = useState<DrawerMode>('view');
+  const [showPanel, setShowPanel] = useState(false);
+  const [panelMode, setPanelMode] = useState<PanelMode>('view');
   const [slideDir, setSlideDir] = useState<'next' | 'prev'>('next');
 
   const calendarDays = useMemo(
@@ -56,18 +56,18 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
 
   const handleSelectBooking = (booking: Booking) => {
     setSelectedBooking(booking);
-    setDrawerMode('view');
-    setShowDrawer(true);
+    setPanelMode('view');
+    setShowPanel(true);
   };
 
   const handleAddBooking = () => {
     setSelectedBooking(null);
-    setDrawerMode('add');
-    setShowDrawer(true);
+    setPanelMode('add');
+    setShowPanel(true);
   };
 
-  const handleCloseDrawer = () => {
-    setShowDrawer(false);
+  const handleClosePanel = () => {
+    setShowPanel(false);
   };
 
   const handleConfirmBooking = (id: string) => {
@@ -75,7 +75,7 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
       prev.map(b => (b.id === id ? { ...b, status: 'Confirmed' } : b)),
     );
     onNotify?.('Reservation confirmed.');
-    setShowDrawer(false);
+    setShowPanel(false);
   };
 
   const handleCancelBooking = (id: string) => {
@@ -83,7 +83,7 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
       prev.map(b => (b.id === id ? { ...b, status: 'Cancelled' } : b)),
     );
     onNotify?.('Reservation cancelled.');
-    setShowDrawer(false);
+    setShowPanel(false);
   };
 
   const handleSaveBooking = (saved: Booking) => {
@@ -95,16 +95,34 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
       return [...prev, saved];
     });
     onNotify?.(
-      drawerMode === 'add'
+      panelMode === 'add'
         ? `Booking added for ${saved.guest}.`
         : `Booking updated for ${saved.guest}.`,
     );
-    setShowDrawer(false);
+    setShowPanel(false);
   };
 
   const handleEdit = () => {
-    setDrawerMode('edit');
+    setPanelMode('edit');
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement
+      ) {
+        return;
+      }
+      if (e.key === 'Escape' && showPanel) {
+        handleClosePanel();
+      } else if (e.key.toLowerCase() === 'n' && !showPanel) {
+        handleAddBooking();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showPanel]);
 
   return (
     <div className="cal-screen">
@@ -114,68 +132,76 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
       {/* ─── Asymmetric overlay ─── */}
       <div aria-hidden="true" className="cal-overlay" />
 
-      {/* ─── Top Navigation ─── */}
-      <motion.nav
-        role="navigation"
-        aria-label="Main navigation"
-        className="cal-nav"
-        initial={{ opacity: 0, y: -12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, ease: EASE, delay: 0.3 }}
+      {/* ─── Main Content Wrapper (Shrinks when panel is open) ─── */}
+      <motion.div
+        className="absolute top-0 bottom-0 left-0 overflow-x-hidden overflow-y-auto"
+        initial={{ right: 0 }}
+        animate={{ right: showPanel ? '420px' : '0px' }}
+        transition={{ duration: 0.45, ease: EASE }}
       >
-        <button
-          onClick={() => onNavigate('reporting', 'push')}
-          aria-label="Go to Vallarta Estates dashboard"
-          className="cal-nav__brand"
+        {/* ─── Top Navigation ─── */}
+        <motion.nav
+          role="navigation"
+          aria-label="Main navigation"
+          className="cal-nav"
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: EASE, delay: 0.3 }}
         >
-          Vallarta Estates
-        </button>
-        <div className="cal-nav__right">
-          <span className="cal-pill">Estate Supervisor</span>
-          <div aria-hidden="true" className="cal-avatar">JD</div>
-        </div>
-      </motion.nav>
+          <button
+            onClick={() => onNavigate('reporting', 'push')}
+            aria-label="Go to Vallarta Estates dashboard"
+            className="cal-nav__brand"
+          >
+            Vallarta Estates
+          </button>
+          <div className="cal-nav__right">
+            <span className="cal-pill">Estate Supervisor</span>
+            <div aria-hidden="true" className="cal-avatar">JD</div>
+          </div>
+        </motion.nav>
 
-      {/* ─── Calendar Grid ─── */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.2, ease: EASE, delay: 0.6 }}
-      >
-        <CalendarGrid
-          days={calendarDays}
-          year={currentYear}
-          month={currentMonth}
-          onPrevMonth={handlePrevMonth}
-          onNextMonth={handleNextMonth}
-          slideDir={slideDir}
-        />
+        {/* ─── Calendar Grid ─── */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.2, ease: EASE, delay: 0.6 }}
+        >
+          <CalendarGrid
+            days={calendarDays}
+            year={currentYear}
+            month={currentMonth}
+            onPrevMonth={handlePrevMonth}
+            onNextMonth={handleNextMonth}
+            slideDir={slideDir}
+          />
+        </motion.div>
+
+        {/* ─── Booking List ─── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: EASE, delay: 0.9 }}
+        >
+          <BookingList
+            bookings={bookings}
+            onSelect={handleSelectBooking}
+            onAdd={handleAddBooking}
+          />
+        </motion.div>
       </motion.div>
 
-      {/* ─── Booking List ─── */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, ease: EASE, delay: 0.9 }}
-      >
-        <BookingList
-          bookings={bookings}
-          onSelect={handleSelectBooking}
-          onAdd={handleAddBooking}
-        />
-      </motion.div>
-
-      {/* ─── Booking Drawer ─── */}
-      <BookingDrawer
-        open={showDrawer}
+      {/* ─── Booking Panel ─── */}
+      <BookingPanel
+        open={showPanel}
         booking={selectedBooking}
-        mode={drawerMode}
+        mode={panelMode}
         bookings={bookings}
         onSave={handleSaveBooking}
         onConfirm={handleConfirmBooking}
         onCancelBooking={handleCancelBooking}
         onEdit={handleEdit}
-        onClose={handleCloseDrawer}
+        onClose={handleClosePanel}
       />
     </div>
   );
