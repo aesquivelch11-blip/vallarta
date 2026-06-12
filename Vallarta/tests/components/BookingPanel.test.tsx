@@ -90,3 +90,27 @@ describe('BookingPanel — Primary Button Weight', () => {
     expect(saveBtn?.className).not.toContain('w-full');
   });
 });
+
+describe('BookingPanel — Keyboard Support', () => {
+  it('closes the panel when Escape is pressed', () => {
+    const onClose = vi.fn();
+    renderPanel({ onClose });
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not call onClose on Escape when panel is not open', () => {
+    const onClose = vi.fn();
+    renderPanel({ open: false, onClose });
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it('cleans up the keyboard listener on unmount', () => {
+    const onClose = vi.fn();
+    const { unmount } = renderPanel({ onClose });
+    unmount();
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(onClose).not.toHaveBeenCalled();
+  });
+});
