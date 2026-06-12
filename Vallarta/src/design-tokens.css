@@ -349,6 +349,23 @@
     to   { transform: scale(1.04); }
 }
 
+/* ── Nav Menu — rack-focus blur bridge ── */
+.nav-image-layer.nav-image-exiting {
+    filter: blur(8px);
+    opacity: 0;
+}
+
+.nav-image-layer.nav-image-entering {
+    filter: blur(0px);
+    opacity: 1;
+    transition: filter 300ms ease-out, opacity 300ms ease-out;
+}
+
+.nav-image-layer.nav-image-enter-done {
+    filter: blur(0px);
+    opacity: 1;
+}
+
 /* ── Nav Menu — image loading skeleton ── */
 .nav-img-skeleton {
     position: absolute;

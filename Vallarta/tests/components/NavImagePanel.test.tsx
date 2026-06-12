@@ -3,15 +3,6 @@ import { render, fireEvent, cleanup } from '@testing-library/react';
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import NavImagePanel from '../../src/components/NavMenu/NavImagePanel';
 
-vi.mock('motion/react', () => ({
-  motion: {
-    div: ({ children, className, style, ...rest }: React.HTMLAttributes<HTMLDivElement> & { children?: React.ReactNode }) =>
-      <div className={className} style={style} data-testid="motion-div">{children}</div>,
-  },
-  AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-  useReducedMotion: vi.fn().mockReturnValue(false),
-}));
-
 const mockItems = [
   { id: 'financial', image: '/img/revenue.jpg', imageWebp: '/img/revenue.webp', label: 'Revenue' },
   { id: 'operations', image: '/img/ops.jpg', imageWebp: '/img/ops.webp', label: 'Operations' },
