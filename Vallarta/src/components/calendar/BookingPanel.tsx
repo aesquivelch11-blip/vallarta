@@ -147,7 +147,7 @@ export default function BookingPanel({
 
   const panelTransition = prefersReduced
     ? { duration: 0.01 }
-    : { duration: 0.45, ease: EASE };
+    : { duration: 0.2, ease: EASE };
 
   return (
     <AnimatePresence>
@@ -160,7 +160,7 @@ export default function BookingPanel({
               ? 'New booking'
               : `Booking for ${booking?.guest ?? 'guest'}`
           }
-          className="cal-drawer-sheet fixed top-0 right-0 bottom-0 w-[420px] max-w-[100vw] z-50 px-8 pt-8 pb-10 flex flex-col gap-6 overflow-y-auto border-l border-white/10"
+          className="cal-panel cal-drawer-sheet fixed top-0 right-0 bottom-0 w-[420px] max-w-[100vw] z-50 px-8 pt-8 pb-10 flex flex-col gap-6 overflow-y-auto border-l border-white/10"
           style={{ backgroundColor: '#242424' }}
           initial={{ x: prefersReduced ? 0 : '100%' }}
           animate={{ x: 0 }}

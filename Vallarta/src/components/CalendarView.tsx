@@ -157,7 +157,7 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
         className="absolute top-0 bottom-0 left-0 overflow-x-hidden overflow-y-auto"
         initial={{ right: 0 }}
         animate={{ right: showPanel ? SIDE_PANEL_WIDTH : '0px' }}
-        transition={{ duration: 0.45, ease: EASE }}
+        transition={{ duration: 0.2, ease: EASE }}
       >
         {/* ─── Top Navigation ─── */}
         <motion.nav
