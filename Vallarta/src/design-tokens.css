@@ -389,7 +389,7 @@
 /* Subtle Ken Burns on the active image */
 @media (prefers-reduced-motion: no-preference) {
     .nav-image-layer img.loaded {
-        animation: navKenBurns 14s cubic-bezier(0.32, 0.72, 0, 1) infinite alternate;
+        animation: navKenBurns 14s ease-in-out infinite alternate;
     }
 }
 
@@ -418,8 +418,8 @@
     opacity: 0;
     filter: blur(4px);
     transform: scale(1.02);
-    transition: opacity   200ms ease,
-                filter    200ms ease,
+    transition: opacity   200ms cubic-bezier(0.23, 1, 0.32, 1),
+                filter    200ms cubic-bezier(0.23, 1, 0.32, 1),
                 transform 250ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
@@ -438,8 +438,8 @@
     opacity: 1;
     filter: blur(0px);
     transform: scale(1);
-    transition: opacity   200ms ease,
-                filter    200ms ease,
+    transition: opacity   200ms cubic-bezier(0.23, 1, 0.32, 1),
+                filter    200ms cubic-bezier(0.23, 1, 0.32, 1),
                 transform 250ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
@@ -2509,41 +2509,7 @@ body::before {
     color: rgba(255, 255, 255, 0.25);
 }
 
-.cal-drawer-toggle {
-    display: flex;
-    background: rgba(255, 255, 255, 0.06);
-    border-radius: 999px;
-    padding: 3px;
-    gap: 2px;
-}
 
-.cal-drawer-toggle__option {
-    flex: 1;
-    font-family: var(--font-ui);
-    font-size: 0.6875rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 7px 16px;
-    border-radius: 999px;
-    border: none;
-    cursor: pointer;
-    transition:
-        background 200ms var(--ease-out-expo),
-        color 200ms var(--ease-out-expo),
-        transform 160ms var(--ease-out-expo);
-    color: rgba(255, 255, 255, 0.5);
-    background: transparent;
-}
-
-.cal-drawer-toggle__option:active {
-    transform: scale(0.97);
-    transition-duration: 80ms;
-}
-
-.cal-drawer-toggle__option--active {
-    background: var(--cal-owner-accent);
-    color: var(--cal-btn-text-dark);
-}
 
 .cal-drawer-btn {
     font-family: var(--font-ui);
