@@ -71,6 +71,7 @@ export default function NavMenuView({
   previousScreen,
 }: NavMenuViewProps) {
   const [activeIndex, setActiveIndex] = useState(initialIndex);
+  const [direction, setDirection] = useState<'next' | 'prev'>('next');
   const [liveAnnouncement, setLiveAnnouncement] = useState('');
   const dialogRef = useRef<HTMLDivElement>(null);
   const prevFocusRef = useRef<HTMLElement | null>(null);
@@ -112,6 +113,7 @@ export default function NavMenuView({
       );
 
     const walk = (dir: -1 | 1) => {
+      setDirection(dir === 1 ? 'next' : 'prev');
       setActiveIndex(prev => {
         const next = (prev + dir + menuItems.length) % menuItems.length;
         setTimeout(() => {
@@ -156,6 +158,12 @@ export default function NavMenuView({
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const handleTabChange = (index: number) => {
+    if (index === activeIndex) return;
+    setDirection(index > activeIndex ? 'next' : 'prev');
+    setActiveIndex(index);
+  };
+
   const handleTabConfirm = (screen: ScreenType, id: string) => {
     if (navTimeoutRef.current) return; // debounce double-tap
     sessionStorage.setItem('nav-last-panel', id);
@@ -174,6 +182,7 @@ export default function NavMenuView({
     const dx = e.changedTouches[0].clientX - touchStartX.current;
     const dy = e.changedTouches[0].clientY - touchStartY.current;
     if (Math.abs(dx) < Math.abs(dy) || Math.abs(dx) < 48) return;
+    setDirection(dx < 0 ? 'next' : 'prev');
     setActiveIndex(prev =>
       dx < 0
         ? Math.min(prev + 1, menuItems.length - 1)
@@ -198,7 +207,7 @@ export default function NavMenuView({
       onTouchEnd={handleTouchEnd}
     >
       {/* Full-bleed image with clip-path wipe */}
-      <NavImagePanel items={menuItems} activeIndex={activeIndex} />
+      <NavImagePanel items={menuItems} activeIndex={activeIndex} direction={direction} />
 
       {/* Header */}
       <header
@@ -234,14 +243,14 @@ export default function NavMenuView({
       <div className="nav-grain" aria-hidden="true" />
 
       {/* Editorial section title */}
-      <NavEditorialTitle label={menuItems[activeIndex].label} />
+      <NavEditorialTitle label={menuItems[activeIndex].label} direction={direction} />
 
       {/* Bottom tab bar */}
       <NavBottomBar
         items={menuItems}
         activeIndex={activeIndex}
         previousScreen={previousScreen}
-        onTabChange={setActiveIndex}
+        onTabChange={handleTabChange}
         onTabConfirm={handleTabConfirm}
       />
     </div>

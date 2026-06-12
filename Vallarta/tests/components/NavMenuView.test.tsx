@@ -100,3 +100,37 @@ describe('NavMenuView — Bottom Bar', () => {
     expect(revenueTab?.textContent).toContain('Revenue');
   });
 });
+
+describe('NavMenuView — Direction Tracking', () => {
+  it('passes direction="next" to NavImagePanel when navigating forward via tabs', () => {
+    const { container } = renderNav();
+    const tabs = screen.getAllByRole('tab');
+    fireEvent.click(tabs[1]); // Revenue (index 1)
+    fireEvent.click(tabs[2]); // Operations (index 2)
+    const imagePanel = container.querySelector('[data-direction="next"]');
+    expect(imagePanel).not.toBeNull();
+  });
+
+  it('passes direction="prev" to NavImagePanel when navigating backward via tabs', () => {
+    const { container } = renderNav();
+    const tabs = screen.getAllByRole('tab');
+    fireEvent.click(tabs[2]); // Operations (index 2)
+    fireEvent.click(tabs[1]); // Revenue (index 1) — backward
+    const imagePanel = container.querySelector('[data-direction="prev"]');
+    expect(imagePanel).not.toBeNull();
+  });
+
+  it('passes direction="next" via ArrowRight key', () => {
+    const { container } = renderNav();
+    fireEvent.keyDown(document, { key: 'ArrowRight' });
+    const imagePanel = container.querySelector('[data-direction="next"]');
+    expect(imagePanel).not.toBeNull();
+  });
+
+  it('passes direction="prev" via ArrowLeft key', () => {
+    const { container } = renderNav();
+    fireEvent.keyDown(document, { key: 'ArrowLeft' });
+    const imagePanel = container.querySelector('[data-direction="prev"]');
+    expect(imagePanel).not.toBeNull();
+  });
+});

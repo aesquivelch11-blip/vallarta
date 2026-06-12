@@ -57,7 +57,7 @@ export default function NavBottomBar({
               transition={{ duration: 0.16, ease: [0.23, 1, 0.32, 1] }}
               onMouseEnter={() => onTabChange(i)}
               onFocus={() => onTabChange(i)}
-              onClick={() => onTabConfirm(item.screen, item.id)}
+              onClick={() => { onTabChange(i); onTabConfirm(item.screen, item.id); }}
             >
               {isActive && (
                 <motion.div
@@ -68,7 +68,6 @@ export default function NavBottomBar({
               )}
 
               <span className="nav-tab-label">{item.label}</span>
-              <span className="nav-tab-metric">{item.metric}</span>
 
               {isCurrent && (
                 <span className="nav-tab-current-dot" aria-hidden="true" />
