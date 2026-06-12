@@ -646,14 +646,14 @@ input:-webkit-autofill:focus {
   color: #faf8f5;
 }
 
-/* Segmented Control toggles */
+/* Segmented Control — refined luxury toggle */
 .cal-drawer-toggle {
   display: flex;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(212, 154, 85, 0.15);
-  padding: 4px;
-  gap: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(212, 154, 85, 0.12);
+  padding: 3px;
+  gap: 2px;
 }
 
 .cal-drawer-toggle__option {
@@ -665,21 +665,26 @@ input:-webkit-autofill:focus {
   font-family: var(--font-sans), sans-serif;
   font-size: 0.625rem;
   font-weight: 500;
-  letter-spacing: 0.15em;
-  color: rgba(250, 248, 245, 0.6);
-  padding: 6px 12px;
+  letter-spacing: 0.18em;
+  color: rgba(250, 248, 245, 0.45);
+  padding: 8px 16px;
   border-radius: 999px;
   transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
   outline: none;
 }
 
 .cal-drawer-toggle__option:hover {
-  color: #faf8f5;
+  color: rgba(250, 248, 245, 0.7);
+}
+
+.cal-drawer-toggle__option:focus-visible {
+  outline: 1px solid rgba(212, 154, 85, 0.4);
+  outline-offset: 2px;
 }
 
 .cal-drawer-toggle__option--active {
-  background: rgba(212, 154, 85, 0.2) !important;
-  color: #faf8f5 !important;
+  background: rgba(212, 154, 85, 0.15) !important;
+  color: #d49a55 !important;
 }
 
 /* Drag to select range styling */

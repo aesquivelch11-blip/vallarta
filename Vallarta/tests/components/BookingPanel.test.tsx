@@ -114,3 +114,28 @@ describe('BookingPanel — Keyboard Support', () => {
     expect(onClose).not.toHaveBeenCalled();
   });
 });
+
+describe('BookingPanel — Segmented Control', () => {
+  it('renders Guest and Owner Stay options', () => {
+    const { container } = renderPanel();
+    const options = container.querySelectorAll('.cal-drawer-toggle__option');
+    expect(options).toHaveLength(2);
+    expect(options[0].textContent).toBe('Guest');
+    expect(options[1].textContent).toBe('Owner Stay');
+  });
+
+  it('marks the active option with aria-pressed', () => {
+    const { container } = renderPanel();
+    const options = container.querySelectorAll('.cal-drawer-toggle__option');
+    expect(options[0].getAttribute('aria-pressed')).toBe('true');
+    expect(options[1].getAttribute('aria-pressed')).toBe('false');
+  });
+
+  it('switches active option when clicked', () => {
+    const { container } = renderPanel();
+    const options = container.querySelectorAll('.cal-drawer-toggle__option');
+    fireEvent.click(options[1]);
+    expect(options[0].getAttribute('aria-pressed')).toBe('false');
+    expect(options[1].getAttribute('aria-pressed')).toBe('true');
+  });
+});
