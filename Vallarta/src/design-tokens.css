@@ -272,12 +272,60 @@
 
 /* ── Nav Menu — wordmark ── */
 .nav-portal__wordmark {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: 1.125rem;
-    font-weight: 400;
-    letter-spacing: 0.04em;
-    color: var(--nav-wordmark-color);
+    font-family: var(--font-ui);
+    font-style: normal;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: rgba(250, 248, 245, 0.72);
+}
+
+/* ── Nav Menu — header right cluster ── */
+.nav-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Hairline separator between Sign out and × */
+.nav-header-separator {
+    display: block;
+    width: 1px;
+    height: 14px;
+    background: rgba(250, 248, 245, 0.18);
+    border-radius: 1px;
+    flex-shrink: 0;
+}
+
+/* ── Nav Menu — sign out button ── */
+.nav-logout-btn {
+    font-family: var(--font-ui);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: rgba(250, 248, 245, 0.40);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    transition:
+        color 0.26s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav-logout-btn:hover {
+    color: rgba(250, 248, 245, 0.78);
+}
+.nav-logout-btn:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 4px;
+    border-radius: 2px;
+}
+.nav-logout-btn:active {
+    transform: scale(0.96);
+    color: rgba(250, 248, 245, 0.92);
 }
 
 /* ── Nav Menu — close button ── */
@@ -349,20 +397,60 @@
     to   { transform: scale(1.04); }
 }
 
-/* ── Nav Menu — rack-focus blur bridge ── */
-.nav-image-layer.nav-image-exiting {
-    filter: blur(8px);
+/* ── Nav Menu — clip-path directional wipe ── */
+.nav-image-layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    will-change: clip-path, opacity;
+    transition: clip-path 450ms cubic-bezier(0.77, 0, 0.175, 1),
+                opacity 250ms cubic-bezier(0.23, 1, 0.32, 1) 200ms;
+}
+
+/* Exiting: wipe away in the direction of travel */
+.nav-image-layer.nav-image-exiting[data-direction="next"] {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+}
+.nav-image-layer.nav-image-exiting[data-direction="prev"] {
+    clip-path: inset(0 0 0 100%);
     opacity: 0;
 }
 
-.nav-image-layer.nav-image-entering {
-    filter: blur(0px);
-    opacity: 1;
-    transition: filter 300ms ease-out, opacity 300ms ease-out;
+/* Entering: reveal from the opposite direction */
+.nav-image-layer.nav-image-entering[data-direction="next"] {
+    clip-path: inset(0 0 0 100%);
+    opacity: 0;
+    transition: clip-path 550ms cubic-bezier(0.23, 1, 0.32, 1),
+                opacity 400ms cubic-bezier(0.23, 1, 0.32, 1) 100ms;
+}
+.nav-image-layer.nav-image-entering[data-direction="prev"] {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+    transition: clip-path 550ms cubic-bezier(0.23, 1, 0.32, 1),
+                opacity 400ms cubic-bezier(0.23, 1, 0.32, 1) 100ms;
 }
 
+.nav-image-layer.nav-image-enter-done[data-direction="next"],
+.nav-image-layer.nav-image-enter-done[data-direction="prev"] {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+}
+
+/* Default (no direction specified): fallback to center wipe */
+.nav-image-layer.nav-image-exiting {
+    clip-path: inset(0 50% 0 50%);
+    opacity: 0;
+}
+.nav-image-layer.nav-image-entering {
+    clip-path: inset(0 50% 0 50%);
+    opacity: 0;
+    transition: clip-path 550ms cubic-bezier(0.23, 1, 0.32, 1),
+                opacity 400ms cubic-bezier(0.23, 1, 0.32, 1) 100ms;
+}
 .nav-image-layer.nav-image-enter-done {
-    filter: blur(0px);
+    clip-path: inset(0 0 0 0);
     opacity: 1;
 }
 
@@ -387,8 +475,9 @@
     z-index: 2;
     pointer-events: none;
     background:
-        linear-gradient(to bottom, var(--nav-scrim-top) 0%, transparent 18%),
-        linear-gradient(to top, rgba(14, 26, 34, 0.85) 0%, var(--nav-scrim-mid) 28%, transparent 60%);
+        linear-gradient(to bottom, rgba(22, 39, 50, 0.42) 0%, transparent 22%),
+        radial-gradient(ellipse 130% 55% at 50% 108%, rgba(14, 26, 34, 0.70) 0%, transparent 68%),
+        linear-gradient(to top, rgba(14, 26, 34, 0.58) 0%, transparent 48%);
 }
 
 /* ── Nav Menu — warm grain overlay (fixed, non-scrolling) ── */
@@ -403,29 +492,35 @@
     animation: navGrainShift 8s steps(10) infinite;
 }
 
-/* Outer shell — double-bezel wrapper */
+/* Outer shell — single-surface cream pill; shadow grounds it against the dark scene */
 .nav-bottom-bar-shell {
     position: absolute;
-    bottom: 24px;
+    bottom: 28px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 30;
-    padding: 6px;
-    background: rgba(250, 248, 245, 0.04);
-    border: 1px solid rgba(250, 248, 245, 0.08);
-    border-radius: 2rem;
+    padding: 0;
+    border: none;
+    background: none;
+    border-radius: 2.25rem;
+    box-shadow:
+        0 20px 60px rgba(14, 26, 34, 0.58),
+        0 4px 16px rgba(14, 26, 34, 0.28);
+    min-width: clamp(580px, 92vw, 920px);
 }
 
-/* Inner core — the actual tab bar */
+/* Inner bar — solid Bleached Bone surface; no blur, no glass, physical material */
 .nav-bottom-bar {
     display: flex;
     align-items: stretch;
-    height: var(--nav-bottom-bar-height);
-    background: var(--nav-bottom-bar-bg);
-    backdrop-filter: blur(24px) saturate(160%);
-    -webkit-backdrop-filter: blur(24px) saturate(160%);
-    border-radius: calc(2rem - 6px);
-    box-shadow: inset 0 1px 1px rgba(250, 248, 245, 0.08);
+    height: 62px;
+    background: var(--color-canvas);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-radius: 2.25rem;
+    /* Scoped color tokens: dark ink on cream — maps to Weathered Timber / Obsidian Charcoal */
+    --nav-tab-color: var(--color-ink-secondary);
+    --nav-tab-active-color: var(--color-ink);
     overflow: hidden;
 }
 
@@ -437,8 +532,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 4px;
-    padding: 0 8px;
+    gap: 0;
+    padding: 0 12px;
     background: none;
     border: none;
     cursor: pointer;
@@ -446,6 +541,8 @@
     transition: color 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     -webkit-tap-highlight-color: transparent;
 }
+
+
 
 /* Staggered entry — each tab gets a delay via inline style */
 .nav-bottom-tab--entering {
@@ -455,6 +552,10 @@
 @media (hover: hover) and (pointer: fine) {
     .nav-bottom-tab:hover {
         color: rgba(250, 248, 245, 0.72);
+    }
+    /* On cream surface: dark hover */
+    .nav-bottom-bar .nav-bottom-tab:hover {
+        color: color-mix(in srgb, var(--color-ink) 68%, transparent);
     }
 }
 
@@ -468,96 +569,80 @@
     color: var(--nav-tab-active-color);
 }
 
-/* ── Nav Menu — active indicator line (positioned by Motion layoutId) ── */
+/* ── Nav Menu — active indicator: Sunset Ochre underline slides between tabs ── */
 .nav-tab-indicator {
     position: absolute;
-    top: 0;
-    left: 8px;
-    right: 8px;
+    bottom: 10px;
+    left: 20%;
+    right: 20%;
+    top: auto;
     height: 1.5px;
-    background: var(--nav-accent);
-    border-radius: 0 0 2px 2px;
+    border-radius: 0;
+    background: var(--color-accent-warning);
+    border: none;
+    box-shadow: none;
 }
 
 /* ── Nav Menu — tab label ── */
 .nav-tab-label {
     font-family: var(--font-ui);
-    font-size: 0.6rem;
+    font-size: 0.6875rem;
     font-weight: 500;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.24em;
     text-transform: uppercase;
     line-height: 1;
+    position: relative;
+    z-index: 1;
 }
 
-/* ── Nav Menu — tab metric ── */
-.nav-tab-metric {
-    font-family: var(--font-ui);
-    font-size: 0.5625rem;
-    font-weight: 400;
-    letter-spacing: 0.06em;
-    line-height: 1;
-    color: var(--nav-tab-metric-color);
-    transition: color 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-}
-
-.nav-bottom-tab[aria-selected="true"] .nav-tab-metric {
-    color: var(--nav-tab-metric-active-color);
-}
 
 /* ── Nav Menu — "you are here" dot ── */
 .nav-tab-current-dot {
     position: absolute;
-    bottom: 10px;
+    bottom: 8px;
     left: 50%;
     transform: translateX(-50%);
-    width: 3px;
-    height: 3px;
+    width: 4px;
+    height: 4px;
     border-radius: 50%;
     background: var(--nav-tab-current-dot);
+    border: none;
 }
 
 /* ── Nav Menu — editorial title ── */
 .nav-editorial-title {
     position: absolute;
-    bottom: 140px;
-    left: 44px;
+    bottom: 152px;
+    left: 48px;
     z-index: 10;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 0;
     pointer-events: none;
     animation: navTitleIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
 }
 
-.nav-eyebrow-tag {
-    display: inline-flex;
-    align-items: center;
-    width: fit-content;
-    padding: 4px 12px;
-    border-radius: 999px;
-    border: 1px solid rgba(250, 248, 245, 0.12);
-    background: rgba(250, 248, 245, 0.04);
-    font-family: var(--font-ui);
-    font-size: 0.5625rem;
-    font-weight: 500;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--nav-eyebrow-color);
-}
 
 .nav-editorial-heading {
     font-family: var(--font-display);
-    font-style: italic;
+    font-style: normal;
     font-weight: 400;
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    line-height: 1.05;
-    letter-spacing: -0.02em;
+    font-size: clamp(3.75rem, 9vw, 7.5rem);
+    line-height: 1.0;
+    letter-spacing: -0.03em;
     color: var(--nav-title-color);
     margin: 0;
+    text-shadow: 0 2px 32px rgba(14, 26, 34, 0.55);
+}
+
+/* ── Nav Menu — editorial title clip-path reveal ── */
+.nav-editorial-heading {
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path 500ms cubic-bezier(0.23, 1, 0.32, 1) 80ms;
+}
+
+.nav-editorial-heading.nav-title-entered {
+    clip-path: inset(0 0 0 0);
 }
 
 /* ── Nav Menu — mobile ── */
@@ -569,7 +654,7 @@
 
     .nav-portal__wordmark {
         font-size: 0.6875rem;
-        letter-spacing: 0.28em;
+        letter-spacing: 0.35em;
     }
 
     .nav-close-btn {
@@ -577,33 +662,39 @@
         height: 38px;
     }
 
-    .nav-tab-label {
-        font-size: 0.5625rem;
-        letter-spacing: 0.12em;
+    .nav-header-actions {
+        gap: 14px;
     }
 
-    .nav-tab-metric {
-        font-size: 0.5rem;
+    .nav-tab-label {
+        font-size: 0.625rem;
+        letter-spacing: 0.20em;
     }
 
     .nav-bottom-bar-shell {
         bottom: 16px;
-        left: 16px;
-        right: 16px;
+        left: 12px;
+        right: 12px;
         transform: none;
+        min-width: unset;
     }
 
     .nav-bottom-bar {
-        height: 72px;
+        height: 54px;
+    }
+
+    .nav-tab-label {
+        font-size: 0.625rem;
+        letter-spacing: 0.20em;
     }
 
     .nav-editorial-title {
-        bottom: 120px;
+        bottom: 124px;
         left: 24px;
     }
 
     .nav-editorial-heading {
-        font-size: clamp(1.75rem, 8vw, 2.5rem);
+        font-size: clamp(2.75rem, 11vw, 4.5rem);
     }
 }
 
@@ -623,7 +714,8 @@
         transition: none;
     }
 
-    .nav-close-btn {
+    .nav-close-btn,
+    .nav-logout-btn {
         transition: none;
     }
 
