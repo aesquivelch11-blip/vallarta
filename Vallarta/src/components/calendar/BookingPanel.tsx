@@ -293,9 +293,18 @@ export default function BookingPanel({
               <div className="flex gap-4">
                 <div className="flex flex-col gap-1.5 flex-1">
                   <span className="cal-drawer-label">Arrival & Departure</span>
-                  <span className="cal-drawer-value">
-                    {formCheckIn && formCheckOut ? formatDisplayDates(formCheckIn, formCheckOut) : 'Set arrival and departure'}
-                  </span>
+                  <button
+                    type="button"
+                    className={`cal-drawer-date-field${formCheckIn && formCheckOut ? ' cal-drawer-date-field--set' : ''}`}
+                    aria-label="Select arrival and departure dates"
+                    onClick={() => {
+                      onClose();
+                    }}
+                  >
+                    {formCheckIn && formCheckOut
+                      ? formatDisplayDates(formCheckIn, formCheckOut)
+                      : 'Set arrival and departure'}
+                  </button>
                 </div>
               </div>
 

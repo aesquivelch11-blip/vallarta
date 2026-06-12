@@ -47,3 +47,27 @@ describe('BookingPanel — Background Consistency', () => {
     expect(panel?.className).toContain('cal-panel');
   });
 });
+
+describe('BookingPanel — Date Interaction', () => {
+  it('renders the date field as an interactive button, not static text', () => {
+    const { container } = renderPanel();
+    const dateField = container.querySelector('.cal-drawer-date-field');
+    expect(dateField).not.toBeNull();
+    expect(dateField?.tagName).toBe('BUTTON');
+    expect(dateField?.getAttribute('aria-label')).toBe('Select arrival and departure dates');
+  });
+
+  it('shows placeholder text when no dates are selected', () => {
+    const { container } = renderPanel();
+    const dateField = container.querySelector('.cal-drawer-date-field');
+    expect(dateField?.textContent).toContain('Set arrival and departure');
+  });
+
+  it('shows formatted dates when dates are preselected', () => {
+    const { container } = renderPanel({
+      preselectedRange: { checkIn: '2026-06-19', checkOut: '2026-06-24' },
+    });
+    const dateField = container.querySelector('.cal-drawer-date-field');
+    expect(dateField?.textContent).toContain('Jun');
+  });
+});
