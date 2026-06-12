@@ -1,5 +1,5 @@
 // src/components/calendar/CalendarGrid.tsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { CalendarDay, MONTH_NAMES } from './bookingUtils';
 
 const DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
@@ -11,6 +11,7 @@ interface CalendarGridProps {
   onPrevMonth: () => void;
   onNextMonth: () => void;
   slideDir?: 'next' | 'prev';
+  onDateRangeSelected?: (startDay: CalendarDay, endDay: CalendarDay) => void;
 }
 
 function ChevronLeft() {
@@ -29,9 +30,52 @@ function ChevronRight() {
   );
 }
 
-export default function CalendarGrid({ days, year, month, onPrevMonth, onNextMonth, slideDir }: CalendarGridProps) {
+export default function CalendarGrid({ days, year, month, onPrevMonth, onNextMonth, slideDir, onDateRangeSelected }: CalendarGridProps) {
   const hasPending = days.some(d => d.pending);
   const hasOwner = days.some(d => d.ownerStay);
+
+  const [dragStartDay, setDragStartDay] = useState<CalendarDay | null>(null);
+  const [dragHoverDay, setDragHoverDay] = useState<CalendarDay | null>(null);
+
+  useEffect(() => {
+    const handleGlobalMouseUp = () => {
+      setDragStartDay(null);
+      setDragHoverDay(null);
+    };
+    window.addEventListener('mouseup', handleGlobalMouseUp);
+    return () => window.removeEventListener('mouseup', handleGlobalMouseUp);
+  }, []);
+
+  const handleMouseDown = (d: CalendarDay) => {
+    if (d.empty) return;
+    setDragStartDay(d);
+    setDragHoverDay(d);
+  };
+
+  const handleMouseEnter = (d: CalendarDay) => {
+    if (d.empty || !dragStartDay) return;
+    setDragHoverDay(d);
+  };
+
+  const handleMouseUp = (d: CalendarDay) => {
+    if (d.empty || !dragStartDay) return;
+    if (onDateRangeSelected) {
+      const start = dragStartDay.day <= d.day ? dragStartDay : d;
+      const end = dragStartDay.day <= d.day ? d : dragStartDay;
+      onDateRangeSelected(start, end);
+    }
+    setDragStartDay(null);
+    setDragHoverDay(null);
+  };
+
+  const sDay = dragStartDay ? dragStartDay.day : -1;
+  const hDay = dragHoverDay ? dragHoverDay.day : -1;
+  const minDay = Math.min(sDay, hDay);
+  const maxDay = Math.max(sDay, hDay);
+  
+  const liveRegionText = dragStartDay && dragHoverDay && minDay > 0
+    ? `Selecting from ${MONTH_NAMES[month]} ${minDay} to ${MONTH_NAMES[month]} ${maxDay}`
+    : '';
 
   return (
     <div
@@ -39,6 +83,9 @@ export default function CalendarGrid({ days, year, month, onPrevMonth, onNextMon
       aria-label={`${MONTH_NAMES[month]} ${year} calendar`}
       className="cal-calendar"
     >
+      <div aria-live="polite" style={{ position: 'absolute', width: 1, height: 1, padding: 0, margin: -1, overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', border: 0 }}>
+        {liveRegionText}
+      </div>
       <div className="cal-calendar__inner">
         <div className="cal-month-nav">
           <button
@@ -82,11 +129,15 @@ export default function CalendarGrid({ days, year, month, onPrevMonth, onNextMon
             const isBoth = d.checkin && d.checkout;
             const isOwnerDay = (d.booked || d.checkin || d.checkout) && d.ownerStay;
             const isPendingDay = (d.booked || d.checkin || d.checkout) && d.pending && !d.ownerStay;
+            const inSelection = dragStartDay && !d.empty && d.day >= minDay && d.day <= maxDay;
 
             return (
               <div
                 key={`day-${i}`}
                 role="gridcell"
+                onMouseDown={() => handleMouseDown(d)}
+                onMouseEnter={() => handleMouseEnter(d)}
+                onMouseUp={() => handleMouseUp(d)}
                 aria-label={
                   d.empty
                     ? undefined
@@ -98,6 +149,7 @@ export default function CalendarGrid({ days, year, month, onPrevMonth, onNextMon
                   isOwnerDay ? 'cal-day--owner' : '',
                   !isOwnerDay && (d.booked || d.checkin || d.checkout) ? 'cal-day--booked' : '',
                   d.today ? 'cal-day--today' : '',
+                  inSelection ? 'cal-day--selected cal-day--drag-target' : '',
                 ]
                   .filter(Boolean)
                   .join(' ')}
@@ -147,6 +199,10 @@ export default function CalendarGrid({ days, year, month, onPrevMonth, onNextMon
               Owner Stay
             </span>
           )}
+        </div>
+        
+        <div className="cal-grid-hint" style={{ textAlign: 'center', marginTop: '1rem', fontSize: '0.875rem', color: 'var(--text-muted, #666)' }}>
+          Click and drag dates to create a new reservation.
         </div>
       </div>
     </div>
