@@ -80,12 +80,7 @@ export default function BookingPanel({
     setOverrideOverlap(false);
   }, [open, mode, booking?.id, preselectedRange]);
 
-  useEffect(() => {
-    if (mode === 'add' && preselectedRange) {
-      setFormCheckIn(preselectedRange.checkIn);
-      setFormCheckOut(preselectedRange.checkOut);
-    }
-  }, [mode, preselectedRange]);
+
 
   useEffect(() => {
     return () => {

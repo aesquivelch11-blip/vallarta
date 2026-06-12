@@ -114,9 +114,13 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
   };
 
   const handleDateRangeSelected = (startDay: { day: number }, endDay: { day: number }) => {
-    const startStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(startDay.day).padStart(2, '0')}`;
-    const endStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(endDay.day).padStart(2, '0')}`;
-    setPreselectedRange({ checkIn: startStr, checkOut: endStr });
+    const formatDate = (day: number) => 
+      `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    
+    setPreselectedRange({ 
+      checkIn: formatDate(startDay.day), 
+      checkOut: formatDate(endDay.day) 
+    });
     setSelectedBooking(null);
     setPanelMode('add');
     setShowPanel(true);
