@@ -75,8 +75,6 @@ export default function BookingPanel({
     setOverrideOverlap(false);
   }, [open, mode, booking, preselectedRange]);
 
-
-
   useEffect(() => {
     return () => {
       if (cancelTimerRef.current) clearTimeout(cancelTimerRef.current);
