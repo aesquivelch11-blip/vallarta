@@ -28,11 +28,6 @@ const EASE = [0.32, 0.72, 0, 1] as const;
 
 const CANCELLATION_TIMEOUT_MS = 3000;
 
-function todayStr(): string {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-}
-
 export default function BookingPanel({
   open,
   booking,
@@ -78,7 +73,7 @@ export default function BookingPanel({
     setDateError('');
     setOverlapWarning('');
     setOverrideOverlap(false);
-  }, [open, mode, booking?.id, preselectedRange]);
+  }, [open, mode, booking, preselectedRange]);
 
 
 
@@ -100,14 +95,6 @@ export default function BookingPanel({
   const derivedNights = calcNights(formCheckIn, formCheckOut);
 
   const validate = (): boolean => {
-    if (!formGuest.trim()) {
-      setDateError('Guest name is required.');
-      return false;
-    }
-    if (!formCheckIn || !formCheckOut) {
-      setDateError('Both dates are required.');
-      return false;
-    }
     if (formCheckOut <= formCheckIn) {
       setDateError('Check-out must be after check-in.');
       return false;
@@ -160,8 +147,7 @@ export default function BookingPanel({
               ? 'New booking'
               : `Booking for ${booking?.guest ?? 'guest'}`
           }
-          className="cal-panel cal-drawer-sheet fixed top-0 right-0 bottom-0 w-[420px] max-w-[100vw] z-50 px-8 pt-8 pb-10 flex flex-col gap-6 overflow-y-auto border-l border-white/10"
-          style={{ backgroundColor: '#242424' }}
+          className="cal-panel cal-drawer-sheet fixed top-0 right-0 bottom-0 w-[420px] max-w-[100vw] z-50 px-8 pt-8 pb-10 flex flex-col gap-6 overflow-y-auto rounded-l-[0.25rem]"
           initial={{ x: prefersReduced ? 0 : '100%' }}
           animate={{ x: 0 }}
           exit={{ x: prefersReduced ? 0 : '100%' }}
@@ -172,7 +158,7 @@ export default function BookingPanel({
             <button
               onClick={onClose}
               aria-label="Close booking panel"
-              className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center cursor-pointer border-none text-white"
+              className="w-[44px] h-[44px] rounded-full border border-white/16 bg-transparent text-white/58 hover:border-white/34 hover:text-white/96 hover:bg-white/06 transition-all duration-200 flex items-center justify-center cursor-pointer"
             >
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <path d="M1 1L13 13M1 13L13 1" />
@@ -270,7 +256,7 @@ export default function BookingPanel({
             <div className="flex flex-col gap-6 flex-1">
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="drawer-guest" className="cal-drawer-label">
-                  Guest Name
+                  Guest
                 </label>
                 <input
                   id="drawer-guest"
@@ -283,7 +269,7 @@ export default function BookingPanel({
               </div>
 
               <div className="flex flex-col gap-2">
-                <span className="cal-drawer-label">Booking Type</span>
+                <span className="cal-drawer-label">Reservation Profile</span>
                 <div className="cal-drawer-toggle" role="group" aria-label="Booking type">
                   <button
                     type="button"
@@ -306,9 +292,9 @@ export default function BookingPanel({
 
               <div className="flex gap-4">
                 <div className="flex flex-col gap-1.5 flex-1">
-                  <span className="cal-drawer-label">Dates Selected</span>
+                  <span className="cal-drawer-label">Arrival & Departure</span>
                   <span className="cal-drawer-value">
-                    {formCheckIn && formCheckOut ? formatDisplayDates(formCheckIn, formCheckOut) : 'Select on calendar'}
+                    {formCheckIn && formCheckOut ? formatDisplayDates(formCheckIn, formCheckOut) : 'Set arrival and departure'}
                   </span>
                 </div>
               </div>
@@ -332,12 +318,19 @@ export default function BookingPanel({
                 </div>
               )}
 
-              <div className="flex gap-3 pt-4 mt-auto">
-                <button className="cal-drawer-btn cal-drawer-btn--save flex-1" onClick={handleSave}>
-                  Save
+              <div className="flex flex-col gap-3 pt-4 mt-auto">
+                <button
+                  className="cal-drawer-btn cal-drawer-btn--save w-full disabled:opacity-35 disabled:cursor-not-allowed disabled:transform-none"
+                  onClick={handleSave}
+                  disabled={!formGuest.trim() || !formCheckIn || !formCheckOut}
+                >
+                  Confirm Reservation
                 </button>
-                <button className="cal-drawer-btn cal-drawer-btn--close flex-1" onClick={onClose}>
-                  Discard
+                <button
+                  className="cal-drawer-btn--close text-white/40 hover:text-white/60 transition-colors bg-transparent border-none py-2 text-[11px] font-medium tracking-[0.2em] uppercase cursor-pointer self-center"
+                  onClick={onClose}
+                >
+                  Cancel
                 </button>
               </div>
             </div>
