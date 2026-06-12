@@ -1,5 +1,5 @@
 // src/components/calendar/CalendarGrid.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { CalendarDay, MONTH_NAMES } from './bookingUtils';
 
 const DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
@@ -46,19 +46,36 @@ export default function CalendarGrid({ days, year, month, onPrevMonth, onNextMon
     return () => window.removeEventListener('mouseup', handleGlobalMouseUp);
   }, []);
 
-  const handleMouseDown = (d: CalendarDay) => {
-    if (d.empty) return;
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    const target = (e.target as HTMLElement).closest('.cal-day') as HTMLElement;
+    if (!target) return;
+    const dayStr = target.dataset.day;
+    if (!dayStr) return;
+    const d = days.find(day => day.day === parseInt(dayStr, 10) && !day.empty);
+    if (!d || d.empty) return;
     setDragStartDay(d);
     setDragHoverDay(d);
-  };
+  }, [days]);
 
-  const handleMouseEnter = (d: CalendarDay) => {
-    if (d.empty || !dragStartDay) return;
+  const handleMouseEnter = useCallback((e: React.MouseEvent) => {
+    if (!dragStartDay) return;
+    const target = (e.target as HTMLElement).closest('.cal-day') as HTMLElement;
+    if (!target) return;
+    const dayStr = target.dataset.day;
+    if (!dayStr) return;
+    const d = days.find(day => day.day === parseInt(dayStr, 10) && !day.empty);
+    if (!d || d.empty) return;
     setDragHoverDay(d);
-  };
+  }, [dragStartDay, days]);
 
-  const handleMouseUp = (d: CalendarDay) => {
-    if (d.empty || !dragStartDay) return;
+  const handleMouseUp = useCallback((e: React.MouseEvent) => {
+    if (!dragStartDay) return;
+    const target = (e.target as HTMLElement).closest('.cal-day') as HTMLElement;
+    let d = null;
+    if (target && target.dataset.day) {
+      d = days.find(day => day.day === parseInt(target.dataset.day!, 10) && !day.empty);
+    }
+    if (!d || d.empty) return;
     if (onDateRangeSelected) {
       const start = dragStartDay.day <= d.day ? dragStartDay : d;
       const end = dragStartDay.day <= d.day ? d : dragStartDay;
@@ -66,12 +83,12 @@ export default function CalendarGrid({ days, year, month, onPrevMonth, onNextMon
     }
     setDragStartDay(null);
     setDragHoverDay(null);
-  };
+  }, [dragStartDay, days, onDateRangeSelected]);
 
-  const sDay = dragStartDay ? dragStartDay.day : -1;
-  const hDay = dragHoverDay ? dragHoverDay.day : -1;
-  const minDay = Math.min(sDay, hDay);
-  const maxDay = Math.max(sDay, hDay);
+  const startDayIndex = dragStartDay ? dragStartDay.day : -1;
+  const hoverDayIndex = dragHoverDay ? dragHoverDay.day : -1;
+  const minDay = Math.min(startDayIndex, hoverDayIndex);
+  const maxDay = Math.max(startDayIndex, hoverDayIndex);
   
   const liveRegionText = dragStartDay && dragHoverDay && minDay > 0
     ? `Selecting from ${MONTH_NAMES[month]} ${minDay} to ${MONTH_NAMES[month]} ${maxDay}`
@@ -83,7 +100,7 @@ export default function CalendarGrid({ days, year, month, onPrevMonth, onNextMon
       aria-label={`${MONTH_NAMES[month]} ${year} calendar`}
       className="cal-calendar"
     >
-      <div aria-live="polite" style={{ position: 'absolute', width: 1, height: 1, padding: 0, margin: -1, overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', border: 0 }}>
+      <div aria-live="polite" className="sr-only">
         {liveRegionText}
       </div>
       <div className="cal-calendar__inner">
@@ -113,6 +130,9 @@ export default function CalendarGrid({ days, year, month, onPrevMonth, onNextMon
           role="grid"
           aria-label="Calendar days"
           className={`cal-grid${slideDir ? ` cal-grid--entering-${slideDir}` : ''}`}
+          onMouseDown={handleMouseDown}
+          onMouseOver={handleMouseEnter}
+          onMouseUp={handleMouseUp}
         >
           {DAY_LABELS.map((label, i) => (
             <div
@@ -135,9 +155,7 @@ export default function CalendarGrid({ days, year, month, onPrevMonth, onNextMon
               <div
                 key={`day-${i}`}
                 role="gridcell"
-                onMouseDown={() => handleMouseDown(d)}
-                onMouseEnter={() => handleMouseEnter(d)}
-                onMouseUp={() => handleMouseUp(d)}
+                data-day={d.empty ? undefined : d.day}
                 aria-label={
                   d.empty
                     ? undefined
