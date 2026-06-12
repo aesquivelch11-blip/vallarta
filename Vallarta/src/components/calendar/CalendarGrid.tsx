@@ -104,8 +104,7 @@ export default function CalendarGrid({ days, year, month, onPrevMonth, onNextMon
         {liveRegionText}
       </div>
       <div className="cal-calendar__inner">
-        <div className="cal-bezel-outer cal-bezel-outer--inline">
-          <div className="cal-bezel-inner">
+        <div className="cal-card cal-card--grid">
             <div className="cal-month-nav">
               <button
                 onClick={onPrevMonth}
@@ -224,7 +223,6 @@ export default function CalendarGrid({ days, year, month, onPrevMonth, onNextMon
             <p className="cal-grid-hint">
               Click and drag dates to create a new reservation.
             </p>
-          </div>
         </div>
       </div>
     </div>

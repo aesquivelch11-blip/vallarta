@@ -19,8 +19,7 @@ export default function BookingList({ bookings, onSelect, onAdd }: BookingListPr
 
   return (
     <div role="region" aria-label="Reservations" className="cal-bookings">
-      <div className="cal-bezel-outer">
-        <div className="cal-bezel-inner cal-bezel-inner--bookings">
+      <div className="cal-card cal-card--bookings">
           <div className="cal-bookings__header">
             <h2 className="cal-bookings__title">Reservations</h2>
             <div className="cal-bookings__header-right">
@@ -92,7 +91,6 @@ export default function BookingList({ bookings, onSelect, onAdd }: BookingListPr
               ))}
             </ul>
           )}
-        </div>
       </div>
     </div>
   );
