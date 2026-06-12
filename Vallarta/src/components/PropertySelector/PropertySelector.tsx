@@ -22,7 +22,7 @@ function getInitialTier(): TierLevel {
   return 'collection';
 }
 
-export default function PropertySelector({ onSelectProperty }: PropertySelectorProps) {
+export default function PropertySelector({ onNavigate, onSelectProperty }: PropertySelectorProps) {
   const [phase, setPhase] = useState<'wordmark' | 'grid' | 'ready'>('wordmark');
   const [tier, setTier] = useState<TierLevel>(getInitialTier);
   const [searchQuery, setSearchQuery] = useState('');
@@ -149,12 +149,13 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.0, 0.0, 0.2, 1] }}
           >
-            <StickyHeader tier={tier} onTierChange={handleTierChange} onSearch={handleSearch} />
+            <StickyHeader tier={tier} onTierChange={handleTierChange} onSearch={handleSearch} onNavigate={onNavigate} />
           </motion.div>
 
           {filteredProperties.length === 0 ? (
             <div className="ps-empty">
               <p className="ps-empty__text">No properties match your search.</p>
+              <p className="ps-empty__subtext">Try adjusting your search terms.</p>
               <button className="ps-empty__cta" onClick={() => handleSearch('')}>
                 Clear search
               </button>
@@ -172,16 +173,15 @@ export default function PropertySelector({ onSelectProperty }: PropertySelectorP
                   selectedId === null
                     ? { opacity: 1, y: 0 }
                     : selectedId === property.id
-                      ? { opacity: 1, y: 0, scale: 1.05 }
-                      : { opacity: 0, filter: 'blur(8px)' }
+                      ? { opacity: 1, y: 0 }
+                      : { opacity: 0.4, filter: 'blur(4px)', y: 4 }
                 }
-                exit={{ opacity: 0, scale: 0.95 }}
+                exit={{ opacity: 0, scale: 0.97 }}
                 transition={{
-                  layout: { duration: 0.6, ease: [0.4, 0.0, 0.2, 1] },
-                  opacity: { duration: 0.8, ease: [0.4, 0.0, 0.2, 1], delay: selectedId === null ? i * 0.08 : 0 },
-                  y: { duration: 0.8, ease: [0.4, 0.0, 0.2, 1], delay: selectedId === null ? i * 0.08 : 0 },
-                  scale: { duration: 0.8, ease: [0.4, 0.0, 0.2, 1] },
-                  filter: { duration: 0.8, ease: [0.4, 0.0, 0.2, 1] },
+                  layout: { duration: 0.5, ease: [0.23, 1, 0.32, 1] },
+                  opacity: { duration: 0.6, ease: [0.23, 1, 0.32, 1], delay: selectedId === null ? i * 0.06 : 0 },
+                  y: { duration: 0.6, ease: [0.23, 1, 0.32, 1], delay: selectedId === null ? i * 0.06 : 0 },
+                  filter: { duration: 0.6, ease: [0.23, 1, 0.32, 1] },
                 }}
               >
                 <PropertyCard

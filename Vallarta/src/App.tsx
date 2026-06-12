@@ -57,6 +57,12 @@ export default function App() {
     setCurrentScreen('nav_menu');
   };
 
+  const handleLogout = () => {
+    setTransitionStyle('push_back');
+    setHistory(['login']);
+    setCurrentScreen('login');
+  };
+
   const handleCloseNavMenu = () => {
     setTransitionStyle('push_back');
     // Go to last history screen that isn't nav_menu or login
@@ -137,6 +143,7 @@ export default function App() {
             <NavMenuView
               onNavigate={(screen, style) => handleNavigate(screen, style)}
               onClose={handleCloseNavMenu}
+              onLogout={handleLogout}
               onNotify={triggerToast}
               previousScreen={navPreviousScreen}
             />

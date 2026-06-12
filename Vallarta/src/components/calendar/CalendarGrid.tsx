@@ -10,6 +10,7 @@ interface CalendarGridProps {
   month: number; // 0-indexed
   onPrevMonth: () => void;
   onNextMonth: () => void;
+  slideDir?: 'next' | 'prev';
 }
 
 function ChevronLeft() {
@@ -28,7 +29,7 @@ function ChevronRight() {
   );
 }
 
-export default function CalendarGrid({ days, year, month, onPrevMonth, onNextMonth }: CalendarGridProps) {
+export default function CalendarGrid({ days, year, month, onPrevMonth, onNextMonth, slideDir }: CalendarGridProps) {
   const hasPending = days.some(d => d.pending);
   const hasOwner = days.some(d => d.ownerStay);
 
@@ -60,7 +61,12 @@ export default function CalendarGrid({ days, year, month, onPrevMonth, onNextMon
           </button>
         </div>
 
-        <div role="grid" aria-label="Calendar days" className="cal-grid">
+        <div
+          key={`${year}-${month}`}
+          role="grid"
+          aria-label="Calendar days"
+          className={`cal-grid${slideDir ? ` cal-grid--entering-${slideDir}` : ''}`}
+        >
           {DAY_LABELS.map((label, i) => (
             <div
               key={`label-${i}`}

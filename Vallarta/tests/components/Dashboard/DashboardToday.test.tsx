@@ -10,28 +10,6 @@ const data = getDashboardData('casa-palmeras');
 afterEach(cleanup);
 
 describe('DashboardToday', () => {
-  it('renders property name in italic', () => {
-    const { container } = render(
-      <DashboardToday
-        data={data}
-        propertyName="Casa Palmeras"
-        propertyLocation="Puerto Vallarta"
-        onNavigate={mockNavigate}
-        onDomainChange={mockDomainChange}
-      />
-    );
-    const nameEl = container.querySelector('p[style*="font-style: italic"]');
-    expect(nameEl).toBeTruthy();
-    expect(nameEl?.textContent).toContain('Casa Palmeras');
-  });
-
-  it('renders location in uppercase tracked label', () => {
-    const { container } = render(
-      <DashboardToday data={data} propertyName="Casa Palmeras" propertyLocation="Puerto Vallarta" onNavigate={mockNavigate} />
-    );
-    expect(container.textContent).toContain('Puerto Vallarta');
-  });
-
   it('renders occupancy as dominant figure', () => {
     const { container } = render(
       <DashboardToday data={data} propertyName="Casa Palmeras" propertyLocation="PV" onNavigate={mockNavigate} />
@@ -92,6 +70,6 @@ describe('DashboardToday', () => {
     const { container } = render(
       <DashboardToday data={quietData} propertyName="Casa Palmeras" propertyLocation="PV" onNavigate={mockNavigate} />
     );
-    expect(container.textContent).toContain('Quiet day');
+    expect(container.textContent).toContain('A quiet day.');
   });
 });

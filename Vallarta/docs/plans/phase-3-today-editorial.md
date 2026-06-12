@@ -1,3 +1,98 @@
+# Phase 3: DashboardToday — Editorial Rewrite
+
+> **For agentic workers:** Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking. Execute phases in order.
+
+**Goal:** Make the Today view feel like an editorial publication — occupancy as the dominant typographic element, staggered motion entrance for each section, no dividers, no property identity block (that now lives in gallery overlay).
+
+**Architecture:** DashboardToday.tsx is completely rewritten. Property name/location block is removed entirely (moved to gallery hero in Phase 1). All horizontal dividers removed — space does the separation work. Occupancy number grows from `clamp(2.5rem, 5vw, 3.5rem)` to `clamp(4.5rem, 9vw, 6.5rem)`. Each section is a `motion.div` with stagger using `custom={index}` + `sectionVariants`. `height: '100%'` + `overflow: 'hidden'` removed — content can scroll naturally (Phase 2 made content area scrollable).
+
+**Tech Stack:** Vite + React 18 + TypeScript, motion/react v12
+
+**Prerequisites:** Phase 1 + Phase 2 complete and committed.
+
+---
+
+## Project Context
+
+### File to rewrite
+`src/components/Dashboard/DashboardToday.tsx`
+
+### What currently exists that changes
+
+| Element | Before | After |
+|---------|--------|-------|
+| Property identity block | Name + location at top, `clamp(1.25rem, 2vw, 1.625rem)` | **REMOVED** — moved to gallery overlay in Phase 1 |
+| Dividers | Two horizontal 1px lines | **REMOVED** — gap-only separation |
+| Occupancy font size | `clamp(2.5rem, 5vw, 3.5rem)` | `clamp(4.5rem, 9vw, 6.5rem)` — MASSIVE |
+| Occupancy font style | Upright roman | Upright roman (keep — only guest names get italic) |
+| Arrivals count font | `clamp(1.5rem, 3vw, 2rem)` | `clamp(1.75rem, 3.5vw, 2.5rem)` |
+| Arrivals empty state | `"No arrivals"` in Instrument Sans | `"A quiet day."` in italic EB Garamond |
+| Departures opacity | `opacity: 0.75` on wrapper | `opacity: 0.55` — more recessive |
+| Departures empty state | `"No departures"` in Instrument Sans | same italic empty state logic |
+| Motion | None | stagger: each section `motion.div custom={i}` |
+| Overflow | `height: '100%', overflow: 'hidden'` | none — natural scroll (Phase 2 owns scrolling) |
+| Gap between sections | `clamp(1.5rem, 3vw, 2.5rem)` | `clamp(2rem, 4vw, 3rem)` |
+
+### Stagger animation pattern (copy exactly)
+
+```typescript
+import { motion } from 'motion/react';
+
+const sectionVariants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.55,
+      delay: i * 0.08,
+      ease: [0.16, 1, 0.3, 1] as const,
+    },
+  }),
+};
+
+// Usage on each section:
+<motion.div
+  variants={sectionVariants}
+  initial="hidden"
+  animate="visible"
+  custom={0}  // 0, 1, 2, 3 for each section
+>
+```
+
+Section stagger order: Occupancy = 0, Arrivals = 1, Departures = 2, Nav links = 3
+
+### Imports needed
+```typescript
+import React from 'react';
+import { motion } from 'motion/react';
+import { ArrowRight } from 'lucide-react';
+import { ScreenType } from '../../types';
+import { Domain } from './DashboardDomainNav';
+import { DashboardData, formatTrendPercent, getTrendDirection } from './dashboardData';
+```
+
+### Props interface (unchanged)
+```typescript
+interface DashboardTodayProps {
+  data: DashboardData;
+  propertyName: string;
+  propertyLocation: string;
+  onNavigate: (screen: ScreenType, style: 'push' | 'push_back' | 'slide_up') => void;
+  onDomainChange?: (domain: Domain) => void;
+}
+```
+Keep `propertyName` + `propertyLocation` in props — DashboardView still passes them even though Today no longer displays them. Removing from props would require updating DashboardView call sites — unnecessary churn.
+
+---
+
+## Task 1: Rewrite DashboardToday.tsx
+
+- [ ] **Step 1: Replace the entire file content**
+
+Write `src/components/Dashboard/DashboardToday.tsx` with exactly this content:
+
+```typescript
 import React from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
@@ -28,7 +123,7 @@ const sectionVariants = {
 
 const labelStyle: React.CSSProperties = {
   fontFamily: 'var(--font-ui)',
-  fontSize: '0.6875rem',
+  fontSize: '0.5625rem',
   fontWeight: 500,
   letterSpacing: '0.28em',
   textTransform: 'uppercase',
@@ -64,6 +159,7 @@ export default function DashboardToday({
         gap: 'clamp(2rem, 4vw, 3rem)',
       }}
     >
+      {/* Occupancy — dominant typographic anchor of the view */}
       <motion.div variants={sectionVariants} initial="hidden" animate="visible" custom={0}>
         <p
           style={{
@@ -84,7 +180,7 @@ export default function DashboardToday({
             <p
               style={{
                 fontFamily: 'var(--font-ui)',
-  fontSize: '0.6875rem',
+                fontSize: '0.5625rem',
                 fontWeight: 500,
                 letterSpacing: '0.10em',
                 textTransform: 'uppercase',
@@ -104,6 +200,7 @@ export default function DashboardToday({
         </div>
       </motion.div>
 
+      {/* Arrivals */}
       <motion.div variants={sectionVariants} initial="hidden" animate="visible" custom={1}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px' }}>
           <p
@@ -148,7 +245,7 @@ export default function DashboardToday({
                 <span
                   style={{
                     fontFamily: 'var(--font-ui)',
-                    fontSize: '0.6875rem',
+                    fontSize: '0.625rem',
                     fontStyle: 'normal',
                     fontWeight: 400,
                     letterSpacing: '0.12em',
@@ -183,7 +280,7 @@ export default function DashboardToday({
           <p
             style={{
               fontFamily: 'var(--font-ui)',
-              fontSize: '0.6875rem',
+              fontSize: '0.625rem',
               fontWeight: 400,
               letterSpacing: '0.06em',
               color: 'var(--color-ink-muted)',
@@ -197,11 +294,13 @@ export default function DashboardToday({
         )}
       </motion.div>
 
+      {/* Departures — recessive, lower opacity */}
       <motion.div
         variants={sectionVariants}
         initial="hidden"
         animate="visible"
         custom={2}
+        style={{ opacity: 0.55 }}
       >
         <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px' }}>
           <p
@@ -216,7 +315,7 @@ export default function DashboardToday({
           >
             {departuresToday.length}
           </p>
-          <p style={{ ...labelStyle, fontSize: '0.6875rem' }}>Departing</p>
+          <p style={{ ...labelStyle, fontSize: '0.5rem' }}>Departing</p>
         </div>
 
         {departuresToday.length > 0 && (
@@ -245,7 +344,7 @@ export default function DashboardToday({
                 <span
                   style={{
                     fontFamily: 'var(--font-ui)',
-                    fontSize: '0.6875rem',
+                    fontSize: '0.625rem',
                     fontWeight: 400,
                     letterSpacing: '0.12em',
                     textTransform: 'uppercase',
@@ -279,7 +378,7 @@ export default function DashboardToday({
           <p
             style={{
               fontFamily: 'var(--font-ui)',
-              fontSize: '0.6875rem',
+              fontSize: '0.625rem',
               fontWeight: 400,
               letterSpacing: '0.06em',
               color: 'var(--color-ink-muted)',
@@ -293,6 +392,7 @@ export default function DashboardToday({
         )}
       </motion.div>
 
+      {/* Quiet day — only when truly nothing happening */}
       {quietDay && (
         <motion.div variants={sectionVariants} initial="hidden" animate="visible" custom={1}>
           <p
@@ -311,6 +411,7 @@ export default function DashboardToday({
         </motion.div>
       )}
 
+      {/* Navigation links */}
       <motion.div
         variants={sectionVariants}
         initial="hidden"
@@ -326,7 +427,7 @@ export default function DashboardToday({
             alignItems: 'center',
             gap: '6px',
             fontFamily: 'var(--font-ui)',
-            fontSize: '0.6875rem',
+            fontSize: '0.5625rem',
             fontWeight: 500,
             letterSpacing: '0.22em',
             textTransform: 'uppercase',
@@ -348,7 +449,7 @@ export default function DashboardToday({
               alignItems: 'center',
               gap: '6px',
               fontFamily: 'var(--font-ui)',
-              fontSize: '0.6875rem',
+              fontSize: '0.5625rem',
               fontWeight: 500,
               letterSpacing: '0.22em',
               textTransform: 'uppercase',
@@ -366,3 +467,53 @@ export default function DashboardToday({
     </div>
   );
 }
+```
+
+- [ ] **Step 2: Verify TypeScript compiles cleanly**
+
+```bash
+npx tsc --noEmit 2>&1
+```
+
+Expected: No output.
+
+- [ ] **Step 3: Start dev server and visually verify**
+
+```bash
+npm run dev
+```
+
+Navigate to Dashboard → Today tab.
+
+- [ ] Occupancy percentage is massive — roughly 4-6× bigger than before, dominant presence
+- [ ] No property name/location block at top — removed
+- [ ] No horizontal divider lines — pure whitespace separation between sections
+- [ ] Sections animate in with stagger: occupancy first, then arrivals slightly after, departures after that, nav last
+- [ ] Arrivals: guest names in italic EB Garamond
+- [ ] Departures section visibly more recessive (opacity 0.55)
+- [ ] If no arrivals AND no departures: single italic `"A quiet day."` renders instead of both section empty states
+- [ ] Page scrolls if content overflows (no `height: 100%, overflow: hidden`)
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add src/components/Dashboard/DashboardToday.tsx
+git commit -m "feat(today): editorial rewrite — dominant occupancy, stagger motion, no dividers"
+```
+
+---
+
+## Expected Visual Outcome
+
+| Before | After |
+|--------|-------|
+| Property name + location block at top | Removed — gallery overlay owns this |
+| Two horizontal divider lines | Zero dividers — gap separation only |
+| Occupancy: `clamp(2.5rem, 5vw, 3.5rem)` | Occupancy: `clamp(4.5rem, 9vw, 6.5rem)` — editorial anchor |
+| No motion on any elements | Staggered entrance: each section 0.08s offset |
+| `"No arrivals"` in Instrument Sans | `"A quiet day."` in italic EB Garamond |
+| Departures opacity: `0.75` | Departures opacity: `0.55` — properly recessive |
+
+---
+
+**Proceed to Phase 4** (`phase-4-financials-editorial.md`) once this commit is verified.

@@ -68,6 +68,15 @@ describe('PropertyCard', () => {
     expect(container.textContent).toContain('Marina Vallarta');
   });
 
+  it('renders property type label', () => {
+    const { container } = render(
+      <PropertyCard property={mockProperty} onSelect={() => {}} index={0} tier="gallery" />
+    );
+    expect(container.textContent).toContain('Oceanfront');
+    const typeEl = container.querySelector('.ps-card__type');
+    expect(typeEl).toBeInTheDocument();
+  });
+
   it('renders occupancy status label', () => {
     const { container } = render(
       <PropertyCard property={mockProperty} onSelect={() => {}} index={0} tier="gallery" />

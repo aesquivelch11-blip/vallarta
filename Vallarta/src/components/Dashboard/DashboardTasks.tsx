@@ -109,11 +109,11 @@ export default function DashboardTasks({ data, onNavigate }: DashboardTasksProps
                 <p
                   style={{
                     fontFamily: 'var(--font-ui)',
-                    fontSize: '0.8125rem',
+                    fontSize: '0.9375rem',
                     fontWeight: 400,
                     color: 'var(--color-ink)',
                     margin: 0,
-                    lineHeight: 1.35,
+                    lineHeight: 1.4,
                   }}
                 >
                   {task.description}
@@ -121,13 +121,12 @@ export default function DashboardTasks({ data, onNavigate }: DashboardTasksProps
                 <p
                   style={{
                     fontFamily: 'var(--font-ui)',
-                    fontSize: '0.5625rem',
+                    fontSize: '0.6875rem',
                     fontWeight: task.status === 'urgent' ? 600 : 400,
                     letterSpacing: '0.14em',
                     textTransform: 'uppercase',
                     color: statusColor[task.status],
                     margin: 0,
-                    opacity: task.status === 'urgent' ? 1 : 0.7,
                   }}
                 >
                   {statusLabel[task.status]}

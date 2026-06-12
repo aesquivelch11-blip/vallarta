@@ -13,7 +13,7 @@ const testImages = [
 describe('DashboardGallery', () => {
   it('renders the first image', () => {
     const { container } = render(
-      <DashboardGallery images={testImages} propertyId="casa-del-sol" propertyName="Casa del Sol" />
+      <DashboardGallery images={testImages} propertyId="casa-del-sol" propertyName="Casa del Sol" propertyLocation="Puerto Vallarta, Jalisco" />
     );
     const img = container.querySelector('img');
     expect(img).toBeInTheDocument();
@@ -22,14 +22,14 @@ describe('DashboardGallery', () => {
 
   it('renders image counter when multiple images', () => {
     const { container } = render(
-      <DashboardGallery images={testImages} propertyId="casa-del-sol" propertyName="Casa del Sol" />
+      <DashboardGallery images={testImages} propertyId="casa-del-sol" propertyName="Casa del Sol" propertyLocation="Puerto Vallarta, Jalisco" />
     );
-    expect(container.textContent).toContain('01 / 03');
+    expect(container.textContent).toContain('01/03');
   });
 
   it('renders empty state when no images', () => {
     const { container } = render(
-      <DashboardGallery images={[]} propertyId="casa-del-sol" propertyName="Casa del Sol" />
+      <DashboardGallery images={[]} propertyId="casa-del-sol" propertyName="Casa del Sol" propertyLocation="Puerto Vallarta, Jalisco" />
     );
     const img = container.querySelector('img');
     expect(img).not.toBeInTheDocument();
@@ -37,14 +37,14 @@ describe('DashboardGallery', () => {
 
   it('renders no counter when single image', () => {
     const { container } = render(
-      <DashboardGallery images={['/single.jpg']} propertyId="casa-del-sol" propertyName="Casa del Sol" />
+      <DashboardGallery images={['/single.jpg']} propertyId="casa-del-sol" propertyName="Casa del Sol" propertyLocation="Puerto Vallarta, Jalisco" />
     );
     expect(container.textContent).not.toContain('/');
   });
 
   it('outer container is not aria-hidden', () => {
     const { container } = render(
-      <DashboardGallery images={testImages} propertyId="casa-del-sol" propertyName="Casa del Sol" />
+      <DashboardGallery images={testImages} propertyId="casa-del-sol" propertyName="Casa del Sol" propertyLocation="Puerto Vallarta, Jalisco" />
     );
     const outer = container.firstElementChild;
     expect(outer?.getAttribute('aria-hidden')).not.toBe('true');

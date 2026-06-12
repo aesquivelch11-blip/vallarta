@@ -23,7 +23,7 @@ export default function TrendBadge({ value, direction }: TrendBadgeProps) {
         alignItems: 'center',
         gap: '3px',
         fontFamily: 'var(--font-ui)',
-        fontSize: '0.5625rem',
+        fontSize: '0.6875rem',
         fontWeight: 500,
         letterSpacing: '0.10em',
         color: trendColors[direction],

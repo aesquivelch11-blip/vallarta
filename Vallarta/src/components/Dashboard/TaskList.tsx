@@ -8,7 +8,7 @@ interface TaskListProps {
 
 const labelStyle: React.CSSProperties = {
   fontFamily: 'var(--font-ui)',
-  fontSize: '0.5625rem',
+  fontSize: '0.6875rem',
   fontWeight: 500,
   letterSpacing: '0.28em',
   textTransform: 'uppercase',
@@ -17,11 +17,11 @@ const labelStyle: React.CSSProperties = {
   lineHeight: 1,
 };
 
-// Status drives opacity only — no badges, no border accents
-const opacityByStatus: Record<DashboardTask['status'], number> = {
-  urgent: 1,
-  pending: 0.6,
-  scheduled: 0.4,
+// Status drives visual weight via color, not opacity
+const colorByStatus: Record<DashboardTask['status'], string> = {
+  urgent: 'var(--color-task-urgent)',
+  pending: 'var(--color-ink)',
+  scheduled: 'var(--color-ink-secondary)',
 };
 
 export default function TaskList({ tasks }: TaskListProps) {
@@ -85,7 +85,7 @@ export default function TaskList({ tasks }: TaskListProps) {
           <motion.li
             key={task.id}
             initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: opacityByStatus[task.status], y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{
               duration: 0.28,
               delay: i * 0.055,
@@ -104,15 +104,15 @@ export default function TaskList({ tasks }: TaskListProps) {
             }}
           >
             {/* Left: description + assignee */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', flex: 1 }}>
               <p
                 style={{
                   fontFamily: 'var(--font-ui)',
                   fontSize: '0.9375rem',
                   fontWeight: 400,
-                  color: 'var(--color-ink)',
+                  color: colorByStatus[task.status],
                   margin: 0,
-                  lineHeight: 1.3,
+                  lineHeight: 1.4,
                 }}
               >
                 {task.description}
@@ -120,7 +120,7 @@ export default function TaskList({ tasks }: TaskListProps) {
               <p
                 style={{
                   fontFamily: 'var(--font-ui)',
-                  fontSize: '0.625rem',
+                  fontSize: '0.6875rem',
                   fontWeight: 400,
                   letterSpacing: '0.08em',
                   textTransform: 'uppercase',
@@ -137,7 +137,7 @@ export default function TaskList({ tasks }: TaskListProps) {
               <p
                 style={{
                   fontFamily: 'var(--font-ui)',
-                  fontSize: '0.625rem',
+                  fontSize: '0.6875rem',
                   fontWeight: task.status === 'urgent' ? 500 : 400,
                   letterSpacing: '0.08em',
                   textTransform: 'uppercase',

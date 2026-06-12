@@ -50,21 +50,25 @@ export default function NavImagePanel({ items, activeIndex, direction = 'next' }
     setPrevLayer(currentLayer);
     setPhase('exiting');
 
+    // First RAF: paint the layer at its clipped "from" position
     rafId.current = requestAnimationFrame(() => {
       setCurrentLayer(activeIndex);
       setPhase('entering');
 
-      timers.current.push(
-        window.setTimeout(() => {
-          setPhase('enter-done');
-          timers.current.push(
-            window.setTimeout(() => {
-              setPrevLayer(null);
-              setPhase('idle');
-            }, 250),
-          );
-        }, 550), // increased from 310 to match longer clip-path transition
-      );
+      // Second RAF: browser has now committed the entering (clipped) frame.
+      // Setting enter-done here gives the CSS transition a real start state
+      // to interpolate from — without this, both state changes collapse into
+      // one render and the clip-path snaps instead of wiping.
+      rafId.current = requestAnimationFrame(() => {
+        setPhase('enter-done');
+
+        timers.current.push(
+          window.setTimeout(() => {
+            setPrevLayer(null);
+            setPhase('idle');
+          }, 300), // 250ms transition + 50ms buffer
+        );
+      });
     });
 
     return () => {
@@ -82,7 +86,13 @@ export default function NavImagePanel({ items, activeIndex, direction = 'next' }
     const isPrev = layer === 'prev';
 
     let layerClass = 'nav-image-layer';
-    if (isPrev && (phase === 'exiting' || phase === 'entering' || phase === 'enter-done')) {
+    // Apply exiting to the CURRENT element during exiting phase so React reuses
+    // the existing DOM node (same key) instead of mounting a fresh node — this
+    // is what allows the idle→exiting transition to fire.
+    if (isCurrent && phase === 'exiting') {
+      layerClass += ' nav-image-exiting';
+    }
+    if (isPrev && (phase === 'entering' || phase === 'enter-done')) {
       layerClass += ' nav-image-exiting';
     }
     if (isCurrent && phase === 'entering') {
@@ -93,7 +103,15 @@ export default function NavImagePanel({ items, activeIndex, direction = 'next' }
     }
 
     return (
-      <div key={`${layer}-${index}`} className={layerClass} data-direction={transitionDirection}>
+      <div
+        key={index}
+        className={layerClass}
+        data-direction={transitionDirection}
+        // Explicit z-index keeps stacking order unambiguous inside the
+        // will-change compositing context: prev stays below current
+        // so the wipe reveals the new image on top.
+        style={{ zIndex: isCurrent ? 2 : 1 }}
+      >
         <picture>
           <source srcSet={item.imageWebp} type="image/webp" />
           <img

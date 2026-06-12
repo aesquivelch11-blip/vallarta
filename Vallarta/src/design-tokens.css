@@ -367,7 +367,7 @@
     inset: 0;
     width: 100%;
     height: 100%;
-    will-change: transform, opacity, filter;
+    will-change: opacity, filter, transform;
 }
 
 .nav-image-layer img {
@@ -397,61 +397,49 @@
     to   { transform: scale(1.04); }
 }
 
-/* ── Nav Menu — clip-path directional wipe ── */
+/* ── Nav Menu — blur crossfade ── */
+/* Emil Kowalski: "Without blur, you see two distinct objects during a crossfade.
+   Blur bridges the visual gap, tricking the eye into perceiving a single smooth
+   transformation." A geometric clip-path wipe cuts a hard edge across the scene —
+   wrong for photography. Blur + opacity dissolve makes the scene itself feel like
+   it's shifting, not two images swapping. Duration stays under 300ms per Emil's UI
+   animation guidelines. */
+
+/* Base: idle state — sharp and fully opaque */
 .nav-image-layer {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    will-change: clip-path, opacity;
-    transition: clip-path 450ms cubic-bezier(0.77, 0, 0.175, 1),
-                opacity 250ms cubic-bezier(0.23, 1, 0.32, 1) 200ms;
-}
-
-/* Exiting: wipe away in the direction of travel */
-.nav-image-layer.nav-image-exiting[data-direction="next"] {
-    clip-path: inset(0 100% 0 0);
-    opacity: 0;
-}
-.nav-image-layer.nav-image-exiting[data-direction="prev"] {
-    clip-path: inset(0 0 0 100%);
-    opacity: 0;
-}
-
-/* Entering: reveal from the opposite direction */
-.nav-image-layer.nav-image-entering[data-direction="next"] {
-    clip-path: inset(0 0 0 100%);
-    opacity: 0;
-    transition: clip-path 550ms cubic-bezier(0.23, 1, 0.32, 1),
-                opacity 400ms cubic-bezier(0.23, 1, 0.32, 1) 100ms;
-}
-.nav-image-layer.nav-image-entering[data-direction="prev"] {
-    clip-path: inset(0 100% 0 0);
-    opacity: 0;
-    transition: clip-path 550ms cubic-bezier(0.23, 1, 0.32, 1),
-                opacity 400ms cubic-bezier(0.23, 1, 0.32, 1) 100ms;
-}
-
-.nav-image-layer.nav-image-enter-done[data-direction="next"],
-.nav-image-layer.nav-image-enter-done[data-direction="prev"] {
-    clip-path: inset(0 0 0 0);
     opacity: 1;
+    filter: blur(0px);
+    transform: scale(1);
 }
 
-/* Default (no direction specified): fallback to center wipe */
+/* Exiting: scene softens and recedes as it dissolves */
 .nav-image-layer.nav-image-exiting {
-    clip-path: inset(0 50% 0 50%);
     opacity: 0;
+    filter: blur(4px);
+    transform: scale(1.02);
+    transition: opacity   200ms ease,
+                filter    200ms ease,
+                transform 250ms cubic-bezier(0.23, 1, 0.32, 1);
 }
+
+/* Entering start: pre-blurred, invisible — no transition so the browser
+   paints this exact frame before enter-done fires (double-RAF guarantees it) */
 .nav-image-layer.nav-image-entering {
-    clip-path: inset(0 50% 0 50%);
     opacity: 0;
-    transition: clip-path 550ms cubic-bezier(0.23, 1, 0.32, 1),
-                opacity 400ms cubic-bezier(0.23, 1, 0.32, 1) 100ms;
+    filter: blur(4px);
+    transform: scale(0.95);
+    transition: none;
 }
+
+/* Enter done: sharpens and arrives — mirrors the exit curve so the eye reads
+   one continuous blur-through rather than two separate events */
 .nav-image-layer.nav-image-enter-done {
-    clip-path: inset(0 0 0 0);
     opacity: 1;
+    filter: blur(0px);
+    transform: scale(1);
+    transition: opacity   200ms ease,
+                filter    200ms ease,
+                transform 250ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 /* ── Nav Menu — image loading skeleton ── */
@@ -635,15 +623,12 @@
     text-shadow: 0 2px 32px rgba(14, 26, 34, 0.55);
 }
 
-/* ── Nav Menu — editorial title clip-path reveal ── */
-.nav-editorial-heading {
-    clip-path: inset(100% 0 0 0);
-    transition: clip-path 500ms cubic-bezier(0.23, 1, 0.32, 1) 80ms;
-}
+/* ── Nav Menu — editorial title reveal ── */
+/* The entry animation is handled by navTitleIn on the .nav-editorial-title
+   wrapper (opacity + translateY). No clip-path or mask is needed on the
+   heading — clip-path was causing a stacking context that boxed in the
+   text-shadow, producing a dark-rectangle artifact behind the text. */
 
-.nav-editorial-heading.nav-title-entered {
-    clip-path: inset(0 0 0 0);
-}
 
 /* ── Nav Menu — mobile ── */
 @media (max-width: 767px) {
@@ -849,7 +834,17 @@ body {
     background: transparent;
     color: var(--color-ink-secondary);
     cursor: pointer;
-    transition: all var(--duration-fast) var(--ease-out-expo);
+    transition:
+        background var(--duration-fast) var(--ease-out-expo),
+        color var(--duration-fast) var(--ease-out-expo),
+        border-color var(--duration-fast) var(--ease-out-expo),
+        transform var(--duration-fast) var(--ease-out-expo),
+        box-shadow var(--duration-fast) var(--ease-out-expo);
+}
+
+.btn:active {
+    transform: scale(0.97);
+    transition-duration: 80ms;
 }
 
 .btn:hover {
@@ -1178,9 +1173,14 @@ body {
     cursor: pointer;
     z-index: 10;
     transition:
-        color 250ms ease,
-        transform 250ms ease;
+        color 220ms var(--ease-out-expo),
+        transform 200ms var(--ease-out-expo);
     padding: 0;
+}
+
+.hero__arrow:active {
+    transform: translateY(-50%) scale(0.88);
+    transition-duration: 80ms;
 }
 
 .hero__arrow--prev {
@@ -1852,7 +1852,12 @@ body::before {
     border: none;
     color: #ffffff;
     padding: 4px 0;
-    transition: opacity 0.2s ease;
+    transition: opacity 200ms var(--ease-out-expo), transform 160ms var(--ease-out-expo);
+}
+
+.cal-nav__brand:active {
+    transform: scale(0.96);
+    transition-duration: 80ms;
 }
 
 .cal-nav__brand:hover {
@@ -1964,7 +1969,7 @@ body::before {
     cursor: default;
     color: #ffffff;
     border-radius: 0;
-    transition: color 0.3s ease;
+    transition: color 220ms var(--ease-out-expo);
 }
 
 .cal-day--booked {
@@ -2069,14 +2074,20 @@ body::before {
     justify-content: center;
     cursor: pointer;
     transition:
-        background 0.2s ease,
-        border-color 0.2s ease;
+        background 200ms var(--ease-out-expo),
+        border-color 200ms var(--ease-out-expo),
+        transform 160ms var(--ease-out-expo);
     flex-shrink: 0;
 }
 
 .cal-add-btn:hover {
     background: rgba(201, 184, 160, 0.1);
     border-color: rgba(201, 184, 160, 0.6);
+}
+
+.cal-add-btn:active {
+    transform: scale(0.88);
+    transition-duration: 80ms;
 }
 
 .cal-add-btn:focus-visible {
@@ -2107,10 +2118,10 @@ body::before {
     padding: clamp(14px, 2vh, 18px) 0;
     border-bottom: 1px solid var(--cal-row-border);
     transition:
-        background 0.4s ease,
-        margin 0.4s ease,
-        padding 0.4s ease,
-        border-radius 0.4s ease;
+        background 350ms cubic-bezier(0.22, 1, 0.36, 1),
+        margin 350ms cubic-bezier(0.22, 1, 0.36, 1),
+        padding 350ms cubic-bezier(0.22, 1, 0.36, 1),
+        border-radius 350ms cubic-bezier(0.22, 1, 0.36, 1);
     cursor: pointer;
     border-radius: 8px;
 }
@@ -2184,25 +2195,40 @@ body::before {
 }
 
 .cal-month-nav__arrow {
-    font-size: 1.25rem;
-    color: rgba(255, 255, 255, 0.6);
-    background: none;
-    border: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    padding: 4px 8px;
-    transition: color 0.2s ease;
-    line-height: 1;
     align-self: center;
+    flex-shrink: 0;
+    transition:
+        border-color 200ms var(--ease-out-expo),
+        background 200ms var(--ease-out-expo),
+        color 200ms var(--ease-out-expo),
+        transform 160ms var(--ease-out-expo);
 }
 
 .cal-month-nav__arrow:hover {
+    border-color: rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.09);
     color: #ffffff;
+}
+
+.cal-month-nav__arrow:active {
+    transform: scale(0.86);
+    transition-duration: 80ms;
 }
 
 .cal-month-nav__arrow:focus-visible {
     outline: 2px solid rgba(255, 255, 255, 0.5);
-    outline-offset: 4px;
-    border-radius: 2px;
+    outline-offset: 3px;
+    border-radius: 50%;
 }
 
 /* ─── Booking row variants ─── */
@@ -2259,8 +2285,14 @@ body::before {
     padding: 8px 20px;
     cursor: pointer;
     transition:
-        border-color 0.2s ease,
-        color 0.2s ease;
+        border-color 200ms var(--ease-out-expo),
+        color 200ms var(--ease-out-expo),
+        transform 160ms var(--ease-out-expo);
+}
+
+.cal-bookings__empty-cta:active {
+    transform: scale(0.96);
+    transition-duration: 80ms;
 }
 
 .cal-bookings__empty-cta:focus-visible {
@@ -2350,8 +2382,15 @@ body::before {
     border: none;
     cursor: pointer;
     padding: 8px 4px;
-    transition: color 0.2s ease;
+    transition:
+        color 200ms var(--ease-out-expo),
+        transform 160ms var(--ease-out-expo);
     align-self: center;
+}
+
+.cal-drawer-btn--cancel-link:active {
+    transform: scale(0.95);
+    transition-duration: 80ms;
 }
 
 .cal-drawer-btn--cancel-link:hover {
@@ -2390,7 +2429,9 @@ body::before {
     font-size: 0.875rem;
     color: #ffffff;
     outline: none;
-    transition: border-color 0.2s ease;
+    transition:
+        border-color 200ms var(--ease-out-expo),
+        box-shadow 200ms var(--ease-out-expo);
 }
 
 .cal-drawer-input:focus {
@@ -2421,10 +2462,16 @@ body::before {
     border: none;
     cursor: pointer;
     transition:
-        background 0.2s ease,
-        color 0.2s ease;
+        background 200ms var(--ease-out-expo),
+        color 200ms var(--ease-out-expo),
+        transform 160ms var(--ease-out-expo);
     color: rgba(255, 255, 255, 0.5);
     background: transparent;
+}
+
+.cal-drawer-toggle__option:active {
+    transform: scale(0.97);
+    transition-duration: 80ms;
 }
 
 .cal-drawer-toggle__option--active {
@@ -2442,12 +2489,19 @@ body::before {
     border-radius: 999px;
     border: none;
     cursor: pointer;
-    transition: opacity 0.2s ease;
+    transition:
+        opacity 200ms var(--ease-out-expo),
+        transform 160ms var(--ease-out-expo);
     flex: 1;
 }
 
 .cal-drawer-btn:hover {
     opacity: 0.85;
+}
+
+.cal-drawer-btn:active {
+    transform: scale(0.96);
+    transition-duration: 80ms;
 }
 
 .cal-drawer-btn--confirm {
@@ -2499,6 +2553,44 @@ body::before {
     letter-spacing: 0.1em;
 }
 
+/* ─── Calendar month slide ─── */
+@keyframes calMonthSlideInFromRight {
+    from { opacity: 0; transform: translateX(20px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes calMonthSlideInFromLeft {
+    from { opacity: 0; transform: translateX(-20px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+.cal-grid--entering-next {
+    animation: calMonthSlideInFromRight 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.cal-grid--entering-prev {
+    animation: calMonthSlideInFromLeft 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ─── Booking row stagger ─── */
+@keyframes bookingRowIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.cal-booking-row:not(.cal-booking-row--cancelled) {
+    animation: bookingRowIn 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.cal-bookings__list > li:nth-child(1)  { animation-delay: 920ms; }
+.cal-bookings__list > li:nth-child(2)  { animation-delay: 970ms; }
+.cal-bookings__list > li:nth-child(3)  { animation-delay: 1020ms; }
+.cal-bookings__list > li:nth-child(4)  { animation-delay: 1070ms; }
+.cal-bookings__list > li:nth-child(5)  { animation-delay: 1120ms; }
+.cal-bookings__list > li:nth-child(6)  { animation-delay: 1170ms; }
+.cal-bookings__list > li:nth-child(7)  { animation-delay: 1220ms; }
+.cal-bookings__list > li:nth-child(8)  { animation-delay: 1270ms; }
+
 /* ─── Calendar Responsive ─── */
 @media (max-width: 400px) {
     .cal-grid {
@@ -2525,8 +2617,22 @@ body::before {
     .cal-day,
     .cal-booking-row,
     .cal-nav__brand,
-    .hero__arrow {
+    .hero__arrow,
+    .cal-month-nav__arrow,
+    .cal-add-btn,
+    .cal-drawer-btn,
+    .cal-drawer-toggle__option,
+    .cal-drawer-btn--cancel-link,
+    .cal-bookings__empty-cta {
         transition: none;
+    }
+
+    .cal-grid--entering-next,
+    .cal-grid--entering-prev,
+    .cal-booking-row:not(.cal-booking-row--cancelled) {
+        animation: none;
+        opacity: 1;
+        transform: none;
     }
 }
 

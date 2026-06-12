@@ -5,12 +5,17 @@ interface DashboardGalleryProps {
   images: string[];
   propertyId: string;
   propertyName: string;
+  propertyLocation: string;
 }
 
-export default function DashboardGallery({ images, propertyId, propertyName }: DashboardGalleryProps) {
+export default function DashboardGallery({
+  images,
+  propertyId,
+  propertyName,
+  propertyLocation,
+}: DashboardGalleryProps) {
   const shouldReduceMotion = useReducedMotion();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const directionRef = useRef(0);
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
 
@@ -18,25 +23,19 @@ export default function DashboardGallery({ images, propertyId, propertyName }: D
 
   const goNext = useCallback(() => {
     if (total <= 1) return;
-    directionRef.current = 1;
-    setCurrentIndex(prev => (prev + 1) % total);
+    setCurrentIndex((prev) => (prev + 1) % total);
   }, [total]);
 
   const goPrev = useCallback(() => {
     if (total <= 1) return;
-    directionRef.current = -1;
-    setCurrentIndex(prev => (prev - 1 + total) % total);
+    setCurrentIndex((prev) => (prev - 1 + total) % total);
   }, [total]);
 
   const handleFrameClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (total <= 1) return;
     const { left, width } = e.currentTarget.getBoundingClientRect();
-    const clickX = e.clientX - left;
-    if (clickX >= width / 2) {
-      goNext();
-    } else {
-      goPrev();
-    }
+    if (e.clientX - left >= width / 2) goNext();
+    else goPrev();
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -63,80 +62,80 @@ export default function DashboardGallery({ images, propertyId, propertyName }: D
     );
   }
 
-  const slideVariants = shouldReduceMotion
+  const imageVariants = shouldReduceMotion
     ? {
         initial: { opacity: 0 },
-        animate: { opacity: 1 },
-        exit: { opacity: 0 },
+        animate: { opacity: 1, transition: { duration: 0.25 } },
+        exit: { opacity: 0, transition: { duration: 0.2 } },
       }
     : {
-        initial: (dir: number) => ({ x: `${dir * 100}%`, opacity: 0 }),
-        animate: { x: '0%', opacity: 1 },
-        exit: (dir: number) => ({ x: `${dir * -100}%`, opacity: 0 }),
+        initial: { opacity: 0, scale: 1.04 },
+        animate: {
+          opacity: 1,
+          scale: 1,
+          transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as const },
+        },
+        exit: {
+          opacity: 0,
+          scale: 0.98,
+          transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] as const },
+        },
       };
 
-  const counter = `${String(currentIndex + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+  const counterCurrent = String(currentIndex + 1).padStart(2, '0');
+  const counterTotal = String(total).padStart(2, '0');
 
   return (
     <div
-      className="w-full h-full flex items-stretch"
+      className="w-full h-full"
       role="region"
-      aria-label={propertyName}
+      aria-label={`${propertyName} gallery`}
       style={{
-        background: 'var(--color-canvas)',
-        padding: 'clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 3vw, 2.5rem) 0.75rem clamp(1rem, 2vw, 1.75rem)',
+        position: 'relative',
+        overflow: 'hidden',
         touchAction: 'pan-y',
+        cursor: total > 1 ? 'pointer' : 'default',
+        background: '#111',
       }}
+      onClick={handleFrameClick}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      <div
-        className="relative w-full h-full overflow-hidden"
-        onClick={handleFrameClick}
-        style={{ cursor: total > 1 ? 'pointer' : 'default', borderRadius: '4px' }}
-      >
-        <AnimatePresence custom={directionRef.current} mode="wait">
-          <motion.img
-            key={currentIndex}
-            layoutId={`property-image-${propertyId}`}
-            src={images[currentIndex]}
-            alt=""
-            className="absolute inset-0 w-full h-full"
-            style={{ objectFit: 'cover', objectPosition: 'center' }}
-            custom={directionRef.current}
-            variants={slideVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={
-              shouldReduceMotion
-                ? { duration: 0.2 }
-                : { duration: 0.28, ease: [0.16, 1, 0.3, 1] }
-            }
-          />
-        </AnimatePresence>
+      <AnimatePresence mode="sync">
+        <motion.img
+          key={`${propertyId}-${currentIndex}`}
+          src={images[currentIndex]}
+          alt=""
+          className="cinematic-grade"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center',
+          }}
+          variants={imageVariants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+        />
+      </AnimatePresence>
 
-        {total > 1 && (
-          <span
-            style={{
-              position: 'absolute',
-              bottom: '10px',
-              right: '12px',
-              fontFamily: 'var(--font-ui)',
-              fontSize: '0.625rem',
-              fontWeight: 500,
-              letterSpacing: '0.20em',
-              textTransform: 'uppercase',
-              color: 'rgba(255,255,255,0.55)',
-              pointerEvents: 'none',
-              userSelect: 'none',
-              zIndex: 4,
-            }}
-          >
-            {counter}
-          </span>
-        )}
+      <div className="hero__gradient" aria-hidden="true" />
+
+      <div className="hero__identity" aria-hidden="true">
+        <p className="hero__property-name">{propertyName}</p>
+        <p className="hero__property-location">{propertyLocation}</p>
       </div>
+
+      {total > 1 && (
+        <div className="hero__counter" aria-hidden="true">
+          <span className="hero__counter-current">{counterCurrent}</span>
+          <span className="hero__counter-sep">/</span>
+          <span className="hero__counter-total">{counterTotal}</span>
+        </div>
+      )}
     </div>
   );
 }

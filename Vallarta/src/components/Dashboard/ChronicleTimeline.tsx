@@ -40,7 +40,7 @@ export default function ChronicleTimeline({ events }: ChronicleTimelineProps) {
           <p
             style={{
               fontFamily: 'var(--font-ui)',
-              fontSize: '0.5625rem',
+              fontSize: '0.6875rem',
               fontWeight: 400,
               letterSpacing: '0.06em',
               color: 'var(--color-ink-muted)',

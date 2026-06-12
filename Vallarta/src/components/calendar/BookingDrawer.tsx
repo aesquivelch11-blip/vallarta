@@ -189,7 +189,12 @@ export default function BookingDrawer({
             {mode === 'view' && booking ? (
               /* ── View Mode ── */
               <>
-                <div className="flex flex-col gap-1.5">
+                <motion.div
+                  className="flex flex-col gap-1.5"
+                  initial={prefersReduced ? false : { opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2, duration: 0.3, ease: EASE }}
+                >
                   <span className="cal-drawer-label">Guest</span>
                   <span className="cal-drawer-guest-name">{booking.guest}</span>
                   {booking.type === 'owner' && (
@@ -197,9 +202,14 @@ export default function BookingDrawer({
                       Owner Stay
                     </span>
                   )}
-                </div>
+                </motion.div>
 
-                <div className="flex gap-6 flex-wrap">
+                <motion.div
+                  className="flex gap-6 flex-wrap"
+                  initial={prefersReduced ? false : { opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.26, duration: 0.3, ease: EASE }}
+                >
                   <div className="flex flex-col gap-1">
                     <span className="cal-drawer-label">Dates</span>
                     <span className="cal-drawer-value">
@@ -218,10 +228,15 @@ export default function BookingDrawer({
                       {booking.status}
                     </span>
                   </div>
-                </div>
+                </motion.div>
 
                 {/* CTA row: Confirm (primary fill) + Edit (ghost) — horizontal */}
-                <div className="flex gap-3 pt-1 items-center">
+                <motion.div
+                  className="flex gap-3 pt-1 items-center"
+                  initial={prefersReduced ? false : { opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.34, duration: 0.28, ease: EASE }}
+                >
                   {booking.status !== 'Confirmed' && (
                     <button
                       className="cal-drawer-btn cal-drawer-btn--confirm"
@@ -247,7 +262,7 @@ export default function BookingDrawer({
                       {cancelArmed ? 'Confirm cancel?' : 'Cancel reservation'}
                     </button>
                   )}
-                </div>
+                </motion.div>
               </>
             ) : (
               /* ── Add / Edit Mode ── */

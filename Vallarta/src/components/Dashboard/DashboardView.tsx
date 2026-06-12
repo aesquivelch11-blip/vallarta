@@ -32,7 +32,7 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
     padding: '8px 0',
     cursor: 'pointer',
     fontFamily: 'var(--font-ui)',
-    fontSize: '0.5625rem',
+    fontSize: '0.6875rem',
     fontWeight: 500,
     letterSpacing: '0.22em',
     textTransform: 'uppercase',
@@ -154,7 +154,12 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
         className="lg:hidden"
         style={{ height: 'clamp(180px, 30vw, 220px)' }}
       >
-        <DashboardGallery images={property.images} propertyId={property.id} propertyName={property.name} />
+        <DashboardGallery
+          images={property.images}
+          propertyId={property.id}
+          propertyName={property.name}
+          propertyLocation={property.location}
+        />
       </div>
 
       {/* Main area — on desktop becomes a two-column grid */}
@@ -209,39 +214,21 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
             </div>
           </div>
 
-          {/* Mobile: domain pill above content */}
-          <div className="lg:hidden">
-            <DashboardDomainNav active={activeDomain} onChange={setActiveDomain} />
-          </div>
+          <DashboardDomainNav active={activeDomain} onChange={setActiveDomain} />
 
-          {/* Domain content + vertical strip (desktop wraps both) */}
-          <div
-            style={{
-              display: 'flex',
-              flex: 1,
-              overflow: 'hidden',
-            }}
-          >
-            {/* Desktop vertical domain strip */}
-            <div className="hidden lg:block">
-              <DashboardDomainNav active={activeDomain} onChange={setActiveDomain} />
-            </div>
-
-            {/* Domain content */}
-            <div style={{ flex: 1, overflowY: activeDomain === 'today' ? 'hidden' : 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
-              <DashboardErrorBoundary>
-                <motion.div
-                  key={activeDomain}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, ease: [0.25, 1, 0.5, 1], staggerChildren: 0.03 }}
-                >
-                  <AmbientProvider value={data.ambientColors}>
-                    {renderDomain()}
-                  </AmbientProvider>
-                </motion.div>
-              </DashboardErrorBoundary>
-            </div>
+          <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+            <DashboardErrorBoundary>
+              <motion.div
+                key={activeDomain}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <AmbientProvider value={data.ambientColors}>
+                  {renderDomain()}
+                </AmbientProvider>
+              </motion.div>
+            </DashboardErrorBoundary>
           </div>
         </div>
 
@@ -252,7 +239,12 @@ export default function DashboardView({ propertyId, onNavigate, onNotify }: Dash
         >
           {/* Gallery — now fills full height with property name overlay */}
           <div style={{ flex: 1, minHeight: 0 }}>
-            <DashboardGallery images={property.images} propertyId={property.id} propertyName={property.name} />
+            <DashboardGallery
+          images={property.images}
+          propertyId={property.id}
+          propertyName={property.name}
+          propertyLocation={property.location}
+        />
           </div>
         </div>
       </div>

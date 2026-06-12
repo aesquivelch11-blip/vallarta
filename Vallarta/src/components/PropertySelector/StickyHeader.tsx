@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Search, X } from 'lucide-react';
+import { motion } from 'motion/react';
+import { ScreenType } from '../../types';
 
 export type TierLevel = 'gallery' | 'collection' | 'catalog';
 
@@ -7,6 +9,7 @@ interface StickyHeaderProps {
   tier: TierLevel;
   onTierChange: (tier: TierLevel) => void;
   onSearch: (query: string) => void;
+  onNavigate?: (screen: ScreenType, transitionStyle: 'push' | 'push_back' | 'slide_up') => void;
 }
 
 const TIERS: { id: TierLevel; label: string; icon: React.ReactNode }[] = [
@@ -54,10 +57,10 @@ const TIERS: { id: TierLevel; label: string; icon: React.ReactNode }[] = [
   },
 ];
 
-export default function StickyHeader({ tier, onTierChange, onSearch }: StickyHeaderProps) {
+export default function StickyHeader({ tier, onTierChange, onSearch, onNavigate }: StickyHeaderProps) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
+  const [activeRect, setActiveRect] = useState<{ left: number; width: number } | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const tierContainerRef = useRef<HTMLDivElement>(null);
 
@@ -70,10 +73,10 @@ export default function StickyHeader({ tier, onTierChange, onSearch }: StickyHea
   useEffect(() => {
     if (!tierContainerRef.current) return;
 
-    const activeBtn = tierContainerRef.current.querySelector('.ps-header__tier-btn--active') as HTMLElement | null;
+    const activeBtn = tierContainerRef.current.querySelector('[data-active="true"]') as HTMLElement | null;
     if (activeBtn) {
       const { offsetLeft, offsetWidth } = activeBtn;
-      setIndicatorStyle({ left: offsetLeft, width: offsetWidth });
+      setActiveRect({ left: offsetLeft, width: offsetWidth });
     }
   }, [tier]);
 
@@ -90,11 +93,22 @@ export default function StickyHeader({ tier, onTierChange, onSearch }: StickyHea
 
   return (
     <header className="ps-header">
-      <div className="ps-header__wordmark">Vallarta // Mita</div>
+      <button
+        className="ps-header__wordmark"
+        onClick={() => onNavigate?.('nav_menu', 'push_back')}
+        aria-label="Back to menu"
+      >
+        Vallarta Estates
+      </button>
 
       <div className="ps-header__controls">
         {searchOpen ? (
-          <div className="ps-header__search">
+          <motion.div
+            className="ps-header__search"
+            initial={{ width: 0, opacity: 0 }}
+            animate={{ width: 'auto', opacity: 1 }}
+            transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
+          >
             <input
               ref={inputRef}
               type="text"
@@ -111,7 +125,7 @@ export default function StickyHeader({ tier, onTierChange, onSearch }: StickyHea
             >
               <X size={16} />
             </button>
-          </div>
+          </motion.div>
         ) : (
           <button
             onClick={() => setSearchOpen(true)}
@@ -122,7 +136,7 @@ export default function StickyHeader({ tier, onTierChange, onSearch }: StickyHea
           </button>
         )}
 
-        <div className="ps-header__tier" ref={tierContainerRef} role="radiogroup" aria-label="Card size">
+        <div className="ps-header__tier" role="radiogroup" aria-label="Card size" ref={tierContainerRef}>
           {TIERS.map((t) => (
             <button
               key={t.id}
@@ -130,18 +144,23 @@ export default function StickyHeader({ tier, onTierChange, onSearch }: StickyHea
               className={`ps-header__tier-btn ${tier === t.id ? 'ps-header__tier-btn--active' : ''}`}
               role="radio"
               aria-checked={tier === t.id}
+              data-active={tier === t.id}
             >
               <span className="ps-header__tier-btn-icon">{t.icon}</span>
               <span className="ps-header__tier-btn-label">{t.label}</span>
             </button>
           ))}
-          <div
-            className="ps-header__tier-indicator"
-            style={{
-              transform: `translateX(${indicatorStyle.left}px)`,
-              width: `${indicatorStyle.width}px`,
-            }}
-          />
+          {activeRect && (
+            <motion.div
+              className="ps-header__tier-indicator"
+              initial={false}
+              animate={{
+                transform: `translateX(${activeRect.left}px)`,
+                width: activeRect.width,
+              }}
+              transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
+            />
+          )}
         </div>
       </div>
     </header>

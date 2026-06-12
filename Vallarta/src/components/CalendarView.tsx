@@ -27,6 +27,7 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [showDrawer, setShowDrawer] = useState(false);
   const [drawerMode, setDrawerMode] = useState<DrawerMode>('view');
+  const [slideDir, setSlideDir] = useState<'next' | 'prev'>('next');
 
   const calendarDays = useMemo(
     () => buildCalendarDays(currentYear, currentMonth, bookings),
@@ -34,6 +35,7 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
   );
 
   const handlePrevMonth = () => {
+    setSlideDir('prev');
     if (currentMonth === 0) {
       setCurrentMonth(11);
       setCurrentYear(y => y - 1);
@@ -43,6 +45,7 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
   };
 
   const handleNextMonth = () => {
+    setSlideDir('next');
     if (currentMonth === 11) {
       setCurrentMonth(0);
       setCurrentYear(y => y + 1);
@@ -145,6 +148,7 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
           month={currentMonth}
           onPrevMonth={handlePrevMonth}
           onNextMonth={handleNextMonth}
+          slideDir={slideDir}
         />
       </motion.div>
 

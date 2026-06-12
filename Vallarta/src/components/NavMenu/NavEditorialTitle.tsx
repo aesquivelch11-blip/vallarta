@@ -8,9 +8,10 @@ interface NavEditorialTitleProps {
 export default function NavEditorialTitle({ label, direction = 'next' }: NavEditorialTitleProps) {
   return (
     <div className="nav-editorial-title" aria-hidden="true" data-direction={direction}>
-      <h2 className="nav-editorial-heading nav-title-entered">
+      <h2 className="nav-editorial-heading">
         {label}
       </h2>
     </div>
   );
 }
+

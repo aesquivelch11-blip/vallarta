@@ -23,8 +23,11 @@ export default function DarkModeToggle() {
         cursor: 'pointer',
         color: 'var(--color-ink-secondary)',
         padding: '4px',
+        minWidth: '44px',
+        minHeight: '44px',
         display: 'inline-flex',
         alignItems: 'center',
+        justifyContent: 'center',
       }}
       aria-label="Toggle dark mode"
       className="dashboard-focus"
