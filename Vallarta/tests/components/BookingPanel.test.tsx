@@ -71,3 +71,22 @@ describe('BookingPanel — Date Interaction', () => {
     expect(dateField?.textContent).toContain('Jun');
   });
 });
+
+describe('BookingPanel — Primary Button Weight', () => {
+  it('renders the save button as a bordered pill, not a full-width solid block', () => {
+    const { container } = renderPanel();
+    const saveBtn = container.querySelector('.cal-drawer-btn--save');
+    expect(saveBtn).not.toBeNull();
+    expect(saveBtn?.className).not.toContain('w-full');
+  });
+
+  it('save button has pill border-radius', () => {
+    const { container } = renderPanel();
+    const saveBtn = container.querySelector('.cal-drawer-btn--save');
+    expect(saveBtn).not.toBeNull();
+    // The cal-drawer-btn--save CSS class applies border-radius: 999px
+    expect(saveBtn?.className).toContain('cal-drawer-btn--save');
+    // Pill buttons are inline-block, not full-width blocks
+    expect(saveBtn?.className).not.toContain('w-full');
+  });
+});

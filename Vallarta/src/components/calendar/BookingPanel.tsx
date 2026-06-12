@@ -327,9 +327,9 @@ export default function BookingPanel({
                 </div>
               )}
 
-              <div className="flex flex-col gap-3 pt-4 mt-auto">
+              <div className="flex flex-col items-center gap-3 pt-4 mt-auto">
                 <button
-                  className="cal-drawer-btn cal-drawer-btn--save w-full disabled:opacity-35 disabled:cursor-not-allowed disabled:transform-none"
+                  className="cal-drawer-btn cal-drawer-btn--save disabled:opacity-35 disabled:cursor-not-allowed disabled:transform-none"
                   onClick={handleSave}
                   disabled={!formGuest.trim() || !formCheckIn || !formCheckOut}
                 >
