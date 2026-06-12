@@ -2587,11 +2587,6 @@ body::before {
     border: 1px solid var(--cal-error-border);
 }
 
-.cal-drawer-btn--save {
-    background: var(--cal-owner-accent);
-    color: var(--cal-btn-text-dark);
-}
-
 .cal-drawer-btn--close {
     background: transparent;
     color: rgba(255, 255, 255, 0.4);
