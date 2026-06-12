@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent, cleanup } from '@testing-library/react';
-import { describe, it, expect, afterEach, vi } from 'vitest';
+import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest';
 import NavImagePanel from '../../src/components/NavMenu/NavImagePanel';
 
 const mockItems = [
@@ -12,6 +12,7 @@ const mockItems = [
 afterEach(() => {
   cleanup();
   vi.clearAllMocks();
+  vi.unstubAllGlobals();
 });
 
 describe('NavImagePanel', () => {
@@ -57,6 +58,13 @@ describe('NavImagePanel', () => {
 });
 
 describe('NavImagePanel — clip-path transitions', () => {
+  beforeEach(() => {
+    vi.stubGlobal('requestAnimationFrame', (cb: FrameRequestCallback) => {
+      cb(0);
+      return 0;
+    });
+  });
+
   it('applies data-direction="next" when activeIndex increases', () => {
     const { container, rerender } = render(
       <NavImagePanel items={mockItems} activeIndex={0} direction="next" />
@@ -88,17 +96,14 @@ describe('NavImagePanel — clip-path transitions', () => {
     });
   });
 
-  it('has transition property on exiting layers', () => {
+  it('applies nav-image-exiting class with data-direction on the previous layer', () => {
     const { container, rerender } = render(
       <NavImagePanel items={mockItems} activeIndex={0} direction="next" />
     );
     rerender(<NavImagePanel items={mockItems} activeIndex={1} direction="next" />);
     const layers = container.querySelectorAll('.nav-image-layer');
     const exiting = Array.from(layers).find(l => l.classList.contains('nav-image-exiting'));
-    if (exiting) {
-      const style = window.getComputedStyle(exiting);
-      expect(style.transition).not.toBe('');
-      expect(style.transition).not.toBe('all 0s ease 0s');
-    }
+    expect(exiting).not.toBeNull();
+    expect(exiting?.getAttribute('data-direction')).toBe('next');
   });
 });

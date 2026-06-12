@@ -48,20 +48,24 @@ export default function NavImagePanel({ items, activeIndex, direction = 'next' }
     const dir = direction || (activeIndex > currentLayer ? 'next' : 'prev');
     setTransitionDirection(dir);
     setPrevLayer(currentLayer);
-    setCurrentLayer(activeIndex);
-    setPhase('entering');
+    setPhase('exiting');
 
-    timers.current.push(
-      window.setTimeout(() => {
-        setPhase('enter-done');
-        timers.current.push(
-          window.setTimeout(() => {
-            setPrevLayer(null);
-            setPhase('idle');
-          }, 250),
-        );
-      }, 550),
-    );
+    rafId.current = requestAnimationFrame(() => {
+      setCurrentLayer(activeIndex);
+      setPhase('entering');
+
+      timers.current.push(
+        window.setTimeout(() => {
+          setPhase('enter-done');
+          timers.current.push(
+            window.setTimeout(() => {
+              setPrevLayer(null);
+              setPhase('idle');
+            }, 250),
+          );
+        }, 550), // increased from 310 to match longer clip-path transition
+      );
+    });
 
     return () => {
       timers.current.forEach(clearTimeout);
@@ -89,7 +93,7 @@ export default function NavImagePanel({ items, activeIndex, direction = 'next' }
     }
 
     return (
-      <div key={`${layer}-${index}`} className={layerClass} data-direction={transitionDirection} style={{ transition: 'clip-path 550ms ease' }}>
+      <div key={`${layer}-${index}`} className={layerClass} data-direction={transitionDirection}>
         <picture>
           <source srcSet={item.imageWebp} type="image/webp" />
           <img
