@@ -25,6 +25,8 @@ interface BookingPanelProps {
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
+const CANCELLATION_TIMEOUT_MS = 3000;
+
 function todayStr(): string {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -125,7 +127,7 @@ export default function BookingPanel({
   const handleCancelTap = (id: string) => {
     if (!cancelArmed) {
       setCancelArmed(true);
-      cancelTimerRef.current = setTimeout(() => setCancelArmed(false), 3000);
+      cancelTimerRef.current = setTimeout(() => setCancelArmed(false), CANCELLATION_TIMEOUT_MS);
     } else {
       if (cancelTimerRef.current) clearTimeout(cancelTimerRef.current);
       setCancelArmed(false);

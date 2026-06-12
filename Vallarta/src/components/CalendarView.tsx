@@ -18,6 +18,10 @@ interface CalendarViewProps {
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
+const SIDE_PANEL_WIDTH = '420px';
+const JANUARY = 0;
+const DECEMBER = 11;
+
 export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps) {
   const today = new Date();
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
@@ -36,8 +40,8 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
 
   const handlePrevMonth = () => {
     setSlideDir('prev');
-    if (currentMonth === 0) {
-      setCurrentMonth(11);
+    if (currentMonth === JANUARY) {
+      setCurrentMonth(DECEMBER);
       setCurrentYear(y => y - 1);
     } else {
       setCurrentMonth(prev => prev - 1);
@@ -46,8 +50,8 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
 
   const handleNextMonth = () => {
     setSlideDir('next');
-    if (currentMonth === 11) {
-      setCurrentMonth(0);
+    if (currentMonth === DECEMBER) {
+      setCurrentMonth(JANUARY);
       setCurrentYear(y => y + 1);
     } else {
       setCurrentMonth(prev => prev + 1);
@@ -136,7 +140,7 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
       <motion.div
         className="absolute top-0 bottom-0 left-0 overflow-x-hidden overflow-y-auto"
         initial={{ right: 0 }}
-        animate={{ right: showPanel ? '420px' : '0px' }}
+        animate={{ right: showPanel ? SIDE_PANEL_WIDTH : '0px' }}
         transition={{ duration: 0.45, ease: EASE }}
       >
         {/* ─── Top Navigation ─── */}
