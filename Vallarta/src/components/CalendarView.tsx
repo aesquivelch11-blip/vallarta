@@ -16,7 +16,7 @@ interface CalendarViewProps {
   onNotify?: (message: string) => void;
 }
 
-const EASE = [0.22, 1, 0.36, 1] as const;
+const EASE = [0.32, 0.72, 0, 1] as const;
 
 const SIDE_PANEL_WIDTH = '420px';
 const JANUARY = 0;
@@ -152,14 +152,19 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
       {/* ─── Asymmetric overlay ─── */}
       <div aria-hidden="true" className="cal-overlay" />
 
-      {/* ─── Main Content Wrapper (Shrinks when panel is open) ─── */}
+      {/* ─── Film-grain texture overlay ─── */}
+      <div className="nav-grain" aria-hidden="true" />
+
+      {/* ─── Main Content Wrapper ─── */}
+      {/* The panel slides in from the right as a sibling; this wrapper
+          shrinks its right edge so nothing hides underneath the panel. */}
       <motion.div
-        className="absolute top-0 bottom-0 left-0 overflow-x-hidden overflow-y-auto"
+        className="cal-content-wrapper"
         initial={{ right: 0 }}
         animate={{ right: showPanel ? SIDE_PANEL_WIDTH : '0px' }}
         transition={{ duration: 0.2, ease: EASE }}
       >
-        {/* ─── Top Navigation ─── */}
+        {/* ─── Top Navigation (absolute within wrapper so it overlays the bg) ─── */}
         <motion.nav
           role="navigation"
           aria-label="Main navigation"
@@ -181,35 +186,38 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
           </div>
         </motion.nav>
 
-        {/* ─── Calendar Grid ─── */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.2, ease: EASE, delay: 0.6 }}
-        >
-          <CalendarGrid
-            days={calendarDays}
-            year={currentYear}
-            month={currentMonth}
-            onPrevMonth={handlePrevMonth}
-            onNextMonth={handleNextMonth}
-            slideDir={slideDir}
-            onDateRangeSelected={handleDateRangeSelected}
-          />
-        </motion.div>
+        {/* ─── Scrollable column (calendar + bookings in document flow) ─── */}
+        <div className="cal-scroll-column">
+          {/* ─── Calendar Grid ─── */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.2, ease: EASE, delay: 0.6 }}
+          >
+            <CalendarGrid
+              days={calendarDays}
+              year={currentYear}
+              month={currentMonth}
+              onPrevMonth={handlePrevMonth}
+              onNextMonth={handleNextMonth}
+              slideDir={slideDir}
+              onDateRangeSelected={handleDateRangeSelected}
+            />
+          </motion.div>
 
-        {/* ─── Booking List ─── */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: EASE, delay: 0.9 }}
-        >
-          <BookingList
-            bookings={bookings}
-            onSelect={handleSelectBooking}
-            onAdd={handleAddBooking}
-          />
-        </motion.div>
+          {/* ─── Booking List ─── */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: EASE, delay: 0.9 }}
+          >
+            <BookingList
+              bookings={bookings}
+              onSelect={handleSelectBooking}
+              onAdd={handleAddBooking}
+            />
+          </motion.div>
+        </div>
       </motion.div>
 
       {/* ─── Booking Panel ─── */}

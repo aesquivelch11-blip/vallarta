@@ -167,7 +167,8 @@
     /* --- Calendar Accent Colors --- */
     --cal-owner-accent: #c9b8a0; /* Estate Sand — owner stays, brand accent */
     --cal-accent-ochre: #d49a55; /* Sunset Ochre — confirmed status, check-in dots */
-    --cal-drawer-surface: #242424; /* Drawer sheet background */
+    --cal-drawer-surface: #162732; /* Banderas Midnight — Drawer sheet background */
+    --cal-drawer-surface-light: #1e3340; /* Banderas Midnight Lightened */
     --cal-btn-text-dark: #1a1a1a;
     --cal-error: rgba(248, 113, 113, 0.85);
     --cal-error-border: rgba(248, 113, 113, 0.25);
@@ -1828,7 +1829,34 @@ body::before {
     z-index: 2;
 }
 
+/* ─── Content Wrapper (shrinks right when panel is open) ─── */
+.cal-content-wrapper {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;                 /* animated by motion.div via inline style */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ─── Scrollable inner column (calendar + bookings) ─── */
+.cal-scroll-column {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.cal-scroll-column::-webkit-scrollbar {
+    display: none;
+}
+
 /* ─── Nav ─── */
+
 .cal-nav {
     position: absolute;
     top: 0;
@@ -1881,12 +1909,14 @@ body::before {
 .cal-pill {
     font-family: var(--font-ui);
     font-size: 0.625rem;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.7);
-    border: 1px solid var(--cal-border-medium);
+    color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.04);
     padding: 8px 18px;
     border-radius: 999px;
+    backdrop-filter: blur(8px);
 }
 
 .cal-avatar {
@@ -1894,31 +1924,28 @@ body::before {
     width: 34px;
     height: 34px;
     border-radius: 50%;
-    background: var(--cal-avatar-bg);
-    border: 1px solid var(--cal-border-medium);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 0.6875rem;
     font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 /* ─── Calendar ─── */
 .cal-calendar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+    position: relative;
     z-index: 5;
     padding-top: clamp(80px, 14vh, 160px);
-    padding-bottom: clamp(32px, 5vh, 64px);
+    padding-bottom: clamp(32px, 5vh, 48px);
+    flex-shrink: 0;
 }
 
 .cal-calendar__inner {
     padding-left: clamp(24px, 5vw, 56px);
+    padding-right: clamp(24px, 5vw, 56px);
 }
 
 .cal-month {
@@ -1938,6 +1965,36 @@ body::before {
     color: rgba(255, 255, 255, 0.65);
     margin-bottom: clamp(28px, 4vh, 44px);
 }
+
+/* --- Refined Double-Bezel Card (Doppelrand) Architecture --- */
+.cal-bezel-outer {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    border-radius: 2rem;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+    display: block;            /* full-width by default (booking list) */
+    backdrop-filter: blur(12px);
+}
+
+/* Calendar grid bezel: auto-width, inline so it hugs the grid */
+.cal-bezel-outer--inline {
+    display: inline-block;
+}
+
+.cal-bezel-inner {
+    background: rgba(22, 39, 50, 0.55); /* Tinted Banderas Midnight (#162732) */
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: calc(2rem - 10px);
+    padding: clamp(20px, 3vh, 32px) clamp(24px, 4vw, 40px);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
+}
+
+/* Bookings list bezel: slightly tighter padding */
+.cal-bezel-inner--bookings {
+    padding: clamp(16px, 2.5vh, 24px) clamp(20px, 3vw, 32px);
+}
+
 
 /* ─── Grid ─── */
 .cal-grid {
@@ -2020,12 +2077,10 @@ body::before {
 
 /* ─── Bookings ─── */
 .cal-bookings {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: clamp(24px, 4vh, 48px) clamp(24px, 5vw, 56px);
+    position: relative;
     z-index: 5;
+    padding: 0 clamp(24px, 5vw, 56px) clamp(32px, 5vh, 56px);
+    flex-shrink: 0;
 }
 
 .cal-bookings__header {
@@ -2086,7 +2141,7 @@ body::before {
 }
 
 .cal-add-btn:active {
-    transform: scale(0.88);
+    transform: scale(0.97);
     transition-duration: 80ms;
 }
 
@@ -2132,6 +2187,11 @@ body::before {
     margin: 0 clamp(-24px, -5vw, -56px);
     padding: clamp(14px, 2vh, 18px) clamp(24px, 5vw, 56px);
     outline: none;
+}
+
+.cal-booking-row:active {
+    transform: scale(0.98);
+    transition: transform 80ms var(--ease-out-expo);
 }
 
 .cal-booking-row:focus-visible {
@@ -2221,7 +2281,7 @@ body::before {
 }
 
 .cal-month-nav__arrow:active {
-    transform: scale(0.86);
+    transform: scale(0.97);
     transition-duration: 80ms;
 }
 
@@ -2343,6 +2403,16 @@ body::before {
 
 .cal-grid-legend__dot--owner {
     background: var(--cal-owner-accent);
+}
+
+/* ─── Grid hint text ─── */
+.cal-grid-hint {
+    text-align: center;
+    margin-top: clamp(8px, 1.5vh, 14px);
+    font-family: var(--font-ui);
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.02em;
 }
 
 /* ─── Booking row guest cell (flex wrapper for guest + chip) ─── */

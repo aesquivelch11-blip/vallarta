@@ -499,7 +499,7 @@ input:-webkit-autofill:focus {
 
 /* Premium Luxury Villa Side Panel (.cal-panel) */
 .cal-panel {
-  background-color: #171614 !important; /* Tinted warm Obsidian background */
+  background-color: var(--cal-drawer-surface) !important; /* Banderas Midnight background */
   border-left: 1px solid rgba(212, 154, 85, 0.18) !important; /* Subtle Sunset Ochre accent border */
   box-shadow: -12px 0 36px rgba(0, 0, 0, 0.45);
   font-family: var(--font-sans), sans-serif;

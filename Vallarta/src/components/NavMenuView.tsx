@@ -13,6 +13,7 @@ interface NavMenuViewProps {
   onClose: () => void;
   onNotify?: (message: string) => void;
   previousScreen?: ScreenType;
+  onLogout?: () => void;
 }
 
 // Static metrics — replace with real data via props when available
