@@ -32,6 +32,7 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
   const [showPanel, setShowPanel] = useState(false);
   const [panelMode, setPanelMode] = useState<PanelMode>('view');
   const [slideDir, setSlideDir] = useState<'next' | 'prev'>('next');
+  const [preselectedRange, setPreselectedRange] = useState<{checkIn: string, checkOut: string} | null>(null);
 
   const calendarDays = useMemo(
     () => buildCalendarDays(currentYear, currentMonth, bookings),
@@ -60,12 +61,14 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
 
   const handleSelectBooking = (booking: Booking) => {
     setSelectedBooking(booking);
+    setPreselectedRange(null);
     setPanelMode('view');
     setShowPanel(true);
   };
 
   const handleAddBooking = () => {
     setSelectedBooking(null);
+    setPreselectedRange(null);
     setPanelMode('add');
     setShowPanel(true);
   };
@@ -108,6 +111,15 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
 
   const handleEdit = () => {
     setPanelMode('edit');
+  };
+
+  const handleDateRangeSelected = (startDay: { day: number }, endDay: { day: number }) => {
+    const startStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(startDay.day).padStart(2, '0')}`;
+    const endStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(endDay.day).padStart(2, '0')}`;
+    setPreselectedRange({ checkIn: startStr, checkOut: endStr });
+    setSelectedBooking(null);
+    setPanelMode('add');
+    setShowPanel(true);
   };
 
   useEffect(() => {
@@ -178,6 +190,7 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
             onPrevMonth={handlePrevMonth}
             onNextMonth={handleNextMonth}
             slideDir={slideDir}
+            onDateRangeSelected={handleDateRangeSelected}
           />
         </motion.div>
 
@@ -200,6 +213,7 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
         open={showPanel}
         booking={selectedBooking}
         mode={panelMode}
+        preselectedRange={preselectedRange}
         bookings={bookings}
         onSave={handleSaveBooking}
         onConfirm={handleConfirmBooking}

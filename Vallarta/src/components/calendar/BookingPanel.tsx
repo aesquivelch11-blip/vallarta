@@ -15,6 +15,7 @@ interface BookingPanelProps {
   open: boolean;
   booking: Booking | null;
   mode: PanelMode;
+  preselectedRange?: { checkIn: string; checkOut: string } | null;
   bookings: Booking[];
   onSave: (booking: Booking) => void;
   onConfirm: (id: string) => void;
@@ -36,6 +37,7 @@ export default function BookingPanel({
   open,
   booking,
   mode,
+  preselectedRange,
   bookings,
   onSave,
   onConfirm,
@@ -51,6 +53,7 @@ export default function BookingPanel({
   const [formCheckOut, setFormCheckOut] = useState('');
   const [dateError, setDateError] = useState('');
   const [overlapWarning, setOverlapWarning] = useState('');
+  const [overrideOverlap, setOverrideOverlap] = useState(false);
   const [cancelArmed, setCancelArmed] = useState(false);
   const cancelTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -69,12 +72,20 @@ export default function BookingPanel({
     } else if (mode === 'add') {
       setFormGuest('');
       setFormType('guest');
-      setFormCheckIn('');
-      setFormCheckOut('');
+      setFormCheckIn(preselectedRange?.checkIn || '');
+      setFormCheckOut(preselectedRange?.checkOut || '');
     }
     setDateError('');
     setOverlapWarning('');
-  }, [open, mode, booking?.id]);
+    setOverrideOverlap(false);
+  }, [open, mode, booking?.id, preselectedRange]);
+
+  useEffect(() => {
+    if (mode === 'add' && preselectedRange) {
+      setFormCheckIn(preselectedRange.checkIn);
+      setFormCheckOut(preselectedRange.checkOut);
+    }
+  }, [mode, preselectedRange]);
 
   useEffect(() => {
     return () => {
@@ -104,6 +115,10 @@ export default function BookingPanel({
     }
     if (formCheckOut <= formCheckIn) {
       setDateError('Check-out must be after check-in.');
+      return false;
+    }
+    if (overlapWarning && !overrideOverlap) {
+      setDateError('Must check override box to allow overlapping dates.');
       return false;
     }
     setDateError('');
@@ -296,30 +311,10 @@ export default function BookingPanel({
 
               <div className="flex gap-4">
                 <div className="flex flex-col gap-1.5 flex-1">
-                  <label htmlFor="drawer-checkin" className="cal-drawer-label">
-                    Check-in
-                  </label>
-                  <input
-                    id="drawer-checkin"
-                    type="date"
-                    className="cal-drawer-input"
-                    value={formCheckIn}
-                    min={todayStr()}
-                    onChange={e => setFormCheckIn(e.target.value)}
-                  />
-                </div>
-                <div className="flex flex-col gap-1.5 flex-1">
-                  <label htmlFor="drawer-checkout" className="cal-drawer-label">
-                    Check-out
-                  </label>
-                  <input
-                    id="drawer-checkout"
-                    type="date"
-                    className="cal-drawer-input"
-                    value={formCheckOut}
-                    min={formCheckIn || todayStr()}
-                    onChange={e => setFormCheckOut(e.target.value)}
-                  />
+                  <span className="cal-drawer-label">Dates Selected</span>
+                  <span className="cal-drawer-value">
+                    {formCheckIn && formCheckOut ? formatDisplayDates(formCheckIn, formCheckOut) : 'Select on calendar'}
+                  </span>
                 </div>
               </div>
 
@@ -328,9 +323,18 @@ export default function BookingPanel({
               )}
               {dateError && <span className="cal-drawer-error" role="alert">{dateError}</span>}
               {overlapWarning && !dateError && (
-                <span className="cal-drawer-warning" role="status">
-                  {overlapWarning} — saving anyway is allowed.
-                </span>
+                <div className="cal-drawer-warning flex items-start gap-2" role="status">
+                  <input 
+                    type="checkbox" 
+                    id="override-overlap" 
+                    checked={overrideOverlap} 
+                    onChange={e => setOverrideOverlap(e.target.checked)} 
+                    className="mt-1"
+                  />
+                  <label htmlFor="override-overlap">
+                    {overlapWarning}. Check to allow saving anyway.
+                  </label>
+                </div>
               )}
 
               <div className="flex gap-3 pt-4 mt-auto">
