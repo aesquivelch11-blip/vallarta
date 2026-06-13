@@ -6,11 +6,38 @@ interface BookingListProps {
   bookings: Booking[];
   onSelect: (booking: Booking) => void;
   onAdd: () => void;
+  loading?: boolean;
 }
 
-export default function BookingList({ bookings, onSelect, onAdd }: BookingListProps) {
+export default function BookingList({ bookings, onSelect, onAdd, loading }: BookingListProps) {
   const now = new Date();
   const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+  if (loading) {
+    return (
+      <div role="region" aria-label="Loading reservations" className="cal-bookings">
+        <div className="cal-card-shell">
+          <div className="cal-card cal-card--bookings">
+            <div className="cal-bookings__header">
+              <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 6, height: 18, width: '30%' }} className="animate-pulse" />
+              <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 6, height: 18, width: 64 }} className="animate-pulse" />
+            </div>
+            <ul className="cal-bookings__list">
+              {Array.from({ length: 3 }, (_, i) => (
+                <li key={`skel-booking-${i}`} className="cal-booking-row animate-pulse">
+                  <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 6, height: 14, width: '25%' }} />
+                  <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 6, height: 14, width: '40%' }} />
+                  <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 6, height: 14, width: '20%' }} />
+                  <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 6, height: 14, width: '15%' }} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const visible = [...bookings]
     .filter(b => b.checkIn >= todayStr)
     .sort((a, b) => a.checkIn.localeCompare(b.checkIn));
@@ -27,10 +54,10 @@ export default function BookingList({ bookings, onSelect, onAdd }: BookingListPr
               <span className="cal-bookings__meta">{activeCount} Active</span>
               <button
                 onClick={onAdd}
-                aria-label="Add new booking"
-                className="cal-add-btn"
+                aria-label="Add new reservation"
+                className="cal-add-link"
               >
-                +
+                New
               </button>
             </div>
           </div>
@@ -42,7 +69,7 @@ export default function BookingList({ bookings, onSelect, onAdd }: BookingListPr
                 onClick={onAdd}
                 className="cal-bookings__empty-cta"
               >
-                + Add a reservation
+                Add a reservation
               </button>
             </div>
           ) : (
@@ -87,7 +114,7 @@ export default function BookingList({ bookings, onSelect, onAdd }: BookingListPr
                   >
                     {booking.status}
                   </span>
-                  <span className="cal-booking-row__nights">{booking.nights}n</span>
+                  <span className="cal-booking-row__nights">{booking.nights}</span>
                 </li>
               ))}
             </ul>
