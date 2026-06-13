@@ -633,6 +633,33 @@
   }
 }
 
+/* ── Section Banner — mirrors performance-section__label pattern from DashboardView ── */
+.ps-section-banner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px clamp(16px, 3vw, 48px) 4px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.ps-section-banner__rule {
+  flex: 1;
+  height: 1px;
+  background: var(--color-border-subtle);
+}
+
+.ps-section-banner__label {
+  font-family: var(--font-ui);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--ps-ink-muted);
+  white-space: nowrap;
+}
+
 /* ── Hero wordmark (page load) ── */
 .ps-hero {
   display: flex;

@@ -153,6 +153,16 @@ export default function PropertySelector({ onNavigate, onSelectProperty }: Prope
             <StickyHeader tier={tier} onTierChange={handleTierChange} onSearch={handleSearch} onNavigate={onNavigate} />
           </motion.div>
 
+          {filteredProperties.length > 0 && (
+            <div className="ps-section-banner" aria-hidden="true">
+              <span className="ps-section-banner__rule" />
+              <span className="ps-section-banner__label">
+                {filteredProperties.length} Estate{filteredProperties.length !== 1 ? 's' : ''} · Banderas Bay
+              </span>
+              <span className="ps-section-banner__rule" />
+            </div>
+          )}
+
           {filteredProperties.length === 0 ? (
             <div className="ps-empty">
               <p className="ps-empty__text">No properties match your search.</p>
