@@ -184,41 +184,43 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
           </div>
         </motion.nav>
 
-        {/* ─── Scrollable column (calendar + bookings in document flow) ─── */}
-        <div className="cal-scroll-column">
-          {/* ─── Calendar Grid ─── */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.2, ease: EASE, delay: 0.6 }}
-          >
-            <CalendarGrid
-              days={calendarDays}
-              year={currentYear}
-              month={currentMonth}
-              onPrevMonth={handlePrevMonth}
-              onNextMonth={handleNextMonth}
-              slideDir={slideDir}
-              onDateRangeSelected={handleDateRangeSelected}
-              loading={false}
-              error={null}
-              onRetry={() => {}}
-            />
-          </motion.div>
+        {/* ─── Split-field layout (calendar left, bookings right) ─── */}
+        <div className="cal-split-layout">
+          <div className="cal-split-layout__left">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.2, ease: EASE, delay: 0.6 }}
+            >
+              <CalendarGrid
+                days={calendarDays}
+                year={currentYear}
+                month={currentMonth}
+                onPrevMonth={handlePrevMonth}
+                onNextMonth={handleNextMonth}
+                slideDir={slideDir}
+                onDateRangeSelected={handleDateRangeSelected}
+                loading={false}
+                error={null}
+                onRetry={() => {}}
+              />
+            </motion.div>
+          </div>
 
-          {/* ─── Booking List ─── */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: EASE, delay: 0.9 }}
-          >
-            <BookingList
-              bookings={bookings}
-              onSelect={handleSelectBooking}
-              onAdd={handleAddBooking}
-              loading={false}
-            />
-          </motion.div>
+          <div className="cal-split-layout__right">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: EASE, delay: 0.9 }}
+            >
+              <BookingList
+                bookings={bookings}
+                onSelect={handleSelectBooking}
+                onAdd={handleAddBooking}
+                loading={false}
+              />
+            </motion.div>
+          </div>
         </div>
       </div>
 

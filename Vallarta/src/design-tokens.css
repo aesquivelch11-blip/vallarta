@@ -1819,11 +1819,11 @@ body::before {
     z-index: 0;
     background: url("./assets/Calendar-background.jpeg") center right / cover no-repeat;
     pointer-events: none;
-    will-change: transform;
 }
 
 @media (prefers-reduced-motion: no-preference) {
     .cal-bg {
+        will-change: transform;
         animation: calKenBurns 24s ease-in-out infinite alternate;
     }
 }
@@ -1877,17 +1877,38 @@ body::before {
     flex-direction: column;
 }
 
-.cal-scroll-column {
+/* ─── Split-field layout ─── */
+.cal-split-layout {
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    padding-top: clamp(72px, 10vh, 100px);
+    padding-left: clamp(24px, 5vw, 56px);
+    padding-right: clamp(24px, 5vw, 56px);
+    padding-bottom: clamp(24px, 4vh, 40px);
+    gap: clamp(20px, 3vw, 40px);
+    position: relative;
+    z-index: 5;
+}
+
+.cal-split-layout::-webkit-scrollbar {
+    display: none;
+}
+
+.cal-split-layout__left,
+.cal-split-layout__right {
     display: flex;
     flex-direction: column;
 }
 
-.cal-scroll-column::-webkit-scrollbar {
-    display: none;
+@media (max-width: 768px) {
+    .cal-split-layout {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* ─── Nav ─── */
@@ -1971,15 +1992,15 @@ body::before {
 /* ─── Calendar ─── */
 .cal-calendar {
     position: relative;
-    z-index: 5;
-    padding-top: clamp(72px, 10vh, 100px);
+    padding-top: 0;         /* was: clamp(72px, 10vh, 100px) — now on split wrapper */
     padding-bottom: clamp(20px, 3vh, 32px);
     flex-shrink: 0;
+    z-index: 5;
 }
 
 .cal-calendar__inner {
-    padding-left: clamp(24px, 5vw, 56px);
-    padding-right: clamp(24px, 5vw, 56px);
+    padding-left: 0;        /* was: clamp(24px, 5vw, 56px) — now on split wrapper */
+    padding-right: 0;
 }
 
 .cal-month {
@@ -2015,7 +2036,7 @@ body::before {
 
 .cal-card {
     background: rgba(22, 39, 50, 0.78);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 0.5rem;
     box-shadow:
         0 2px 0 rgba(255, 255, 255, 0.04) inset,
@@ -2026,13 +2047,12 @@ body::before {
 }
 
 .cal-card--grid {
-    display: inline-block;
-    max-width: max-content;
+    display: block;
+    width: 100%;
 }
 
 .cal-card--bookings {
     display: block;
-    max-width: 500px;
     width: 100%;
 }
 
@@ -2228,7 +2248,7 @@ body::before {
 .cal-bookings {
     position: relative;
     z-index: 5;
-    padding: 0 clamp(20px, 4vw, 48px) clamp(24px, 4vh, 40px);
+    padding: 0 0 clamp(24px, 4vh, 40px);   /* was: 0 clamp(20px,4vw,48px) clamp(24px,4vh,40px) */
     flex-shrink: 0;
 }
 
