@@ -212,10 +212,11 @@
   color: rgba(255, 255, 255, 0.75);
   margin: 12px 0 0 0;
   line-height: 1.4;
+  clip-path: inset(0 0 100% 0); /* hidden: clipped from bottom */
   opacity: 0;
-  transform: translateY(8px);
-  transition: opacity var(--ps-duration-fast) var(--ps-ease-out),
-              transform var(--ps-duration-fast) var(--ps-ease-out);
+  transition:
+    clip-path 300ms var(--ps-ease-out) 40ms,
+    opacity 180ms ease;
 }
 
 /* ── Status dot (always visible) — top-left ── */
@@ -278,14 +279,14 @@
 }
 
 /* ── Hover states ── */
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .ps-card:hover .ps-card__image {
     transform: scale(1.03);
   }
 
   .ps-card:hover .ps-card__tagline {
+    clip-path: inset(0 0 0% 0); /* revealed */
     opacity: 1;
-    transform: translateY(0);
   }
 
   .ps-card:hover .ps-card__status-label {
@@ -405,12 +406,13 @@
 
   .ps-card__tagline {
     transition: none;
+    clip-path: inset(0 0 100% 0);
     opacity: 0;
   }
 
   .ps-card:hover .ps-card__tagline {
+    clip-path: inset(0 0 0% 0);
     opacity: 1;
-    transform: none;
   }
 
   .ps-card__status-label {
