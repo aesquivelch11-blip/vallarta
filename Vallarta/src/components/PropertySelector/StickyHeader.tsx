@@ -105,9 +105,9 @@ export default function StickyHeader({ tier, onTierChange, onSearch, onNavigate 
         {searchOpen ? (
           <motion.div
             className="ps-header__search"
-            initial={{ width: 0, opacity: 0 }}
-            animate={{ width: 'auto', opacity: 1 }}
-            transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
+            initial={{ opacity: 0, x: 8 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
           >
             <input
               ref={inputRef}
