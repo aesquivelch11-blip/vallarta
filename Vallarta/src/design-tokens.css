@@ -2133,7 +2133,11 @@ body::before {
     width: 3px;
     height: 3px;
     border-radius: 50%;
-    background: var(--cal-accent-ochre);
+    background: var(--color-accent-positive);
+}
+
+.cal-day__dot--confirmed {
+    background: var(--color-accent-positive);
 }
 
 .cal-day__dot--owner {
@@ -2178,7 +2182,7 @@ body::before {
 }
 
 .cal-grid-legend__dot--confirmed {
-    background: var(--cal-accent-ochre);
+    background: var(--color-accent-positive);
 }
 
 .cal-grid-legend__dot--pending {
@@ -2410,13 +2414,13 @@ body::before {
 }
 
 .cal-booking-row__status--confirmed {
-    color: var(--color-accent-warning);
-    background: var(--color-accent-warning-bg);
+    color: var(--color-accent-positive);
+    background: var(--color-accent-positive-bg);
 }
 
 .cal-booking-row__status--pending {
-    color: var(--color-accent-positive);
-    background: var(--color-accent-positive-bg);
+    color: var(--color-accent-warning);
+    background: var(--color-accent-warning-bg);
 }
 
 .cal-booking-row__status--cancelled {
@@ -2631,13 +2635,13 @@ body::before {
 }
 
 .cal-drawer-btn--confirm {
-    background: var(--cal-owner-accent);
-    color: var(--cal-btn-text-dark);
+    background: var(--color-accent-positive);
+    color: rgba(255, 255, 255, 0.95);
 }
 
 .cal-drawer-btn--save {
-    background: var(--cal-owner-accent);
-    color: var(--cal-btn-text-dark);
+    background: var(--color-accent-positive);
+    color: rgba(255, 255, 255, 0.95);
 }
 
 .cal-drawer-btn--edit {
