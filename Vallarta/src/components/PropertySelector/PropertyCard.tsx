@@ -53,51 +53,48 @@ export default function PropertyCard({ property, onSelect, index, tier }: Proper
   }, []);
 
   return (
-    <div className="ps-card-shell">
-      <button
-        onClick={() => onSelect(property.id)}
-        className={`ps-card dashboard-focus ${tall ? 'ps-card--tall' : 'ps-card--short'}`}
-        style={{ '--i': index } as React.CSSProperties}
-        aria-label={`View ${property.name}, ${property.location}`}
+    <button
+      onClick={() => onSelect(property.id)}
+      className={`ps-card dashboard-focus ${tall ? 'ps-card--tall' : 'ps-card--short'}`}
+      style={{ '--i': index } as React.CSSProperties}
+      aria-label={`View ${property.name}, ${property.location}`}
+    >
+      <div
+        ref={imageRef}
+        className="ps-card__image-wrap"
+        style={{
+          clipPath: revealed ? 'inset(0 0 0 0)' : 'inset(100% 0 0 0)',
+          transition: revealed
+            ? `clip-path var(--ps-duration-base) var(--ps-ease-out), aspect-ratio var(--ps-duration-base) var(--ps-ease-out)`
+            : 'none',
+        }}
       >
-        <div
-          ref={imageRef}
-          className="ps-card__image-wrap"
-          style={{
-            clipPath: revealed ? 'inset(0 0 0 0)' : 'inset(100% 0 0 0)',
-            transition: revealed
-              ? `clip-path var(--ps-duration-base) var(--ps-ease-out), aspect-ratio var(--ps-duration-base) var(--ps-ease-out)`
-              : 'none',
-          }}
-        >
-          <picture>
-            {property.imageWebp && <source srcSet={property.imageWebp} type="image/webp" />}
-            <motion.img
-              layoutId={`property-image-${property.id}`}
-              src={property.imageUrl}
-              alt={property.name}
-              className="ps-card__image"
-              loading="lazy"
-            />
-          </picture>
-          <div className="ps-card__gradient" />
-          <div className="ps-card__shimmer" aria-hidden="true" />
-          <div className="ps-card__status">
-            <span className={`ps-card__status-dot ps-card__status-dot--${property.occupancyStatus}`} />
-            <span className="ps-card__status-label">{STATUS_LABELS[property.occupancyStatus]}</span>
-          </div>
-          <div className="ps-card__overlay">
-            {property.propertyType && (
-              <p className="ps-card__type">{property.propertyType}</p>
-            )}
-            <motion.h3 className="ps-card__name" layoutId={`property-title-${property.id}`}>{property.name}</motion.h3>
-            <p className="ps-card__location">{property.location}</p>
-            {property.tagline && (
-              <p className="ps-card__tagline">{property.tagline}</p>
-            )}
-          </div>
+        <picture>
+          {property.imageWebp && <source srcSet={property.imageWebp} type="image/webp" />}
+          <motion.img
+            layoutId={`property-image-${property.id}`}
+            src={property.imageUrl}
+            alt={property.name}
+            className="ps-card__image"
+            loading="lazy"
+          />
+        </picture>
+        <div className="ps-card__gradient" />
+        <div className="ps-card__status">
+          <span className={`ps-card__status-dot ps-card__status-dot--${property.occupancyStatus}`} />
+          <span className="ps-card__status-label">{STATUS_LABELS[property.occupancyStatus]}</span>
         </div>
-      </button>
-    </div>
+        <div className="ps-card__overlay">
+          {property.propertyType && (
+            <p className="ps-card__type">{property.propertyType}</p>
+          )}
+          <motion.h3 className="ps-card__name" layoutId={`property-title-${property.id}`}>{property.name}</motion.h3>
+          <p className="ps-card__location">{property.location}</p>
+          {property.tagline && (
+            <p className="ps-card__tagline">{property.tagline}</p>
+          )}
+        </div>
+      </div>
+    </button>
   );
 }
