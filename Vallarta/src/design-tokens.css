@@ -2844,14 +2844,14 @@ body::before {
     animation: bookingRowIn 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.cal-bookings__list > li:nth-child(1)  { animation-delay: 920ms; }
-.cal-bookings__list > li:nth-child(2)  { animation-delay: 970ms; }
-.cal-bookings__list > li:nth-child(3)  { animation-delay: 1020ms; }
-.cal-bookings__list > li:nth-child(4)  { animation-delay: 1070ms; }
-.cal-bookings__list > li:nth-child(5)  { animation-delay: 1120ms; }
-.cal-bookings__list > li:nth-child(6)  { animation-delay: 1170ms; }
-.cal-bookings__list > li:nth-child(7)  { animation-delay: 1220ms; }
-.cal-bookings__list > li:nth-child(8)  { animation-delay: 1270ms; }
+.cal-bookings__list > li:nth-child(1)  { animation-delay: 600ms; }
+.cal-bookings__list > li:nth-child(2)  { animation-delay: 650ms; }
+.cal-bookings__list > li:nth-child(3)  { animation-delay: 700ms; }
+.cal-bookings__list > li:nth-child(4)  { animation-delay: 750ms; }
+.cal-bookings__list > li:nth-child(5)  { animation-delay: 800ms; }
+.cal-bookings__list > li:nth-child(6)  { animation-delay: 850ms; }
+.cal-bookings__list > li:nth-child(7)  { animation-delay: 900ms; }
+.cal-bookings__list > li:nth-child(8)  { animation-delay: 950ms; }
 
 /* ─── Calendar Responsive ─── */
 @media (max-width: 400px) {
