@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { CalendarDay, MONTH_NAMES } from './bookingUtils';
 
-const DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+const DAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 interface CalendarGridProps {
   days: CalendarDay[];
@@ -12,6 +12,9 @@ interface CalendarGridProps {
   onNextMonth: () => void;
   slideDir?: 'next' | 'prev';
   onDateRangeSelected?: (startDay: CalendarDay, endDay: CalendarDay) => void;
+  error?: string | null;
+  onRetry?: () => void;
+  loading?: boolean;
 }
 
 function ChevronLeft() {
@@ -30,9 +33,93 @@ function ChevronRight() {
   );
 }
 
-export default function CalendarGrid({ days, year, month, onPrevMonth, onNextMonth, slideDir, onDateRangeSelected }: CalendarGridProps) {
+export default function CalendarGrid({ days, year, month, onPrevMonth, onNextMonth, slideDir, onDateRangeSelected, error, onRetry, loading }: CalendarGridProps) {
   const hasPending = days.some(d => d.pending);
   const hasOwner = days.some(d => d.ownerStay);
+
+  if (loading) {
+    return (
+      <div role="group" aria-label="Loading calendar" className="cal-calendar">
+        <div className="cal-calendar__inner">
+          <div className="cal-card-shell">
+            <div className="cal-card cal-card--grid">
+              <div className="cal-month-nav">
+                <div style={{ width: 64, height: 24, borderRadius: 6, background: 'rgba(255,255,255,0.06)' }} className="animate-pulse" />
+              </div>
+              <div className="cal-grid">
+                {DAY_LABELS.map((_, i) => (
+                  <div key={`skel-label-${i}`} className="cal-day-label" style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 4, height: 14 }} />
+                ))}
+                {Array.from({ length: 42 }, (_, i) => (
+                  <div key={`skel-day-${i}`} className="cal-day animate-pulse" style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 8 }} />
+                ))}
+              </div>
+              <div className="cal-grid-legend" style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 6, height: 18, width: '50%' }} />
+
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div role="group" aria-label="Calendar error" className="cal-calendar">
+        <div className="cal-calendar__inner">
+          <div className="cal-card-shell">
+            <div
+              className="cal-card cal-card--grid"
+              style={{
+                background: 'rgba(255, 255, 255, 0.04)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 12,
+                padding: '32px 16px',
+                minHeight: 260,
+              }}
+            >
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+                style={{ color: 'var(--cal-error, rgba(248, 113, 113, 0.85))' }}
+              >
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" />
+                <line x1="12" y1="8" x2="12" y2="13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                <circle cx="12" cy="16" r="0.75" fill="currentColor" />
+              </svg>
+              <p style={{ color: 'rgba(255, 255, 255, 0.7)', margin: 0, textAlign: 'center', fontSize: 14 }}>
+                {error}
+              </p>
+              {onRetry && (
+                <button
+                  onClick={onRetry}
+                  style={{
+                    background: 'var(--color-accent-positive, #22c55e)',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: 8,
+                    padding: '6px 16px',
+                    fontSize: 13,
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                  }}
+                >
+                  Retry
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const [dragStartDay, setDragStartDay] = useState<CalendarDay | null>(null);
   const [dragHoverDay, setDragHoverDay] = useState<CalendarDay | null>(null);
@@ -130,7 +217,7 @@ export default function CalendarGrid({ days, year, month, onPrevMonth, onNextMon
             <div
               key={`${year}-${month}`}
               role="grid"
-              aria-label="Calendar days"
+              aria-label="Calendar days. Click and drag to select a date range."
               className={`cal-grid${slideDir ? ` cal-grid--entering-${slideDir}` : ''}`}
               onMouseDown={handleMouseDown}
               onMouseOver={handleMouseEnter}
@@ -191,6 +278,7 @@ export default function CalendarGrid({ days, year, month, onPrevMonth, onNextMon
                         aria-hidden="true"
                         className={[
                           'cal-day__dot',
+                          !d.ownerStay && !isPendingDay ? 'cal-day__dot--confirmed' : '',
                           d.ownerStay ? 'cal-day__dot--owner' : '',
                           isPendingDay ? 'cal-day__dot--pending' : '',
                         ].filter(Boolean).join(' ')}
@@ -221,9 +309,7 @@ export default function CalendarGrid({ days, year, month, onPrevMonth, onNextMon
               )}
             </div>
 
-            <p className="cal-grid-hint">
-              Click and drag dates to create a new reservation.
-            </p>
+
           </div>
         </div>
       </div>

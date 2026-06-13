@@ -2175,15 +2175,6 @@ body::before {
     background: var(--cal-owner-accent);
 }
 
-.cal-grid-hint {
-    text-align: center;
-    margin-top: clamp(8px, 1.5vh, 14px);
-    font-family: var(--font-ui);
-    font-size: 0.8125rem;
-    color: rgba(255, 255, 255, 0.4);
-    letter-spacing: 0.02em;
-}
-
 /* ─── Month nav arrows ─── */
 .cal-month-nav {
     display: flex;
