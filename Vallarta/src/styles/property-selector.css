@@ -140,6 +140,26 @@
   pointer-events: none;
 }
 
+/* Coastal shimmer — Sunset Ochre warm glow blooms at card base on hover */
+.ps-card__shimmer {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 80% 40% at 50% 110%,
+    rgba(212, 154, 85, 0.18) 0%,
+    transparent 60%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 400ms var(--ps-ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ps-card:hover .ps-card__shimmer {
+    opacity: 1;
+  }
+}
+
 /* ── Text overlay section ── */
 .ps-card__overlay {
   position: absolute;
@@ -397,6 +417,10 @@
     transition: none;
     opacity: 1;
     transform: none;
+  }
+
+  .ps-card__shimmer {
+    transition: none;
   }
 
   .ps-progress {

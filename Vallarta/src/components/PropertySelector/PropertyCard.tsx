@@ -81,6 +81,7 @@ export default function PropertyCard({ property, onSelect, index, tier }: Proper
             />
           </picture>
           <div className="ps-card__gradient" />
+          <div className="ps-card__shimmer" aria-hidden="true" />
           <div className="ps-card__status">
             <span className={`ps-card__status-dot ps-card__status-dot--${property.occupancyStatus}`} />
             <span className="ps-card__status-label">{STATUS_LABELS[property.occupancyStatus]}</span>
