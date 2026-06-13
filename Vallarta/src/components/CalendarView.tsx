@@ -18,7 +18,6 @@ interface CalendarViewProps {
 
 const EASE = [0.32, 0.72, 0, 1] as const;
 
-const SIDE_PANEL_WIDTH = '420px';
 const JANUARY = 0;
 const DECEMBER = 11;
 
@@ -146,6 +145,9 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
 
   return (
     <div className="cal-screen">
+      {/* ─── Cinematic background (extracted for Ken Burns) ─── */}
+      <div aria-hidden="true" className="cal-bg" />
+
       {/* ─── Dark base overlay ─── */}
       <div aria-hidden="true" className="cal-base-overlay" />
 
@@ -156,13 +158,9 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
       <div className="nav-grain" aria-hidden="true" />
 
       {/* ─── Main Content Wrapper ─── */}
-      {/* The panel slides in from the right as a sibling; this wrapper
-          shrinks its right edge so nothing hides underneath the panel. */}
-      <motion.div
+      {/* Panel overlays on top (z-50); this wrapper stays full-width. */}
+      <div
         className="cal-content-wrapper"
-        initial={{ right: 0 }}
-        animate={{ right: showPanel ? SIDE_PANEL_WIDTH : '0px' }}
-        transition={{ duration: 0.2, ease: EASE }}
       >
         {/* ─── Top Navigation (absolute within wrapper so it overlays the bg) ─── */}
         <motion.nav
@@ -174,7 +172,7 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
           transition={{ duration: 1, ease: EASE, delay: 0.3 }}
         >
           <button
-            onClick={() => onNavigate('reporting', 'push')}
+            onClick={() => onNavigate('nav_menu', 'push')}
             aria-label="Go to Vallarta Estates dashboard"
             className="cal-nav__brand"
           >
@@ -202,6 +200,9 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
               onNextMonth={handleNextMonth}
               slideDir={slideDir}
               onDateRangeSelected={handleDateRangeSelected}
+              loading={false}
+              error={null}
+              onRetry={() => {}}
             />
           </motion.div>
 
@@ -215,10 +216,11 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
               bookings={bookings}
               onSelect={handleSelectBooking}
               onAdd={handleAddBooking}
+              loading={false}
             />
           </motion.div>
         </div>
-      </motion.div>
+      </div>
 
       {/* ─── Booking Panel ─── */}
       <BookingPanel
