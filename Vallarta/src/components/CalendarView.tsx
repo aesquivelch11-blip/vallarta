@@ -179,8 +179,7 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
             Vallarta Estates
           </button>
           <div className="cal-nav__right">
-            <span className="cal-pill">Estate Supervisor</span>
-            <div aria-hidden="true" className="cal-avatar">JD</div>
+            <span className="cal-nav__role">Estate Supervisor</span>
           </div>
         </motion.nav>
 
