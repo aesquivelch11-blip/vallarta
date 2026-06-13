@@ -1,7 +1,19 @@
 import { useState, useRef, useEffect } from 'react';
-import { Search, X } from 'lucide-react';
 import { motion } from 'motion/react';
 import { ScreenType } from '../../types';
+
+const SearchIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+    <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" strokeWidth="0.9" />
+    <path d="M10 10L13.5 13.5" stroke="currentColor" strokeWidth="0.9" strokeLinecap="round" />
+  </svg>
+);
+
+const CloseIcon = () => (
+  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+    <path d="M1 1L11 11M11 1L1 11" stroke="currentColor" strokeWidth="0.85" strokeLinecap="round" />
+  </svg>
+);
 
 export type TierLevel = 'gallery' | 'collection' | 'catalog';
 
@@ -123,7 +135,7 @@ export default function StickyHeader({ tier, onTierChange, onSearch, onNavigate 
               className="ps-header__search-close"
               aria-label="Close search"
             >
-              <X size={16} />
+              <CloseIcon />
             </button>
           </motion.div>
         ) : (
@@ -132,7 +144,7 @@ export default function StickyHeader({ tier, onTierChange, onSearch, onNavigate 
             className="ps-header__search-toggle"
             aria-label="Open search"
           >
-            <Search size={16} />
+            <SearchIcon />
           </button>
         )}
 
