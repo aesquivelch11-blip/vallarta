@@ -2484,11 +2484,21 @@ body::before {
     opacity: 1;
 }
 
-/* ─── Drawer panel — Banderas Midnight ─── */
+/* ─── Drawer panel — Banderas Midnight translucent ─── */
 .cal-panel.cal-drawer-sheet {
-    background: var(--cal-drawer-surface);
-    border-left: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: -12px 0 48px rgba(0, 0, 0, 0.3);
+    background: rgba(22, 39, 50, 0.88);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border-left: 1px solid rgba(255, 255, 255, 0.10);
+    box-shadow: -20px 0 60px rgba(0, 0, 0, 0.5);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+    .cal-panel.cal-drawer-sheet {
+        background: rgba(22, 39, 50, 0.98);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
 }
 
 .cal-drawer-sheet {
