@@ -66,17 +66,7 @@
 
 /* Grid cell */
 .ps-grid-cell {
-  opacity: 0;
-  transform: translateY(16px);
-  animation: ps-cell-in var(--ps-duration-base) var(--ps-ease-out) forwards;
-  animation-delay: calc(var(--i, 0) * 80ms);
-}
-
-@keyframes ps-cell-in {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  /* intentionally empty — Framer Motion controls opacity/transform */
 }
 
 /* ── Card ── */
@@ -377,12 +367,6 @@
 
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
-  .ps-grid-cell {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-
   .ps-card__image {
     transition: none;
   }

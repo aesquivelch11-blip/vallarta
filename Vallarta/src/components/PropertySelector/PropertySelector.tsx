@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import Lenis from 'lenis';
 import { ScreenType } from '../../types';
 import { sampleProperties } from './propertyData';
@@ -30,6 +30,7 @@ export default function PropertySelector({ onNavigate, onSelectProperty }: Prope
   const [scrollProgress, setScrollProgress] = useState(0);
   const lenisRef = useRef<Lenis | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -179,9 +180,20 @@ export default function PropertySelector({ onNavigate, onSelectProperty }: Prope
                 exit={{ opacity: 0, scale: 0.97 }}
                 transition={{
                   layout: { duration: 0.5, ease: [0.23, 1, 0.32, 1] },
-                  opacity: { duration: 0.6, ease: [0.23, 1, 0.32, 1], delay: selectedId === null ? i * 0.06 : 0 },
-                  y: { duration: 0.6, ease: [0.23, 1, 0.32, 1], delay: selectedId === null ? i * 0.06 : 0 },
-                  filter: { duration: 0.6, ease: [0.23, 1, 0.32, 1] },
+                  opacity: {
+                    duration: shouldReduceMotion ? 0 : 0.6,
+                    ease: [0.23, 1, 0.32, 1],
+                    delay: shouldReduceMotion ? 0 : (selectedId === null ? i * 0.06 : 0),
+                  },
+                  y: {
+                    duration: shouldReduceMotion ? 0 : 0.6,
+                    ease: [0.23, 1, 0.32, 1],
+                    delay: shouldReduceMotion ? 0 : (selectedId === null ? i * 0.06 : 0),
+                  },
+                  filter: {
+                    duration: shouldReduceMotion ? 0 : 0.6,
+                    ease: [0.23, 1, 0.32, 1],
+                  },
                 }}
               >
                 <PropertyCard
