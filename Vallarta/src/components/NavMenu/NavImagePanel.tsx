@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { flushSync } from 'react-dom';
 
 interface NavImageItem {
   id: string;
@@ -50,15 +51,18 @@ export default function NavImagePanel({ items, activeIndex, direction = 'next' }
     setPrevLayer(currentLayer);
     setPhase('exiting');
 
-    // First RAF: paint the layer at its clipped "from" position
+    // First RAF: force-commit the entering frame so the browser paints it
+    // before the second RAF fires. Without flushSync, React 18 concurrent
+    // mode batches both RAFs into one commit and the CSS transition never
+    // sees an intermediate state → hard cut instead of dissolve.
     rafId.current = requestAnimationFrame(() => {
-      setCurrentLayer(activeIndex);
-      setPhase('entering');
+      flushSync(() => {
+        setCurrentLayer(activeIndex);
+        setPhase('entering');
+      });
 
-      // Second RAF: browser has now committed the entering (clipped) frame.
-      // Setting enter-done here gives the CSS transition a real start state
-      // to interpolate from — without this, both state changes collapse into
-      // one render and the clip-path snaps instead of wiping.
+      // Second RAF: entering frame is now painted. enter-done triggers the
+      // CSS transition from the committed start state.
       rafId.current = requestAnimationFrame(() => {
         setPhase('enter-done');
 

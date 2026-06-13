@@ -1,6 +1,6 @@
 // src/components/calendar/BookingPanel.tsx
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
+import { motion, AnimatePresence, useReducedMotion, LayoutGroup } from 'motion/react';
 import {
   Booking,
   BookingType,
@@ -8,6 +8,7 @@ import {
   findOverlap,
   formatDisplayDates,
 } from './bookingUtils';
+import DatePicker from './DatePicker';
 
 export type PanelMode = 'view' | 'edit' | 'add';
 
@@ -50,6 +51,7 @@ export default function BookingPanel({
   const [overlapWarning, setOverlapWarning] = useState('');
   const [overrideOverlap, setOverrideOverlap] = useState(false);
   const [cancelArmed, setCancelArmed] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const cancelTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Reset form state when panel opens or mode changes
@@ -164,11 +166,11 @@ export default function BookingPanel({
         >
           {/* Close Button top right */}
           <div className="flex justify-end">
-            <button
-              onClick={onClose}
-              aria-label="Close booking panel"
-              className="w-[44px] h-[44px] rounded-full border border-white/16 bg-transparent text-white/58 hover:border-white/34 hover:text-white/96 hover:bg-white/06 transition-all duration-200 flex items-center justify-center cursor-pointer"
-            >
+              <button
+                onClick={onClose}
+                aria-label="Close booking panel"
+                className="cal-drawer-close w-[44px] h-[44px] rounded-full bg-transparent transition-colors duration-200 flex items-center justify-center cursor-pointer"
+              >
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <path d="M1 1L13 13M1 13L13 1" />
               </svg>
@@ -277,44 +279,101 @@ export default function BookingPanel({
                 />
               </div>
 
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 mt-4">
                 <span className="cal-drawer-label">Reservation Profile</span>
-                <div className="cal-drawer-toggle" role="group" aria-label="Booking type">
-                  <button
-                    type="button"
-                    className={`cal-drawer-toggle__option${formType === 'guest' ? ' cal-drawer-toggle__option--active' : ''}`}
-                    onClick={() => setFormType('guest')}
-                    aria-pressed={formType === 'guest'}
-                  >
-                    Guest
-                  </button>
-                  <button
-                    type="button"
-                    className={`cal-drawer-toggle__option${formType === 'owner' ? ' cal-drawer-toggle__option--active' : ''}`}
-                    onClick={() => setFormType('owner')}
-                    aria-pressed={formType === 'owner'}
-                  >
-                    Owner Stay
-                  </button>
-                </div>
+                <LayoutGroup id="booking-type-toggle">
+                  <div className="cal-drawer-toggle" role="group" aria-label="Booking type">
+                    {(['guest', 'owner'] as BookingType[]).map((type) => (
+                      <button
+                        key={type}
+                        type="button"
+                        className={`cal-drawer-toggle__option${formType === type ? ' cal-drawer-toggle__option--active' : ''}`}
+                        onClick={() => setFormType(type)}
+                        aria-pressed={formType === type}
+                      >
+                        {formType === type && (
+                          <motion.span
+                            layoutId="toggle-pill"
+                            className="cal-drawer-toggle__pill"
+                            aria-hidden="true"
+                            transition={
+                              prefersReduced
+                                ? { duration: 0 }
+                                : { type: 'spring', stiffness: 500, damping: 38, mass: 0.8 }
+                            }
+                          />
+                        )}
+                        <span className="cal-drawer-toggle__label">
+                          {type === 'guest' ? 'Guest' : 'Owner Stay'}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </LayoutGroup>
               </div>
 
-              <div className="flex gap-4">
-                <div className="flex flex-col gap-1.5 flex-1">
-                  <span className="cal-drawer-label">Arrival & Departure</span>
-                  <button
-                    type="button"
-                    className={`cal-drawer-date-field${formCheckIn && formCheckOut ? ' cal-drawer-date-field--set' : ''}`}
-                    aria-label="Select arrival and departure dates"
-                    onClick={() => {
-                      onClose();
-                    }}
-                  >
-                    {formCheckIn && formCheckOut
-                      ? formatDisplayDates(formCheckIn, formCheckOut)
-                      : 'Set arrival and departure'}
-                  </button>
+              <div className="relative mt-4">
+                <span className="cal-drawer-label block mb-2">Dates</span>
+                
+                <div className="flex gap-4">
+                  <div className="flex flex-col gap-1.5 flex-1">
+                    <span className="cal-drawer-label text-[#242424]/50">Arrival</span>
+                    <button
+                      type="button"
+                      onClick={() => setPickerOpen(true)}
+                      className={`cal-drawer-input text-left cursor-pointer flex items-center justify-between ${formCheckIn ? 'text-[#242424]' : 'text-[#242424]/40'}`}
+                      aria-label="Select arrival date"
+                    >
+                      <span>
+                        {formCheckIn
+                          ? new Date(formCheckIn + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                          : 'Select date'}
+                      </span>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-60 text-[#242424]">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                      </svg>
+                    </button>
+                  </div>
+                  
+                  <div className="flex flex-col gap-1.5 flex-1">
+                    <span className="cal-drawer-label text-[#242424]/50">Departure</span>
+                    <button
+                      type="button"
+                      onClick={() => setPickerOpen(true)}
+                      className={`cal-drawer-input text-left cursor-pointer flex items-center justify-between ${formCheckOut ? 'text-[#242424]' : 'text-[#242424]/40'}`}
+                      aria-label="Select departure date"
+                      disabled={!formCheckIn}
+                    >
+                      <span>
+                        {formCheckOut
+                          ? new Date(formCheckOut + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                          : 'Select date'}
+                      </span>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-60 text-[#242424]">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                      </svg>
+                    </button>
+                  </div>
                 </div>
+
+                <DatePicker
+                  isOpen={pickerOpen}
+                  onClose={() => setPickerOpen(false)}
+                  checkIn={formCheckIn}
+                  checkOut={formCheckOut}
+                  bookings={bookings}
+                  excludeBookingId={booking?.id}
+                  onSelectRange={(checkInDate, checkOutDate) => {
+                    setFormCheckIn(checkInDate);
+                    setFormCheckOut(checkOutDate);
+                  }}
+                />
               </div>
 
               {formCheckIn && formCheckOut && derivedNights > 0 && (
@@ -345,7 +404,7 @@ export default function BookingPanel({
                   Confirm Reservation
                 </button>
                 <button
-                  className="cal-drawer-btn--close text-white/40 hover:text-white/60 transition-colors bg-transparent border-none py-2 text-[11px] font-medium tracking-[0.2em] uppercase cursor-pointer self-center"
+                  className="cal-drawer-btn--close text-white/40 hover:text-white/60 transition-colors bg-transparent border-none py-2 cursor-pointer self-center"
                   onClick={onClose}
                 >
                   Cancel

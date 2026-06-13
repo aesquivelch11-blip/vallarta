@@ -2649,9 +2649,11 @@ body::before {
     .cal-add-btn,
     .cal-drawer-btn,
     .cal-drawer-toggle__option,
+    .cal-drawer-toggle__pill,
     .cal-drawer-btn--cancel-link,
     .cal-bookings__empty-cta {
         transition: none;
+        will-change: auto;
     }
 
     .cal-grid--entering-next,

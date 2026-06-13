@@ -70,6 +70,7 @@ export default function NavMenuView({
   onNavigate,
   onClose,
   previousScreen,
+  onLogout,
 }: NavMenuViewProps) {
   const [activeIndex, setActiveIndex] = useState(initialIndex);
   const [direction, setDirection] = useState<'next' | 'prev'>('next');
@@ -216,23 +217,18 @@ export default function NavMenuView({
         style={{ height: 'var(--nav-header-height)', padding: '0 56px' }}
       >
         <span className="nav-portal__wordmark">Vallarta Estates</span>
-        <button
-          aria-label="Close menu"
-          onClick={onClose}
-          className="nav-close-btn"
-        >
-          <svg
-            width="11"
-            height="11"
-            viewBox="0 0 11 11"
-            fill="none"
-            aria-hidden="true"
-            focusable="false"
-          >
-            <line x1="1" y1="1" x2="10" y2="10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-            <line x1="10" y1="1" x2="1" y2="10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-          </svg>
-        </button>
+        <div className="nav-header-actions">
+          {onLogout && (
+            <button
+              aria-label="Sign out"
+              onClick={onLogout}
+              className="nav-logout-btn"
+            >
+              Sign out
+            </button>
+          )}
+          {onLogout && <span className="nav-header-separator" aria-hidden="true" />}
+        </div>
       </header>
 
       {/* Screen-reader live region */}

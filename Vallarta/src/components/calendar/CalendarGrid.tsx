@@ -89,7 +89,7 @@ export default function CalendarGrid({ days, year, month, onPrevMonth, onNextMon
   const hoverDayIndex = dragHoverDay ? dragHoverDay.day : -1;
   const minDay = Math.min(startDayIndex, hoverDayIndex);
   const maxDay = Math.max(startDayIndex, hoverDayIndex);
-  
+
   const liveRegionText = dragStartDay && dragHoverDay && minDay > 0
     ? `Selecting from ${MONTH_NAMES[month]} ${minDay} to ${MONTH_NAMES[month]} ${maxDay}`
     : '';
@@ -104,7 +104,8 @@ export default function CalendarGrid({ days, year, month, onPrevMonth, onNextMon
         {liveRegionText}
       </div>
       <div className="cal-calendar__inner">
-        <div className="cal-card cal-card--grid">
+        <div className="cal-card-shell">
+          <div className="cal-card cal-card--grid">
             <div className="cal-month-nav">
               <button
                 onClick={onPrevMonth}
@@ -219,10 +220,11 @@ export default function CalendarGrid({ days, year, month, onPrevMonth, onNextMon
                 </span>
               )}
             </div>
-            
+
             <p className="cal-grid-hint">
               Click and drag dates to create a new reservation.
             </p>
+          </div>
         </div>
       </div>
     </div>
