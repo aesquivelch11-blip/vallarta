@@ -3443,3 +3443,385 @@ body::before {
         transition: none;
     }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   CalendarView v2 — Redesigned layout
+   3-month grid at top, glance strip + reservations list below
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Page layout: vertical stack inside cal-screen ─── */
+.cv2-layout {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(20px, 3vh, 32px);
+    padding-top: clamp(80px, 11vh, 108px);
+    padding-left: clamp(24px, 5vw, 56px);
+    padding-right: clamp(24px, 5vw, 56px);
+    padding-bottom: clamp(40px, 6vh, 64px);
+    min-height: 100dvh;
+}
+
+/* ─── Lower section: glance + reservations ─── */
+.cv2-lower {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(16px, 2.5vh, 24px);
+}
+
+/* ─── At a Glance strip ─── */
+.cv2-glance {
+    display: flex;
+    align-items: center;
+    gap: clamp(24px, 3vw, 40px);
+    background: rgba(250, 248, 245, 0.80);
+    border: 1px solid rgba(36, 36, 36, 0.07);
+    border-radius: 0.5rem;
+    backdrop-filter: blur(28px) saturate(105%);
+    -webkit-backdrop-filter: blur(28px) saturate(105%);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.90) inset, 0 12px 40px rgba(14, 26, 34, 0.08);
+    padding: clamp(16px, 2.5vh, 24px) clamp(24px, 4vw, 40px);
+    flex-wrap: wrap;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+    .cv2-glance {
+        background: rgba(250, 248, 245, 0.97);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+}
+
+.cv2-glance__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+.cv2-glance__label {
+    font-family: var(--font-ui);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(36, 36, 36, 0.42);
+    line-height: 1;
+}
+
+.cv2-glance__value {
+    font-family: var(--font-display);
+    font-size: clamp(1.125rem, 2vw, 1.5rem);
+    font-weight: 400;
+    color: rgba(36, 36, 36, 0.90);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+}
+
+.cv2-glance__sub {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    color: rgba(36, 36, 36, 0.42);
+    letter-spacing: 0.04em;
+    line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+}
+
+.cv2-glance__divider {
+    width: 1px;
+    height: 36px;
+    background: rgba(36, 36, 36, 0.09);
+    flex-shrink: 0;
+    align-self: center;
+}
+
+.cv2-glance__actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+/* ─── Buttons ─── */
+.cv2-btn-primary {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: var(--color-accent-positive);
+    color: rgba(255, 255, 255, 0.96);
+    border: 1px solid transparent;
+    border-radius: 999px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition:
+        opacity 200ms var(--ease-out-expo),
+        transform 160ms var(--ease-out-expo);
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.cv2-btn-primary:hover { opacity: 0.85; }
+.cv2-btn-primary:active { transform: scale(0.97); transition-duration: 80ms; }
+.cv2-btn-primary:focus-visible { outline: 2px solid var(--color-accent-positive); outline-offset: 3px; }
+
+.cv2-btn-owner {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: transparent;
+    color: #8c7658;
+    border: 1px solid rgba(201, 184, 160, 0.55);
+    border-radius: 999px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition:
+        background 200ms var(--ease-out-expo),
+        border-color 200ms var(--ease-out-expo),
+        transform 160ms var(--ease-out-expo);
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.cv2-btn-owner:hover { background: rgba(201, 184, 160, 0.12); border-color: rgba(201, 184, 160, 0.80); }
+.cv2-btn-owner:active { transform: scale(0.97); transition-duration: 80ms; }
+.cv2-btn-owner:focus-visible { outline: 2px solid rgba(201, 184, 160, 0.70); outline-offset: 3px; }
+
+/* ─── Reservations card ─── */
+.cv2-reservations {
+    background: rgba(250, 248, 245, 0.80);
+    border: 1px solid rgba(36, 36, 36, 0.07);
+    border-radius: 0.5rem;
+    backdrop-filter: blur(28px) saturate(105%);
+    -webkit-backdrop-filter: blur(28px) saturate(105%);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.90) inset, 0 12px 40px rgba(14, 26, 34, 0.08);
+    padding: clamp(20px, 3vh, 32px) clamp(24px, 4vw, 40px);
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow-y: auto;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+    .cv2-reservations {
+        background: rgba(250, 248, 245, 0.97);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+}
+
+.cv2-reservations__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: clamp(10px, 1.5vh, 16px);
+    border-bottom: 1px solid rgba(36, 36, 36, 0.08);
+    margin-bottom: 4px;
+}
+
+.cv2-reservations__title {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.25rem, 2.5vw, 1.625rem);
+    color: rgba(36, 36, 36, 0.88);
+    line-height: 1;
+}
+
+.cv2-reservations__count {
+    font-family: var(--font-ui);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: rgba(36, 36, 36, 0.40);
+}
+
+.cv2-reservations__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: clamp(24px, 4vh, 40px) 0;
+    font-family: var(--font-ui);
+    font-size: 0.875rem;
+    color: rgba(36, 36, 36, 0.38);
+    letter-spacing: 0.04em;
+}
+
+/* ─── Reservation list ─── */
+.cv2-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.cv2-row {
+    display: grid;
+    grid-template-columns: clamp(140px, 18vw, 200px) 1fr clamp(72px, 9vw, 100px) clamp(52px, 6vw, 72px);
+    align-items: center;
+    gap: 12px;
+    padding: clamp(12px, 1.8vh, 17px) 0;
+    border-bottom: 1px solid rgba(36, 36, 36, 0.07);
+    cursor: pointer;
+    border-radius: 8px;
+    transition:
+        background 300ms cubic-bezier(0.22, 1, 0.36, 1),
+        padding 300ms cubic-bezier(0.22, 1, 0.36, 1),
+        margin 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cv2-row:last-child { border-bottom: none; }
+
+.cv2-row:hover,
+.cv2-row:focus-visible {
+    background: rgba(36, 36, 36, 0.035);
+    margin: 0 clamp(-24px, -4vw, -40px);
+    padding: clamp(12px, 1.8vh, 17px) clamp(24px, 4vw, 40px);
+    outline: none;
+}
+
+.cv2-row:active { transform: scale(0.99); transition: transform 80ms var(--ease-out-expo); }
+.cv2-row:focus-visible { box-shadow: inset 0 0 0 1.5px rgba(36, 36, 36, 0.20); }
+
+.cv2-row--owner { background: rgba(201, 184, 160, 0.04); }
+
+/* Dates column */
+.cv2-row__dates {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cv2-row__date-range {
+    font-family: var(--font-ui);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(36, 36, 36, 0.78);
+    line-height: 1;
+}
+
+.cv2-row__countdown {
+    font-family: var(--font-ui);
+    font-size: 0.6rem;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(36, 36, 36, 0.38);
+    line-height: 1;
+}
+
+/* Guest column */
+.cv2-row__guest-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.cv2-row__guest {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.0625rem;
+    color: var(--color-ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cv2-row__chip {
+    font-family: var(--font-ui);
+    font-size: 0.5625rem;
+    font-weight: 500;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.cv2-row__chip--owner { color: var(--status-owner); }
+
+/* Status column */
+.cv2-row__status {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.cv2-row__status--confirmed { color: var(--status-positive); }
+.cv2-row__status--pending   { color: var(--status-pending); }
+.cv2-row__status--cancelled { color: var(--status-cancelled); text-decoration: line-through; }
+
+/* Nights column */
+.cv2-row__nights {
+    font-family: var(--font-ui);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--status-positive);
+    text-align: right;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 2px;
+    justify-content: flex-end;
+}
+
+.cv2-row__nights-val   { font-size: 1rem; }
+.cv2-row__nights-label { font-size: 0.6875rem; font-weight: 400; color: rgba(36, 36, 36, 0.48); letter-spacing: 0.10em; text-transform: uppercase; }
+
+/* ─── Mobile ─── */
+@media (max-width: 640px) {
+    .cv2-glance {
+        gap: 16px;
+    }
+    .cv2-glance__divider { display: none; }
+    .cv2-glance__actions {
+        margin-left: 0;
+        width: 100%;
+    }
+    .cv2-row {
+        grid-template-columns: 1fr auto auto;
+        grid-template-rows: auto auto;
+    }
+    .cv2-row__dates {
+        grid-column: 1;
+        grid-row: 1;
+    }
+    .cv2-row__guest-cell {
+        grid-column: 1;
+        grid-row: 2;
+    }
+    .cv2-row__status {
+        grid-column: 2;
+        grid-row: 1;
+    }
+    .cv2-row__nights {
+        grid-column: 3;
+        grid-row: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cv2-row,
+    .cv2-btn-primary,
+    .cv2-btn-owner {
+        transition: none;
+    }
+}

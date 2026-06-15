@@ -16,6 +16,7 @@ interface BookingPanelProps {
   open: boolean;
   booking: Booking | null;
   mode: PanelMode;
+  initialType?: BookingType;
   preselectedRange?: { checkIn: string; checkOut: string } | null;
   bookings: Booking[];
   onSave: (booking: Booking) => void;
@@ -78,7 +79,7 @@ export default function BookingPanel({
       setFormCheckOut(booking.checkOut);
     } else if (mode === 'add') {
       setFormGuest('');
-      setFormType('guest');
+      setFormType(initialType || 'guest');
       setFormCheckIn(preselectedRange?.checkIn || '');
       setFormCheckOut(preselectedRange?.checkOut || '');
     }
