@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./design-tokens.css";
+@import "./components/calendar/calendar.css";
 @import "./styles/property-selector.css";
 
 

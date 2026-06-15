@@ -44,6 +44,7 @@ export default function BookingPanel({
   open,
   booking,
   mode,
+  initialType,
   preselectedRange,
   bookings,
   onSave,
@@ -86,7 +87,7 @@ export default function BookingPanel({
     setDateError('');
     setOverlapWarning('');
     setOverrideOverlap(false);
-  }, [open, mode, booking, preselectedRange]);
+  }, [open, mode, booking, initialType, preselectedRange]);
 
   useEffect(() => {
     return () => {
