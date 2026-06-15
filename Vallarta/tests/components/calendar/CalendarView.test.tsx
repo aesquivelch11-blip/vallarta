@@ -44,11 +44,11 @@ describe('CalendarView DOM structure', () => {
     expect(grids.length).toBeGreaterThanOrEqual(1);
   });
 
-  it('booking nights are rendered without n suffix', () => {
+  it('booking nights value contains only digits', () => {
     renderCalendar();
-    const nightsCells = document.querySelectorAll('.cal-booking-row__nights');
-    nightsCells.forEach((cell) => {
-      expect(cell.textContent).toMatch(/^\d+$/);
+    const nightsValues = document.querySelectorAll('.cal-booking-row__nights-value');
+    nightsValues.forEach((el) => {
+      expect(el.textContent).toMatch(/^\d+$/);
     });
   });
 
