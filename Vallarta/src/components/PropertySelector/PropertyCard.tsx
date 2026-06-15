@@ -8,23 +8,23 @@ interface PropertyCardProps {
   onSelect: (propertyId: string) => void;
   index: number;
   tier: TierLevel;
+  tall: boolean;
 }
 
-const STATUS_LABELS: Record<string, string> = {
-  available: 'Available',
-  occupied: 'Occupied',
-  maintenance: 'Maintenance',
-  reserved: 'Reserved',
-};
-
-function isTallCard(index: number, tier: TierLevel): boolean {
+export function isTallCard(index: number, tier: TierLevel): boolean {
   if (tier === 'catalog') return false;
   if (tier === 'gallery') return index % 3 === 0;
   return index % 5 === 0 || index % 5 === 3;
 }
 
-export default function PropertyCard({ property, onSelect, index, tier }: PropertyCardProps) {
-  const tall = isTallCard(index, tier);
+const STATUS_LABELS: Record<string, string> = {
+  available: 'Open',
+  occupied: 'In Residence',
+  maintenance: 'On Hold',
+  reserved: 'Reserved',
+};
+
+export default function PropertyCard({ property, onSelect, index, tall }: PropertyCardProps) {
   const imageRef = useRef<HTMLDivElement>(null);
   const [revealed, setRevealed] = useState(false);
 
@@ -80,12 +80,14 @@ export default function PropertyCard({ property, onSelect, index, tier }: Proper
           />
         </picture>
         <div className="ps-card__gradient" />
-        <div className="ps-card__status">
-          <span className={`ps-card__status-dot ps-card__status-dot--${property.occupancyStatus}`} />
-          <span className="ps-card__status-label">{STATUS_LABELS[property.occupancyStatus]}</span>
+        <div className={`ps-card__status ps-card__status--${property.occupancyStatus}`}>
+          {STATUS_LABELS[property.occupancyStatus]}
         </div>
         <div className="ps-card__overlay">
-          <motion.h3 className="ps-card__name" layoutId={`property-title-${property.id}`}>{property.name}</motion.h3>
+          <div className="ps-card__name-rule" aria-hidden="true" />
+          <motion.h3 className="ps-card__name" layoutId={`property-title-${property.id}`}>
+            {property.name}
+          </motion.h3>
           <p className="ps-card__location">{property.location}</p>
         </div>
       </div>

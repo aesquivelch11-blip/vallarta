@@ -14,7 +14,6 @@ export interface Booking {
 }
 
 export interface CalendarDay {
-  date: string;            // YYYY-MM-DD, "" for empty cells
   day: number;
   empty?: boolean;
   booked?: boolean;
@@ -23,7 +22,6 @@ export interface CalendarDay {
   today?: boolean;
   checkin?: boolean;
   checkout?: boolean;
-  past?: boolean;          // strictly before today (computed at build time)
 }
 
 export const MONTH_NAMES = [
@@ -77,13 +75,12 @@ const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, 
   const days: CalendarDay[] = [];
 
   for (let i = 0; i < offset; i++) {
-    days.push({ date: '', day: 0, empty: true });
+    days.push({ day: 0, empty: true });
   }
 
   for (let d = 1; d <= daysInMonth; d++) {
-    const date = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-    const isToday = date === todayStr;
-    const isPast = date < todayStr;
+    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    const isToday = dateStr === todayStr;
 
     let booked = false;
     let ownerStay = false;
@@ -93,22 +90,22 @@ const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, 
 
     for (const b of activeBookings) {
       const isPending = b.status === 'Pending';
-      if (date === b.checkIn) {
+      if (dateStr === b.checkIn) {
         checkin = true;
         if (b.type === 'owner') ownerStay = true;
         if (isPending) pending = true;
-      } else if (date === b.checkOut) {
+      } else if (dateStr === b.checkOut) {
         checkout = true;
         if (b.type === 'owner') ownerStay = true;
         if (isPending) pending = true;
-      } else if (date > b.checkIn && date < b.checkOut) {
+      } else if (dateStr > b.checkIn && dateStr < b.checkOut) {
         booked = true;
         if (b.type === 'owner') ownerStay = true;
         if (isPending) pending = true;
       }
     }
 
-    days.push({ date, day: d, today: isToday, past: isPast, booked, ownerStay, pending, checkin, checkout });
+    days.push({ day: d, today: isToday, booked, ownerStay, pending, checkin, checkout });
   }
 
   return days;

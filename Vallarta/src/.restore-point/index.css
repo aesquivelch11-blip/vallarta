@@ -1,7 +1,8 @@
 @import "tailwindcss";
 @import "./design-tokens.css";
 @import "./styles/property-selector.css";
-
+@import "./styles/calendar-typeset.css";
+@import "./styles/calendar-color-polish.css";
 
 @theme {
   --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;

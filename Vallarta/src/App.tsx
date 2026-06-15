@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from 'motion/react';
 import { ScreenType } from './types';
 import LoginView from './components/LoginView';
 import NavMenuView from './components/NavMenuView';
-import FinancialReportingView from './components/FinancialReportingView';
 import FinancialDeepDiveView from './components/FinancialDeepDiveView';
 import CameraFeedView from './components/CameraFeedView';
 import CalendarView from './components/CalendarView';
@@ -67,7 +66,7 @@ export default function App() {
     setTransitionStyle('push_back');
     // Go to last history screen that isn't nav_menu or login
     const validHistory = history.filter(s => s !== 'nav_menu' && s !== 'login');
-    const destination = validHistory.length > 0 ? validHistory[validHistory.length - 1] : 'reporting';
+    const destination = validHistory.length > 0 ? validHistory[validHistory.length - 1] : 'deep_dive';
     
     // Reset history stack
     setHistory(['login', destination]);
@@ -150,16 +149,6 @@ export default function App() {
           </div>
         );
       }
-      case 'reporting':
-        return (
-          <div key="reporting" className="w-full min-h-screen">
-            <FinancialReportingView 
-              onNavigate={(screen, style) => handleNavigate(screen, style)} 
-              onNotify={triggerToast}
-              propertyId={selectedPropertyId}
-            />
-          </div>
-        );
       case 'deep_dive':
         return (
           <div key="deep_dive" className="w-full min-h-screen">

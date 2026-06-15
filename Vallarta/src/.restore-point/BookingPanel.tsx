@@ -25,19 +25,9 @@ interface BookingPanelProps {
   onClose: () => void;
 }
 
-const SPRING = { type: 'spring', damping: 30, stiffness: 240 } as const;
-const CANCELLATION_TIMEOUT_MS = 3000;
+const EASE = [0.32, 0.72, 0, 1] as const;
 
-function CalIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true" className="cal-drawer-input__icon">
-      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-      <line x1="16" y1="2" x2="16" y2="6" />
-      <line x1="8" y1="2" x2="8" y2="6" />
-      <line x1="3" y1="10" x2="21" y2="10" />
-    </svg>
-  );
-}
+const CANCELLATION_TIMEOUT_MS = 3000;
 
 export default function BookingPanel({
   open,
@@ -155,51 +145,27 @@ export default function BookingPanel({
 
   const panelTransition = prefersReduced
     ? { duration: 0.01 }
-    : SPRING;
+    : { duration: 0.2, ease: EASE };
 
   return (
     <AnimatePresence>
       {open && (
-        <>
-          {/* Backdrop scrim */}
-          <motion.div
-            key="cal-panel-backdrop"
-            className="fixed inset-0 z-40"
-            style={{ 
-              backgroundColor: 'rgba(14, 26, 34, 0.4)', 
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)'
-            }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            onClick={onClose}
-            aria-hidden="true"
-          />
-
-          {/* Panel sheet */}
-          <motion.div
-            key="cal-panel-sheet"
-            role="complementary"
-            aria-label={
-              mode === 'add'
-                ? 'New booking'
-                : `Booking for ${booking?.guest ?? 'guest'}`
-            }
-            className="cal-panel cal-drawer-sheet fixed top-0 right-0 bottom-0 w-[420px] max-w-[100vw] z-50 px-10 pt-10 pb-12 flex flex-col gap-8 overflow-y-auto"
-            initial={{ x: prefersReduced ? 0 : '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: prefersReduced ? 0 : '100%' }}
-            transition={panelTransition}
-            style={{
-              boxShadow: '-8px 0 32px rgba(0, 0, 0, 0.15)',
-              borderLeft: '1px solid rgba(255, 255, 255, 0.08)'
-            }}
-          >
-
+        <motion.div
+          key="cal-panel-sheet"
+          role="complementary"
+          aria-label={
+            mode === 'add'
+              ? 'New booking'
+              : `Booking for ${booking?.guest ?? 'guest'}`
+          }
+          className="cal-panel cal-drawer-sheet fixed top-0 right-0 bottom-0 w-[420px] max-w-[100vw] z-50 px-8 pt-8 pb-10 flex flex-col gap-6 overflow-y-auto rounded-l-[0.25rem]"
+          initial={{ x: prefersReduced ? 0 : '100%' }}
+          animate={{ x: 0 }}
+          exit={{ x: prefersReduced ? 0 : '100%' }}
+          transition={panelTransition}
+        >
           {/* Close Button top right */}
-          <div className="flex justify-end -mr-2">
+          <div className="flex justify-end">
               <button
                 onClick={onClose}
                 aria-label="Close booking panel"
@@ -213,54 +179,40 @@ export default function BookingPanel({
 
           {mode === 'view' && booking ? (
             /* ── View Mode ── */
-            <motion.div
-              className="flex flex-col gap-8"
-              initial="hidden"
-              animate="visible"
-              variants={{
-                hidden: {},
-                visible: prefersReduced
-                  ? { transition: { staggerChildren: 0 } }
-                  : { transition: { staggerChildren: 0.04, delayChildren: 0.08 } },
-              }}
-            >
+            <>
               <motion.div
-                className="flex flex-col gap-2"
-                variants={{
-                  hidden: { opacity: 0, y: 8 },
-                  visible: { opacity: 1, y: 0, transition: SPRING },
-                }}
+                className="flex flex-col gap-1.5"
+                initial={prefersReduced ? false : { opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2, duration: 0.3, ease: EASE }}
               >
-                <div className="mb-8">
-                  <span className="cal-drawer-label">Guest</span>
-                  <span className="cal-drawer-guest-name font-display italic text-4xl text-[color:var(--color-ink)]">{booking.guest}</span>
-                </div>
+                <span className="cal-drawer-label">Guest</span>
+                <span className="cal-drawer-guest-name">{booking.guest}</span>
                 {booking.type === 'owner' && (
-                  <span className="cal-booking-row__chip cal-booking-row__chip--owner self-start mt-2">
+                  <span className="cal-booking-row__chip cal-booking-row__chip--owner self-start mt-0.5">
                     Owner Stay
                   </span>
                 )}
               </motion.div>
 
               <motion.div
-                className="flex flex-col gap-8 mt-2"
-                variants={{
-                  hidden: { opacity: 0, y: 8 },
-                  visible: { opacity: 1, y: 0, transition: SPRING },
-                }}
+                className="flex flex-col gap-6"
+                initial={prefersReduced ? false : { opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.26, duration: 0.3, ease: EASE }}
               >
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-1">
                   <span className="cal-drawer-label">Dates</span>
-                  <span className="cal-drawer-value text-lg font-light tracking-wide">
+                  <span className="cal-drawer-value">
                     {formatDisplayDates(booking.checkIn, booking.checkOut)}
                   </span>
                 </div>
-                <div className="flex gap-10">
-                  <div className="flex flex-col gap-2">
+                <div className="flex gap-6">
+                  <div className="flex flex-col gap-1">
                     <span className="cal-drawer-label">Nights</span>
-                    <span className="cal-drawer-value text-lg font-light">{booking.nights}</span>
+                    <span className="cal-drawer-value">{booking.nights}</span>
                   </div>
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-1">
                     <span className="cal-drawer-label">Status</span>
                     <span
                       className={`cal-booking-row__status cal-booking-row__status--${booking.status.toLowerCase()}`}
@@ -272,34 +224,32 @@ export default function BookingPanel({
               </motion.div>
 
               <motion.div
-                className="flex gap-4 pt-6 items-center mt-auto"
-                variants={{
-                  hidden: { opacity: 0, y: 8 },
-                  visible: { opacity: 1, y: 0, transition: SPRING },
-                }}
+                className="flex gap-3 pt-4 items-center mt-auto"
+                initial={prefersReduced ? false : { opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.34, duration: 0.28, ease: EASE }}
               >
                 {booking.status !== 'Confirmed' && (
                   <button
-                    className="cal-btn cal-btn--primary flex-1"
+                    className="cal-drawer-btn cal-drawer-btn--confirm flex-1"
                     onClick={() => onConfirm(booking.id)}
                   >
-                    Confirm Booking
+                    Confirm
                   </button>
                 )}
                 <button
-                  className={`cal-btn cal-btn--secondary ${booking.status === 'Confirmed' ? 'flex-1' : ''}`}
+                  className="cal-drawer-btn cal-drawer-btn--edit flex-1"
                   onClick={onEdit}
                 >
-                  Edit Details
+                  Edit
                 </button>
               </motion.div>
-
-              <motion.div
-                className="flex justify-center pt-4"
-                variants={{
-                  hidden: { opacity: 0 },
-                  visible: { opacity: 1, transition: { duration: 0.4 } },
-                }}
+              
+              <motion.div 
+                className="flex justify-center pt-2"
+                initial={prefersReduced ? false : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4, duration: 0.28, ease: EASE }}
               >
                 {booking.status !== 'Cancelled' && (
                   <button
@@ -311,13 +261,13 @@ export default function BookingPanel({
                   </button>
                 )}
               </motion.div>
-            </motion.div>
+            </>
           ) : (
             /* ── Add / Edit Mode ── */
-            <div className="flex flex-col gap-8 flex-1">
-              <div className="mb-6 relative">
+            <div className="flex flex-col gap-6 flex-1">
+              <div className="flex flex-col gap-1.5">
                 <label htmlFor="drawer-guest" className="cal-drawer-label">
-                  Guest Name
+                  Guest
                 </label>
                 <input
                   id="drawer-guest"
@@ -329,7 +279,7 @@ export default function BookingPanel({
                 />
               </div>
 
-              <div className="mb-8 relative">
+              <div className="flex flex-col gap-2 mt-4">
                 <span className="cal-drawer-label">Reservation Profile</span>
                 <LayoutGroup id="booking-type-toggle">
                   <div className="cal-drawer-toggle" role="group" aria-label="Booking type">
@@ -349,7 +299,7 @@ export default function BookingPanel({
                             transition={
                               prefersReduced
                                 ? { duration: 0 }
-                                : { type: 'spring', damping: 25, stiffness: 220 }
+                                : { type: 'spring', stiffness: 500, damping: 38, mass: 0.8 }
                             }
                           />
                         )}
@@ -362,42 +312,52 @@ export default function BookingPanel({
                 </LayoutGroup>
               </div>
 
-              <div className="mb-6">
-                <span className="cal-drawer-label block mb-3">Dates</span>
+              <div className="relative mt-4">
+                <span className="cal-drawer-label block mb-2">Dates</span>
                 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="cal-drawer-date-field relative">
-                    <span className="cal-drawer-label">Arrival</span>
+                <div className="flex gap-4">
+                  <div className="flex flex-col gap-1.5 flex-1">
+                    <span className="cal-drawer-label text-[#242424]/50">Arrival</span>
                     <button
                       type="button"
                       onClick={() => setPickerOpen(true)}
-                      className="cal-drawer-input cal-drawer-input--button"
+                      className={`cal-drawer-input text-left cursor-pointer flex items-center justify-between ${formCheckIn ? 'text-[#242424]' : 'text-[#242424]/40'}`}
                       aria-label="Select arrival date"
                     >
-                      <span className={formCheckIn ? 'cal-drawer-input__value' : 'cal-drawer-input__placeholder'}>
+                      <span>
                         {formCheckIn
                           ? new Date(formCheckIn + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
                           : 'Select date'}
                       </span>
-                      <CalIcon />
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-60 text-[#242424]">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                      </svg>
                     </button>
                   </div>
                   
-                  <div className="cal-drawer-date-field relative">
-                    <span className="cal-drawer-label">Departure</span>
+                  <div className="flex flex-col gap-1.5 flex-1">
+                    <span className="cal-drawer-label text-[#242424]/50">Departure</span>
                     <button
                       type="button"
                       onClick={() => setPickerOpen(true)}
-                      className="cal-drawer-input cal-drawer-input--button"
+                      className={`cal-drawer-input text-left cursor-pointer flex items-center justify-between ${formCheckOut ? 'text-[#242424]' : 'text-[#242424]/40'}`}
                       aria-label="Select departure date"
                       disabled={!formCheckIn}
                     >
-                      <span className={formCheckOut ? 'cal-drawer-input__value' : 'cal-drawer-input__placeholder'}>
+                      <span>
                         {formCheckOut
                           ? new Date(formCheckOut + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
                           : 'Select date'}
                       </span>
-                      <CalIcon />
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-60 text-[#242424]">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                      </svg>
                     </button>
                   </div>
                 </div>
@@ -417,34 +377,34 @@ export default function BookingPanel({
               </div>
 
               {formCheckIn && formCheckOut && derivedNights > 0 && (
-                <span className="cal-drawer-nights pt-2 text-[color:var(--color-ink-muted)] text-sm uppercase tracking-widest font-ui">{derivedNights} nights</span>
+                <span className="cal-drawer-nights">{derivedNights} nights</span>
               )}
-              {dateError && <span className="cal-drawer-error text-sm mt-2" role="alert">{dateError}</span>}
+              {dateError && <span className="cal-drawer-error" role="alert">{dateError}</span>}
               {overlapWarning && !dateError && (
-                <div className="cal-drawer-warning flex items-start gap-3 mt-2 text-sm opacity-90" role="status">
+                <div className="cal-drawer-warning flex items-start gap-2" role="status">
                   <input 
                     type="checkbox" 
                     id="override-overlap" 
                     checked={overrideOverlap} 
                     onChange={e => setOverrideOverlap(e.target.checked)} 
-                    className="mt-1 flex-shrink-0"
+                    className="mt-1"
                   />
-                  <label htmlFor="override-overlap" className="leading-snug">
+                  <label htmlFor="override-overlap">
                     {overlapWarning}. Check to allow saving anyway.
                   </label>
                 </div>
               )}
 
-              <div className="flex flex-col items-center gap-4 pt-8 mt-auto">
+              <div className="flex flex-col items-center gap-3 pt-4 mt-auto">
                 <button
-                  className="cal-btn cal-btn--primary w-full"
+                  className="cal-drawer-btn cal-drawer-btn--save disabled:opacity-35 disabled:cursor-not-allowed disabled:transform-none"
                   onClick={handleSave}
                   disabled={!formGuest.trim() || !formCheckIn || !formCheckOut}
                 >
                   Confirm Reservation
                 </button>
                 <button
-                  className="cal-btn cal-btn--ghost w-full"
+                  className="cal-drawer-btn--close text-white/40 hover:text-white/60 transition-colors bg-transparent border-none py-2 cursor-pointer self-center"
                   onClick={onClose}
                 >
                   Cancel
@@ -453,7 +413,6 @@ export default function BookingPanel({
             </div>
           )}
         </motion.div>
-        </>
       )}
     </AnimatePresence>
   );

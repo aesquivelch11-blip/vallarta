@@ -1,46 +1,16 @@
 // src/components/calendar/BookingList.tsx
 import React from 'react';
-import { motion, useReducedMotion } from 'motion/react';
 import { Booking, formatDisplayDates } from './bookingUtils';
 
 interface BookingListProps {
   bookings: Booking[];
   onSelect: (booking: Booking) => void;
   onAdd: () => void;
-  loading?: boolean;
-  viewToggle?: React.ReactNode;
 }
 
-export default function BookingList({ bookings, onSelect, onAdd, loading, viewToggle }: BookingListProps) {
+export default function BookingList({ bookings, onSelect, onAdd }: BookingListProps) {
   const now = new Date();
   const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-  const prefersReduced = useReducedMotion();
-
-  if (loading) {
-    return (
-      <div role="region" aria-label="Loading reservations" className="cal-bookings">
-        <div className="cal-card-shell">
-          <div className="cal-card cal-card--bookings">
-            <div className="cal-bookings__header">
-              <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 6, height: 18, width: '30%' }} className="animate-pulse" />
-              <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 6, height: 18, width: 64 }} className="animate-pulse" />
-            </div>
-            <ul className="cal-bookings__list">
-              {Array.from({ length: 3 }, (_, i) => (
-                <li key={`skel-booking-${i}`} className="cal-booking-row animate-pulse">
-                  <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 6, height: 14, width: '25%' }} />
-                  <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 6, height: 14, width: '40%' }} />
-                  <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 6, height: 14, width: '20%' }} />
-                  <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 6, height: 14, width: '15%' }} />
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   const visible = [...bookings]
     .filter(b => b.checkIn >= todayStr)
     .sort((a, b) => a.checkIn.localeCompare(b.checkIn));
@@ -54,14 +24,13 @@ export default function BookingList({ bookings, onSelect, onAdd, loading, viewTo
           <div className="cal-bookings__header">
             <h2 className="cal-bookings__title">Reservations</h2>
             <div className="cal-bookings__header-right">
-              {viewToggle}
               <span className="cal-bookings__meta">{activeCount} Active</span>
               <button
                 onClick={onAdd}
-                aria-label="Add new reservation"
-                className="cal-btn cal-btn--ghost"
+                aria-label="Add new booking"
+                className="cal-add-btn"
               >
-                + New
+                +
               </button>
             </div>
           </div>
@@ -71,27 +40,15 @@ export default function BookingList({ bookings, onSelect, onAdd, loading, viewTo
               <p className="cal-bookings__empty">No upcoming reservations.</p>
               <button
                 onClick={onAdd}
-                className="cal-btn cal-bookings__empty-cta"
+                className="cal-bookings__empty-cta"
               >
-                Add a reservation
+                + Add a reservation
               </button>
             </div>
           ) : (
-            <motion.ul
-              className="cal-bookings__list"
-              initial="hidden"
-              animate="visible"
-              variants={{
-                hidden: {},
-                visible: {
-                  transition: prefersReduced
-                    ? { staggerChildren: 0 }
-                    : { staggerChildren: 0.06, delayChildren: 0.15 },
-                },
-              }}
-            >
+            <ul className="cal-bookings__list">
               {visible.map(booking => (
-                <motion.li
+                <li
                   key={booking.id}
                   className={[
                     'cal-booking-row',
@@ -110,16 +67,6 @@ export default function BookingList({ bookings, onSelect, onAdd, loading, viewTo
                   }}
                   tabIndex={0}
                   aria-label={`${booking.guest}, ${formatDisplayDates(booking.checkIn, booking.checkOut)}, ${booking.nights} nights, ${booking.status}`}
-                  variants={{
-                    hidden: { opacity: 0, y: 6 },
-                    visible: {
-                      opacity: 1,
-                      y: 0,
-                      transition: prefersReduced
-                        ? { duration: 0 }
-                        : { duration: 0.32, ease: [0.22, 1, 0.36, 1] },
-                    },
-                  }}
                 >
                   <time
                     dateTime={booking.checkIn}
@@ -131,7 +78,7 @@ export default function BookingList({ bookings, onSelect, onAdd, loading, viewTo
                     <span className="cal-booking-row__guest">{booking.guest}</span>
                     {booking.type === 'owner' && (
                       <span className="cal-booking-row__chip cal-booking-row__chip--owner">
-                        Owner
+                        Owner Stay
                       </span>
                     )}
                   </span>
@@ -140,13 +87,10 @@ export default function BookingList({ bookings, onSelect, onAdd, loading, viewTo
                   >
                     {booking.status}
                   </span>
-                  <span className="cal-booking-row__nights" aria-label={`${booking.nights} nights`}>
-                    <span className="cal-booking-row__nights-value">{booking.nights}</span>
-                    <span className="cal-booking-row__nights-label" aria-hidden="true">n</span>
-                  </span>
-                </motion.li>
+                  <span className="cal-booking-row__nights">{booking.nights}n</span>
+                </li>
               ))}
-            </motion.ul>
+            </ul>
           )}
         </div>
       </div>

@@ -1,0 +1,108 @@
+/* --- Typeset Calendar Screen Overrides --- */
+
+.cal-month {
+  font-family: var(--font-display) !important;
+  font-size: clamp(2.25rem, 6vw, 3.5rem) !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.cal-bookings__title {
+  font-family: var(--font-display) !important;
+  font-size: clamp(1.25rem, 3vw, 1.625rem) !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+}
+
+.cal-booking-row__guest {
+  font-family: var(--font-display) !important;
+  font-style: italic !important;
+  font-weight: 400 !important;
+  font-size: clamp(0.875rem, 1.5vw, 1.0625rem) !important;
+}
+
+.cal-day-label {
+  font-family: var(--font-ui) !important;
+  font-size: 0.6875rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.25em !important;
+  text-transform: uppercase !important;
+}
+
+.cal-day {
+  font-family: var(--font-ui) !important;
+  font-size: 0.75rem !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.15em !important;
+  text-transform: uppercase !important;
+}
+
+.cal-nav__brand {
+  font-family: var(--font-ui) !important;
+  font-size: 0.6875rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.35em !important;
+  text-transform: uppercase !important;
+}
+
+.cal-pill {
+  font-family: var(--font-ui) !important;
+  font-size: 0.625rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.25em !important;
+  text-transform: uppercase !important;
+}
+
+.cal-panel .cal-drawer-label {
+  font-family: var(--font-ui) !important;
+  font-size: 0.625rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.25em !important;
+  text-transform: uppercase !important;
+}
+
+.cal-panel .cal-drawer-guest-name {
+  font-family: var(--font-display) !important;
+  font-style: italic !important;
+  font-weight: 400 !important;
+  font-size: clamp(0.875rem, 1.5vw, 1.0625rem) !important;
+}
+
+.cal-panel .cal-drawer-value {
+  font-family: var(--font-ui) !important;
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+}
+
+.cal-booking-row__date,
+.cal-booking-row__status,
+.cal-booking-row__nights {
+  font-family: var(--font-ui) !important;
+  font-size: 0.75rem !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.10em !important;
+  text-transform: uppercase !important;
+}
+
+.cal-panel .cal-drawer-btn {
+  font-family: var(--font-ui) !important;
+  font-weight: 500 !important;
+}
+
+.cal-panel .cal-drawer-btn--cancel-link {
+  font-family: var(--font-ui) !important;
+  font-weight: 500 !important;
+}
+
+.cal-panel .cal-drawer-btn--close {
+  font-family: var(--font-ui) !important;
+  font-weight: 500 !important;
+}
+
+.cal-drawer-nights,
+.cal-drawer-error,
+.cal-drawer-warning {
+  font-family: var(--font-ui) !important;
+  font-size: 0.75rem !important;
+  font-weight: 400 !important;
+}

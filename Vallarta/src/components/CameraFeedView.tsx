@@ -69,9 +69,9 @@ export default function CameraFeedView({ onNavigate, onNotify }: CameraFeedViewP
           <button 
             aria-label="Close View"
             id="camera-close-view-btn"
-            onClick={() => onNavigate('reporting', 'push_back')}
+            onClick={() => onNavigate('nav_menu', 'push_back')}
             className="p-3 border border-[#FAF8F5]/15 hover:bg-[#FAF8F5]/10 transition duration-300 cursor-pointer text-[#FAF8F5]/80 hover:text-[#FAF8F5] rounded-full magnetic-btn"
-            title="Back to Reporting overview"
+            title="Back to menu"
           >
             <X className="w-4 h-4" />
           </button>

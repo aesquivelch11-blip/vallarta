@@ -3,7 +3,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import Lenis from 'lenis';
 import { ScreenType } from '../../types';
 import { sampleProperties } from './propertyData';
-import PropertyCard from './PropertyCard';
+import PropertyCard, { isTallCard } from './PropertyCard';
 import PropertySkeleton from './PropertySkeleton';
 import StickyHeader, { TierLevel } from './StickyHeader';
 
@@ -27,7 +27,6 @@ export default function PropertySelector({ onNavigate, onSelectProperty }: Prope
   const [tier, setTier] = useState<TierLevel>(getInitialTier);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const lenisRef = useRef<Lenis | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
@@ -61,12 +60,6 @@ export default function PropertySelector({ onNavigate, onSelectProperty }: Prope
     });
 
     lenisRef.current = lenis;
-
-    function onScroll({ progress }: { progress: number }) {
-      setScrollProgress(progress * 100);
-    }
-
-    lenis.on('scroll', onScroll);
 
     let rafId: number;
 
@@ -126,8 +119,6 @@ export default function PropertySelector({ onNavigate, onSelectProperty }: Prope
         {liveAnnouncement}
       </div>
 
-      <div className="ps-progress" style={{ transform: `scaleX(${scrollProgress / 100})`, transformOrigin: 'left center' }} />
-
       <AnimatePresence>
         {phase === 'wordmark' && (
           <motion.div
@@ -174,46 +165,50 @@ export default function PropertySelector({ onNavigate, onSelectProperty }: Prope
           ) : (
             <div className={gridClass}>
               <AnimatePresence mode="sync">
-                {filteredProperties.map((property, i) => (
-              <motion.div
-                key={property.id}
-                className="ps-grid-cell"
-                layout
-                initial={{ opacity: 0, y: 16 }}
-                animate={
-                  selectedId === null
-                    ? { opacity: 1, y: 0 }
-                    : selectedId === property.id
-                      ? { opacity: 1, y: 0 }
-                      : { opacity: 0.4, filter: 'blur(4px)', y: 4 }
-                }
-                exit={{ opacity: 0, scale: 0.97 }}
-                transition={{
-                  layout: { duration: 0.5, ease: [0.23, 1, 0.32, 1] },
-                  opacity: {
-                    duration: shouldReduceMotion ? 0 : 0.6,
-                    ease: [0.23, 1, 0.32, 1],
-                    delay: shouldReduceMotion ? 0 : (selectedId === null ? i * 0.06 : 0),
-                  },
-                  y: {
-                    duration: shouldReduceMotion ? 0 : 0.6,
-                    ease: [0.23, 1, 0.32, 1],
-                    delay: shouldReduceMotion ? 0 : (selectedId === null ? i * 0.06 : 0),
-                  },
-                  filter: {
-                    duration: shouldReduceMotion ? 0 : 0.6,
-                    ease: [0.23, 1, 0.32, 1],
-                  },
-                }}
-              >
-                <PropertyCard
-                  property={property}
-                  onSelect={handleSelect}
-                  index={i}
-                  tier={tier}
-                />
-                  </motion.div>
-                ))}
+                {filteredProperties.map((property, i) => {
+                  const tall = isTallCard(i, tier);
+                  return (
+                    <motion.div
+                      key={property.id}
+                      className={`ps-grid-cell${tall ? ' ps-grid-cell--tall' : ''}`}
+                      layout
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={
+                        selectedId === null
+                          ? { opacity: 1, y: 0 }
+                          : selectedId === property.id
+                            ? { opacity: 1, y: 0 }
+                            : { opacity: 0.4, filter: 'blur(4px)', y: 4 }
+                      }
+                      exit={{ opacity: 0, scale: 0.97 }}
+                      transition={{
+                        layout: { duration: 0.5, ease: [0.23, 1, 0.32, 1] },
+                        opacity: {
+                          duration: shouldReduceMotion ? 0 : 0.6,
+                          ease: [0.23, 1, 0.32, 1],
+                          delay: shouldReduceMotion ? 0 : (selectedId === null ? i * 0.06 : 0),
+                        },
+                        y: {
+                          duration: shouldReduceMotion ? 0 : 0.6,
+                          ease: [0.23, 1, 0.32, 1],
+                          delay: shouldReduceMotion ? 0 : (selectedId === null ? i * 0.06 : 0),
+                        },
+                        filter: {
+                          duration: shouldReduceMotion ? 0 : 0.6,
+                          ease: [0.23, 1, 0.32, 1],
+                        },
+                      }}
+                    >
+                      <PropertyCard
+                        property={property}
+                        onSelect={handleSelect}
+                        index={i}
+                        tier={tier}
+                        tall={tall}
+                      />
+                    </motion.div>
+                  );
+                })}
               </AnimatePresence>
             </div>
           )}

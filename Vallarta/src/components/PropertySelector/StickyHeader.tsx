@@ -27,7 +27,7 @@ interface StickyHeaderProps {
 const TIERS: { id: TierLevel; label: string; icon: React.ReactNode }[] = [
   {
     id: 'gallery',
-    label: 'Large',
+    label: 'Editorial',
     icon: (
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect x="1" y="1" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.2" />
@@ -39,7 +39,7 @@ const TIERS: { id: TierLevel; label: string; icon: React.ReactNode }[] = [
   },
   {
     id: 'collection',
-    label: 'Medium',
+    label: 'Grid',
     icon: (
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect x="1" y="1" width="4" height="4" rx="0.8" stroke="currentColor" strokeWidth="1.2" />
@@ -53,7 +53,7 @@ const TIERS: { id: TierLevel; label: string; icon: React.ReactNode }[] = [
   },
   {
     id: 'catalog',
-    label: 'Compact',
+    label: 'Index',
     icon: (
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect x="1" y="1" width="3" height="3" rx="0.6" stroke="currentColor" strokeWidth="1" />
