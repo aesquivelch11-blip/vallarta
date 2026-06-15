@@ -4,9 +4,14 @@ import { motion, AnimatePresence } from 'motion/react';
 import { ScreenType } from '../types';
 import {
   Booking,
-  SEED_BOOKINGS,
   buildCalendarDays,
 } from './calendar/bookingUtils';
+import {
+  useBookings,
+  useCreateBooking,
+  useUpdateBooking,
+  useCancelBooking,
+} from '../hooks/useBookings';
 import CalendarGrid from './calendar/CalendarGrid';
 import WeekGrid from './calendar/WeekGrid';
 import TriMonthGrid from './calendar/TriMonthGrid';
@@ -17,6 +22,7 @@ import { useCalendarView, startOfWeek, CalendarViewMode } from './calendar/useCa
 interface CalendarViewProps {
   onNavigate: (screen: ScreenType, transitionStyle: 'push' | 'push_back' | 'slide_up') => void;
   onNotify?: (message: string) => void;
+  propertyId?: string;
 }
 
 const EASE = [0.32, 0.72, 0, 1] as const;
@@ -24,13 +30,20 @@ const EASE = [0.32, 0.72, 0, 1] as const;
 const JANUARY = 0;
 const DECEMBER = 11;
 
-export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps) {
+export default function CalendarView({
+  onNavigate,
+  onNotify,
+  propertyId = import.meta.env.VITE_DEFAULT_PROPERTY_ID as string,
+}: CalendarViewProps) {
   const today = new Date();
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth()); // 0-indexed
   const [weekStart, setWeekStart] = useState<Date>(() => startOfWeek(today));
 
-  const [bookings, setBookings] = useState<Booking[]>(SEED_BOOKINGS);
+  const { data: bookings = [], isLoading: bookingsLoading } = useBookings(propertyId);
+  const createMutation = useCreateBooking(propertyId);
+  const updateMutation = useUpdateBooking(propertyId);
+  const cancelMutation = useCancelBooking(propertyId);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [showPanel, setShowPanel] = useState(false);
   const [panelMode, setPanelMode] = useState<PanelMode>('view');
@@ -135,35 +148,46 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
   };
 
   const handleConfirmBooking = (id: string) => {
-    setBookings(prev =>
-      prev.map(b => (b.id === id ? { ...b, status: 'Confirmed' } : b)),
+    const booking = bookings.find(b => b.id === id);
+    if (!booking) return;
+    updateMutation.mutate(
+      { ...booking, status: 'Confirmed' },
+      {
+        onSuccess: () => {
+          notify('Reservation confirmed.');
+          setShowPanel(false);
+        },
+      },
     );
-    notify('Reservation confirmed.');
-    setShowPanel(false);
   };
 
   const handleCancelBooking = (id: string) => {
-    setBookings(prev =>
-      prev.map(b => (b.id === id ? { ...b, status: 'Cancelled' } : b)),
-    );
-    notify('Reservation cancelled.');
-    setShowPanel(false);
+    cancelMutation.mutate(id, {
+      onSuccess: () => {
+        notify('Reservation cancelled.');
+        setShowPanel(false);
+      },
+    });
   };
 
   const handleSaveBooking = (saved: Booking) => {
-    setBookings(prev => {
-      const exists = prev.find(b => b.id === saved.id);
-      if (exists) {
-        return prev.map(b => (b.id === saved.id ? saved : b));
-      }
-      return [...prev, saved];
-    });
-    notify(
-      panelMode === 'add'
-        ? `Booking added for ${saved.guest}.`
-        : `Booking updated for ${saved.guest}.`,
-    );
-    setShowPanel(false);
+    const bookingWithProperty = { ...saved, property_id: propertyId };
+    if (panelMode === 'add') {
+      const { id: _, ...rest } = bookingWithProperty;
+      createMutation.mutate(rest, {
+        onSuccess: () => {
+          notify(`Booking added for ${saved.guest}.`);
+          setShowPanel(false);
+        },
+      });
+    } else {
+      updateMutation.mutate(bookingWithProperty, {
+        onSuccess: () => {
+          notify(`Booking updated for ${saved.guest}.`);
+          setShowPanel(false);
+        },
+      });
+    }
   };
 
   const handleEdit = () => {
@@ -308,7 +332,7 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
               bookings={bookings}
               onSelect={handleSelectBooking}
               onAdd={handleAddBooking}
-              loading={false}
+              loading={bookingsLoading}
               viewToggle={
                 <div className="cal-view-toggle" role="group" aria-label="Calendar view">
                   <button

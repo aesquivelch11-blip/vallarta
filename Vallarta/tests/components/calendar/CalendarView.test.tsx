@@ -2,6 +2,13 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import CalendarView from '../../../src/components/CalendarView';
 
+vi.mock('../../../src/hooks/useBookings', () => ({
+  useBookings: () => ({ data: [], isLoading: false }),
+  useCreateBooking: () => ({ mutate: vi.fn() }),
+  useUpdateBooking: () => ({ mutate: vi.fn() }),
+  useCancelBooking: () => ({ mutate: vi.fn() }),
+}));
+
 vi.mock('motion/react', () => ({
   motion: {
     nav: ({ children, className, ...rest }: React.HTMLAttributes<HTMLElement> & { children?: React.ReactNode }) =>
