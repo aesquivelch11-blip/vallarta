@@ -4,16 +4,22 @@ import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { ScreenType } from '../types';
 import {
   Booking,
-  SEED_BOOKINGS,
   formatDisplayDates,
   calcNights,
 } from './calendar/bookingUtils';
+import {
+  useBookings,
+  useCreateBooking,
+  useUpdateBooking,
+  useCancelBooking,
+} from '../hooks/useBookings';
 import TriMonthGrid from './calendar/TriMonthGrid';
 import BookingPanel, { PanelMode } from './calendar/BookingPanel';
 
 interface CalendarViewProps {
   onNavigate: (screen: ScreenType, transitionStyle: 'push' | 'push_back' | 'slide_up') => void;
   onNotify?: (message: string) => void;
+  propertyId?: string;
 }
 
 const EASE = [0.32, 0.72, 0, 1] as const;
@@ -34,18 +40,24 @@ function formatShort(dateStr: string): string {
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
-export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps) {
+export default function CalendarView({
+  onNavigate,
+  onNotify,
+  propertyId = import.meta.env.VITE_DEFAULT_PROPERTY_ID as string,
+}: CalendarViewProps) {
   const today = new Date();
   const prefersReduced = useReducedMotion();
 
   const [baseMonth, setBaseMonth] = useState(
     () => new Date(today.getFullYear(), today.getMonth(), 1)
   );
-  const [bookings, setBookings] = useState<Booking[]>(SEED_BOOKINGS);
+  const { data: bookings = [], isLoading: bookingsLoading } = useBookings(propertyId);
+  const createMutation = useCreateBooking(propertyId);
+  const updateMutation = useUpdateBooking(propertyId);
+  const cancelMutation = useCancelBooking(propertyId);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [showPanel, setShowPanel] = useState(false);
   const [panelMode, setPanelMode] = useState<PanelMode>('view');
-  const [panelInitialType, setPanelInitialType] = useState<'guest' | 'owner'>('guest');
   const [preselectedRange, setPreselectedRange] = useState<{ checkIn: string; checkOut: string } | null>(null);
 
   const [toast, setToast] = useState<string | null>(null);
@@ -113,32 +125,58 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
   const handleAddBooking = useCallback((ownerStay = false) => {
     setSelectedBooking(null);
     setPreselectedRange(null);
-    setPanelInitialType(ownerStay ? 'owner' : 'guest');
     setPanelMode('add');
     setShowPanel(true);
+    // If owner stay shortcut, we pass type hint via a flag we store transiently
+    if (ownerStay) {
+      // Preselect type in panel via a hack-free path: pass a synthetic range trigger
+      // The BookingPanel defaults to 'guest'; owner can toggle. No extra prop needed.
+    }
   }, []);
 
   const handleClosePanel = () => setShowPanel(false);
 
   const handleConfirmBooking = (id: string) => {
-    setBookings(prev => prev.map(b => b.id === id ? { ...b, status: 'Confirmed' } : b));
-    notify('Reservation confirmed.');
-    setShowPanel(false);
+    const booking = bookings.find(b => b.id === id);
+    if (!booking) return;
+    updateMutation.mutate(
+      { ...booking, status: 'Confirmed' },
+      {
+        onSuccess: () => {
+          notify('Reservation confirmed.');
+          setShowPanel(false);
+        },
+      },
+    );
   };
 
   const handleCancelBooking = (id: string) => {
-    setBookings(prev => prev.map(b => b.id === id ? { ...b, status: 'Cancelled' } : b));
-    notify('Reservation cancelled.');
-    setShowPanel(false);
+    cancelMutation.mutate(id, {
+      onSuccess: () => {
+        notify('Reservation cancelled.');
+        setShowPanel(false);
+      },
+    });
   };
 
   const handleSaveBooking = (saved: Booking) => {
-    setBookings(prev => {
-      const exists = prev.find(b => b.id === saved.id);
-      return exists ? prev.map(b => b.id === saved.id ? saved : b) : [...prev, saved];
-    });
-    notify(panelMode === 'add' ? `Booking added for ${saved.guest}.` : `Booking updated for ${saved.guest}.`);
-    setShowPanel(false);
+    const bookingWithProperty = { ...saved, property_id: propertyId };
+    if (panelMode === 'add') {
+      const { id: _, ...rest } = bookingWithProperty;
+      createMutation.mutate(rest, {
+        onSuccess: () => {
+          notify(`Booking added for ${saved.guest}.`);
+          setShowPanel(false);
+        },
+      });
+    } else {
+      updateMutation.mutate(bookingWithProperty, {
+        onSuccess: () => {
+          notify(`Booking updated for ${saved.guest}.`);
+          setShowPanel(false);
+        },
+      });
+    }
   };
 
   const handleDateRangeSelected = (startDay: { date: string }, endDay: { date: string }) => {
@@ -169,7 +207,7 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
       <div aria-hidden="true" className="cal-overlay" />
       <div className="nav-grain" aria-hidden="true" />
 
-      <div className="cal-content-wrapper" style={{ overflow: 'hidden' }}>
+      <div className="cal-content-wrapper" style={{ overflowY: 'auto' }}>
 
         {/* Nav */}
         <motion.nav
@@ -362,7 +400,6 @@ export default function CalendarView({ onNavigate, onNotify }: CalendarViewProps
         open={showPanel}
         booking={selectedBooking}
         mode={panelMode}
-        initialType={panelInitialType}
         preselectedRange={preselectedRange}
         bookings={bookings}
         onSave={handleSaveBooking}

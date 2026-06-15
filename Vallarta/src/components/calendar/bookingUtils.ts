@@ -5,12 +5,77 @@ export type BookingStatus = 'Confirmed' | 'Pending' | 'Cancelled';
 
 export interface Booking {
   id: string;
+  property_id?: string;
   guest: string;
   type: BookingType;
   checkIn: string;   // "YYYY-MM-DD"
   checkOut: string;  // "YYYY-MM-DD"
   nights: number;
   status: BookingStatus;
+  // optional — stored in DB, shown/edited in BookingPanel
+  revenueNightlyRate?: number;
+  revenueTotal?: number;
+  guestEmail?: string;
+  guestPhone?: string;
+  notes?: string;
+}
+
+/** Raw shape returned by Supabase — snake_case column names. */
+export interface DbBooking {
+  id: string;
+  property_id: string;
+  guest: string;
+  type: BookingType;
+  check_in: string;
+  check_out: string;
+  nights: number;
+  status: BookingStatus;
+  revenue_nightly_rate: number | null;
+  revenue_total: number | null;
+  guest_email: string | null;
+  guest_phone: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+/** Maps a raw Supabase row to a typed Booking. */
+export function mapDbBooking(row: DbBooking): Booking {
+  return {
+    id: row.id,
+    property_id: row.property_id,
+    guest: row.guest,
+    type: row.type,
+    checkIn: row.check_in,
+    checkOut: row.check_out,
+    nights: row.nights,
+    status: row.status,
+    revenueNightlyRate: row.revenue_nightly_rate ?? undefined,
+    revenueTotal: row.revenue_total ?? undefined,
+    guestEmail: row.guest_email ?? undefined,
+    guestPhone: row.guest_phone ?? undefined,
+    notes: row.notes ?? undefined,
+  };
+}
+
+/** Maps a Booking (without id) to the DB insert/update shape. */
+export function mapToDbBooking(
+  booking: Omit<Booking, 'id'>,
+): Omit<DbBooking, 'id' | 'created_at' | 'updated_at'> {
+  return {
+    property_id: booking.property_id,
+    guest: booking.guest,
+    type: booking.type,
+    check_in: booking.checkIn,
+    check_out: booking.checkOut,
+    nights: booking.nights,
+    status: booking.status,
+    revenue_nightly_rate: booking.revenueNightlyRate ?? null,
+    revenue_total: booking.revenueTotal ?? null,
+    guest_email: booking.guestEmail ?? null,
+    guest_phone: booking.guestPhone ?? null,
+    notes: booking.notes ?? null,
+  };
 }
 
 export interface CalendarDay {
@@ -34,6 +99,7 @@ export const MONTH_NAMES = [
 export const SEED_BOOKINGS: Booking[] = [
   {
     id: '1',
+    property_id: '',
     guest: 'Margaret & James Whitfield',
     type: 'guest',
     checkIn: '2026-06-19',
@@ -43,6 +109,7 @@ export const SEED_BOOKINGS: Booking[] = [
   },
   {
     id: '2',
+    property_id: '',
     guest: 'Santiago Reyes',
     type: 'guest',
     checkIn: '2026-06-28',
@@ -52,6 +119,7 @@ export const SEED_BOOKINGS: Booking[] = [
   },
   {
     id: '3',
+    property_id: '',
     guest: 'The Brenner Family',
     type: 'guest',
     checkIn: '2026-07-02',
