@@ -3450,27 +3450,18 @@ body::before {
    ═══════════════════════════════════════════════════════════════ */
 
 /* ─── Page layout: vertical stack inside cal-screen ─── */
-/*  Page layout: vertical stack inside cal-screen  */
 .cv2-layout {
     position: relative;
     z-index: 5;
-    display: grid;
-    grid-template-columns: 1fr minmax(320px, 380px);
-    align-items: stretch;
-    gap: clamp(20px, 3vw, 48px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(20px, 3vh, 32px);
     padding-top: clamp(80px, 11vh, 108px);
     padding-left: clamp(24px, 5vw, 56px);
     padding-right: clamp(24px, 5vw, 56px);
     padding-bottom: clamp(40px, 6vh, 64px);
     height: 100dvh;
-}
-
-@media (max-width: 1024px) {
-    .cv2-layout {
-        grid-template-columns: 1fr;
-        height: auto;
-        min-height: 100dvh;
-    }
+    overflow: hidden;
 }
 
 /* ─── Lower section: glance + reservations ─── */
@@ -3478,8 +3469,7 @@ body::before {
     display: flex;
     flex-direction: column;
     gap: clamp(16px, 2.5vh, 24px);
-    height: 100%;
-    max-height: calc(100dvh - clamp(80px, 11vh, 108px) - clamp(40px, 6vh, 64px));
+    flex: 1;
     min-height: 0;
 }
 
@@ -3620,6 +3610,7 @@ body::before {
     display: flex;
     flex-direction: column;
     flex: 1;
+    min-height: 0;
     overflow-y: auto;
 }
 
