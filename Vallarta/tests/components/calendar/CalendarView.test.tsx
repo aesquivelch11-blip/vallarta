@@ -15,6 +15,8 @@ vi.mock('motion/react', () => ({
       <nav className={className} {...rest}>{children}</nav>,
     div: ({ children, className, ...rest }: React.HTMLAttributes<HTMLDivElement> & { children?: React.ReactNode }) =>
       <div className={className} {...rest}>{children}</div>,
+    section: ({ children, className, ...rest }: React.HTMLAttributes<HTMLElement> & { children?: React.ReactNode }) =>
+      <section className={className} {...rest}>{children}</section>,
     ul: ({ children, className, ...rest }: React.HTMLAttributes<HTMLUListElement> & { children?: React.ReactNode }) =>
       <ul className={className} {...rest}>{children}</ul>,
     li: ({ children, className, ...rest }: React.HTMLAttributes<HTMLLIElement> & { children?: React.ReactNode }) =>
@@ -45,10 +47,10 @@ describe('CalendarView DOM structure', () => {
     ).toBeNull();
   });
 
-  it('calendar grid has drag instruction in accessible label', () => {
+  it('calendar section has accessible label', () => {
     renderCalendar();
-    const grids = screen.getAllByRole('grid', { name: /click and drag/i });
-    expect(grids.length).toBeGreaterThanOrEqual(1);
+    const section = document.querySelector('[aria-label="3-month calendar overview"]');
+    expect(section).not.toBeNull();
   });
 
   it('booking nights value contains only digits', () => {

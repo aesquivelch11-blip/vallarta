@@ -5,7 +5,7 @@ export type BookingStatus = 'Confirmed' | 'Pending' | 'Cancelled';
 
 export interface Booking {
   id: string;
-  property_id: string;
+  property_id?: string;
   guest: string;
   type: BookingType;
   checkIn: string;   // "YYYY-MM-DD"

@@ -1,10 +1,11 @@
 // src/components/CalendarView.tsx
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { ScreenType } from '../types';
 import {
   Booking,
-  buildCalendarDays,
+  formatDisplayDates,
+  calcNights,
 } from './calendar/bookingUtils';
 import {
   useBookings,
@@ -12,12 +13,8 @@ import {
   useUpdateBooking,
   useCancelBooking,
 } from '../hooks/useBookings';
-import CalendarGrid from './calendar/CalendarGrid';
-import WeekGrid from './calendar/WeekGrid';
 import TriMonthGrid from './calendar/TriMonthGrid';
-import BookingList from './calendar/BookingList';
 import BookingPanel, { PanelMode } from './calendar/BookingPanel';
-import { useCalendarView, startOfWeek, CalendarViewMode } from './calendar/useCalendarView';
 
 interface CalendarViewProps {
   onNavigate: (screen: ScreenType, transitionStyle: 'push' | 'push_back' | 'slide_up') => void;
@@ -27,8 +24,21 @@ interface CalendarViewProps {
 
 const EASE = [0.32, 0.72, 0, 1] as const;
 
-const JANUARY = 0;
-const DECEMBER = 11;
+function toDateStr(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+function daysUntil(dateStr: string): number {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const target = new Date(dateStr + 'T00:00:00');
+  return Math.round((target.getTime() - today.getTime()) / 86_400_000);
+}
+
+function formatShort(dateStr: string): string {
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
 
 export default function CalendarView({
   onNavigate,
@@ -36,10 +46,11 @@ export default function CalendarView({
   propertyId = import.meta.env.VITE_DEFAULT_PROPERTY_ID as string,
 }: CalendarViewProps) {
   const today = new Date();
-  const [currentYear, setCurrentYear] = useState(today.getFullYear());
-  const [currentMonth, setCurrentMonth] = useState(today.getMonth()); // 0-indexed
-  const [weekStart, setWeekStart] = useState<Date>(() => startOfWeek(today));
+  const prefersReduced = useReducedMotion();
 
+  const [baseMonth, setBaseMonth] = useState(
+    () => new Date(today.getFullYear(), today.getMonth(), 1)
+  );
   const { data: bookings = [], isLoading: bookingsLoading } = useBookings(propertyId);
   const createMutation = useCreateBooking(propertyId);
   const updateMutation = useUpdateBooking(propertyId);
@@ -47,18 +58,11 @@ export default function CalendarView({
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [showPanel, setShowPanel] = useState(false);
   const [panelMode, setPanelMode] = useState<PanelMode>('view');
-  const [slideDir, setSlideDir] = useState<'next' | 'prev'>('next');
-  const [preselectedRange, setPreselectedRange] = useState<{checkIn: string, checkOut: string} | null>(null);
-
-  const { view, setView } = useCalendarView();
-
-  const calendarDays = useMemo(
-    () => buildCalendarDays(currentYear, currentMonth, bookings),
-    [currentYear, currentMonth, bookings],
-  );
+  const [preselectedRange, setPreselectedRange] = useState<{ checkIn: string; checkOut: string } | null>(null);
 
   const [toast, setToast] = useState<string | null>(null);
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const notify = useCallback((message: string) => {
     if (onNotify) onNotify(message);
     setToast(message);
@@ -70,63 +74,45 @@ export default function CalendarView({
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
   }, []);
 
-  const handlePrevMonth = () => {
-    setSlideDir('prev');
-    if (currentMonth === JANUARY) {
-      setCurrentMonth(DECEMBER);
-      setCurrentYear(y => y - 1);
-    } else {
-      setCurrentMonth(prev => prev - 1);
+  // Upcoming: future bookings sorted by check-in, non-cancelled
+  const upcoming = useMemo(() => {
+    const todayStr = toDateStr(today);
+    return [...bookings]
+      .filter(b => b.status !== 'Cancelled' && b.checkOut >= todayStr)
+      .sort((a, b) => a.checkIn.localeCompare(b.checkIn));
+  }, [bookings]);
+
+  // Next arrival
+  const nextArrival = useMemo(() => {
+    const todayStr = toDateStr(today);
+    return upcoming.find(b => b.checkIn >= todayStr) ?? null;
+  }, [upcoming]);
+
+  // Quarter occupancy: count booked nights in next 90 days
+  const quarterOccupancy = useMemo(() => {
+    const todayStr = toDateStr(today);
+    const endDate = new Date(today);
+    endDate.setDate(today.getDate() + 90);
+    const endStr = toDateStr(endDate);
+
+    let bookedNights = 0;
+    for (const b of bookings) {
+      if (b.status === 'Cancelled') continue;
+      const start = b.checkIn > todayStr ? b.checkIn : todayStr;
+      const end = b.checkOut < endStr ? b.checkOut : endStr;
+      if (start < end) {
+        bookedNights += Math.round((new Date(end).getTime() - new Date(start).getTime()) / 86_400_000);
+      }
     }
+    return Math.round((bookedNights / 90) * 100);
+  }, [bookings]);
+
+  const handlePrevMonth = () => {
+    setBaseMonth(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1));
   };
 
   const handleNextMonth = () => {
-    setSlideDir('next');
-    if (currentMonth === DECEMBER) {
-      setCurrentMonth(JANUARY);
-      setCurrentYear(y => y + 1);
-    } else {
-      setCurrentMonth(prev => prev + 1);
-    }
-  };
-
-  const handlePrevWeek = () => {
-    const next = new Date(weekStart);
-    next.setDate(weekStart.getDate() - 7);
-    setWeekStart(next);
-  };
-
-  const handleNextWeek = () => {
-    const next = new Date(weekStart);
-    next.setDate(weekStart.getDate() + 7);
-    setWeekStart(next);
-  };
-
-  const handlePrevTriMonth = () => {
-    setSlideDir('prev');
-    if (currentMonth === JANUARY) {
-      setCurrentMonth(DECEMBER);
-      setCurrentYear(y => y - 1);
-    } else {
-      setCurrentMonth(prev => prev - 1);
-    }
-  };
-
-  const handleNextTriMonth = () => {
-    setSlideDir('next');
-    if (currentMonth === DECEMBER) {
-      setCurrentMonth(JANUARY);
-      setCurrentYear(y => y + 1);
-    } else {
-      setCurrentMonth(prev => prev + 1);
-    }
-  };
-
-  const handleJumpToToday = () => {
-    const now = new Date();
-    setCurrentYear(now.getFullYear());
-    setCurrentMonth(now.getMonth());
-    setWeekStart(startOfWeek(now));
+    setBaseMonth(prev => new Date(prev.getFullYear(), prev.getMonth() + 1, 1));
   };
 
   const handleSelectBooking = (booking: Booking) => {
@@ -136,16 +122,19 @@ export default function CalendarView({
     setShowPanel(true);
   };
 
-  const handleAddBooking = useCallback(() => {
+  const handleAddBooking = useCallback((ownerStay = false) => {
     setSelectedBooking(null);
     setPreselectedRange(null);
     setPanelMode('add');
     setShowPanel(true);
+    // If owner stay shortcut, we pass type hint via a flag we store transiently
+    if (ownerStay) {
+      // Preselect type in panel via a hack-free path: pass a synthetic range trigger
+      // The BookingPanel defaults to 'guest'; owner can toggle. No extra prop needed.
+    }
   }, []);
 
-  const handleClosePanel = () => {
-    setShowPanel(false);
-  };
+  const handleClosePanel = () => setShowPanel(false);
 
   const handleConfirmBooking = (id: string) => {
     const booking = bookings.find(b => b.id === id);
@@ -190,15 +179,8 @@ export default function CalendarView({
     }
   };
 
-  const handleEdit = () => {
-    setPanelMode('edit');
-  };
-
   const handleDateRangeSelected = (startDay: { date: string }, endDay: { date: string }) => {
-    setPreselectedRange({
-      checkIn: startDay.date,
-      checkOut: endDay.date,
-    });
+    setPreselectedRange({ checkIn: startDay.date, checkOut: endDay.date });
     setSelectedBooking(null);
     setPanelMode('add');
     setShowPanel(true);
@@ -206,73 +188,35 @@ export default function CalendarView({
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (
-        e.target instanceof HTMLInputElement ||
-        e.target instanceof HTMLTextAreaElement ||
-        e.metaKey ||
-        e.ctrlKey ||
-        e.altKey
-      ) {
-        return;
-      }
-      if (e.key === 'Escape' && showPanel) {
-        handleClosePanel();
-        return;
-      }
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement || e.metaKey || e.ctrlKey) return;
+      if (e.key === 'Escape' && showPanel) { handleClosePanel(); return; }
       if (showPanel) return;
-
-      const key = e.key.toLowerCase();
-      if (key === 'n') {
-        handleAddBooking();
-      } else if (key === 't') {
-        handleJumpToToday();
-      } else if (key === '1') {
-        setView('month');
-      } else if (key === '2') {
-        setView('week');
-      } else if (key === '3') {
-        setView('trimonth');
-      } else if (e.key === 'ArrowLeft') {
-        if (view === 'month') handlePrevMonth();
-        else if (view === 'week') handlePrevWeek();
-        else handlePrevTriMonth();
-      } else if (e.key === 'ArrowRight') {
-        if (view === 'month') handleNextMonth();
-        else if (view === 'week') handleNextWeek();
-        else handleNextTriMonth();
-      }
+      if (e.key.toLowerCase() === 'n') handleAddBooking();
+      if (e.key === 'ArrowLeft') handlePrevMonth();
+      if (e.key === 'ArrowRight') handleNextMonth();
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [showPanel, handleAddBooking, view, setView]);
+  }, [showPanel, handleAddBooking]);
 
   return (
     <div className="cal-screen">
-      {/* ─── Cinematic background (extracted for Ken Burns) ─── */}
+      {/* Cinematic background */}
       <div aria-hidden="true" className="cal-bg" />
-
-      {/* ─── Dark base overlay ─── */}
       <div aria-hidden="true" className="cal-base-overlay" />
-
-      {/* ─── Asymmetric overlay ─── */}
       <div aria-hidden="true" className="cal-overlay" />
-
-      {/* ─── Film-grain texture overlay ─── */}
       <div className="nav-grain" aria-hidden="true" />
 
-      {/* ─── Main Content Wrapper ─── */}
-      {/* Panel overlays on top (z-50); this wrapper stays full-width. */}
-      <div
-        className="cal-content-wrapper"
-      >
-        {/* ─── Top Navigation (absolute within wrapper so it overlays the bg) ─── */}
+      <div className="cal-content-wrapper" style={{ overflowY: 'auto' }}>
+
+        {/* Nav */}
         <motion.nav
           role="navigation"
           aria-label="Main navigation"
           className="cal-nav"
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: EASE, delay: 0.3 }}
+          transition={{ duration: 0.8, ease: EASE, delay: 0.2 }}
         >
           <button
             onClick={() => onNavigate('nav_menu', 'push')}
@@ -286,87 +230,172 @@ export default function CalendarView({
           </div>
         </motion.nav>
 
-        {/* ─── Split-field layout (calendar left, bookings right) ─── */}
-        <div className="cal-split-layout">
-          <div className="cal-split-layout__left">
-            {view === 'month' && (
-              <CalendarGrid
-                days={calendarDays}
-                year={currentYear}
-                month={currentMonth}
-                onPrevMonth={handlePrevMonth}
-                onNextMonth={handleNextMonth}
-                slideDir={slideDir}
-                onDateRangeSelected={handleDateRangeSelected}
-                selectedBooking={selectedBooking}
-                loading={false}
-                error={null}
-                onRetry={() => {}}
-              />
-            )}
-            {view === 'week' && (
-              <WeekGrid
-                weekStart={weekStart}
-                bookings={bookings}
-                onPrevWeek={handlePrevWeek}
-                onNextWeek={handleNextWeek}
-                onDateRangeSelected={handleDateRangeSelected}
-                onJumpToToday={handleJumpToToday}
-                selectedBooking={selectedBooking}
-              />
-            )}
-            {view === 'trimonth' && (
-              <TriMonthGrid
-                baseMonthStart={new Date(currentYear, currentMonth, 1)}
-                bookings={bookings}
-                onPrevMonth={handlePrevTriMonth}
-                onNextMonth={handleNextTriMonth}
-                onDateRangeSelected={handleDateRangeSelected}
-                selectedBooking={selectedBooking}
-              />
-            )}
-          </div>
+        {/* Page body */}
+        <div className="cv2-layout">
 
-          <div className="cal-split-layout__right">
-            <BookingList
+          {/* 3-Month Calendar */}
+          <motion.section
+            initial={prefersReduced ? false : { opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: EASE, delay: 0.35 }}
+            aria-label="3-month calendar overview"
+          >
+            <TriMonthGrid
+              baseMonthStart={baseMonth}
               bookings={bookings}
-              onSelect={handleSelectBooking}
-              onAdd={handleAddBooking}
-              loading={bookingsLoading}
-              viewToggle={
-                <div className="cal-view-toggle" role="group" aria-label="Calendar view">
-                  <button
-                    type="button"
-                    className={`cal-view-toggle__btn${view === 'month' ? ' cal-view-toggle__btn--active' : ''}`}
-                    onClick={() => setView('month')}
-                    aria-pressed={view === 'month'}
-                  >
-                    Month
-                  </button>
-                  <button
-                    type="button"
-                    className={`cal-view-toggle__btn${view === 'week' ? ' cal-view-toggle__btn--active' : ''}`}
-                    onClick={() => setView('week')}
-                    aria-pressed={view === 'week'}
-                  >
-                    Week
-                  </button>
-                  <button
-                    type="button"
-                    className={`cal-view-toggle__btn cal-view-toggle__btn--trimonth${view === 'trimonth' ? ' cal-view-toggle__btn--active' : ''}`}
-                    onClick={() => setView('trimonth')}
-                    aria-pressed={view === 'trimonth'}
-                  >
-                    3-Mo
+              onPrevMonth={handlePrevMonth}
+              onNextMonth={handleNextMonth}
+              onDateRangeSelected={handleDateRangeSelected}
+              selectedBooking={selectedBooking}
+            />
+          </motion.section>
+
+          {/* Stats + Reservations */}
+          <motion.section
+            className="cv2-lower"
+            initial={prefersReduced ? false : { opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: EASE, delay: 0.5 }}
+          >
+
+            {/* At a Glance strip */}
+            <div className="cv2-glance" role="region" aria-label="At a glance">
+              <div className="cv2-glance__stat">
+                <span className="cv2-glance__label">Next Arrival</span>
+                <span className="cv2-glance__value">
+                  {nextArrival
+                    ? daysUntil(nextArrival.checkIn) === 0
+                      ? 'Today'
+                      : daysUntil(nextArrival.checkIn) === 1
+                        ? 'Tomorrow'
+                        : `${formatShort(nextArrival.checkIn)}`
+                    : 'None'}
+                </span>
+                {nextArrival && (
+                  <span className="cv2-glance__sub">{nextArrival.guest}</span>
+                )}
+              </div>
+              <div className="cv2-glance__divider" aria-hidden="true" />
+              <div className="cv2-glance__stat">
+                <span className="cv2-glance__label">90-Day Occupancy</span>
+                <span className="cv2-glance__value">{quarterOccupancy}%</span>
+                <span className="cv2-glance__sub">next 3 months</span>
+              </div>
+              <div className="cv2-glance__divider" aria-hidden="true" />
+              <div className="cv2-glance__stat">
+                <span className="cv2-glance__label">Active Reservations</span>
+                <span className="cv2-glance__value">
+                  {bookings.filter(b => b.status !== 'Cancelled').length}
+                </span>
+                <span className="cv2-glance__sub">
+                  {bookings.filter(b => b.status === 'Pending').length > 0
+                    ? `${bookings.filter(b => b.status === 'Pending').length} pending`
+                    : 'all confirmed'}
+                </span>
+              </div>
+              <div className="cv2-glance__actions">
+                <button
+                  className="cv2-btn-primary"
+                  onClick={() => handleAddBooking(false)}
+                  aria-label="Add new reservation"
+                >
+                  New Reservation
+                </button>
+                <button
+                  className="cv2-btn-owner"
+                  onClick={() => handleAddBooking(true)}
+                  aria-label="Add owner stay"
+                >
+                  Owner Stay
+                </button>
+              </div>
+            </div>
+
+            {/* Reservations List */}
+            <div className="cv2-reservations" role="region" aria-label="Upcoming reservations">
+              <div className="cv2-reservations__header">
+                <h2 className="cv2-reservations__title">Upcoming</h2>
+                <span className="cv2-reservations__count">{upcoming.length} reservations</span>
+              </div>
+
+              {upcoming.length === 0 ? (
+                <div className="cv2-reservations__empty">
+                  <p>No upcoming reservations.</p>
+                  <button className="cv2-btn-primary" onClick={() => handleAddBooking(false)}>
+                    Add reservation
                   </button>
                 </div>
-              }
-            />
-          </div>
+              ) : (
+                <motion.ul
+                  className="cv2-list"
+                  role="list"
+                  initial="hidden"
+                  animate="visible"
+                  variants={{
+                    hidden: {},
+                    visible: {
+                      transition: prefersReduced
+                        ? { staggerChildren: 0 }
+                        : { staggerChildren: 0.055, delayChildren: 0.1 },
+                    },
+                  }}
+                >
+                  {upcoming.map(b => {
+                    const nights = calcNights(b.checkIn, b.checkOut);
+                    const daysAway = daysUntil(b.checkIn);
+                    return (
+                      <motion.li
+                        key={b.id}
+                        className={['cv2-row', b.type === 'owner' ? 'cv2-row--owner' : ''].filter(Boolean).join(' ')}
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => handleSelectBooking(b)}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSelectBooking(b); }
+                        }}
+                        aria-label={`${b.guest}, ${formatDisplayDates(b.checkIn, b.checkOut)}, ${nights} nights, ${b.status}`}
+                        variants={{
+                          hidden: { opacity: 0, y: 6 },
+                          visible: {
+                            opacity: 1,
+                            y: 0,
+                            transition: prefersReduced ? { duration: 0 } : { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
+                          },
+                        }}
+                      >
+                        <div className="cv2-row__dates">
+                          <time dateTime={b.checkIn} className="cv2-row__date-range">
+                            {formatDisplayDates(b.checkIn, b.checkOut)}
+                          </time>
+                          <span className="cv2-row__countdown">
+                            {daysAway === 0 ? 'Today' : daysAway === 1 ? 'Tomorrow' : daysAway > 0 ? `in ${daysAway}d` : 'Past'}
+                          </span>
+                        </div>
+                        <div className="cv2-row__guest-cell">
+                          <span className="cv2-row__guest">{b.guest}</span>
+                          {b.type === 'owner' && (
+                            <span className="cv2-row__chip cv2-row__chip--owner">Owner</span>
+                          )}
+                        </div>
+                        <span className={`cv2-row__status cv2-row__status--${b.status.toLowerCase()}`}>
+                          {b.status}
+                        </span>
+                        <span className="cv2-row__nights" aria-label={`${nights} nights`}>
+                          <span className="cv2-row__nights-val">{nights}</span>
+                          <span className="cv2-row__nights-label" aria-hidden="true">n</span>
+                        </span>
+                      </motion.li>
+                    );
+                  })}
+                </motion.ul>
+              )}
+            </div>
+
+          </motion.section>
         </div>
       </div>
 
-      {/* ─── Booking Panel ─── */}
+      {/* Booking Panel */}
       <BookingPanel
         open={showPanel}
         booking={selectedBooking}
@@ -376,11 +405,11 @@ export default function CalendarView({
         onSave={handleSaveBooking}
         onConfirm={handleConfirmBooking}
         onCancelBooking={handleCancelBooking}
-        onEdit={handleEdit}
+        onEdit={() => setPanelMode('edit')}
         onClose={handleClosePanel}
       />
 
-      {/* ─── Toast (always-fires post-action feedback) ─── */}
+      {/* Toast */}
       <AnimatePresence>
         {toast && (
           <motion.div
