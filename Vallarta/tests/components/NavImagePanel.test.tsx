@@ -71,9 +71,12 @@ describe('NavImagePanel — clip-path transitions', () => {
     );
     rerender(<NavImagePanel items={mockItems} activeIndex={1} direction="next" />);
     const layers = container.querySelectorAll('.nav-image-layer');
-    const entering = Array.from(layers).find(l => l.classList.contains('nav-image-entering'));
-    expect(entering).not.toBeNull();
-    expect(entering?.getAttribute('data-direction')).toBe('next');
+    // With immediate RAF stub, phase advances to enter-done before assertion
+    const transitioned = Array.from(layers).find(l =>
+      l.classList.contains('nav-image-entering') || l.classList.contains('nav-image-enter-done')
+    );
+    expect(transitioned).not.toBeNull();
+    expect(transitioned?.getAttribute('data-direction')).toBe('next');
   });
 
   it('applies data-direction="prev" when activeIndex decreases', () => {
@@ -82,9 +85,11 @@ describe('NavImagePanel — clip-path transitions', () => {
     );
     rerender(<NavImagePanel items={mockItems} activeIndex={0} direction="prev" />);
     const layers = container.querySelectorAll('.nav-image-layer');
-    const entering = Array.from(layers).find(l => l.classList.contains('nav-image-entering'));
-    expect(entering).not.toBeNull();
-    expect(entering?.getAttribute('data-direction')).toBe('prev');
+    const transitioned = Array.from(layers).find(l =>
+      l.classList.contains('nav-image-entering') || l.classList.contains('nav-image-enter-done')
+    );
+    expect(transitioned).not.toBeNull();
+    expect(transitioned?.getAttribute('data-direction')).toBe('prev');
   });
 
   it('does not apply filter:blur to any image layer', () => {

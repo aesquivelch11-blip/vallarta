@@ -8,8 +8,17 @@ vi.mock('motion/react', () => ({
       <nav className={className} {...rest}>{children}</nav>,
     div: ({ children, className, ...rest }: React.HTMLAttributes<HTMLDivElement> & { children?: React.ReactNode }) =>
       <div className={className} {...rest}>{children}</div>,
+    ul: ({ children, className, ...rest }: React.HTMLAttributes<HTMLUListElement> & { children?: React.ReactNode }) =>
+      <ul className={className} {...rest}>{children}</ul>,
+    li: ({ children, className, ...rest }: React.HTMLAttributes<HTMLLIElement> & { children?: React.ReactNode }) =>
+      <li className={className} {...rest}>{children}</li>,
+    button: ({ children, className, onClick, ...rest }: React.ButtonHTMLAttributes<HTMLButtonElement> & { children?: React.ReactNode }) =>
+      <button className={className} onClick={onClick} {...rest}>{children}</button>,
+    span: ({ children, className, ...rest }: React.HTMLAttributes<HTMLSpanElement> & { children?: React.ReactNode }) =>
+      <span className={className} {...rest}>{children}</span>,
   },
   AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  LayoutGroup: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   useReducedMotion: () => false,
 }));
 
