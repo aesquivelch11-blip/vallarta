@@ -26,12 +26,13 @@ const EXPENSES_DATA: ExpenseItem[] = [
   { id: 'utilities', category: 'Utilities & Infrastructure', amount: '$18,900', amountValue: 18900, change: '-0.8%', changeValue: -0.8, date: '2024-10-22', formattedDate: 'OCT 22, 2024', trend: 'down' },
 ];
 
-function FastReveal({ children, className, style }: { children: React.ReactNode, className?: string, style?: React.CSSProperties }) {
+function FastReveal({ children, className, style, id }: { children: React.ReactNode, className?: string, style?: React.CSSProperties, id?: string }) {
   const reduce = useReducedMotion();
   return (
     <motion.div
       className={className}
       style={style}
+      id={id}
       initial={reduce ? false : { opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.05 }}
