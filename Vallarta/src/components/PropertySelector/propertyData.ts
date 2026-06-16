@@ -1,86 +1,36 @@
 import { Property } from '../../types';
-import propImg1 from '../../assets/Menu/menu-1.webp';
-import propImg2 from '../../assets/Menu/menu-2.webp';
-import propImg3 from '../../assets/Menu/menu-3.webp';
-import propImg4 from '../../assets/Menu/menu-4.webp';
+import marival01 from '../../assets/marival/marival-01.jpeg';
+import marival02 from '../../assets/marival/marival-02.jpeg';
+import marival03 from '../../assets/marival/marival-03.jpeg';
+import marival04 from '../../assets/marival/marival-04.jpeg';
+import marival05 from '../../assets/marival/marival-05.jpeg';
+import marival06 from '../../assets/marival/marival-06.jpeg';
+import marival07 from '../../assets/marival/marival-07.jpeg';
+import marival08 from '../../assets/marival/marival-08.jpeg';
+import marival09 from '../../assets/marival/marival-09.jpeg';
 
 export const sampleProperties: Property[] = [
   {
-    id: 'casa-del-sol',
-    name: 'Casa del Sol',
-    location: 'Marina Vallarta',
-    tagline: 'Beachfront estate with private dock',
+    id: 'marival-penthouse',
+    name: 'Marival Penthouse',
+    location: 'Puerto Vallarta',
+    tagline: 'Rooftop penthouse above the Banderas Bay',
     occupancyStatus: 'available',
-    pricePerNight: 15000,
-    propertyType: 'Oceanfront',
-    imageUrl: propImg1,
-    imageWebp: propImg1,
-    images: [propImg1, propImg2, propImg3],
-    metrics: { bedrooms: 5, occupancy: '65%', revenue: '$18,200' },
-  },
-  {
-    id: 'villa-cemento',
-    name: 'Villa Cemento',
-    location: 'Conchas Chinas',
-    tagline: 'Contemporary hillside retreat with panoramic views',
-    occupancyStatus: 'available',
-    pricePerNight: 8500,
-    propertyType: 'Cliffside',
-    imageUrl: propImg2,
-    imageWebp: propImg2,
-    images: [propImg2, propImg3, propImg4],
-    metrics: { bedrooms: 3, occupancy: '92%', revenue: '$9,800' },
-  },
-  {
-    id: 'villa-tropical',
-    name: 'Villa Tropical',
-    location: 'Punta Mita',
-    tagline: 'Cliffside villa with sunset terrace',
-    occupancyStatus: 'reserved',
-    pricePerNight: 18000,
-    propertyType: 'Private Beach',
-    imageUrl: propImg3,
-    imageWebp: propImg3,
-    images: [propImg3, propImg4, propImg1],
-    metrics: { bedrooms: 6, occupancy: '85%', revenue: '$21,500' },
-  },
-  {
-    id: 'casa-brutal',
-    name: 'Casa Brutal',
-    location: 'Zona Romantica',
-    tagline: 'Oceanfront luxury with private infinity pool',
-    occupancyStatus: 'occupied',
-    pricePerNight: 9500,
-    propertyType: 'Compound',
-    imageUrl: propImg4,
-    imageWebp: propImg4,
-    images: [propImg4, propImg1, propImg2],
-    metrics: { bedrooms: 3, occupancy: '78%', revenue: '$12,400' },
-  },
-  {
-    id: 'casa-palmeras',
-    name: 'Casa Palmeras',
-    location: 'Bucerias',
-    tagline: 'Boutique casita steps from the sand',
-    occupancyStatus: 'available',
-    pricePerNight: 6200,
-    propertyType: 'Garden',
-    imageUrl: propImg1,
-    imageWebp: propImg1,
-    images: [propImg1, propImg3],
-    metrics: { bedrooms: 4, occupancy: '71%', revenue: '$6,100' },
-  },
-  {
-    id: 'casa-brisa',
-    name: 'Casa Brisa',
-    location: 'Sayulita',
-    tagline: 'Jungle-edge retreat with rooftop pool',
-    occupancyStatus: 'maintenance',
-    pricePerNight: 7800,
-    propertyType: 'Hillside',
-    imageUrl: propImg2,
-    imageWebp: propImg2,
-    images: [propImg2, propImg4],
-    metrics: { bedrooms: 2, occupancy: '58%', revenue: '$4,900' },
+    pricePerNight: 0,
+    propertyType: 'Penthouse',
+    imageUrl: marival01,
+    imageWebp: marival01,
+    images: [
+      marival01,
+      marival02,
+      marival03,
+      marival04,
+      marival05,
+      marival06,
+      marival07,
+      marival08,
+      marival09,
+    ],
+    metrics: { bedrooms: 0, occupancy: '—', revenue: '—' },
   },
 ];
