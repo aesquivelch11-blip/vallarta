@@ -4,8 +4,13 @@ import path from 'path';
 import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
+  const required = ['VITE_SUPABASE_URL', 'VITE_SUPABASE_ANON_KEY'];
+  for (const key of required) {
+    if (!process.env[key]) throw new Error(`Missing required env var: ${key}`);
+  }
+
   return {
-    base: process.env.GITHUB_ACTIONS === 'true' ? '/vallarta/' : '/',
+    base: '/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
