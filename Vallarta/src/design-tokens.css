@@ -750,10 +750,10 @@
 }
 
 .t-metric-value {
-    font-family: var(--font-ui);
-    font-size: clamp(2.5rem, 3.5vw, 3rem);
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
     font-weight: 400;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
     line-height: 1.1;
     font-variant-numeric: tabular-nums;
 }
