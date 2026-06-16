@@ -933,7 +933,7 @@ body {
     }
     50% {
         opacity: 0.9;
-        box-shadow: 0 0 0 10px oklch(38% 0.15 12 / 0);
+        box-shadow: 0 0 0 10px transparent;
     }
 }
 
@@ -1814,6 +1814,7 @@ body::before {
     --color-accent-warning: #d49a55;
     --color-accent-live: #c45a5a;
     --color-accent-live-bg: rgba(196, 90, 90, 0.08);
+    --color-accent-live-glow: rgba(196, 90, 90, 0.25);
     --color-task-urgent: #c45a5a;
     --color-task-pending: #9a9590;
     --color-task-scheduled: #6a6a6a;
