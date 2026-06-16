@@ -26,11 +26,12 @@ const EXPENSES_DATA: ExpenseItem[] = [
   { id: 'utilities', category: 'Utilities & Infrastructure', amount: '$18,900', amountValue: 18900, change: '-0.8%', changeValue: -0.8, date: '2024-10-22', formattedDate: 'OCT 22, 2024', trend: 'down' },
 ];
 
-function FastReveal({ children, className }: { children: React.ReactNode, className?: string }) {
+function FastReveal({ children, className, style }: { children: React.ReactNode, className?: string, style?: React.CSSProperties }) {
   const reduce = useReducedMotion();
   return (
     <motion.div
       className={className}
+      style={style}
       initial={reduce ? false : { opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.05 }}
@@ -71,18 +72,27 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
   };
 
   return (
-    <div className="min-h-[100dvh] bg-[#FAF8F5] text-[#242424] font-sans flex flex-col" id="deep-dive-container">
+    <div className="min-h-[100dvh] flex flex-col" style={{ background: 'var(--color-canvas)', color: 'var(--color-ink)', fontFamily: 'var(--font-ui)' }} id="deep-dive-container">
       
       {/* Top Bar Logo & Menu */}
-      <header className="sticky top-0 bg-[#FAF8F5]/90 z-40 border-b border-[#242424]/10 px-8 py-5 flex justify-between items-center backdrop-blur-xl" id="deep-dive-header">
-        <h1 className="text-xl md:text-2xl font-serif text-[#242424] cursor-pointer" onClick={() => onNavigate('nav_menu', 'push')}>
+      <header
+        className="sticky top-0 z-40 px-8 py-5 flex justify-between items-center"
+        style={{
+          background: 'color-mix(in srgb, var(--color-canvas) 90%, transparent)',
+          borderBottom: '1px solid var(--color-border-subtle)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+        }}
+        id="deep-dive-header"
+      >
+        <h1 className="text-xl md:text-2xl font-serif cursor-pointer" style={{ color: 'var(--color-ink)' }} onClick={() => onNavigate('nav_menu', 'push')}>
           Vallarta Estates
         </h1>
         <button 
           aria-label="Menu"
           id="deep-dive-menu-btn"
           onClick={() => onNavigate('nav_menu', 'slide_up')}
-          className="p-2 text-[#242424] hover:text-[#7E7A74] transition-colors duration-200 cursor-pointer"
+          className="p-2 cursor-pointer deep-dive-menu-btn"
         >
           <Menu className="w-5 h-5" />
         </button>
@@ -97,20 +107,20 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
           {/* Hero Metrics (Unboxed) */}
           <FastReveal className="space-y-12">
             <div className="space-y-6">
-              <h2 className="text-5xl md:text-7xl lg:text-[7rem] font-serif text-[#242424] leading-[0.9] tracking-tighter" id="deep-dive-header-title">
+              <h2 className="text-5xl md:text-7xl lg:text-[6rem] font-serif leading-[0.9] tracking-tighter" style={{ color: 'var(--color-ink)' }} id="deep-dive-header-title">
                 Portfolio<br/>Yield.
               </h2>
-              <p className="text-[#7E7A74] text-lg max-w-[40ch] leading-relaxed">
+              <p className="text-lg max-w-[40ch] leading-relaxed" style={{ color: 'var(--color-ink-secondary)' }}>
                 Year-to-date fiscal performance, measured against internal forecasts and market baseline.
               </p>
             </div>
 
-            <div className="flex flex-wrap gap-x-16 gap-y-8 pt-8 border-t border-[#242424]/10" id="deep-dive-top-metrics">
+            <div className="flex flex-wrap gap-x-16 gap-y-8 pt-8 border-t" style={{ borderColor: 'var(--color-border-subtle)' }} id="deep-dive-top-metrics">
               <div>
-                <span className="text-[10px] uppercase tracking-widest text-[#7E7A74] font-semibold block mb-2">Q4 Yield</span>
+                <span className="text-[10px] uppercase tracking-widest font-semibold block mb-2" style={{ color: 'var(--color-ink-secondary)' }}>Q4 Yield</span>
                 <div className="flex items-baseline gap-3">
-                  <span className="text-4xl lg:text-5xl font-serif text-[#242424] tabular-nums">8.4%</span>
-                  <span className="text-sm text-[#2B3B32] flex items-center">
+                  <span className="text-4xl lg:text-5xl font-serif tabular-nums" style={{ color: 'var(--color-ink)' }}>8.4%</span>
+                  <span className="text-sm flex items-center" style={{ color: 'var(--color-accent-positive)' }}>
                     <ArrowUpRight className="w-3.5 h-3.5 mr-0.5" />
                     1.2%
                   </span>
@@ -118,90 +128,93 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
               </div>
 
               <div>
-                <span className="text-[10px] uppercase tracking-widest text-[#7E7A74] font-semibold block mb-2">YTD Revenue</span>
-                <span className="text-4xl lg:text-5xl font-serif text-[#242424] tabular-nums block">$1.24M</span>
+                <span className="text-[10px] uppercase tracking-widest font-semibold block mb-2" style={{ color: 'var(--color-ink-secondary)' }}>YTD Revenue</span>
+                <span className="text-4xl lg:text-5xl font-serif tabular-nums block" style={{ color: 'var(--color-ink)' }}>$1.24M</span>
               </div>
               
               <div>
-                <span className="text-[10px] uppercase tracking-widest text-[#7E7A74] font-semibold block mb-2">Premium</span>
-                <span className="text-4xl lg:text-5xl font-serif text-[#242424] tabular-nums block">+14%</span>
+                <span className="text-[10px] uppercase tracking-widest font-semibold block mb-2" style={{ color: 'var(--color-ink-secondary)' }}>Premium</span>
+                <span className="text-4xl lg:text-5xl font-serif tabular-nums block" style={{ color: 'var(--color-ink)' }}>+14%</span>
               </div>
             </div>
           </FastReveal>
 
           {/* Operational Expenses (Print Ledger Style) */}
           <FastReveal className="space-y-8" id="deep-dive-opex-section">
-            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-[#242424]/10 pb-6">
-              <h3 className="text-3xl font-serif text-[#242424] tracking-tight">
+            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b pb-6" style={{ borderColor: 'var(--color-border-subtle)' }}>
+              <h3 className="text-3xl font-serif tracking-tight" style={{ color: 'var(--color-ink)' }}>
                 Operational Expenses
               </h3>
               
               {/* Editorial Search and Sort */}
               <div className="flex flex-col sm:flex-row gap-6 w-full lg:w-auto">
-                <div className="relative flex items-center w-full sm:w-48 border-b border-[#242424]/20 group">
-                  <Search className="w-3.5 h-3.5 text-[#7E7A74] absolute left-0" />
+                <div className="relative flex items-center w-full sm:w-48 border-b group" style={{ borderColor: 'var(--color-border-medium)' }}>
+                  <Search className="w-3.5 h-3.5 absolute left-0" style={{ color: 'var(--color-ink-secondary)' }} />
                   <input
                     type="text"
                     placeholder="Search ledger..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-6 pr-6 py-2 bg-transparent border-none text-sm focus:outline-none focus:ring-0 text-[#242424] placeholder:text-[#7E7A74]"
+                    className="w-full pl-6 pr-6 py-2 bg-transparent border-none text-sm focus:outline-none focus:ring-0 deep-dive-search" style={{ color: 'var(--color-ink)' }}
                   />
                   {searchQuery && (
                     <button
                       type="button"
                       onClick={() => setSearchQuery('')}
-                      className="absolute right-0 p-1 text-[#7E7A74] hover:text-[#242424] transition-colors cursor-pointer"
+                      className="absolute right-0 p-1 transition-colors cursor-pointer deep-dive-search-clear" style={{ color: 'var(--color-ink-secondary)' }}
                     >
                       <X className="w-3 h-3" />
                     </button>
                   )}
                 </div>
 
-                <div className="relative flex items-center w-full sm:w-32 border-b border-[#242424]/20">
+                <div className="relative flex items-center w-full sm:w-32 border-b" style={{ borderColor: 'var(--color-border-medium)' }}>
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value as 'highest' | 'newest')}
-                    className="w-full py-2 bg-transparent border-none text-sm focus:outline-none focus:ring-0 text-[#242424] appearance-none cursor-pointer"
+                    className="w-full py-2 bg-transparent border-none text-sm focus:outline-none focus:ring-0 appearance-none cursor-pointer"
+                    style={{ color: 'var(--color-ink)' }}
                   >
                     <option value="highest">Value (High)</option>
                     <option value="newest">Recent</option>
                   </select>
-                  <div className="absolute right-0 pointer-events-none text-[#242424]">
+                  <div className="absolute right-0 pointer-events-none" style={{ color: 'var(--color-ink)' }}>
                     <ArrowDownRight className="w-3.5 h-3.5" />
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-col divide-y divide-[#242424]/5">
+            <div className="flex flex-col">
               {sortedExpenses.length > 0 ? (
                 sortedExpenses.map((expense) => {
                   const isDown = expense.trend === 'down';
-                  const trendColor = isDown ? 'text-[#2B3B32]' : 'text-[#D49A55]';
-                  
+                  const trendStyle = isDown
+                    ? { color: 'var(--color-accent-positive)' }
+                    : { color: 'var(--color-accent-warning)' };
+
                   return (
-                    <div key={expense.id} className="py-5 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 group">
+                    <div key={expense.id} className="py-5 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 group border-b last:border-b-0" style={{ borderColor: 'var(--color-border-subtle)' }}>
                       <div className="flex items-baseline gap-4 w-full sm:w-1/2">
-                        <span className="text-lg font-serif text-[#242424]">{expense.category}</span>
+                        <span className="text-lg font-serif" style={{ color: 'var(--color-ink)' }}>{expense.category}</span>
                       </div>
                       <div className="flex items-baseline justify-between sm:justify-end gap-8 w-full sm:w-1/2">
-                        <span className="text-[10px] uppercase tracking-widest text-[#7E7A74]">
+                        <span className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--color-ink-secondary)' }}>
                           {expense.formattedDate}
                         </span>
                         <div className="flex items-baseline gap-4 w-32 justify-end">
-                          <span className={`text-xs flex items-center ${trendColor}`}>
+                          <span className="text-xs flex items-center" style={trendStyle}>
                             {isDown ? <ArrowDownRight className="w-3 h-3 mr-0.5" /> : <ArrowUpRight className="w-3 h-3 mr-0.5" />}
                             {expense.change}
                           </span>
-                          <span className="text-xl font-serif text-[#242424] tabular-nums">{expense.amount}</span>
+                          <span className="text-xl font-serif tabular-nums" style={{ color: 'var(--color-ink)' }}>{expense.amount}</span>
                         </div>
                       </div>
                     </div>
                   );
                 })
               ) : (
-                <div className="py-12 text-[#7E7A74] text-sm">
+                <div className="py-12 text-sm" style={{ color: 'var(--color-ink-secondary)' }}>
                   No expense records found.
                 </div>
               )}
@@ -209,11 +222,12 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
           </FastReveal>
 
           {/* Action Link replacing heavy button */}
-          <FastReveal className="pt-8 border-t border-[#242424]/10">
+          <FastReveal className="pt-8 border-t" style={{ borderColor: 'var(--color-border-subtle)' }}>
             <button
               onClick={startDownload}
               disabled={downloading}
-              className="group text-[#242424] text-xs font-semibold tracking-widest uppercase flex items-center gap-3 cursor-pointer transition-opacity hover:opacity-60 disabled:opacity-40"
+              className="group text-xs font-semibold tracking-widest uppercase flex items-center gap-3 cursor-pointer transition-opacity hover:opacity-60 disabled:opacity-40"
+              style={{ color: 'var(--color-ink)' }}
             >
               <Download className="w-4 h-4" />
               {downloading ? 'Compiling Document...' : 'Export Fiscal PDF'}
@@ -222,15 +236,15 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
         </div>
 
         {/* Right Column: Decorative Image Placeholder */}
-        <div className="hidden lg:flex lg:col-span-4 xl:col-span-4 bg-[#EAE2D6] relative min-h-[500px]" id="decorative-image-placeholder">
+        <div className="hidden lg:flex lg:col-span-4 xl:col-span-4 relative min-h-[500px]" style={{ background: 'var(--color-surface-solid)' }} id="decorative-image-placeholder">
           {/* Subtle noise/texture overlay placeholder */}
-          <div className="absolute inset-0 opacity-20 mix-blend-multiply" style={{ backgroundImage: 'radial-gradient(#242424 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
+          <div className="absolute inset-0 opacity-20 mix-blend-multiply" style={{ backgroundImage: 'radial-gradient(var(--color-ink) 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
           
           <div className="absolute inset-x-0 bottom-0 p-8 flex justify-between items-end">
-            <span className="text-[10px] font-semibold tracking-widest uppercase text-[#242424]/60">
+            <span className="text-[10px] font-semibold tracking-widest uppercase" style={{ color: 'var(--color-ink-muted)' }}>
               Fig. 01
             </span>
-            <span className="text-[10px] font-semibold tracking-widest uppercase text-[#242424]/60 text-right max-w-[150px]">
+            <span className="text-[10px] font-semibold tracking-widest uppercase text-right max-w-[150px]" style={{ color: 'var(--color-ink-muted)' }}>
               Estate Visual Documentation
             </span>
           </div>

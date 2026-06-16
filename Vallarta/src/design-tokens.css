@@ -859,6 +859,29 @@ body {
     box-shadow: var(--shadow-lift);
 }
 
+/* ── Financial Deep Dive — menu button ── */
+.deep-dive-menu-btn {
+    color: var(--color-ink);
+    transition: color var(--duration-fast) var(--ease-out-expo);
+}
+.deep-dive-menu-btn:hover {
+    color: var(--color-ink-secondary);
+}
+
+/* ── Financial Deep Dive — search input ── */
+.deep-dive-search::placeholder {
+    color: var(--color-ink-secondary);
+    opacity: 0.7;
+}
+
+/* ── Financial Deep Dive — search clear button ── */
+.deep-dive-search-clear {
+    transition: color var(--duration-fast) var(--ease-out-expo);
+}
+.deep-dive-search-clear:hover {
+    color: var(--color-ink);
+}
+
 /* Badge component */
 .badge {
     display: inline-flex;
