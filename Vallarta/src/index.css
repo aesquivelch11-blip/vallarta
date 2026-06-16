@@ -5,9 +5,9 @@
 
 
 @theme {
-  --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "EB Garamond Variable", Georgia, serif;
-  --font-mono: "Instrument Sans", ui-monospace, SFMono-Regular, monospace;
+  --font-sans: var(--font-ui);
+  --font-serif: var(--font-display);
+  --font-mono: var(--font-ui);
 }
 
 /* Suppress browser autofill color injection on cream login panel */
