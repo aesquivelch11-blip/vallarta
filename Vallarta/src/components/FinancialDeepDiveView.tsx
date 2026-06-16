@@ -85,7 +85,7 @@ export default function FinancialDeepDiveView({ onNavigate, onNotify }: Financia
         }}
         id="deep-dive-header"
       >
-        <h1 className="text-xl md:text-2xl font-serif cursor-pointer" style={{ color: 'var(--color-ink)' }} onClick={() => onNavigate('nav_menu', 'push')}>
+        <h1 className="t-wordmark cursor-pointer" style={{ color: 'var(--color-ink)' }} onClick={() => onNavigate('nav_menu', 'push')}>
           Vallarta Estates
         </h1>
         <button 
