@@ -1767,11 +1767,13 @@ body {
 }
 
 .site-footer__wordmark {
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-size: 1.125rem;
-    letter-spacing: 0.04em;
+    font-family: var(--font-ui);
+    font-weight: 500;
+    font-size: 0.6875rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
     color: var(--color-dark-ink-secondary);
+    line-height: 1;
 }
 
 .site-footer__links {
