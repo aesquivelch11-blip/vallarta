@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { ScreenType } from '../../types';
 import { DashboardData, formatCurrency, formatTrendPercent } from './dashboardData';
 
@@ -189,31 +189,6 @@ export default function DashboardFinancials({ data, onNavigate }: DashboardFinan
             </p>
           </div>
         </div>
-      </motion.div>
-
-      {/* Nav link */}
-      <motion.div variants={sectionVariants} initial="hidden" animate="visible" custom={3}>
-        <button
-          className="dashboard-link"
-          onClick={() => onNavigate('reporting', 'push')}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            fontFamily: 'var(--font-ui)',
-            fontSize: '0.6875rem',
-            fontWeight: 500,
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            color: 'var(--color-ink-secondary)',
-            background: 'none',
-            border: 'none',
-            padding: 0,
-            cursor: 'pointer',
-          }}
-        >
-          VIEW FINANCIALS <ArrowRight size={11} strokeWidth={1.5} />
-        </button>
       </motion.div>
     </div>
   );

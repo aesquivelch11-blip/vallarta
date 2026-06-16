@@ -13,11 +13,11 @@ describe('NavEditorialTitle', () => {
     expect(container.textContent).toContain('Revenue');
   });
 
-  it('renders the nav-editorial-heading with nav-title-entered class', () => {
+  it('renders the nav-editorial-heading element', () => {
     const { container } = render(<NavEditorialTitle label="Revenue" />);
     const heading = container.querySelector('.nav-editorial-heading');
     expect(heading).not.toBeNull();
-    expect(heading?.classList.contains('nav-title-entered')).toBe(true);
+    expect(heading?.tagName).toBe('H2');
   });
 
   it('updates label text on rerender', () => {

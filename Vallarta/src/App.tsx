@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from 'motion/react';
 import { ScreenType } from './types';
 import LoginView from './components/LoginView';
 import NavMenuView from './components/NavMenuView';
-import FinancialReportingView from './components/FinancialReportingView';
 import FinancialDeepDiveView from './components/FinancialDeepDiveView';
 import CameraFeedView from './components/CameraFeedView';
 import CalendarView from './components/CalendarView';
@@ -67,7 +66,7 @@ export default function App() {
     setTransitionStyle('push_back');
     // Go to last history screen that isn't nav_menu or login
     const validHistory = history.filter(s => s !== 'nav_menu' && s !== 'login');
-    const destination = validHistory.length > 0 ? validHistory[validHistory.length - 1] : 'reporting';
+    const destination = validHistory.length > 0 ? validHistory[validHistory.length - 1] : 'deep_dive';
     
     // Reset history stack
     setHistory(['login', destination]);
@@ -108,7 +107,7 @@ export default function App() {
     switch (currentScreen) {
       case 'login':
         return (
-          <div key="login" className="w-full min-h-screen relative bg-[#0c0c0c]">
+          <div key="login" className="w-full min-h-screen relative" style={{ background: 'var(--color-dark-canvas)' }}>
             <AnimatePresence mode="wait">
               {!hasLoaded ? (
                 <motion.div
@@ -150,16 +149,6 @@ export default function App() {
           </div>
         );
       }
-      case 'reporting':
-        return (
-          <div key="reporting" className="w-full min-h-screen">
-            <FinancialReportingView 
-              onNavigate={(screen, style) => handleNavigate(screen, style)} 
-              onNotify={triggerToast}
-              propertyId={selectedPropertyId}
-            />
-          </div>
-        );
       case 'deep_dive':
         return (
           <div key="deep_dive" className="w-full min-h-screen">
@@ -243,15 +232,19 @@ export default function App() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed bottom-20 left-6 right-6 md:left-auto md:right-8 md:w-96 bg-[#242424] border border-[#C9B8A0]/30 p-5 shadow-2xl z-[9999] flex items-start gap-4 rounded-[2rem]"
+            className="fixed bottom-20 left-6 right-6 md:left-auto md:right-8 md:w-96 p-5 shadow-2xl z-[9999] flex items-start gap-4 rounded-[2rem] border"
             id="global-toast-notification"
+            style={{
+              background: 'var(--color-dark-canvas)',
+              borderColor: 'rgba(201, 184, 160, 0.30)',
+            }}
           >
-            <div className="w-2 h-2 rounded-full bg-[#C9B8A0] mt-1.5 animate-pulse shrink-0" />
+            <div className="w-2 h-2 rounded-full mt-1.5 animate-pulse shrink-0" style={{ background: 'var(--cal-owner-accent)' }} />
             <div className="flex-grow">
-              <span className="text-[10px] tracking-[0.25em] font-medium text-[#C9B8A0]/80 block uppercase mb-1 font-sans">
+              <span className="text-[10px] tracking-[0.25em] font-medium block uppercase mb-1" style={{ color: 'rgba(201, 184, 160, 0.80)', fontFamily: 'var(--font-ui)' }}>
                 Estate Concierge Bulletin
               </span>
-              <p className="text-[#F5F1E8] text-xs font-light leading-relaxed tracking-wide font-sans">
+              <p className="text-xs font-light leading-relaxed tracking-wide" style={{ color: 'var(--color-dark-ink)', fontFamily: 'var(--font-ui)' }}>
                 {toastMessage}
               </p>
             </div>

@@ -5,6 +5,9 @@ import path from 'path';
 const cssPath = path.resolve(__dirname, '../src/design-tokens.css');
 const css = fs.readFileSync(cssPath, 'utf-8');
 
+const calCssPath = path.resolve(__dirname, '../src/components/calendar/calendar.css');
+const calCss = fs.readFileSync(calCssPath, 'utf-8');
+
 describe('design-tokens.css', () => {
   it('contains dashboard-link active press state', () => {
     expect(css).toContain('.dashboard-link:active');
@@ -29,8 +32,8 @@ describe('design-tokens.css', () => {
     expect(css).toContain('var(--ease-out-quart)');
   });
 
-  it('contains dark mode overlay CSS rule', () => {
-    expect(css).toContain('[data-theme="dark"] .dark-mode-overlay');
-    expect(css).toContain('opacity: 1');
+  it('contains dark mode overlay CSS rule in calendar.css', () => {
+    expect(calCss).toContain('[data-theme="dark"] .dark-mode-overlay');
+    expect(calCss).toContain('opacity: 1');
   });
 });

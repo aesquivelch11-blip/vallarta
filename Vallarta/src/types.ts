@@ -1,7 +1,6 @@
 export type ScreenType =
   | 'login'
   | 'nav_menu'
-  | 'reporting'
   | 'deep_dive'
   | 'camera_expanded'
   | 'calendar'

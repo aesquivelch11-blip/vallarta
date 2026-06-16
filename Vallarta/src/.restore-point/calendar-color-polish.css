@@ -1,0 +1,519 @@
+:root {
+  --cal-bone: var(--color-canvas, #faf8f5);
+  --cal-ink: var(--color-ink, #242424);
+  --cal-ink-secondary: #6e6963;
+  --cal-ink-muted: #6e6963;
+  --cal-agave: var(--color-accent-positive, #2b3b32);
+  --cal-agave-border: rgba(43, 59, 50, 0.12);
+  --cal-agave-tint: rgba(43, 59, 50, 0.06);
+  --cal-agave-tint-strong: rgba(43, 59, 50, 0.12);
+  --cal-ochre-dark: #8b6530;
+  --cal-ochre-tint: rgba(212, 154, 85, 0.08);
+  --cal-error-light: rgba(248, 113, 113, 0.95);
+}
+
+/* ─────────────────────────────────────────
+   1. Base screen noise overlay
+   ───────────────────────────────────────── */
+.cal-screen::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: var(--ps-noise);
+  opacity: 0.04;
+}
+
+/* ─────────────────────────────────────────
+   2. Card surfaces — Bleached Bone
+   ───────────────────────────────────────── */
+.cal-card-shell {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.cal-screen .cal-card {
+  background-color: var(--cal-bone) !important;
+  border: 1px solid var(--cal-agave-border) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03) !important;
+  margin: 0 !important;
+  flex: 0 0 auto;
+}
+
+.cal-card--grid {
+  max-width: max-content;
+}
+
+.cal-card--bookings {
+  max-width: 500px;
+  width: 100%;
+}
+
+/* ─────────────────────────────────────────
+   3. Panel surface — Shadowed Agave
+   ───────────────────────────────────────── */
+.cal-panel.cal-drawer-sheet {
+  background-color: var(--cal-agave) !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: -12px 0 48px rgba(0, 0, 0, 0.08) !important;
+}
+
+
+/* ─────────────────────────────────────────
+   4. Card typography — Obsidian / Weathered Timber
+   ───────────────────────────────────────── */
+.cal-screen .cal-month,
+.cal-screen .cal-bookings__title {
+  color: var(--cal-ink) !important;
+}
+
+.cal-screen .cal-year {
+  color: var(--cal-ink-secondary) !important;
+}
+
+.cal-screen .cal-day-label {
+  color: var(--cal-ink-muted) !important;
+}
+
+.cal-screen .cal-day {
+  color: var(--cal-ink) !important;
+}
+
+.cal-screen .cal-day--booked {
+  color: var(--cal-ink-muted) !important;
+}
+
+.cal-screen .cal-day--owner {
+  color: var(--cal-ochre-dark) !important;
+}
+
+.cal-screen .cal-day--today {
+  border: 1px solid var(--cal-agave) !important;
+  border-radius: 50%;
+}
+
+/* ─────────────────────────────────────────
+   5. Day dots & grid legend
+   ───────────────────────────────────────── */
+.cal-screen .cal-day__dot {
+  background-color: var(--cal-agave) !important;
+}
+
+.cal-screen .cal-day__dot--owner {
+  background-color: var(--cal-ochre-dark) !important;
+}
+
+.cal-screen .cal-day__dot--pending {
+  background-color: transparent !important;
+  border: 1.5px solid var(--cal-ink-secondary) !important;
+}
+
+.cal-screen .cal-grid-legend__item {
+  color: var(--cal-ink-muted) !important;
+}
+
+.cal-screen .cal-grid-legend__dot--confirmed {
+  background-color: var(--cal-agave) !important;
+}
+
+.cal-screen .cal-grid-legend__dot--owner {
+  background-color: var(--cal-ochre-dark) !important;
+}
+
+.cal-screen .cal-grid-legend__dot--pending {
+  background-color: transparent !important;
+  border: 1.5px solid var(--cal-ink-secondary) !important;
+}
+
+.cal-screen .cal-grid-hint {
+  color: var(--cal-ink-muted) !important;
+}
+
+/* ─────────────────────────────────────────
+   6. Month navigation arrows
+   ───────────────────────────────────────── */
+.cal-screen .cal-month-nav__arrow {
+  border: 1px solid rgba(36, 36, 36, 0.12) !important;
+  background: rgba(36, 36, 36, 0.02) !important;
+  color: var(--cal-ink-secondary) !important;
+}
+
+.cal-screen .cal-month-nav__arrow:hover {
+  border-color: var(--cal-agave-border) !important;
+  background: var(--cal-agave-tint) !important;
+  color: var(--cal-ink) !important;
+}
+
+.cal-screen .cal-month-nav__arrow:focus-visible {
+  outline: 2px solid var(--cal-agave) !important;
+  outline-offset: 3px;
+}
+
+/* ─────────────────────────────────────────
+   7. Booking rows
+   ───────────────────────────────────────── */
+.cal-screen .cal-booking-row {
+  border-bottom: 1px solid rgba(36, 36, 36, 0.06) !important;
+}
+
+.cal-screen .cal-booking-row:hover,
+.cal-screen .cal-booking-row:focus-visible {
+  background-color: var(--cal-agave-tint) !important;
+  outline: none;
+  box-shadow: inset 0 0 0 1px var(--cal-agave-border) !important;
+}
+
+.cal-screen .cal-booking-row:focus-visible {
+  box-shadow: inset 0 0 0 1.5px var(--cal-agave) !important;
+}
+
+.cal-screen .cal-booking-row__date,
+.cal-screen .cal-booking-row__nights {
+  color: var(--cal-ink-secondary) !important;
+}
+
+.cal-screen .cal-booking-row__guest {
+  color: var(--cal-ink) !important;
+}
+
+.cal-screen .cal-booking-row__status--confirmed {
+  color: var(--cal-agave) !important;
+}
+
+.cal-screen .cal-booking-row__status--pending {
+  color: var(--cal-ink-muted) !important;
+}
+
+.cal-screen .cal-booking-row__status--cancelled,
+.cal-screen .cal-booking-row--cancelled,
+.cal-screen .cal-booking-row--cancelled .cal-booking-row__status {
+  color: var(--cal-ink-muted) !important;
+}
+
+.cal-screen .cal-booking-row__chip--owner {
+  color: var(--cal-ochre-dark) !important;
+  border-color: rgba(139, 101, 48, 0.25) !important;
+  background-color: var(--cal-ochre-tint) !important;
+}
+
+.cal-screen .cal-bookings__meta {
+  color: var(--cal-ink-muted) !important;
+}
+
+.cal-screen .cal-booking-row--owner {
+  background-color: var(--cal-ochre-tint) !important;
+}
+
+.cal-screen .cal-booking-row--cancelled {
+  opacity: 1 !important;
+}
+
+/* ─────────────────────────────────────────
+   8. Empty state & add button
+   ───────────────────────────────────────── */
+.cal-screen .cal-add-btn {
+  color: var(--cal-agave) !important;
+  border: 1px solid var(--cal-agave-border) !important;
+  background-color: var(--cal-agave-tint) !important;
+}
+
+.cal-screen .cal-add-btn:hover {
+  background-color: var(--cal-agave-tint-strong) !important;
+  border-color: rgba(43, 59, 50, 0.25) !important;
+}
+
+.cal-screen .cal-bookings__empty {
+  color: var(--cal-ink-muted) !important;
+}
+
+.cal-screen .cal-bookings__empty-cta {
+  color: var(--cal-agave) !important;
+  border: 1px solid var(--cal-agave-border) !important;
+  background-color: var(--cal-agave-tint) !important;
+}
+
+.cal-screen .cal-bookings__empty-cta:hover {
+  background-color: var(--cal-agave-tint-strong) !important;
+  border-color: rgba(43, 59, 50, 0.25) !important;
+}
+
+/* ─────────────────────────────────────────
+   9. Panel typography — Bone on Agave
+   ───────────────────────────────────────── */
+.cal-panel.cal-drawer-sheet .cal-drawer-label {
+  color: rgba(250, 248, 245, 0.65) !important;
+}
+
+.cal-panel.cal-drawer-sheet .cal-drawer-guest-name {
+  color: var(--cal-bone) !important;
+  text-shadow: none;
+}
+
+.cal-panel.cal-drawer-sheet .cal-drawer-value {
+  color: var(--cal-bone) !important;
+}
+
+.cal-panel.cal-drawer-sheet .cal-booking-row__status--confirmed,
+.cal-panel.cal-drawer-sheet .cal-booking-row__chip--owner {
+  color: var(--cal-bone) !important;
+  border-color: rgba(250, 248, 245, 0.35) !important;
+  background-color: rgba(250, 248, 245, 0.08) !important;
+}
+
+/* ─────────────────────────────────────────
+   10. Panel inputs
+   ───────────────────────────────────────── */
+.cal-panel.cal-drawer-sheet .cal-drawer-input {
+  background-color: var(--cal-bone) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: var(--cal-ink) !important;
+}
+
+.cal-panel.cal-drawer-sheet .cal-drawer-input:focus {
+  border-color: rgba(250, 248, 245, 0.55) !important;
+  box-shadow: 0 0 0 2px rgba(250, 248, 245, 0.15) !important;
+}
+
+.cal-panel.cal-drawer-sheet .cal-drawer-input::placeholder {
+  color: var(--cal-ink-muted) !important;
+}
+
+.cal-panel.cal-drawer-sheet input[type="date"] {
+  color-scheme: light;
+}
+
+/* ─────────────────────────────────────────
+   11. Panel buttons
+   ───────────────────────────────────────── */
+.cal-panel.cal-drawer-sheet .cal-drawer-btn {
+  background-color: var(--cal-bone) !important;
+  color: var(--cal-agave) !important;
+  border-radius: 9999px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+}
+
+.cal-panel.cal-drawer-sheet .cal-drawer-btn:hover {
+  background-color: rgba(250, 248, 245, 0.92) !important;
+  transform: scale(0.98) !important;
+}
+
+.cal-panel.cal-drawer-sheet .cal-drawer-btn:disabled {
+  background-color: rgba(250, 248, 245, 0.18) !important;
+  color: rgba(250, 248, 245, 0.5) !important;
+  transform: none !important;
+}
+
+.cal-panel.cal-drawer-sheet .cal-drawer-btn--edit {
+  background-color: transparent !important;
+  border: 1px solid rgba(250, 248, 245, 0.35) !important;
+  color: var(--cal-bone) !important;
+}
+
+.cal-panel.cal-drawer-sheet .cal-drawer-btn--edit:hover {
+  background-color: rgba(250, 248, 245, 0.08) !important;
+}
+
+.cal-panel.cal-drawer-sheet .cal-drawer-btn--cancel-link {
+  color: rgba(250, 248, 245, 0.55) !important;
+  background: transparent !important;
+}
+
+.cal-panel.cal-drawer-sheet .cal-drawer-btn--cancel-link:hover,
+.cal-panel.cal-drawer-sheet .cal-drawer-btn--cancel-link--armed {
+  color: var(--cal-error-light) !important;
+}
+
+.cal-panel.cal-drawer-sheet .cal-drawer-btn--close {
+  color: rgba(250, 248, 245, 0.55) !important;
+  background: transparent !important;
+  border: 1px solid rgba(250, 248, 245, 0.12) !important;
+}
+
+.cal-panel.cal-drawer-sheet .cal-drawer-btn--close:hover {
+  color: var(--cal-bone) !important;
+  border-color: rgba(250, 248, 245, 0.3) !important;
+}
+
+/* Top-right close icon button */
+.cal-panel.cal-drawer-sheet .cal-drawer-close {
+  color: rgba(250, 248, 245, 0.55) !important;
+  background: transparent !important;
+}
+
+.cal-panel.cal-drawer-sheet .cal-drawer-close:hover {
+  color: var(--cal-bone) !important;
+}
+
+.cal-panel.cal-drawer-sheet .cal-drawer-close:focus-visible {
+  outline: 2px solid rgba(250, 248, 245, 0.5);
+  outline-offset: 3px;
+  border-radius: 50%;
+}
+
+/* ─────────────────────────────────────────
+   12. Panel toggle
+   ───────────────────────────────────────── */
+.cal-panel.cal-drawer-sheet .cal-drawer-toggle {
+  display: flex !important;
+  border-radius: 0.25rem !important;
+  overflow: hidden !important;
+  background: rgba(250, 248, 245, 0.06) !important;
+  border: 1px solid rgba(250, 248, 245, 0.12) !important;
+}
+
+.cal-panel.cal-drawer-sheet .cal-drawer-toggle__option {
+  position: relative !important;
+  flex: 1 !important;
+  padding: 0.5rem 1rem !important;
+  font-size: 0.8125rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  color: rgba(250, 248, 245, 0.6) !important;
+  transition: color 0.2s ease !important;
+}
+
+.cal-panel.cal-drawer-sheet .cal-drawer-toggle__option:hover:not(.cal-drawer-toggle__option--active) {
+  color: rgba(250, 248, 245, 0.85) !important;
+}
+
+.cal-panel.cal-drawer-sheet .cal-drawer-toggle__option--active {
+  color: var(--cal-agave) !important;
+}
+
+.cal-panel.cal-drawer-sheet .cal-drawer-toggle__label {
+  position: relative !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  user-select: none !important;
+}
+
+.cal-panel.cal-drawer-sheet .cal-drawer-toggle__pill {
+  position: absolute !important;
+  inset: 2px !important;
+  background: var(--cal-bone) !important;
+  border-radius: calc(0.25rem - 2px) !important;
+  z-index: 0 !important;
+  will-change: transform !important;
+}
+
+/* ─────────────────────────────────────────
+   13. Panel helper text
+   ───────────────────────────────────────── */
+.cal-panel.cal-drawer-sheet .cal-drawer-nights {
+  color: rgba(250, 248, 245, 0.55) !important;
+}
+
+.cal-panel.cal-drawer-sheet .cal-drawer-error {
+  color: var(--cal-error-light) !important;
+}
+
+.cal-panel.cal-drawer-sheet .cal-drawer-warning {
+  color: rgba(250, 248, 245, 0.8) !important;
+}
+
+/* ─────────────────────────────────────────
+   14. Drag-to-select range
+   ───────────────────────────────────────── */
+.cal-screen .cal-day--selected.cal-day--drag-target {
+  background-color: var(--cal-agave-tint-strong) !important;
+  color: var(--cal-ink) !important;
+}
+
+.cal-screen .cal-day--selected.cal-day--drag-target::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--cal-agave) !important;
+  pointer-events: none;
+}
+
+/* ─────────────────────────────────────────
+   15. Custom date picker
+   ───────────────────────────────────────── */
+.cal-date-picker-outer {
+  background-color: var(--cal-bone) !important;
+  border: 1px solid var(--cal-agave-border) !important;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.08) !important;
+}
+
+.cal-date-picker-inner {
+  background-color: rgba(255, 255, 255, 0.7) !important;
+  border: 1px solid rgba(43, 59, 50, 0.06) !important;
+}
+
+.cal-date-picker-inner .cal-picker-arrow {
+  color: var(--cal-ink-secondary) !important;
+}
+
+.cal-date-picker-inner .cal-picker-arrow:hover {
+  background-color: var(--cal-agave-tint) !important;
+  color: var(--cal-ink) !important;
+}
+
+.cal-date-picker-inner .cal-picker-month {
+  color: var(--cal-ink) !important;
+}
+
+.cal-date-picker-inner .cal-picker-year {
+  color: var(--cal-agave) !important;
+}
+
+.cal-date-picker-inner .cal-picker-instruction,
+.cal-date-picker-inner .cal-picker-day-label {
+  color: var(--cal-ink-muted) !important;
+}
+
+.cal-date-picker-inner .cal-picker-day {
+  color: var(--cal-ink) !important;
+}
+
+.cal-date-picker-inner .cal-picker-day--hover:not(.cal-picker-day--selected):not(.cal-picker-day--range):hover {
+  background-color: var(--cal-agave-tint) !important;
+}
+
+.cal-date-picker-inner .cal-picker-day--selected {
+  background-color: var(--cal-agave) !important;
+  color: var(--cal-bone) !important;
+}
+
+.cal-date-picker-inner .cal-picker-day--range {
+  background-color: var(--cal-agave-tint) !important;
+  color: var(--cal-ink) !important;
+}
+
+.cal-date-picker-inner .cal-picker-dot--confirmed {
+  background-color: var(--cal-agave) !important;
+}
+
+.cal-date-picker-inner .cal-picker-dot--owner {
+  background-color: var(--cal-ochre-dark) !important;
+}
+
+.cal-date-picker-inner .cal-picker-dot--pending {
+  background-color: var(--cal-ink-secondary) !important;
+}
+
+/* ─────────────────────────────────────────
+   16. Reduced motion
+   ───────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .cal-screen .cal-booking-row,
+  .cal-screen .cal-month-nav__arrow,
+  .cal-screen .cal-add-btn,
+  .cal-panel.cal-drawer-sheet .cal-drawer-btn,
+  .cal-panel.cal-drawer-sheet .cal-drawer-toggle__option,
+  .cal-screen .cal-bookings__empty-cta {
+    transition: none !important;
+  }
+}

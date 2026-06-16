@@ -1,6 +1,6 @@
 import { render, cleanup } from '@testing-library/react';
 import { describe, it, expect, afterEach, beforeAll, vi } from 'vitest';
-import PropertyCard from '../../../src/components/PropertySelector/PropertyCard';
+import PropertyCard, { isTallCard } from '../../../src/components/PropertySelector/PropertyCard';
 import type { Property } from '../../../src/types';
 
 beforeAll(() => {
@@ -47,7 +47,7 @@ const mockProperty: Property = {
 describe('PropertyCard', () => {
   it('renders property image', () => {
     const { container } = render(
-      <PropertyCard property={mockProperty} onSelect={() => {}} index={0} tier="gallery" />
+      <PropertyCard property={mockProperty} onSelect={() => {}} index={0} tier="gallery" tall={isTallCard(0, 'gallery')} />
     );
     const img = container.querySelector('img');
     expect(img).toBeInTheDocument();
@@ -56,21 +56,21 @@ describe('PropertyCard', () => {
 
   it('renders property name as heading', () => {
     const { container } = render(
-      <PropertyCard property={mockProperty} onSelect={() => {}} index={0} tier="gallery" />
+      <PropertyCard property={mockProperty} onSelect={() => {}} index={0} tier="gallery" tall={isTallCard(0, 'gallery')} />
     );
     expect(container.textContent).toContain('Casa del Sol');
   });
 
   it('renders property location', () => {
     const { container } = render(
-      <PropertyCard property={mockProperty} onSelect={() => {}} index={0} tier="gallery" />
+      <PropertyCard property={mockProperty} onSelect={() => {}} index={0} tier="gallery" tall={isTallCard(0, 'gallery')} />
     );
     expect(container.textContent).toContain('Marina Vallarta');
   });
 
   it('does not render property type label', () => {
     const { container } = render(
-      <PropertyCard property={mockProperty} onSelect={() => {}} index={0} tier="gallery" />
+      <PropertyCard property={mockProperty} onSelect={() => {}} index={0} tier="gallery" tall={isTallCard(0, 'gallery')} />
     );
     expect(container.textContent).not.toContain('Oceanfront');
     const typeEl = container.querySelector('.ps-card__type');
@@ -79,7 +79,7 @@ describe('PropertyCard', () => {
 
   it('does not render tagline', () => {
     const { container } = render(
-      <PropertyCard property={mockProperty} onSelect={() => {}} index={0} tier="gallery" />
+      <PropertyCard property={mockProperty} onSelect={() => {}} index={0} tier="gallery" tall={isTallCard(0, 'gallery')} />
     );
     expect(container.textContent).not.toContain('Beachfront estate with private dock');
     const taglineEl = container.querySelector('.ps-card__tagline');
@@ -88,14 +88,14 @@ describe('PropertyCard', () => {
 
   it('renders occupancy status label', () => {
     const { container } = render(
-      <PropertyCard property={mockProperty} onSelect={() => {}} index={0} tier="gallery" />
+      <PropertyCard property={mockProperty} onSelect={() => {}} index={0} tier="gallery" tall={isTallCard(0, 'gallery')} />
     );
-    expect(container.textContent).toContain('Available');
+    expect(container.textContent).toContain('Open');
   });
 
   it('renders as a button with accessible label', () => {
     const { container } = render(
-      <PropertyCard property={mockProperty} onSelect={() => {}} index={0} tier="gallery" />
+      <PropertyCard property={mockProperty} onSelect={() => {}} index={0} tier="gallery" tall={isTallCard(0, 'gallery')} />
     );
     const button = container.querySelector('button');
     expect(button).toBeInTheDocument();
@@ -104,7 +104,7 @@ describe('PropertyCard', () => {
 
   it('handles catalog tier without tall class', () => {
     const { container } = render(
-      <PropertyCard property={mockProperty} onSelect={() => {}} index={0} tier="catalog" />
+      <PropertyCard property={mockProperty} onSelect={() => {}} index={0} tier="catalog" tall={isTallCard(0, 'catalog')} />
     );
     const button = container.querySelector('button');
     expect(button).not.toHaveClass('ps-card--tall');
@@ -112,7 +112,7 @@ describe('PropertyCard', () => {
 
   it('renders with webp source when available', () => {
     const { container } = render(
-      <PropertyCard property={mockProperty} onSelect={() => {}} index={0} tier="gallery" />
+      <PropertyCard property={mockProperty} onSelect={() => {}} index={0} tier="gallery" tall={isTallCard(0, 'gallery')} />
     );
     const source = container.querySelector('source');
     expect(source).toBeInTheDocument();

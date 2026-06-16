@@ -1,0 +1,2712 @@
+:root {
+    /* --- Typography --- */
+    --font-display: "EB Garamond Variable", Georgia, serif;
+    --font-ui: "Instrument Sans", -apple-system, sans-serif;
+    --font-mono: "Instrument Sans", ui-monospace, monospace;
+
+    /* --- Color: Banderas Palette --- */
+    --color-canvas: #faf8f5; /* Bleached Bone — global background */
+    --color-surface: rgba(255, 255, 255, 0.72);
+    --color-surface-solid: #f2ece4; /* Travertine Cream — solid surface */
+    --color-ink: #242424; /* Obsidian Charcoal — primary body copy */
+    --color-ink-secondary: #77736d; /* Weathered Timber — secondary text, WCAG AA compliant */
+    --color-ink-muted: #7a7570; /* Weathered Timber muted — WCAG AA compliant for tertiary text */
+    --color-border-subtle: rgba(36, 36, 36, 0.06);
+    --color-border-medium: rgba(36, 36, 36, 0.1);
+
+    /* --- Accents --- */
+    --color-accent-positive: #2b3b32; /* Shadowed Agave — success/guest */
+    --color-accent-positive-bg: rgba(43, 59, 50, 0.07);
+    --color-accent-negative: oklch(53% 0.2 25);
+    --color-accent-warning: #d49a55; /* Sunset Ochre — warning/owner */
+    --color-accent-warning-bg: rgba(212, 154, 85, 0.08);
+    --color-accent-live: oklch(38% 0.15 12);
+    --color-accent-live-glow: oklch(38% 0.15 12 / 0.25);
+    --color-accent-live-bg: oklch(38% 0.15 12 / 0.08);
+
+    /* --- Status Ambient --- */
+    --status-available-glow: oklch(72% 0.08 155 / 0.5);
+    --status-occupied-glow: oklch(55% 0.06 80 / 0.4);
+    --status-maintenance-glow: oklch(62% 0.12 70 / 0.45);
+    --status-reserved-glow: oklch(65% 0.05 260 / 0.35);
+
+    /* --- Dashboard Task Status --- */
+    --color-task-urgent: oklch(53% 0.12 25);
+    --color-task-pending: var(--color-ink-secondary);
+    --color-task-scheduled: var(--color-ink-muted);
+
+    /* --- Login Surface: Banderas Palette --- */
+    --login-canvas: #faf8f5; /* Bleached Bone */
+    --login-surface: #f2ece4; /* Travertine Cream */
+    --login-ink: #242424; /* Obsidian Charcoal */
+    --login-ink-secondary: #7e7a74; /* Weathered Timber */
+    --login-ink-muted: #7e7a74; /* Weathered Timber */
+    --login-border: rgba(36, 36, 36, 0.12);
+    --login-border-focus: rgba(36, 36, 36, 0.35);
+    --login-accent: #d49a55; /* Sunset Ochre */
+    --login-accent-hover: #bf8a4a; /* Sunset Ochre darkened */
+    --login-error: oklch(53% 0.2 25);
+    --login-error-bg: oklch(96% 0.015 25);
+
+    /* --- Layout --- */
+    --grid-max-width: 1400px;
+    --grid-gutter: 24px;
+    --space-section: 120px;
+    --space-element: 32px;
+    --radius-panel: 20px;
+    --radius-card: 16px;
+    --radius-pill: 9999px;
+
+    /* --- Editorial Wall --- */
+    --ew-frame: clamp(32px, 5vw, 80px);
+    --ew-gap: 2px;
+    --ew-card-pad-x: clamp(24px, 3vw, 40px);
+    --ew-card-pad-y: clamp(20px, 2.5vw, 32px);
+    --ew-card-pad-bottom: clamp(32px, 4vw, 56px);
+    --ew-status-dot-size: 6px;
+    --ew-name-size: clamp(2rem, 4.5vw, 3.5rem);
+    --ew-location-size: 0.5625rem;
+    --ew-location-tracking: 0.3em;
+    --ew-header-size: 0.625rem;
+    --ew-header-tracking: 0.35em;
+
+    /* --- Material --- */
+    --shadow-contact: 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-ambient: 0 8px 32px rgba(0, 0, 0, 0.06);
+    --shadow-lift: 0 2px 8px rgba(0, 0, 0, 0.04);
+    --shadow-float: 0 12px 48px rgba(0, 0, 0, 0.08);
+
+    /* --- Motion --- */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    --duration-slow: 1.2s;
+    --duration-base: 0.6s;
+    --duration-fast: 0.35s;
+
+    /* --- Calendar Dark Overlay --- */
+    --cal-base-overlay: rgba(0, 0, 0, 0.04);
+    --cal-top-vignette: radial-gradient(
+        ellipse at 20% 30%,
+        rgba(0, 0, 0, 0.02) 0%,
+        rgba(0, 0, 0, 0) 50%
+    );
+    --cal-left-vignette: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.04) 0%,
+        rgba(0, 0, 0, 0) 15%
+    );
+    --cal-bottom-fade: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0) 50%,
+        rgba(0, 0, 0, 0.32) 100%
+    );
+    --cal-text-strong: 0 2px 10px rgba(0, 0, 0, 0.25);
+    --cal-text-base: 0 1px 6px rgba(0, 0, 0, 0.18);
+    --cal-text-subtle: none;
+    --cal-border-light: rgba(255, 255, 255, 0.12);
+    --cal-border-medium: rgba(255, 255, 255, 0.22);
+    --cal-surface-hover: rgba(255, 255, 255, 0.04);
+    --cal-row-border: rgba(255, 255, 255, 0.07);
+    --cal-day-muted: rgba(255, 255, 255, 0.55);
+    --cal-label-muted: rgba(255, 255, 255, 0.6);
+    --cal-label-faint: rgba(255, 255, 255, 0.45);
+    --cal-pill-bg: rgba(255, 255, 255, 0.07);
+    --cal-avatar-bg: rgba(255, 255, 255, 0.1);
+    --cal-booking-border: rgba(255, 255, 255, 0.09);
+
+    /* --- Dark Surface (Guest Chronicle + Operations + Footer) --- */
+    --color-dark-canvas: #162732; /* Banderas Midnight */
+    --color-dark-surface: #1e3340; /* Banderas Midnight lightened */
+    --color-dark-ink: #faf8f5; /* Bleached Bone */
+    --color-dark-ink-secondary: #d1dfe2; /* Horizon Wash */
+    --color-dark-ink-muted: #7e7a74; /* Weathered Timber */
+    --color-dark-border: rgba(255, 255, 255, 0.12);
+    --color-dark-accent: #d49a55; /* Sunset Ochre */
+
+    /* --- Nav Menu --- */
+    /* Shell — warm Banderas Midnight instead of cool gray */
+    --nav-shell-bg: #162732;
+    --nav-header-height: 72px;
+    --nav-font-display: var(--font-display);
+    --nav-font-label: var(--font-ui);
+
+    /* Accent — Sunset Ochre (brand signature) replaces restrained terracotta */
+    --nav-accent: #d49a55;
+    --nav-accent-strong: #e8b06a;
+
+    /* Scrim system — warm-tinted */
+    --nav-scrim-top: rgba(22, 39, 50, 0.28);
+    --nav-scrim-heavy: rgba(22, 39, 50, 0.72);
+    --nav-scrim-mid: rgba(22, 39, 50, 0.38);
+    --nav-scrim-light: rgba(22, 39, 50, 0.12);
+
+    /* Header text */
+    --nav-wordmark-color: rgba(250, 248, 245, 0.52);
+
+    /* Close button */
+    --nav-close-color: rgba(250, 248, 245, 0.58);
+    --nav-close-color-hover: rgba(250, 248, 245, 0.96);
+    --nav-close-border: rgba(250, 248, 245, 0.16);
+    --nav-close-border-hover: rgba(250, 248, 245, 0.34);
+    --nav-close-bg-hover: rgba(250, 248, 245, 0.06);
+
+    /* Bottom bar — floating island */
+    --nav-bottom-bar-height: 88px;
+    --nav-bottom-bar-bg: rgba(14, 26, 34, 0.86);
+    --nav-tab-color: rgba(250, 248, 245, 0.48);
+    --nav-tab-active-color: rgba(250, 248, 245, 0.96);
+    --nav-tab-metric-color: rgba(250, 248, 245, 0.40);
+    --nav-tab-metric-active-color: rgba(250, 248, 245, 0.60);
+    --nav-tab-current-dot: #d49a55;
+
+    /* Editorial title */
+    --nav-title-color: rgba(250, 248, 245, 0.94);
+    --nav-eyebrow-color: rgba(250, 248, 245, 0.40);
+
+    /* --- Calendar Accent Colors --- */
+    --cal-owner-accent: #c9b8a0; /* Estate Sand — owner stays, brand accent */
+    --cal-accent-ochre: #d49a55; /* Sunset Ochre — confirmed status, check-in dots */
+    --cal-drawer-surface: #162732; /* Banderas Midnight — Drawer sheet background */
+    --cal-drawer-surface-light: #1e3340; /* Banderas Midnight Lightened */
+    --cal-btn-text-dark: #1a1a1a;
+    --cal-error: rgba(248, 113, 113, 0.85);
+    --cal-error-border: rgba(248, 113, 113, 0.25);
+
+    /* --- Property Selector v2 --- */
+    /* Canvas */
+    --ps-canvas: #f7f5f2;
+    --ps-surface: #efe9e1;
+    --ps-ink: #1a1a1a;
+    --ps-ink-secondary: #6b6560;
+    --ps-ink-muted: #9a9590;
+
+    /* Noise texture */
+    --ps-noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
+
+    /* Status accent colors */
+    --ps-status-available: oklch(72% 0.08 155);
+    --ps-status-available-glow: oklch(72% 0.08 155 / 0.4);
+    --ps-status-occupied: oklch(55% 0.06 80);
+    --ps-status-occupied-glow: oklch(55% 0.06 80 / 0.3);
+    --ps-status-maintenance: oklch(62% 0.12 70);
+    --ps-status-maintenance-glow: oklch(62% 0.12 70 / 0.35);
+    --ps-status-reserved: oklch(65% 0.05 260);
+    --ps-status-reserved-glow: oklch(65% 0.05 260 / 0.3);
+
+    /* Grid */
+    --ps-grid-gap: 16px;
+    --ps-header-height: 56px;
+
+    /* Typography */
+    --ps-name-size: clamp(1.25rem, 2.5vw, 2rem);
+    --ps-location-size: 0.625rem;
+    --ps-location-tracking: 0.30em;
+    --ps-tagline-size: 0.75rem;
+
+    /* Motion */
+    --ps-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ps-ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+    --ps-duration-instant: 150ms;
+    --ps-duration-fast: 250ms;
+    --ps-duration-base: 500ms;
+    --ps-duration-slow: 700ms;
+
+    /* --- Ambient Color Tokens --- */
+    --color-ambient-canvas: var(--color-canvas);
+    --color-ambient-accent: var(--color-accent-positive);
+    --color-ambient-surface: var(--color-surface);
+}
+
+/* ── Nav Menu — entry animations ── */
+@keyframes navHeaderIn {
+    from {
+        opacity: 0;
+        transform: translateY(-14px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Nav Menu — warm film-grain overlay ── */
+@keyframes navGrainShift {
+    0%, 100% { transform: translate(0, 0); }
+    10% { transform: translate(-2%, -2%); }
+    30% { transform: translate(1%, -3%); }
+    50% { transform: translate(-1%, 2%); }
+    70% { transform: translate(3%, 1%); }
+    90% { transform: translate(-2%, 3%); }
+}
+
+/* ── Nav Menu — staggered tab entry ── */
+@keyframes navTabSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Nav Menu — editorial title entry ── */
+@keyframes navTitleIn {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Nav Menu — header ── */
+.nav-header {
+    animation: navHeaderIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.01s both;
+    background: linear-gradient(to bottom, rgba(22, 39, 50, 0.60), transparent);
+    z-index: 40;
+}
+
+/* ── Nav Menu — wordmark ── */
+.nav-portal__wordmark {
+    font-family: var(--font-ui);
+    font-style: normal;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: rgba(250, 248, 245, 0.72);
+}
+
+/* ── Nav Menu — header right cluster ── */
+.nav-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Hairline separator between Sign out and × */
+.nav-header-separator {
+    display: block;
+    width: 1px;
+    height: 14px;
+    background: rgba(250, 248, 245, 0.18);
+    border-radius: 1px;
+    flex-shrink: 0;
+}
+
+/* ── Nav Menu — sign out button ── */
+.nav-logout-btn {
+    font-family: var(--font-ui);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: rgba(250, 248, 245, 0.40);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    transition:
+        color 0.26s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav-logout-btn:hover {
+    color: rgba(250, 248, 245, 0.78);
+}
+.nav-logout-btn:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 4px;
+    border-radius: 2px;
+}
+.nav-logout-btn:active {
+    transform: scale(0.96);
+    color: rgba(250, 248, 245, 0.92);
+}
+
+/* ── Nav Menu — close button ── */
+.nav-close-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--nav-close-border);
+    background: transparent;
+    color: var(--nav-close-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition:
+        border-color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+        color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+        background 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav-close-btn:hover {
+    border-color: var(--nav-close-border-hover);
+    color: var(--nav-close-color-hover);
+    background: var(--nav-close-bg-hover);
+}
+.nav-close-btn:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.6);
+    outline-offset: 3px;
+    border-color: var(--nav-close-border-hover);
+    color: var(--nav-close-color-hover);
+}
+.nav-close-btn:active {
+    transform: scale(0.88);
+}
+
+/* ── Nav Menu — full-bleed image layer ── */
+.nav-image-layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    will-change: opacity, filter, transform;
+}
+
+.nav-image-layer img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0;
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-image-layer img.loaded {
+    opacity: 1;
+}
+
+/* Subtle Ken Burns on the active image */
+@media (prefers-reduced-motion: no-preference) {
+    .nav-image-layer img.loaded {
+        animation: navKenBurns 14s ease-in-out infinite alternate;
+    }
+}
+
+@keyframes navKenBurns {
+    from { transform: scale(1); }
+    to   { transform: scale(1.04); }
+}
+
+/* ── Nav Menu — blur crossfade ── */
+/* Emil Kowalski: "Without blur, you see two distinct objects during a crossfade.
+   Blur bridges the visual gap, tricking the eye into perceiving a single smooth
+   transformation." A geometric clip-path wipe cuts a hard edge across the scene —
+   wrong for photography. Blur + opacity dissolve makes the scene itself feel like
+   it's shifting, not two images swapping. Duration stays under 300ms per Emil's UI
+   animation guidelines. */
+
+/* Base: idle state — sharp and fully opaque */
+.nav-image-layer {
+    opacity: 1;
+    filter: blur(0px);
+    transform: scale(1);
+}
+
+/* Exiting: scene softens and recedes as it dissolves */
+.nav-image-layer.nav-image-exiting {
+    opacity: 0;
+    filter: blur(4px);
+    transform: scale(1.02);
+    transition: opacity   200ms cubic-bezier(0.23, 1, 0.32, 1),
+                filter    200ms cubic-bezier(0.23, 1, 0.32, 1),
+                transform 250ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Entering start: pre-blurred, invisible — no transition so the browser
+   paints this exact frame before enter-done fires (double-RAF guarantees it) */
+.nav-image-layer.nav-image-entering {
+    opacity: 0;
+    filter: blur(4px);
+    transform: scale(0.95);
+    transition: none;
+}
+
+/* Enter done: sharpens and arrives — mirrors the exit curve so the eye reads
+   one continuous blur-through rather than two separate events */
+.nav-image-layer.nav-image-enter-done {
+    opacity: 1;
+    filter: blur(0px);
+    transform: scale(1);
+    transition: opacity   200ms cubic-bezier(0.23, 1, 0.32, 1),
+                filter    200ms cubic-bezier(0.23, 1, 0.32, 1),
+                transform 250ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* ── Nav Menu — image loading skeleton ── */
+.nav-img-skeleton {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: #1a2b35;
+    pointer-events: none;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav-img-skeleton.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ── Nav Menu — scrim overlay ── */
+.nav-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background:
+        linear-gradient(to bottom, rgba(22, 39, 50, 0.42) 0%, transparent 22%),
+        radial-gradient(ellipse 130% 55% at 50% 108%, rgba(14, 26, 34, 0.70) 0%, transparent 68%),
+        linear-gradient(to top, rgba(14, 26, 34, 0.58) 0%, transparent 48%);
+}
+
+/* ── Nav Menu — warm grain overlay (fixed, non-scrolling) ── */
+.nav-grain {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+    animation: navGrainShift 8s steps(10) infinite;
+}
+
+/* Outer shell — single-surface cream pill; shadow grounds it against the dark scene */
+.nav-bottom-bar-shell {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 30;
+    padding: 0;
+    border: none;
+    background: none;
+    border-radius: 2.25rem;
+    box-shadow:
+        0 20px 60px rgba(14, 26, 34, 0.58),
+        0 4px 16px rgba(14, 26, 34, 0.28);
+    min-width: clamp(580px, 92vw, 920px);
+}
+
+/* Inner bar — solid Bleached Bone surface; no blur, no glass, physical material */
+.nav-bottom-bar {
+    display: flex;
+    align-items: stretch;
+    height: 62px;
+    background: var(--color-canvas);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-radius: 2.25rem;
+    /* Scoped color tokens: dark ink on cream — maps to Weathered Timber / Obsidian Charcoal */
+    --nav-tab-color: var(--color-ink-secondary);
+    --nav-tab-active-color: var(--color-ink);
+    overflow: hidden;
+}
+
+/* ── Nav Menu — bottom tab ── */
+.nav-bottom-tab {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    padding: 0 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--nav-tab-color);
+    transition: color 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+
+/* Staggered entry — each tab gets a delay via inline style */
+.nav-bottom-tab--entering {
+    animation: navTabSlideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .nav-bottom-tab:hover {
+        color: rgba(250, 248, 245, 0.72);
+    }
+    /* On cream surface: dark hover */
+    .nav-bottom-bar .nav-bottom-tab:hover {
+        color: color-mix(in srgb, var(--color-ink) 68%, transparent);
+    }
+}
+
+.nav-bottom-tab:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.55);
+    outline-offset: -2px;
+    border-radius: 4px;
+}
+
+.nav-bottom-tab[aria-selected="true"] {
+    color: var(--nav-tab-active-color);
+}
+
+/* ── Nav Menu — active indicator: Sunset Ochre underline slides between tabs ── */
+.nav-tab-indicator {
+    position: absolute;
+    bottom: 10px;
+    left: 20%;
+    right: 20%;
+    top: auto;
+    height: 1.5px;
+    border-radius: 0;
+    background: var(--color-accent-warning);
+    border: none;
+    box-shadow: none;
+}
+
+/* ── Nav Menu — tab label ── */
+.nav-tab-label {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    line-height: 1;
+    position: relative;
+    z-index: 1;
+}
+
+
+/* ── Nav Menu — "you are here" dot ── */
+.nav-tab-current-dot {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--nav-tab-current-dot);
+    border: none;
+}
+
+/* ── Nav Menu — editorial title ── */
+.nav-editorial-title {
+    position: absolute;
+    bottom: 152px;
+    left: 48px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    pointer-events: none;
+    animation: navTitleIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+
+.nav-editorial-heading {
+    font-family: var(--font-display);
+    font-style: normal;
+    font-weight: 400;
+    font-size: clamp(3.75rem, 9vw, 7.5rem);
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    color: var(--nav-title-color);
+    margin: 0;
+    text-shadow: 0 2px 32px rgba(14, 26, 34, 0.55);
+}
+
+/* ── Nav Menu — editorial title reveal ── */
+/* The entry animation is handled by navTitleIn on the .nav-editorial-title
+   wrapper (opacity + translateY). No clip-path or mask is needed on the
+   heading — clip-path was causing a stacking context that boxed in the
+   text-shadow, producing a dark-rectangle artifact behind the text. */
+
+
+/* ── Nav Menu — mobile ── */
+@media (max-width: 767px) {
+    .nav-header {
+        height: 48px;
+        padding: 0 24px;
+    }
+
+    .nav-portal__wordmark {
+        font-size: 0.6875rem;
+        letter-spacing: 0.35em;
+    }
+
+    .nav-close-btn {
+        width: 38px;
+        height: 38px;
+    }
+
+    .nav-header-actions {
+        gap: 14px;
+    }
+
+    .nav-tab-label {
+        font-size: 0.625rem;
+        letter-spacing: 0.20em;
+    }
+
+    .nav-bottom-bar-shell {
+        bottom: 16px;
+        left: 12px;
+        right: 12px;
+        transform: none;
+        min-width: unset;
+    }
+
+    .nav-bottom-bar {
+        height: 54px;
+    }
+
+    .nav-tab-label {
+        font-size: 0.625rem;
+        letter-spacing: 0.20em;
+    }
+
+    .nav-editorial-title {
+        bottom: 124px;
+        left: 24px;
+    }
+
+    .nav-editorial-heading {
+        font-size: clamp(2.75rem, 11vw, 4.5rem);
+    }
+}
+
+/* ── Nav Menu — reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+    .nav-header {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+
+    .nav-image-layer img.loaded {
+        animation: none;
+    }
+
+    .nav-img-skeleton {
+        transition: none;
+    }
+
+    .nav-close-btn,
+    .nav-logout-btn {
+        transition: none;
+    }
+
+    .nav-bottom-tab {
+        transition: none;
+    }
+
+    .nav-tab-metric {
+        transition: none;
+    }
+
+    .nav-grain {
+        animation: none;
+    }
+
+    .nav-bottom-tab--entering {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+
+    .nav-editorial-title {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* Typography System */
+.t-property-name {
+    font-family: var(--font-display);
+    font-size: clamp(3.5rem, 5vw, 4.5rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+}
+
+.t-section-header {
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 3vw, 1.625rem);
+    font-weight: 400;
+    line-height: 1.3;
+}
+
+.t-metric-value {
+    font-family: var(--font-ui);
+    font-size: clamp(2.5rem, 3.5vw, 3rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+}
+
+.t-metric-label {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    line-height: 1.4;
+    text-transform: uppercase;
+    color: var(--color-ink-secondary);
+}
+
+.t-body {
+    font-family: var(--font-ui);
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    line-height: 1.65;
+}
+
+.t-caption {
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+}
+
+.t-mono {
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+}
+
+.t-wordmark {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+/* Base resets */
+body {
+    font-family: var(--font-ui);
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Glass card */
+.glass-card {
+    background: var(--color-surface);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid var(--color-border-subtle);
+    box-shadow: var(--shadow-contact), var(--shadow-ambient);
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 28px;
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-border-medium);
+    background: transparent;
+    color: var(--color-ink-secondary);
+    cursor: pointer;
+    transition:
+        background var(--duration-fast) var(--ease-out-expo),
+        color var(--duration-fast) var(--ease-out-expo),
+        border-color var(--duration-fast) var(--ease-out-expo),
+        transform var(--duration-fast) var(--ease-out-expo),
+        box-shadow var(--duration-fast) var(--ease-out-expo);
+}
+
+.btn:active {
+    transform: scale(0.97);
+    transition-duration: 80ms;
+}
+
+.btn:hover {
+    background: var(--color-ink);
+    color: var(--color-canvas);
+    border-color: var(--color-ink);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lift);
+}
+
+/* Badge component */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-ui);
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.badge--owner {
+    background: var(--color-accent-warning-bg);
+    color: #8b6530; /* Dark Sunset Ochre for readability */
+}
+
+.badge--guest {
+    background: var(--color-accent-positive-bg);
+    color: var(--color-accent-positive);
+}
+
+.badge--pending {
+    background: rgba(126, 122, 116, 0.08); /* Weathered Timber */
+    color: var(--color-ink-secondary);
+}
+
+/* Dashboard focus utilities */
+.dashboard-focus:focus-visible {
+  outline: 2px solid var(--color-ink-secondary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.dashboard-link:focus-visible {
+  outline: 2px solid var(--color-ink-secondary);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* Live badge */
+.live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    background: var(--color-accent-live);
+    color: #fff;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    animation: live-pulse 2.5s ease-in-out infinite;
+}
+
+.live-badge::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    background: #fff;
+    border-radius: 50%;
+}
+
+@keyframes live-pulse {
+    0%,
+    100% {
+        opacity: 1;
+        box-shadow: 0 0 0 0 var(--color-accent-live-glow);
+    }
+    50% {
+        opacity: 0.9;
+        box-shadow: 0 0 0 10px oklch(38% 0.15 12 / 0);
+    }
+}
+
+/* Cinematic grade for all photographs — warm matte film look */
+.cinematic-grade {
+    filter: saturate(0.78) contrast(0.88) brightness(1.06) sepia(0.14)
+        hue-rotate(-5deg);
+}
+
+/* Reveal animation utility */
+.reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+        opacity var(--duration-base) var(--ease-out-expo),
+        transform var(--duration-base) var(--ease-out-expo);
+}
+
+.reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Status dot */
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.status-dot--active {
+    background: var(--color-dark-accent);
+    box-shadow: none;
+}
+
+/* Hero — Editorial Split Layout */
+.hero {
+    position: relative;
+    width: 100%;
+    height: 65vh;
+    min-height: 480px;
+    background: var(--color-dark-canvas);
+    overflow: hidden;
+}
+
+.hero__media {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.hero__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero__slide-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero__gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.2) 0%,
+        rgba(0, 0, 0, 0) 35%,
+        rgba(0, 0, 0, 0) 50%,
+        rgba(0, 0, 0, 0.55) 85%,
+        rgba(0, 0, 0, 0.72) 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+}
+
+.hero__counter {
+    position: absolute;
+    bottom: 28px;
+    right: clamp(24px, 6vw, 80px);
+    left: auto;
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    z-index: 10;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.45);
+    user-select: none;
+    pointer-events: none;
+}
+
+.hero__counter-current {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.hero__counter-sep {
+    font-size: 0.625rem;
+    margin: 0 1px;
+}
+
+.hero__counter-total {
+    color: rgba(255, 255, 255, 0.35);
+}
+
+/* Hero property identity */
+.hero__identity {
+    position: absolute;
+    bottom: clamp(96px, 20%, 180px);
+    left: clamp(24px, 6vw, 80px);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    pointer-events: none;
+}
+
+.hero__property-name {
+    font-family: var(--font-display);
+    font-size: clamp(2.75rem, 5.5vw, 4.5rem);
+    font-weight: 400;
+    font-style: italic;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.94);
+}
+
+.hero__property-location {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1;
+}
+
+/* Hero metrics overlay — glass strip at hero bottom */
+.hero__metrics {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background: rgba(10, 8, 6, 0.55);
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hero__metric {
+    padding: 20px clamp(16px, 2.5vw, 36px);
+    border-right: 1px solid rgba(255, 255, 255, 0.07);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.hero__metric:last-child {
+    border-right: none;
+}
+
+.hero__metric--interactive {
+    cursor: pointer;
+    transition: background var(--duration-fast) var(--ease-out-expo);
+}
+
+.hero__metric--interactive:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.hero__metric--interactive:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 4px;
+}
+
+.hero__metric-label {
+    font-family: var(--font-ui);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1;
+}
+
+.hero__metric-value {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.25rem, 2.2vw, 1.875rem);
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: -0.01em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.hero__metric-delta {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.48);
+    line-height: 1;
+}
+
+@media (max-width: 640px) {
+    .hero__metrics {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .hero__metric:nth-child(2) {
+        border-right: none;
+    }
+    .hero__metric:nth-child(3) {
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    .hero__metric:nth-child(4) {
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+        border-right: none;
+    }
+}
+
+.hero__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.55);
+    cursor: pointer;
+    z-index: 10;
+    transition:
+        color 220ms var(--ease-out-expo),
+        transform 200ms var(--ease-out-expo);
+    padding: 0;
+}
+
+.hero__arrow:active {
+    transform: translateY(-50%) scale(0.88);
+    transition-duration: 80ms;
+}
+
+.hero__arrow--prev {
+    left: clamp(16px, 3vw, 32px);
+}
+
+.hero__arrow--next {
+    right: clamp(16px, 3vw, 32px);
+}
+
+.hero__arrow--prev:hover {
+    color: rgba(255, 255, 255, 0.95);
+    transform: translateY(-50%) translateX(-2px);
+}
+
+.hero__arrow--next:hover {
+    color: rgba(255, 255, 255, 0.95);
+    transform: translateY(-50%) translateX(2px);
+}
+
+/* ── Performance Section ── */
+.performance-section {
+    max-width: var(--grid-max-width);
+    margin: 0 auto;
+    padding: var(--space-section) clamp(24px, 6vw, 80px);
+    display: grid;
+    grid-template-columns: 60fr 36fr;
+    gap: 80px;
+    align-items: start;
+}
+
+.performance-section__label {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 48px;
+}
+
+.performance-section__label-text {
+    font-family: var(--font-ui);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    white-space: nowrap;
+}
+
+.performance-section__label-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--color-border-subtle);
+}
+
+.performance-section__chart {
+    display: flex;
+    flex-direction: column;
+}
+
+.performance-section__aside {
+    padding-top: 8px;
+}
+
+.performance-section__aside-quote {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1rem, 1.6vw, 1.25rem);
+    line-height: 1.55;
+    color: var(--color-ink-secondary);
+    margin: 0 0 32px 0;
+}
+
+.performance-section__aside-cta {
+    font-family: var(--font-ui);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--color-accent-warning);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: opacity var(--duration-fast) var(--ease-out-expo);
+}
+
+.performance-section__aside-cta:hover {
+    opacity: 0.65;
+}
+
+/* Monthly revenue table */
+.monthly-table {
+    display: flex;
+    flex-direction: column;
+}
+
+.monthly-table__row {
+    display: grid;
+    grid-template-columns: 36px 1fr 48px auto;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.monthly-table__row:last-child {
+    border-bottom: none;
+}
+
+.monthly-table__month {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    line-height: 1;
+}
+
+.monthly-table__revenue {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.125rem;
+    color: var(--color-ink-secondary);
+    letter-spacing: -0.01em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.monthly-table__delta {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+    color: var(--color-ink-muted);
+    line-height: 1;
+    text-align: right;
+}
+
+.monthly-table__delta--up {
+    color: var(--color-accent-positive);
+}
+
+.monthly-table__delta--down {
+    color: var(--color-accent-negative);
+}
+
+.monthly-table__bar {
+    height: 1px;
+    background: var(--color-accent-warning);
+    opacity: 0.28;
+    min-width: 0;
+}
+
+/* Current month emphasis */
+.monthly-table__row--current .monthly-table__revenue {
+    font-size: 1.375rem;
+    color: var(--color-ink);
+}
+
+.monthly-table__row--current .monthly-table__month {
+    color: var(--color-ink-secondary);
+}
+
+.monthly-table__row--current .monthly-table__bar {
+    opacity: 1;
+}
+
+.monthly-table__row--current .monthly-table__delta {
+    color: var(--color-ink-secondary);
+}
+
+@media (max-width: 900px) {
+    .performance-section {
+        grid-template-columns: 1fr;
+        gap: 48px;
+    }
+    .performance-section__label {
+        margin-bottom: 32px;
+    }
+}
+
+/* ── Guest Chronicle ── */
+.chronicle-section {
+    background: var(--color-dark-canvas);
+    padding: var(--space-section) clamp(24px, 6vw, 80px);
+}
+
+.chronicle-section__header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 64px;
+}
+
+.chronicle-section__label {
+    font-family: var(--font-ui);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--color-dark-ink-muted);
+    white-space: nowrap;
+}
+
+.chronicle-section__rule {
+    flex: 1;
+    height: 1px;
+    background: var(--color-dark-border);
+}
+
+.chronicle-legend {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-bottom: 40px;
+}
+
+.chronicle-legend__item {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-dark-ink-muted);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.chronicle-legend__item::before {
+    content: "";
+    display: block;
+    width: 24px;
+    height: 2px;
+}
+
+.chronicle-legend__item--owner::before {
+    background: oklch(65% 0.05 55 / 0.55);
+}
+
+.chronicle-legend__item--guest::before {
+    background: oklch(65% 0.05 55 / 0.18);
+}
+
+.chronicle-timeline {
+    position: relative;
+    width: 100%;
+}
+
+.chronicle-timeline__stays {
+    position: relative;
+    width: 100%;
+    min-height: 180px;
+}
+
+.chronicle-stay {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.chronicle-stay__bar {
+    height: 2px;
+    border-radius: 0;
+    width: 100%;
+}
+
+.chronicle-stay--owner .chronicle-stay__bar {
+    background: oklch(65% 0.05 55 / 0.55);
+}
+
+.chronicle-stay--guest .chronicle-stay__bar {
+    background: oklch(65% 0.05 55 / 0.18);
+}
+
+.chronicle-stay__name {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(0.875rem, 1.5vw, 1.0625rem);
+    color: var(--color-dark-ink);
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+.chronicle-stay__meta {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-dark-ink-muted);
+    white-space: nowrap;
+}
+
+.chronicle-timeline__axis {
+    width: 100%;
+    height: 1px;
+    background: var(--color-dark-border);
+    margin-top: 16px;
+}
+
+.chronicle-timeline__axis-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.chronicle-timeline__axis-label {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-dark-ink-muted);
+}
+
+@media (max-width: 768px) {
+    .chronicle-timeline__stays {
+        min-height: 220px;
+    }
+    .chronicle-stay__name {
+        font-size: 0.8125rem;
+    }
+}
+
+/* ── Financial Brief ── */
+.financial-brief {
+    max-width: var(--grid-max-width);
+    margin: 0 auto;
+    padding: var(--space-section) clamp(24px, 6vw, 80px);
+}
+
+.financial-brief__header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 56px;
+}
+
+.financial-brief__label {
+    font-family: var(--font-ui);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    white-space: nowrap;
+}
+
+.financial-brief__rule {
+    flex: 1;
+    height: 1px;
+    background: var(--color-border-subtle);
+}
+
+.financial-brief__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 36px 0;
+    border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.financial-brief__row:last-of-type {
+    border-bottom: none;
+}
+
+.financial-brief__row-label {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-ink-secondary);
+}
+
+.financial-brief__row-right {
+    text-align: right;
+}
+
+.financial-brief__row-value {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+    font-variant-numeric: tabular-nums;
+    display: block;
+    line-height: 1.1;
+}
+
+.financial-brief__row-delta {
+    font-family: var(--font-ui);
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+    color: var(--color-ink-muted);
+    display: block;
+    margin-top: 6px;
+}
+
+@media (max-width: 768px) {
+    .financial-brief__row {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+        padding: 28px 0;
+    }
+    .financial-brief__row-right {
+        text-align: left;
+    }
+}
+
+/* ── Property Vitals Operations ── */
+.vitals-ops {
+    background: var(--color-dark-canvas);
+    padding: var(--space-section) 0;
+}
+
+.vitals-ops__inner {
+    display: grid;
+    grid-template-columns: 40fr 60fr;
+    min-height: 480px;
+}
+
+.vitals-ops__status {
+    padding: 0 clamp(24px, 6vw, 80px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0;
+}
+
+.vitals-ops__status-header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 56px;
+}
+
+.vitals-ops__status-label {
+    font-family: var(--font-ui);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--color-dark-ink-muted);
+    white-space: nowrap;
+}
+
+.vitals-ops__status-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--color-dark-border);
+}
+
+.vitals-ops__status-item {
+    padding: 28px 0;
+    border-bottom: 1px solid var(--color-dark-border);
+}
+
+.vitals-ops__status-item:last-child {
+    border-bottom: none;
+}
+
+.vitals-ops__status-item-label {
+    font-family: var(--font-ui);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--color-dark-ink-muted);
+    margin-bottom: 8px;
+    display: block;
+}
+
+.vitals-ops__status-item-value {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1rem, 1.8vw, 1.25rem);
+    color: var(--color-dark-ink);
+    display: block;
+    line-height: 1.3;
+}
+
+.vitals-ops__status-item-sub {
+    font-family: var(--font-ui);
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+    color: var(--color-dark-ink-muted);
+    display: block;
+    margin-top: 5px;
+}
+
+.vitals-ops__camera {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: 0;
+}
+
+.vitals-ops__camera img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: filter var(--duration-base) var(--ease-out-expo);
+}
+
+.vitals-ops__camera:hover img {
+    filter: saturate(0.92) contrast(1.04) brightness(1.05);
+}
+
+.vitals-ops__camera-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 24px 32px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+    pointer-events: none;
+}
+
+.vitals-ops__camera-id {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .vitals-ops__inner {
+        grid-template-columns: 1fr;
+    }
+    .vitals-ops__camera {
+        height: 260px;
+    }
+    .vitals-ops__status {
+        padding: clamp(24px, 6vw, 80px) clamp(24px, 6vw, 80px);
+    }
+}
+
+/* Footer */
+.site-footer {
+    padding: 56px clamp(24px, 6vw, 80px);
+    background: var(--color-dark-canvas);
+    border-top: 1px solid var(--color-dark-border);
+}
+
+.site-footer__inner {
+    max-width: var(--grid-max-width);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.site-footer__wordmark {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.125rem;
+    letter-spacing: 0.04em;
+    color: var(--color-dark-ink-secondary);
+}
+
+.site-footer__links {
+    display: flex;
+    gap: 32px;
+}
+
+.site-footer__links button,
+.site-footer__links a {
+    font-family: var(--font-ui);
+    font-size: 0.625rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-dark-ink-muted);
+    text-decoration: none;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: color var(--duration-fast) var(--ease-out-expo);
+}
+
+.site-footer__links button:hover,
+.site-footer__links a:hover {
+    color: var(--color-dark-ink);
+}
+
+/* Noise texture */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero {
+        height: 70vh;
+        min-height: 420px;
+    }
+    .site-footer__inner {
+        flex-direction: column;
+        gap: 24px;
+    }
+}
+
+/* ─── Calendar Screen (Dark Full-Bleed) ─── */
+.cal-screen {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    min-height: 100dvh;
+    background: url("./assets/Calendar-background.jpeg") center right / cover
+        no-repeat;
+    font-family: var(--font-ui);
+    color: #ffffff;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+.cal-base-overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--cal-base-overlay);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.cal-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        var(--cal-left-vignette), var(--cal-top-vignette),
+        var(--cal-bottom-fade);
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* ─── Content Wrapper (shrinks right when panel is open) ─── */
+.cal-content-wrapper {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;                 /* animated by motion.div via inline style */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ─── Scrollable inner column (calendar + bookings) ─── */
+.cal-scroll-column {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.cal-scroll-column::-webkit-scrollbar {
+    display: none;
+}
+
+/* ─── Nav ─── */
+
+.cal-nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: clamp(20px, 4vh, 40px) clamp(24px, 5vw, 56px);
+    z-index: 10;
+}
+
+.cal-nav__brand {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    font-weight: 500;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: #ffffff;
+    padding: 4px 0;
+    transition: opacity 200ms var(--ease-out-expo), transform 160ms var(--ease-out-expo);
+}
+
+.cal-nav__brand:active {
+    transform: scale(0.96);
+    transition-duration: 80ms;
+}
+
+.cal-nav__brand:hover {
+    opacity: 0.75;
+}
+
+.cal-nav__brand:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 4px;
+    border-radius: 2px;
+}
+
+.cal-nav__right {
+    display: flex;
+    align-items: center;
+    gap: clamp(12px, 2vw, 24px);
+    font-size: 0.8125rem;
+    font-weight: 400;
+}
+
+.cal-pill {
+    font-family: var(--font-ui);
+    font-size: 0.625rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(22, 39, 50, 0.72);  /* solid Banderas Midnight — no blur */
+    padding: 7px 16px;
+    border-radius: 999px;
+}
+
+.cal-avatar {
+    font-family: var(--font-ui);
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(22, 39, 50, 0.72);  /* solid — no blur */
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* ─── Calendar ─── */
+.cal-calendar {
+    position: relative;
+    z-index: 5;
+    padding-top: clamp(72px, 10vh, 100px);   /* tighter — clears the 64px nav */
+    padding-bottom: clamp(20px, 3vh, 32px);
+    flex-shrink: 0;
+}
+
+.cal-calendar__inner {
+    padding-left: clamp(24px, 5vw, 56px);
+    padding-right: clamp(24px, 5vw, 56px);
+}
+
+.cal-month {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3rem);     /* tighter — was 3.5rem max */
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.cal-year {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+    margin-bottom: clamp(16px, 2.5vh, 28px);  /* tighter — was 44px max */
+}
+
+/* ────────────────────────────────────────
+   cal-card — single solid-surface card
+   Replaces the old double-bezel glassmorphic system.
+   Material: Banderas Midnight (#162732) at 82% opacity so the
+   background image breathes through just enough without blur.
+   Same design language as the nav bottom bar (physical, zero blur).
+   ──────────────────────────────────────── */
+.cal-card {
+    background: rgba(22, 39, 50, 0.82);  /* Banderas Midnight */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1.25rem;
+    box-shadow:
+        0 2px 0 rgba(255, 255, 255, 0.04) inset,  /* top highlight */
+        0 20px 56px rgba(0, 0, 0, 0.4);
+    padding: clamp(16px, 2.5vh, 28px) clamp(20px, 3.5vw, 36px);
+}
+
+/* Grid card: inline-block so it hugs the 7-column grid width */
+.cal-card--grid {
+    display: inline-block;
+}
+
+/* Bookings card: full-width block */
+.cal-card--bookings {
+    display: block;
+}
+
+/* ─── Grid ─── */
+.cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, clamp(34px, 4.5vw, 44px));  /* compact cells */
+    gap: clamp(4px, 0.8vw, 8px) clamp(8px, 1.2vw, 12px);
+}
+
+.cal-day-label {
+    font-family: var(--font-ui);
+    font-size: 0.5625rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cal-label-muted);
+    padding-bottom: clamp(6px, 1vh, 10px);  /* tighter */
+    text-align: center;
+}
+
+/* ─── Day Cells ─── */
+.cal-day {
+    font-family: var(--font-ui);
+    font-size: clamp(0.75rem, 1.6vw, 0.875rem);
+    font-weight: 400;
+    height: clamp(32px, 4.2vh, 42px);  /* compact — was 48px max */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: default;
+    color: rgba(255, 255, 255, 0.88);
+    border-radius: 0;
+    transition: color 220ms var(--ease-out-expo);
+}
+
+.cal-day--booked {
+    color: var(--cal-day-muted);
+}
+
+.cal-day--empty {
+    pointer-events: none;
+    opacity: 0;
+}
+
+.cal-day--today {
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 50%;
+}
+
+.cal-day--owner {
+    color: var(--cal-owner-accent);
+    opacity: 0.9;
+}
+
+.cal-day__dot--owner {
+    background: var(--cal-owner-accent);
+}
+
+.cal-day__dot--pending {
+    background: transparent;
+    border: 1.5px solid var(--cal-accent-ochre);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    bottom: clamp(3px, 0.7vh, 7px);
+}
+
+.cal-day__dot {
+    position: absolute;
+    bottom: clamp(4px, 0.8vh, 8px);
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--cal-accent-ochre);
+}
+
+.cal-day__dot {
+    left: var(--accent-dot, 50%);
+    transform: var(--accent-dot, translateX(-50%));
+}
+
+/* ─── Bookings ─── */
+.cal-bookings {
+    position: relative;
+    z-index: 5;
+    padding: 0 clamp(20px, 4vw, 48px) clamp(24px, 4vh, 40px);
+    flex-shrink: 0;
+}
+
+.cal-bookings__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: clamp(10px, 1.5vh, 16px);
+    border-bottom: 1px solid var(--cal-booking-border);
+    gap: 12px;
+}
+
+.cal-bookings__header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.cal-bookings__title {
+    font-family: var(--font-serif);
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.cal-bookings__meta {
+    font-family: var(--font-ui);
+    font-size: 0.625rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.cal-add-btn {
+    font-family: var(--font-ui);
+    font-size: 1.25rem;
+    line-height: 1;
+    color: var(--cal-owner-accent);
+    background: none;
+    border: 1px solid rgba(201, 184, 160, 0.3);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition:
+        background 200ms var(--ease-out-expo),
+        border-color 200ms var(--ease-out-expo),
+        transform 160ms var(--ease-out-expo);
+    flex-shrink: 0;
+}
+
+.cal-add-btn:hover {
+    background: rgba(201, 184, 160, 0.1);
+    border-color: rgba(201, 184, 160, 0.6);
+}
+
+.cal-add-btn:active {
+    transform: scale(0.97);
+    transition-duration: 80ms;
+}
+
+.cal-add-btn:focus-visible {
+    outline: 2px solid rgba(201, 184, 160, 0.6);
+    outline-offset: 3px;
+    border-radius: 50%;
+}
+
+.cal-bookings__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: clamp(180px, 32vh, 300px);  /* taller — more rows visible */
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.cal-bookings__list::-webkit-scrollbar {
+    display: none;
+}
+
+.cal-booking-row {
+    display: grid;
+    grid-template-columns:
+        clamp(88px, 14vw, 130px) 1fr clamp(72px, 9vw, 100px)
+        clamp(50px, 7vw, 76px);
+    align-items: center;
+    padding: clamp(10px, 1.5vh, 14px) 0;
+    border-bottom: 1px solid var(--cal-row-border);
+    transition:
+        background 350ms cubic-bezier(0.22, 1, 0.36, 1),
+        margin 350ms cubic-bezier(0.22, 1, 0.36, 1),
+        padding 350ms cubic-bezier(0.22, 1, 0.36, 1),
+        border-radius 350ms cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.cal-booking-row:hover,
+.cal-booking-row:focus-visible {
+    background: var(--cal-surface-hover);
+    margin: 0 clamp(-20px, -3.5vw, -36px);  /* matches cal-card padding */
+    padding: clamp(10px, 1.5vh, 14px) clamp(20px, 3.5vw, 36px);
+    outline: none;
+}
+
+.cal-booking-row:active {
+    transform: scale(0.98);
+    transition: transform 80ms var(--ease-out-expo);
+}
+
+.cal-booking-row:focus-visible {
+    box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.3);
+}
+
+.cal-booking-row__date {
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: var(--cal-label-muted);
+}
+
+.cal-booking-row__guest {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(0.8125rem, 1.5vw, 0.9375rem);
+    font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cal-booking-row__status {
+    font-family: var(--font-ui);
+    font-size: 0.625rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.cal-booking-row__status--confirmed {
+    color: var(--cal-accent-ochre);
+}
+
+.cal-booking-row__status--pending {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+[data-theme="dark"] .dark-mode-overlay {
+  opacity: 1;
+}
+
+.cal-booking-row__status--cancelled {
+    color: rgba(255, 255, 255, 0.3);
+    text-decoration: line-through;
+}
+
+.cal-booking-row__nights {
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    color: var(--cal-label-muted);
+    text-align: right;
+}
+
+/* ─── Month nav ─── */
+.cal-month-nav {
+    display: flex;
+    align-items: flex-start;
+    gap: clamp(12px, 2vw, 24px);
+    margin-bottom: clamp(12px, 2vh, 20px);
+}
+
+.cal-month-nav__arrow {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    align-self: center;
+    flex-shrink: 0;
+    transition:
+        border-color 200ms var(--ease-out-expo),
+        background 200ms var(--ease-out-expo),
+        color 200ms var(--ease-out-expo),
+        transform 160ms var(--ease-out-expo);
+}
+
+.cal-month-nav__arrow:hover {
+    border-color: rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.09);
+    color: #ffffff;
+}
+
+.cal-month-nav__arrow:active {
+    transform: scale(0.97);
+    transition-duration: 80ms;
+}
+
+.cal-month-nav__arrow:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 3px;
+    border-radius: 50%;
+}
+
+/* ─── Booking row variants ─── */
+.cal-booking-row--owner {
+    background: rgba(201, 184, 160, 0.04);
+}
+
+.cal-booking-row--cancelled {
+    opacity: 0.45;
+}
+
+.cal-booking-row__chip {
+    font-family: var(--font-ui);
+    font-size: 0.5625rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-weight: 500;
+    flex-shrink: 0;
+}
+
+.cal-booking-row__chip--owner {
+    color: var(--cal-owner-accent);
+    border: 1px solid rgba(201, 184, 160, 0.4);
+}
+
+.cal-bookings__empty {
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.35);
+    letter-spacing: 0.1em;
+    padding: clamp(16px, 3vh, 28px) 0;
+    text-align: center;
+}
+
+.cal-bookings__empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: clamp(16px, 3vh, 28px) 0;
+}
+
+.cal-bookings__empty-cta {
+    font-family: var(--font-ui);
+    font-size: 0.625rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cal-owner-accent);
+    background: none;
+    border: 1px solid rgba(201, 184, 160, 0.25);
+    border-radius: 999px;
+    padding: 8px 20px;
+    cursor: pointer;
+    transition:
+        border-color 200ms var(--ease-out-expo),
+        color 200ms var(--ease-out-expo),
+        transform 160ms var(--ease-out-expo);
+}
+
+.cal-bookings__empty-cta:active {
+    transform: scale(0.96);
+    transition-duration: 80ms;
+}
+
+.cal-bookings__empty-cta:focus-visible {
+    outline: 2px solid rgba(201, 184, 160, 0.6);
+    outline-offset: 3px;
+}
+
+.cal-bookings__empty-cta:hover {
+    border-color: rgba(201, 184, 160, 0.6);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* ─── Grid legend ─── */
+.cal-grid-legend {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: clamp(8px, 1.5vh, 14px);
+    padding-left: 2px;
+}
+
+.cal-grid-legend__item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--font-ui);
+    font-size: 0.5625rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.cal-grid-legend__dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.cal-grid-legend__dot--confirmed {
+    background: var(--cal-accent-ochre);
+}
+
+.cal-grid-legend__dot--pending {
+    background: transparent;
+    border: 1.5px solid var(--cal-accent-ochre);
+}
+
+.cal-grid-legend__dot--owner {
+    background: var(--cal-owner-accent);
+}
+
+/* ─── Grid hint text ─── */
+.cal-grid-hint {
+    text-align: center;
+    margin-top: clamp(8px, 1.5vh, 14px);
+    font-family: var(--font-ui);
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.02em;
+}
+
+/* ─── Booking row guest cell (flex wrapper for guest + chip) ─── */
+.cal-booking-row__guest-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    overflow: hidden;
+}
+
+/* ─── Drawer surface token ─── */
+.cal-drawer-sheet {
+    background: var(--cal-drawer-surface);
+    border-top: 1px solid rgba(201, 184, 160, 0.3);
+    border-radius: 2rem 2rem 0 0;
+}
+
+/* ─── Drawer guest name (EB Garamond italic in view mode) ─── */
+.cal-drawer-guest-name {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(1rem, 2vw, 1.125rem);
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.95);
+    line-height: 1.3;
+}
+
+/* ─── Cancel as text link (not a peer pill button) ─── */
+.cal-drawer-btn--cancel-link {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(248, 113, 113, 0.55);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px 4px;
+    transition:
+        color 200ms var(--ease-out-expo),
+        transform 160ms var(--ease-out-expo);
+    align-self: center;
+}
+
+.cal-drawer-btn--cancel-link:active {
+    transform: scale(0.95);
+    transition-duration: 80ms;
+}
+
+.cal-drawer-btn--cancel-link:hover {
+    color: rgba(248, 113, 113, 0.85);
+}
+
+.cal-drawer-btn--cancel-link--armed {
+    color: rgba(248, 113, 113, 0.9);
+    font-weight: 500;
+}
+
+/* ─── Booking Drawer ─── */
+.cal-drawer-label {
+    font-family: var(--font-ui);
+    font-size: 0.5625rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+    display: block;
+    margin-bottom: 4px;
+}
+
+.cal-drawer-value {
+    font-family: var(--font-ui);
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.cal-drawer-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(201, 184, 160, 0.2);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-family: var(--font-ui);
+    font-size: 0.875rem;
+    color: #ffffff;
+    outline: none;
+    transition:
+        border-color 200ms var(--ease-out-expo),
+        box-shadow 200ms var(--ease-out-expo);
+}
+
+.cal-drawer-input:focus {
+    border-color: rgba(201, 184, 160, 0.6);
+    box-shadow: 0 0 0 2px rgba(201, 184, 160, 0.3);
+}
+
+.cal-drawer-input::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+}
+
+
+
+.cal-drawer-btn {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 12px 20px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    transition:
+        opacity 200ms var(--ease-out-expo),
+        transform 160ms var(--ease-out-expo);
+    flex: 1;
+}
+
+.cal-drawer-btn:hover {
+    opacity: 0.85;
+}
+
+.cal-drawer-btn:active {
+    transform: scale(0.96);
+    transition-duration: 80ms;
+}
+
+.cal-drawer-btn--confirm {
+    background: var(--cal-owner-accent);
+    color: var(--cal-btn-text-dark);
+}
+
+.cal-drawer-btn--edit {
+    background: transparent;
+    border: 1px solid rgba(201, 184, 160, 0.5);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.cal-drawer-btn--cancel {
+    background: transparent;
+    color: var(--cal-error);
+    border: 1px solid var(--cal-error-border);
+}
+
+.cal-drawer-btn--close {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.cal-drawer-error {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    color: var(--cal-error);
+    letter-spacing: 0.05em;
+}
+
+.cal-drawer-warning {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 0.05em;
+}
+
+.cal-drawer-nights {
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.45);
+    letter-spacing: 0.1em;
+}
+
+/* ─── Calendar month slide ─── */
+@keyframes calMonthSlideInFromRight {
+    from { opacity: 0; transform: translateX(20px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes calMonthSlideInFromLeft {
+    from { opacity: 0; transform: translateX(-20px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+.cal-grid--entering-next {
+    animation: calMonthSlideInFromRight 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.cal-grid--entering-prev {
+    animation: calMonthSlideInFromLeft 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ─── Booking row stagger ─── */
+@keyframes bookingRowIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.cal-booking-row:not(.cal-booking-row--cancelled) {
+    animation: bookingRowIn 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.cal-bookings__list > li:nth-child(1)  { animation-delay: 920ms; }
+.cal-bookings__list > li:nth-child(2)  { animation-delay: 970ms; }
+.cal-bookings__list > li:nth-child(3)  { animation-delay: 1020ms; }
+.cal-bookings__list > li:nth-child(4)  { animation-delay: 1070ms; }
+.cal-bookings__list > li:nth-child(5)  { animation-delay: 1120ms; }
+.cal-bookings__list > li:nth-child(6)  { animation-delay: 1170ms; }
+.cal-bookings__list > li:nth-child(7)  { animation-delay: 1220ms; }
+.cal-bookings__list > li:nth-child(8)  { animation-delay: 1270ms; }
+
+/* ─── Calendar Responsive ─── */
+@media (max-width: 400px) {
+    .cal-grid {
+        grid-template-columns: repeat(7, clamp(1.75rem, 7vw, 2.25rem));
+        gap: clamp(0.25rem, 1vw, 0.375rem) clamp(0.375rem, 1.5vw, 0.625rem);
+    }
+
+    .cal-day {
+        height: clamp(1.75rem, 7vw, 2.25rem);
+        font-size: clamp(0.6875rem, 2vw, 0.8125rem);
+    }
+
+    .cal-calendar__inner {
+        padding-left: clamp(1rem, 5vw, 2rem);
+    }
+
+    .cal-booking-row {
+        grid-template-columns: 5rem 1fr 5rem 3.75rem;
+        gap: 0.5rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cal-day,
+    .cal-booking-row,
+    .cal-nav__brand,
+    .hero__arrow,
+    .cal-month-nav__arrow,
+    .cal-add-btn,
+    .cal-drawer-btn,
+    .cal-drawer-toggle__option,
+    .cal-drawer-toggle__pill,
+    .cal-drawer-btn--cancel-link,
+    .cal-bookings__empty-cta {
+        transition: none;
+        will-change: auto;
+    }
+
+    .cal-grid--entering-next,
+    .cal-grid--entering-prev,
+    .cal-booking-row:not(.cal-booking-row--cancelled) {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ── Dark Mode ── */
+[data-theme="dark"] {
+    --color-canvas: #0f1a1a;
+    --color-surface: rgba(255, 255, 255, 0.05);
+    --color-surface-solid: #1a2a2a;
+    --color-ink: #f2ece4;
+    --color-ink-secondary: #9a9590;
+    --color-ink-muted: #8a8a8a;
+    --color-border-subtle: rgba(255, 255, 255, 0.06);
+    --color-border-medium: rgba(255, 255, 255, 0.1);
+    --color-accent-positive: #3a6b4a;
+    --color-accent-warning: #d49a55;
+    --color-accent-live: #c45a5a;
+    --color-accent-live-bg: rgba(196, 90, 90, 0.08);
+    --color-task-urgent: #c45a5a;
+    --color-task-pending: #9a9590;
+    --color-task-scheduled: #6a6a6a;
+    --color-ambient-canvas: #0f1a1a;
+    --color-ambient-accent: #d49a55;
+    --color-ambient-surface: #1a2a2a;
+    --login-canvas: #0f1a1a;
+    --login-surface: #1a2a2a;
+    --login-ink: #f2ece4;
+    --login-ink-secondary: #9a9590;
+    --login-ink-muted: #9a9590;
+    --login-border: rgba(255, 255, 255, 0.12);
+    --login-border-focus: rgba(255, 255, 255, 0.35);
+    --login-accent: #d49a55;
+    --login-accent-hover: #bf8a4a;
+    --login-error: #c45a5a;
+    --login-error-bg: rgba(196, 90, 90, 0.08);
+}
+
+.dashboard-link:active,
+.dashboard-focus:active,
+.metric-card:active {
+  transform: scale(0.98);
+  transition: transform 150ms ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lift);
+  transition: transform 200ms var(--ease-out-quart), box-shadow 200ms var(--ease-out-quart);
+}

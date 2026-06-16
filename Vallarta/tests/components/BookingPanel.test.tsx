@@ -7,8 +7,11 @@ vi.mock('motion/react', () => ({
   motion: {
     div: ({ children, className, style, ...rest }: React.HTMLAttributes<HTMLDivElement> & { children?: React.ReactNode }) =>
       <div className={className} style={style} {...rest}>{children}</div>,
+    span: ({ children, className, ...rest }: React.HTMLAttributes<HTMLSpanElement> & { children?: React.ReactNode }) =>
+      <span className={className} {...rest}>{children}</span>,
   },
   AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  LayoutGroup: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   useReducedMotion: () => false,
 }));
 
@@ -38,7 +41,9 @@ describe('BookingPanel — Background Consistency', () => {
     const { container } = renderPanel();
     const panel = container.querySelector('[role="complementary"]');
     expect(panel).not.toBeNull();
-    expect(panel!.getAttribute('style')).toBeNull();
+    const style = panel!.getAttribute('style') ?? '';
+    expect(style).not.toContain('background-color');
+    expect(style).not.toMatch(/background\s*:/);
   });
 
   it('has the cal-panel CSS class for Banderas Midnight background', () => {
@@ -49,45 +54,42 @@ describe('BookingPanel — Background Consistency', () => {
 });
 
 describe('BookingPanel — Date Interaction', () => {
-  it('renders the date field as an interactive button, not static text', () => {
+  it('renders date fields as interactive buttons', () => {
     const { container } = renderPanel();
-    const dateField = container.querySelector('.cal-drawer-date-field');
-    expect(dateField).not.toBeNull();
-    expect(dateField?.tagName).toBe('BUTTON');
-    expect(dateField?.getAttribute('aria-label')).toBe('Select arrival and departure dates');
+    const dateFields = container.querySelectorAll('.cal-drawer-date-field');
+    expect(dateFields.length).toBe(2);
+    const arrivalBtn = dateFields[0].querySelector('button');
+    expect(arrivalBtn).not.toBeNull();
+    expect(arrivalBtn?.getAttribute('aria-label')).toBe('Select arrival date');
   });
 
   it('shows placeholder text when no dates are selected', () => {
     const { container } = renderPanel();
-    const dateField = container.querySelector('.cal-drawer-date-field');
-    expect(dateField?.textContent).toContain('Set arrival and departure');
+    const arrivalBtn = container.querySelector('[aria-label="Select arrival date"]');
+    expect(arrivalBtn?.textContent).toContain('Select date');
   });
 
   it('shows formatted dates when dates are preselected', () => {
     const { container } = renderPanel({
       preselectedRange: { checkIn: '2026-06-19', checkOut: '2026-06-24' },
     });
-    const dateField = container.querySelector('.cal-drawer-date-field');
-    expect(dateField?.textContent).toContain('Jun');
+    const arrivalBtn = container.querySelector('[aria-label="Select arrival date"]');
+    expect(arrivalBtn?.textContent).toContain('Jun');
   });
 });
 
-describe('BookingPanel — Primary Button Weight', () => {
-  it('renders the save button as a bordered pill, not a full-width solid block', () => {
+describe('BookingPanel — Primary Button', () => {
+  it('renders the confirm reservation button', () => {
     const { container } = renderPanel();
-    const saveBtn = container.querySelector('.cal-drawer-btn--save');
+    const saveBtn = container.querySelector('.cal-btn--primary');
     expect(saveBtn).not.toBeNull();
-    expect(saveBtn?.className).not.toContain('w-full');
   });
 
-  it('save button has pill border-radius', () => {
+  it('confirm button has primary class', () => {
     const { container } = renderPanel();
-    const saveBtn = container.querySelector('.cal-drawer-btn--save');
+    const saveBtn = container.querySelector('.cal-btn.cal-btn--primary');
     expect(saveBtn).not.toBeNull();
-    // The cal-drawer-btn--save CSS class applies border-radius: 999px
-    expect(saveBtn?.className).toContain('cal-drawer-btn--save');
-    // Pill buttons are inline-block, not full-width blocks
-    expect(saveBtn?.className).not.toContain('w-full');
+    expect(saveBtn?.textContent).toContain('Confirm Reservation');
   });
 });
 
