@@ -1,0 +1,2019 @@
+/* ═══════════════════════════════════════════════════════════════
+   calendar.css — ALL calendar-specific styles
+
+   Layout hierarchy (read before editing):
+     .cal-screen           — full-viewport root (position: relative)
+     .cal-content-wrapper  — position: absolute; inset: 0 (fills screen)
+     .cv2-layout           — height: 100dvh grid; rows: 65fr 35fr
+                              65% = TriMonthGrid (uses cal-* classes)
+                              35% = .cv2-lower (glance + reservations)
+     .cv2-lower            — grid: minmax(260px,360px) 1fr (side-by-side)
+
+   Class naming:
+     cal-*   — calendar grid, day cells, drawer, booking rows, nav
+     cv2-*   — page-level layout only (CalendarView v2)
+               Do NOT confuse with old cal-split-layout (deleted).
+═══════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════
+   Calendar Screen — Unified Dark Translucent System
+   Background image breathes through all surfaces.
+   Palette: Agave (guest/actions), Ochre (owner/highlights), Sand (warm neutrals)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Screen ─── */
+.cal-screen {
+    position: relative;
+    width: 100vw;
+    min-height: 100dvh;
+    background: var(--color-dark-canvas); /* fallback if image fails */
+    font-family: var(--font-ui);
+    color: rgba(255, 255, 255, 0.92);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Background image layer — isolated for Ken Burns ─── */
+.cal-bg {
+    position: absolute;
+    inset: -6%;
+    z-index: 0;
+    background: url("../../assets/Calendar-background.jpeg") center right / cover no-repeat;
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .cal-bg {
+        will-change: transform;
+        transform-origin: 58% 42%;
+        animation: calKenBurns 30s ease-in-out infinite alternate;
+    }
+}
+
+@keyframes calKenBurns {
+    from { transform: scale(1.04) translate(0, 0); }
+    to   { transform: scale(1.14) translate(-1.5%, 1.5%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cal-bg {
+        animation: none;
+    }
+}
+
+.cal-base-overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--cal-base-overlay);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.cal-overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--cal-left-vignette), var(--cal-top-vignette), var(--cal-bottom-fade);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.cal-screen::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: var(--ps-noise);
+    opacity: 0.04;
+}
+
+/* ─── Content Wrapper (shrinks right when panel is open) ─── */
+.cal-content-wrapper {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* ─── Nav ─── */
+.cal-nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: clamp(20px, 4vh, 40px) clamp(24px, 5vw, 56px);
+    z-index: 10;
+}
+
+.cal-nav__brand {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.92);
+    padding: 4px 0;
+    transition: opacity 200ms var(--ease-out-expo), transform 160ms var(--ease-out-expo);
+}
+
+.cal-nav__brand:active {
+    transform: scale(0.96);
+    transition-duration: 80ms;
+}
+
+.cal-nav__brand:hover {
+    opacity: 0.75;
+}
+
+.cal-nav__brand:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 4px;
+    border-radius: 2px;
+}
+
+.cal-nav__right {
+    display: flex;
+    align-items: center;
+    gap: clamp(12px, 2vw, 24px);
+    font-size: 0.875rem;
+    font-weight: 400;
+}
+
+.cal-nav__role {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.38);
+}
+
+/* ─── Calendar ─── */
+.cal-calendar {
+    position: relative;
+    padding-top: 0;         /* was: clamp(72px, 10vh, 100px) — now on split wrapper */
+    padding-bottom: clamp(20px, 3vh, 32px);
+    flex-shrink: 0;
+    z-index: 5;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.cal-calendar__inner {
+    padding-left: 0;        /* was: clamp(24px, 5vw, 56px) — now on split wrapper */
+    padding-right: 0;
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.cal-month {
+    font-family: var(--font-display);
+    font-size: 2.25rem;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 4px;
+    color: rgba(36, 36, 36, 0.90);
+}
+
+.cal-year {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(36, 36, 36, 0.38);
+    margin-bottom: clamp(16px, 2.5vh, 28px);
+}
+
+/* ─── Cards — Banderas Midnight translucent ─── */
+.cal-card-shell {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.cal-card {
+    background: rgba(250, 248, 245, 0.80);
+    border: 1px solid rgba(36, 36, 36, 0.07);
+    border-radius: 0.5rem;
+    backdrop-filter: blur(28px) saturate(105%);
+    -webkit-backdrop-filter: blur(28px) saturate(105%);
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.90) inset,
+        0 20px 56px rgba(14, 26, 34, 0.10);
+    padding: clamp(14px, 1.8vh, 22px) clamp(20px, 3.5vw, 36px);
+    margin: 0;
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+    .cal-card {
+        background: rgba(250, 248, 245, 0.97);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+}
+
+.cal-card--grid {
+    display: block;
+    width: 100%;
+}
+
+.cal-card--bookings {
+    display: block;
+    width: 100%;
+}
+
+/* ─── Grid ─── */
+.cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, clamp(36px, 4.8vw, 46px));
+    gap: clamp(6px, 1vw, 10px) clamp(10px, 1.4vw, 14px);
+}
+
+.cal-day-label {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(36, 36, 36, 0.32);
+    padding-bottom: clamp(8px, 1.2vh, 12px);
+    text-align: center;
+}
+
+/* ─── Day Cells ─── */
+.cal-day {
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    height: clamp(34px, 4.5vh, 44px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: default;
+    color: rgba(36, 36, 36, 0.80);
+    border-radius: 0;
+    transition: color 220ms var(--ease-out-expo);
+}
+
+.cal-day--booked {
+    color: rgba(36, 36, 36, 0.42);
+    background: rgba(43, 59, 50, 0.05);
+    border-radius: 50%;
+}
+
+.cal-day--empty {
+    pointer-events: none;
+    opacity: 0;
+}
+
+.cal-day--today {
+    border: 1.5px solid rgba(36, 36, 36, 0.58);
+    box-shadow: inset 0 0 0 1px rgba(43, 59, 50, 0.06);
+    border-radius: 50%;
+    font-weight: 500;
+}
+
+.cal-day--owner {
+    color: var(--cal-accent-ochre);
+    opacity: 0.9;
+}
+
+.cal-day--selected.cal-day--drag-target {
+    background: rgba(43, 59, 50, 0.12);
+    color: rgba(36, 36, 36, 0.92);
+}
+
+.cal-day--selected.cal-day--drag-target::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--color-accent-positive);
+    pointer-events: none;
+}
+
+/* ─── Day dots ─── */
+.cal-day__dot {
+    position: absolute;
+    bottom: clamp(4px, 0.8vh, 8px);
+    left: var(--accent-dot, 50%);
+    transform: var(--accent-dot, translateX(-50%));
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--status-positive);
+}
+
+.cal-day__dot--confirmed {
+    background: var(--status-positive);
+}
+
+.cal-day__dot--owner {
+    background: var(--status-owner);
+}
+
+.cal-day__dot--pending {
+    background: var(--status-pending);
+    opacity: 0.7;
+}
+
+/* ─── Grid legend ─── */
+.cal-grid-legend {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: clamp(6px, 0.8vh, 10px);
+    padding-left: 2px;
+}
+
+.cal-grid-legend__item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(36, 36, 36, 0.45);
+}
+
+.cal-grid-legend__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.cal-grid-legend__dot--confirmed {
+    background: var(--status-positive);
+}
+
+.cal-grid-legend__dot--pending {
+    background: var(--status-pending);
+    opacity: 0.7;
+}
+
+.cal-grid-legend__dot--owner {
+    background: var(--status-owner);
+}
+
+/* ─── Month nav arrows ─── */
+.cal-month-nav {
+    display: flex;
+    align-items: flex-start;
+    gap: clamp(12px, 2vw, 24px);
+    margin-bottom: clamp(12px, 2vh, 20px);
+}
+
+.cal-month-nav__arrow {
+    min-width: 44px;
+    min-height: 44px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(36, 36, 36, 0.14);
+    background: rgba(36, 36, 36, 0.04);
+    color: rgba(36, 36, 36, 0.50);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    align-self: center;
+    flex-shrink: 0;
+    transition:
+        border-color 200ms var(--ease-out-expo),
+        background 200ms var(--ease-out-expo),
+        color 200ms var(--ease-out-expo),
+        transform 160ms var(--ease-out-expo);
+}
+
+.cal-month-nav__arrow:hover {
+    border-color: rgba(36, 36, 36, 0.28);
+    background: rgba(36, 36, 36, 0.08);
+    color: rgba(36, 36, 36, 0.88);
+}
+
+.cal-month-nav__arrow:active {
+    transform: scale(0.97);
+    transition-duration: 80ms;
+}
+
+.cal-month-nav__arrow:focus-visible {
+    outline: 2px solid rgba(36, 36, 36, 0.4);
+    outline-offset: 3px;
+    border-radius: 50%;
+}
+
+/* ─── Bookings ─── */
+.cal-bookings {
+    position: relative;
+    z-index: 5;
+    padding: 0 0 clamp(24px, 4vh, 40px);   /* was: 0 clamp(20px,4vw,48px) clamp(24px,4vh,40px) */
+    flex-shrink: 0;
+}
+
+.cal-bookings__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: clamp(10px, 1.5vh, 16px);
+    border-bottom: 1px solid rgba(36, 36, 36, 0.10);
+    gap: 12px;
+}
+
+.cal-bookings__header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.cal-bookings__title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: rgba(36, 36, 36, 0.88);
+}
+
+.cal-bookings__meta {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(36, 36, 36, 0.45);
+}
+
+.cal-bookings__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: clamp(180px, 32vh, 300px);
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.cal-bookings__list::-webkit-scrollbar {
+    display: none;
+}
+
+/* ─── Booking rows ─── */
+.cal-booking-row {
+    display: grid;
+    grid-template-columns:
+        clamp(88px, 14vw, 130px) 1fr clamp(72px, 9vw, 100px)
+        clamp(50px, 7vw, 76px);
+    align-items: center;
+    padding: clamp(12px, 1.8vh, 16px) 0;
+    border-bottom: 1px solid rgba(36, 36, 36, 0.08);
+    transition:
+        background 350ms cubic-bezier(0.22, 1, 0.36, 1),
+        margin 350ms cubic-bezier(0.22, 1, 0.36, 1),
+        padding 350ms cubic-bezier(0.22, 1, 0.36, 1),
+        border-radius 350ms cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.cal-booking-row:hover,
+.cal-booking-row:focus-visible {
+    background: rgba(36, 36, 36, 0.04);
+    margin: 0 clamp(-24px, -4vw, -40px);
+    padding: clamp(12px, 1.8vh, 16px) clamp(24px, 4vw, 40px);
+    outline: none;
+}
+
+.cal-booking-row:active {
+    transform: scale(0.98);
+    transition: transform 80ms var(--ease-out-expo);
+}
+
+.cal-booking-row:focus-visible {
+    box-shadow: inset 0 0 0 1.5px rgba(36, 36, 36, 0.25);
+}
+
+.cal-booking-row__date {
+    font-family: var(--font-ui);
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(36, 36, 36, 0.78);
+}
+
+.cal-booking-row__guest-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.cal-booking-row__guest {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.125rem;
+    color: var(--color-ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cal-booking-row__status {
+    font-family: var(--font-ui);
+    font-style: normal;
+    font-weight: 500;
+    font-size: 0.6875rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    display: inline;
+    padding: 0;
+    border-radius: 0;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.cal-booking-row__status--confirmed {
+    color: var(--status-positive);
+    background: transparent;
+}
+
+.cal-booking-row__status--pending {
+    color: var(--status-pending);
+    background: transparent;
+}
+
+.cal-booking-row__status--cancelled {
+    color: var(--status-cancelled);
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+    background: transparent;
+}
+
+.cal-booking-row__nights {
+    font-family: var(--font-ui);
+    font-style: normal;
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: var(--status-positive);
+    text-align: right;
+    line-height: 1;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 2px;
+    justify-content: flex-end;
+}
+
+.cal-booking-row__nights-value {
+    font-size: 1rem;
+}
+
+.cal-booking-row__nights-label {
+    font-size: 0.6875rem;
+    font-weight: 400;
+    color: rgba(36, 36, 36, 0.50);
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+}
+
+.cal-booking-row--owner {
+    background: rgba(201, 184, 160, 0.04);
+}
+
+.cal-booking-row--cancelled {
+    opacity: 0.45;
+}
+
+.cal-booking-row__chip {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--status-owner);
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.cal-booking-row__chip--owner {
+    color: var(--status-owner);
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+.cal-bookings__empty {
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    color: rgba(36, 36, 36, 0.35);
+    letter-spacing: 0.1em;
+    padding: clamp(16px, 3vh, 28px) 0;
+    text-align: center;
+}
+
+.cal-bookings__empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: clamp(16px, 3vh, 28px) 0;
+}
+
+.cal-bookings__empty-cta {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-accent-positive);
+    background: rgba(43, 59, 50, 0.12);
+    border: 1px solid rgba(43, 59, 50, 0.25);
+    border-radius: 999px;
+    padding: 8px 20px;
+    cursor: pointer;
+    transition:
+        border-color 200ms var(--ease-out-expo),
+        color 200ms var(--ease-out-expo),
+        transform 160ms var(--ease-out-expo);
+}
+
+.cal-bookings__empty-cta:active {
+    transform: scale(0.96);
+    transition-duration: 80ms;
+}
+
+.cal-bookings__empty-cta:focus-visible {
+    outline: 2px solid var(--color-accent-positive);
+    outline-offset: 3px;
+}
+
+.cal-bookings__empty-cta:hover {
+    background: rgba(43, 59, 50, 0.18);
+    border-color: rgba(43, 59, 50, 0.40);
+    color: var(--color-accent-positive);
+}
+
+[data-theme="dark"] .dark-mode-overlay {
+    opacity: 1;
+}
+
+/* ─── Drawer panel — Bleached Bone warm glass ─── */
+.cal-panel.cal-drawer-sheet {
+    background: rgba(250, 248, 245, 0.82);
+    backdrop-filter: blur(28px) saturate(108%);
+    -webkit-backdrop-filter: blur(28px) saturate(108%);
+    border-left: 1px solid rgba(36, 36, 36, 0.10);
+    box-shadow: -20px 0 60px rgba(14, 26, 34, 0.14);
+    border-radius: 0;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+    .cal-panel.cal-drawer-sheet {
+        background: rgba(250, 248, 245, 0.98);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+}
+
+.cal-drawer-close {
+    color: rgba(36, 36, 36, 0.40);
+    background: transparent;
+    transition: color 200ms var(--ease-out-expo);
+}
+
+.cal-drawer-close:hover {
+    color: rgba(36, 36, 36, 0.88);
+}
+
+.cal-drawer-close:focus-visible {
+    outline: 2px solid rgba(36, 36, 36, 0.40);
+    outline-offset: 3px;
+    border-radius: 50%;
+}
+
+.cal-drawer-label {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: var(--color-ink-secondary);
+    display: block;
+    margin-bottom: 4px;
+}
+
+.cal-drawer-guest-name {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.125rem;
+    color: rgba(36, 36, 36, 0.90);
+    line-height: 1.3;
+}
+
+.cal-drawer-value {
+    font-family: var(--font-ui);
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgba(36, 36, 36, 0.80);
+}
+
+.cal-drawer-input {
+    width: 100%;
+    background: rgba(36, 36, 36, 0.04);
+    border: 1px solid rgba(36, 36, 36, 0.14);
+    border-radius: 0.25rem;
+    padding: 10px 14px;
+    font-family: var(--font-ui);
+    font-size: 0.875rem;
+    color: rgba(36, 36, 36, 0.88);
+    outline: none;
+    transition:
+        border-color 200ms var(--ease-out-expo),
+        box-shadow 200ms var(--ease-out-expo);
+}
+
+.cal-drawer-input:focus {
+    border-color: rgba(36, 36, 36, 0.35);
+    box-shadow: 0 0 0 2px rgba(36, 36, 36, 0.07);
+}
+
+.cal-drawer-input::placeholder {
+    color: rgba(36, 36, 36, 0.28);
+}
+
+.cal-drawer-input--button {
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: rgba(36, 36, 36, 0.78);
+}
+
+.cal-drawer-input--button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.cal-drawer-input__value {
+    color: rgba(36, 36, 36, 0.88);
+}
+
+.cal-drawer-input__placeholder {
+    color: rgba(36, 36, 36, 0.40);
+}
+
+.cal-drawer-input__icon {
+    color: rgba(36, 36, 36, 0.55);
+    flex-shrink: 0;
+}
+
+.cal-panel.cal-drawer-sheet input[type="date"] {
+    color-scheme: light;
+}
+
+/* ─── Drawer buttons ─── */
+/* Base — shared by all variants */
+.cal-btn,
+.cal-drawer-btn,
+.cal-add-link,
+.cal-bookings__empty-cta {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    cursor: pointer;
+    transition:
+        opacity 200ms var(--ease-out-expo),
+        background 200ms var(--ease-out-expo),
+        color 200ms var(--ease-out-expo),
+        border-color 200ms var(--ease-out-expo),
+        transform 160ms var(--ease-out-expo);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.cal-btn:active,
+.cal-drawer-btn:active,
+.cal-add-link:active,
+.cal-bookings__empty-cta:active {
+    transform: scale(0.96);
+    transition-duration: 80ms;
+}
+
+.cal-btn:focus-visible,
+.cal-drawer-btn:focus-visible,
+.cal-add-link:focus-visible,
+.cal-bookings__empty-cta:focus-visible {
+    outline: 2px solid var(--cal-accent-ochre);
+    outline-offset: 3px;
+}
+
+/* Primary — solid agave */
+.cal-btn--primary,
+.cal-drawer-btn--confirm,
+.cal-drawer-btn--save {
+    background: var(--color-accent-positive);
+    color: rgba(255, 255, 255, 0.96);
+    border: 1px solid transparent;
+    padding: 12px 20px;
+    flex: 1;
+}
+
+.cal-btn--primary:hover,
+.cal-drawer-btn--confirm:hover,
+.cal-drawer-btn--save:hover {
+    opacity: 0.88;
+}
+
+.cal-btn--primary:disabled,
+.cal-drawer-btn--confirm:disabled,
+.cal-drawer-btn--save:disabled {
+    background: rgba(36, 36, 36, 0.10);
+    color: rgba(36, 36, 36, 0.40);
+    transform: none;
+    cursor: not-allowed;
+    opacity: 1;
+}
+
+/* Secondary — outlined */
+.cal-btn--secondary,
+.cal-drawer-btn--edit {
+    background: transparent;
+    border: 1px solid rgba(36, 36, 36, 0.22);
+    color: rgba(36, 36, 36, 0.78);
+    padding: 12px 20px;
+    flex: 1;
+}
+
+.cal-btn--secondary:hover,
+.cal-drawer-btn--edit:hover {
+    background: rgba(36, 36, 36, 0.05);
+    border-color: rgba(36, 36, 36, 0.32);
+}
+
+/* Ghost — text only, no chrome */
+.cal-btn--ghost,
+.cal-add-link,
+.cal-drawer-btn--cancel-link,
+.cal-drawer-btn--close {
+    background: transparent;
+    border: none;
+    color: rgba(36, 36, 36, 0.60);
+    padding: 8px 4px;
+    letter-spacing: 0.15em;
+}
+
+.cal-btn--ghost:hover,
+.cal-add-link:hover,
+.cal-drawer-btn--cancel-link:hover,
+.cal-drawer-btn--close:hover {
+    color: rgba(36, 36, 36, 0.88);
+}
+
+/* Cancel-link variant — red ghost */
+.cal-drawer-btn--cancel-link {
+    color: color-mix(in srgb, var(--cal-error) 60%, transparent);
+}
+
+.cal-drawer-btn--cancel-link:hover {
+    color: var(--cal-error);
+}
+
+.cal-drawer-btn--cancel-link--armed {
+    color: var(--cal-error);
+    font-weight: 500;
+}
+
+/* Empty-state CTA — secondary in pill, used on the empty bookings list */
+.cal-bookings__empty-cta {
+    background: rgba(43, 59, 50, 0.10);
+    border: 1px solid rgba(43, 59, 50, 0.25);
+    color: var(--color-accent-positive);
+    padding: 10px 22px;
+    font-size: 0.6875rem;
+}
+
+.cal-bookings__empty-cta:hover {
+    background: rgba(43, 59, 50, 0.18);
+    border-color: rgba(43, 59, 50, 0.40);
+}
+
+/* Destructive — outlined red, for "Cancel reservation" full-button use */
+.cal-btn--destructive,
+.cal-drawer-btn--cancel {
+    background: transparent;
+    color: var(--cal-error);
+    border: 1px solid var(--cal-error-border);
+    padding: 12px 20px;
+    flex: 1;
+}
+
+.cal-btn--destructive:hover,
+.cal-drawer-btn--cancel:hover {
+    background: color-mix(in srgb, var(--cal-error) 8%, transparent);
+    border-color: color-mix(in srgb, var(--cal-error) 60%, transparent);
+}
+
+/* Legacy alias — keep .cal-drawer-btn working when used without a variant */
+.cal-drawer-btn {
+    padding: 12px 20px;
+    flex: 1;
+    background: transparent;
+    border: 1px solid transparent;
+    color: rgba(36, 36, 36, 0.78);
+}
+
+.cal-drawer-error {
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--cal-error);
+    letter-spacing: 0.05em;
+}
+
+.cal-drawer-warning {
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: rgba(36, 36, 36, 0.58);
+    letter-spacing: 0.05em;
+}
+
+.cal-drawer-nights {
+    font-family: var(--font-ui);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgba(212, 154, 85, 0.70);
+    letter-spacing: 0;
+}
+
+/* ─── Drawer toggle ─── */
+.cal-drawer-toggle {
+    display: flex;
+    border-radius: 0.25rem;
+    overflow: hidden;
+    background: rgba(36, 36, 36, 0.05);
+    border: 1px solid rgba(36, 36, 36, 0.12);
+}
+
+.cal-drawer-toggle__option {
+    position: relative;
+    flex: 1;
+    padding: 0.5rem 1rem;
+    font-family: var(--font-ui);
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: rgba(36, 36, 36, 0.45);
+    transition: color 0.2s ease;
+}
+
+.cal-drawer-toggle__option:hover:not(.cal-drawer-toggle__option--active) {
+    color: rgba(36, 36, 36, 0.72);
+}
+
+.cal-drawer-toggle__option--active {
+    color: var(--color-accent-positive);
+}
+
+.cal-drawer-toggle__label {
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+    user-select: none;
+}
+
+.cal-drawer-toggle__pill {
+    position: absolute;
+    inset: 2px;
+    background: rgba(250, 248, 245, 0.95);
+    border: 1px solid rgba(36, 36, 36, 0.08);
+    border-radius: 0.25rem;
+    z-index: 0;
+    will-change: transform;
+}
+
+/* ─── Date picker — warm glass ─── */
+.cal-date-picker-outer {
+    background: rgba(250, 248, 245, 0.95);
+    border: 1px solid rgba(36, 36, 36, 0.10);
+    box-shadow: 0 12px 48px rgba(14, 26, 34, 0.15);
+}
+
+.cal-date-picker-inner {
+    background: rgba(36, 36, 36, 0.03);
+    border: 1px solid rgba(36, 36, 36, 0.07);
+}
+
+.cal-date-picker-inner .cal-picker-arrow {
+    color: rgba(36, 36, 36, 0.45);
+}
+
+.cal-date-picker-inner .cal-picker-arrow:hover {
+    background: rgba(36, 36, 36, 0.06);
+    color: rgba(36, 36, 36, 0.88);
+}
+
+.cal-date-picker-inner .cal-picker-month {
+    color: rgba(36, 36, 36, 0.88);
+}
+
+.cal-date-picker-inner .cal-picker-year {
+    color: var(--color-accent-positive);
+}
+
+.cal-date-picker-inner .cal-picker-instruction,
+.cal-date-picker-inner .cal-picker-day-label {
+    color: rgba(36, 36, 36, 0.35);
+}
+
+.cal-date-picker-inner .cal-picker-day {
+    color: rgba(36, 36, 36, 0.80);
+}
+
+.cal-date-picker-inner .cal-picker-day--hover:not(.cal-picker-day--selected):not(.cal-picker-day--range):hover {
+    background: rgba(43, 59, 50, 0.10);
+}
+
+.cal-date-picker-inner .cal-picker-day--selected {
+    background: var(--color-accent-positive);
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.cal-date-picker-inner .cal-picker-day--range {
+    background: rgba(43, 59, 50, 0.08);
+    color: rgba(36, 36, 36, 0.80);
+}
+
+.cal-date-picker-inner .cal-picker-dot--confirmed {
+    background: var(--color-accent-positive);
+}
+
+.cal-date-picker-inner .cal-picker-dot--owner {
+    background: var(--cal-accent-ochre);
+}
+
+.cal-date-picker-inner .cal-picker-dot--pending {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* ─── Calendar month slide ─── */
+@keyframes calMonthSlideInFromRight {
+    from { opacity: 0; transform: translateX(20px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes calMonthSlideInFromLeft {
+    from { opacity: 0; transform: translateX(-20px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+.cal-grid--entering-next {
+    animation: calMonthSlideInFromRight 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.cal-grid--entering-prev {
+    animation: calMonthSlideInFromLeft 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ─── Booking row entrance (Motion-driven; CSS only handles reduced-motion fallback) ─── */
+@keyframes bookingRowIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cal-grid--entering-next,
+    .cal-grid--entering-prev {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ─── Calendar Responsive ─── */
+@media (max-width: 400px) {
+    .cal-grid {
+        grid-template-columns: repeat(7, clamp(1.75rem, 7vw, 2.25rem));
+        gap: clamp(0.25rem, 1vw, 0.375rem) clamp(0.375rem, 1.5vw, 0.625rem);
+    }
+
+    .cal-day {
+        height: clamp(1.75rem, 7vw, 2.25rem);
+        font-size: clamp(0.6875rem, 2vw, 0.8125rem);
+    }
+
+    .cal-calendar__inner {
+        padding-left: clamp(1rem, 5vw, 2rem);
+    }
+
+    .cal-booking-row {
+        grid-template-columns: 5rem 1fr 5rem 3.75rem;
+        gap: 0.5rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cal-day,
+    .cal-booking-row,
+    .cal-nav__brand,
+    .hero__arrow,
+    .cal-month-nav__arrow,
+    .cal-add-link,
+    .cal-drawer-btn,
+    .cal-drawer-toggle__option,
+    .cal-drawer-toggle__pill,
+    .cal-drawer-btn--cancel-link,
+    .cal-bookings__empty-cta,
+    .cal-toast {
+        transition: none;
+        will-change: auto;
+    }
+
+    .cal-grid--entering-next,
+    .cal-grid--entering-prev {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ─── Calendar — P0 additions (Phase 1) ─── */
+
+/* Past day in main grid (not booked, just in the past) */
+.cal-day--past {
+    color: rgba(36, 36, 36, 0.28);
+    cursor: not-allowed;
+}
+
+/* Selected-booking pulse — fires when a booking is selected/saved */
+@keyframes cal-selected-booking-pulse {
+    0%   { box-shadow: inset 0 0 0 0 transparent; }
+    50%  { box-shadow: inset 0 0 0 1.5px var(--color-accent-positive); }
+    100% { box-shadow: inset 0 0 0 0 transparent; }
+}
+
+.cal-day--selected-booking {
+    animation: cal-selected-booking-pulse 1.4s var(--ease-out-expo) 2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cal-day--selected-booking {
+        animation: none;
+        box-shadow: inset 0 0 0 1.5px var(--color-accent-positive);
+    }
+}
+
+/* Date picker — past day treatment */
+.cal-date-picker-inner .cal-picker-day--past {
+    color: rgba(36, 36, 36, 0.28);
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.cal-date-picker-inner .cal-picker-day--past:hover {
+    background: transparent;
+}
+
+/* Toast — always-fires post-action feedback */
+.cal-toast {
+    position: fixed;
+    left: 50%;
+    bottom: clamp(24px, 4vh, 40px);
+    transform: translateX(-50%);
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px 10px 14px;
+    background: rgba(250, 248, 245, 0.94);
+    backdrop-filter: blur(20px) saturate(110%);
+    -webkit-backdrop-filter: blur(20px) saturate(110%);
+    border: 1px solid rgba(36, 36, 36, 0.10);
+    border-radius: 999px;
+    box-shadow: 0 12px 36px rgba(14, 26, 34, 0.14);
+    max-width: min(90vw, 480px);
+}
+
+.cal-toast__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-accent-positive);
+    flex-shrink: 0;
+}
+
+.cal-toast__msg {
+    font-family: var(--font-ui);
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: rgba(36, 36, 36, 0.88);
+    letter-spacing: 0;
+    line-height: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cal-toast {
+        transition: none;
+    }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+    .cal-toast {
+        background: rgba(250, 248, 245, 0.98);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+}
+
+/* ─── Calendar — Phase 5: view toggle + week + 3-month ─── */
+
+/* View toggle (segmented control, sits in the bookings card header right) */
+.cal-view-toggle {
+    display: inline-flex;
+    background: rgba(36, 36, 36, 0.05);
+    border: 1px solid rgba(36, 36, 36, 0.10);
+    border-radius: 999px;
+    padding: 2px;
+    gap: 0;
+}
+
+.cal-view-toggle__btn {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(36, 36, 36, 0.55);
+    background: transparent;
+    border: none;
+    padding: 8px 14px;
+    min-height: 32px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition:
+        background 200ms var(--ease-out-expo),
+        color 200ms var(--ease-out-expo);
+    line-height: 1;
+}
+
+.cal-view-toggle__btn:hover:not(.cal-view-toggle__btn--active) {
+    color: rgba(36, 36, 36, 0.85);
+}
+
+.cal-view-toggle__btn--active {
+    background: rgba(250, 248, 245, 0.95);
+    color: var(--color-accent-positive);
+    box-shadow: 0 1px 2px rgba(14, 26, 34, 0.06);
+}
+
+.cal-view-toggle__btn:focus-visible {
+    outline: 2px solid var(--cal-accent-ochre);
+    outline-offset: 2px;
+}
+
+/* Functional Weekly View */
+.cal-week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: clamp(8px, 1.2vw, 12px);
+    margin-top: 16px;
+}
+
+.cal-week-card {
+    display: flex;
+    flex-direction: column;
+    padding: clamp(12px, 2vh, 16px) clamp(8px, 1vw, 12px);
+    background: rgba(255, 255, 255, 0.40);
+    border: 1px solid rgba(36, 36, 36, 0.04);
+    border-radius: 12px;
+    cursor: pointer;
+    position: relative;
+    transition:
+        background 250ms var(--ease-out-expo),
+        box-shadow 250ms var(--ease-out-expo),
+        transform 150ms var(--ease-out-expo);
+    color: rgba(36, 36, 36, 0.85);
+    min-height: clamp(120px, 16vh, 160px);
+    text-align: center;
+}
+
+.cal-week-card:hover:not(:disabled):not(.cal-week-card--past) {
+    background: rgba(255, 255, 255, 0.80);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    transform: translateY(-2px);
+}
+
+.cal-week-card:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.cal-week-card:focus-visible {
+    outline: 2px solid var(--cal-accent-ochre);
+    outline-offset: 2px;
+}
+
+.cal-week-card--past {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: transparent;
+    border-color: transparent;
+}
+
+.cal-week-card--today {
+    border-color: var(--color-accent-positive);
+    background: rgba(255, 255, 255, 0.60);
+}
+
+.cal-week-card--selected {
+    border-color: var(--color-accent-positive);
+    box-shadow: 0 0 0 1px var(--color-accent-positive);
+}
+
+.cal-week-card__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 16px;
+}
+
+.cal-week-card__day-label {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: rgba(36, 36, 36, 0.45);
+    line-height: 1;
+}
+
+.cal-week-card__day-num {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--color-ink);
+}
+
+.cal-week-card__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.cal-week-card__chip {
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+.cal-week-card__chip--confirmed {
+    background: var(--color-accent-positive-bg);
+    color: var(--color-accent-positive);
+}
+
+.cal-week-card__chip--owner {
+    background: rgba(201, 184, 160, 0.15);
+    color: #8c7658;
+}
+
+.cal-week-card__chip--pending {
+    background: var(--color-accent-warning-bg);
+    color: var(--color-accent-warning);
+}
+
+/* Functional 3-Month View */
+.cal-trimonth__nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 0 48px 0;
+}
+
+.cal-trimonth__range {
+    /* Tight grouping for nav elements */
+}
+
+.cal-trimonth__range-label {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    color: rgba(36, 36, 36, 0.85);
+    letter-spacing: 0;
+}
+
+.cal-trimonth__row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: clamp(32px, 5vw, 64px);
+}
+
+@media (max-width: 1023px) {
+    .cal-trimonth {
+        display: none;
+    }
+}
+
+.cal-trimonth__month-col {
+    flex: 1;
+    min-width: 250px;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+}
+
+.cal-trimonth__month-header {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.cal-trimonth__month-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--color-ink);
+    line-height: 1;
+}
+
+.cal-trimonth__month-year {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    letter-spacing: 0.2em;
+    color: var(--color-ink-muted);
+}
+
+.cal-trimonth__days-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(36, 36, 36, 0.4);
+    text-align: center;
+    margin-bottom: 6px;
+}
+
+.cal-trimonth__grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+}
+
+.cal-trimonth__cell {
+    height: clamp(30px, 4vh, 48px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+    transition: transform 150ms var(--ease-out-expo);
+}
+
+.cal-trimonth__cell:hover:not(:disabled):not(.cal-trimonth__cell--empty):not(.cal-trimonth__cell--past) {
+    transform: scale(1.15);
+}
+
+.cal-trimonth__cell--empty {
+    cursor: default;
+}
+
+.cal-trimonth__cell--past {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.cal-trimonth__cell--today {
+    border: 1px solid var(--color-accent-positive);
+    border-radius: 50%;
+}
+
+.cal-trimonth__cell--selected {
+    box-shadow: inset 0 0 0 2px var(--color-accent-positive);
+    border-radius: 50%;
+}
+
+.cal-trimonth__num {
+    font-family: var(--font-ui);
+    font-size: 0.875rem;
+    color: rgba(36, 36, 36, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.cal-trimonth__num--confirmed {
+    background: var(--color-accent-positive-bg);
+    color: var(--color-accent-positive);
+    font-weight: 500;
+}
+
+.cal-trimonth__num--owner {
+    background: rgba(201, 184, 160, 0.25);
+    color: #8c7658;
+    font-weight: 500;
+}
+
+.cal-trimonth__num--pending {
+    background: var(--color-accent-warning-bg);
+    color: var(--color-accent-warning);
+    font-weight: 500;
+}
+
+.cal-trimonth__legend {
+    margin-top: 48px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .cal-week-card,
+    .cal-trimonth__cell {
+        transition: none;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CalendarView v2 — Redesigned layout
+   3-month grid at top, glance strip + reservations list below
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Page layout: vertical stack inside cal-screen ─── */
+/*  Page layout: vertical stack inside cal-screen  */
+.cv2-layout {
+    position: relative;
+    z-index: 5;
+    display: grid;
+    grid-template-rows: 68fr 32fr;
+    grid-template-columns: 1fr;
+    align-items: stretch;
+    gap: clamp(10px, 1.4vh, 16px);
+    padding-top: clamp(64px, 8vh, 88px);
+    padding-left: clamp(24px, 5vw, 56px);
+    padding-right: clamp(24px, 5vw, 56px);
+    padding-bottom: clamp(12px, 1.5vh, 18px);
+    height: 100dvh;
+    max-width: 1800px;
+    margin: 0 auto;
+    width: 100%;
+    overflow: hidden;
+}
+
+@media (max-width: 1024px) {
+    .cv2-layout {
+        height: auto;
+        min-height: 100dvh;
+        overflow: visible;
+    }
+}
+
+/* ─── Lower section: glance + reservations side-by-side ─── */
+.cv2-lower {
+    display: grid;
+    grid-template-columns: minmax(300px, 1fr) 1.4fr;
+    gap: clamp(16px, 2vw, 24px);
+    min-height: 0;
+    overflow: hidden;
+    height: 100%;
+}
+
+@media (max-width: 1024px) {
+    .cv2-lower {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ─── At a Glance strip ─── */
+.cv2-glance {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(16px, 2vw, 24px);
+    background: rgba(250, 248, 245, 0.80);
+    border: 1px solid rgba(36, 36, 36, 0.07);
+    border-radius: 0.5rem;
+    backdrop-filter: blur(28px) saturate(105%);
+    -webkit-backdrop-filter: blur(28px) saturate(105%);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.90) inset, 0 12px 40px rgba(14, 26, 34, 0.08);
+    padding: clamp(12px, 1.5vh, 16px) clamp(20px, 3vw, 32px);
+}
+@media (prefers-reduced-transparency: reduce) {
+    .cv2-glance {
+        background: rgba(250, 248, 245, 0.97);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+}
+
+.cv2-glance__stats {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: clamp(16px, 2.5vw, 32px);
+    flex: 1 1 auto;
+    min-width: 280px;
+}
+
+.cv2-glance__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.cv2-glance__label {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(36, 36, 36, 0.55);
+    line-height: 1.2;
+}
+
+.cv2-glance__value {
+    font-family: var(--font-ui);
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: rgba(36, 36, 36, 0.95);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+}
+
+.cv2-glance__sub {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    color: rgba(36, 36, 36, 0.48);
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+}
+
+.cv2-glance__divider {
+    width: 1px;
+    height: 32px;
+    background: rgba(36, 36, 36, 0.12);
+    flex-shrink: 0;
+}
+
+.cv2-glance__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+/* ─── Buttons ─── */
+.cv2-btn-primary {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: var(--color-accent-positive);
+    color: rgba(255, 255, 255, 0.96);
+    border: 1px solid transparent;
+    border-radius: 999px;
+    padding: 7px 16px;
+    cursor: pointer;
+    transition:
+        opacity 200ms var(--ease-out-expo),
+        transform 160ms var(--ease-out-expo);
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.cv2-btn-primary:hover { opacity: 0.85; }
+.cv2-btn-primary:active { transform: scale(0.97); transition-duration: 80ms; }
+.cv2-btn-primary:focus-visible { outline: 2px solid var(--color-accent-positive); outline-offset: 3px; }
+
+.cv2-btn-owner {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: transparent;
+    color: #8c7658;
+    border: 1px solid rgba(201, 184, 160, 0.55);
+    border-radius: 999px;
+    padding: 7px 16px;
+    cursor: pointer;
+    transition:
+        background 200ms var(--ease-out-expo),
+        border-color 200ms var(--ease-out-expo),
+        transform 160ms var(--ease-out-expo);
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.cv2-btn-owner:hover { background: rgba(201, 184, 160, 0.12); border-color: rgba(201, 184, 160, 0.80); }
+.cv2-btn-owner:active { transform: scale(0.97); transition-duration: 80ms; }
+.cv2-btn-owner:focus-visible { outline: 2px solid rgba(201, 184, 160, 0.70); outline-offset: 3px; }
+
+/* ─── Reservations card ─── */
+.cv2-reservations {
+    background: rgba(250, 248, 245, 0.80);
+    border: 1px solid rgba(36, 36, 36, 0.07);
+    border-radius: 0.5rem;
+    backdrop-filter: blur(28px) saturate(105%);
+    -webkit-backdrop-filter: blur(28px) saturate(105%);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.90) inset, 0 12px 40px rgba(14, 26, 34, 0.08);
+    padding: clamp(12px, 1.4vh, 16px) clamp(16px, 2.5vw, 28px);
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+    .cv2-reservations {
+        background: rgba(250, 248, 245, 0.97);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+}
+
+.cv2-reservations__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: clamp(8px, 1vh, 12px);
+    border-bottom: 1px solid rgba(36, 36, 36, 0.08);
+    margin-bottom: 2px;
+}
+
+.cv2-reservations__title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.25rem;
+    color: rgba(36, 36, 36, 0.88);
+    line-height: 1;
+}
+
+.cv2-reservations__count {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: rgba(36, 36, 36, 0.40);
+}
+
+.cv2-reservations__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: clamp(24px, 4vh, 40px) 0;
+    font-family: var(--font-ui);
+    font-size: 0.875rem;
+    color: rgba(36, 36, 36, 0.38);
+    letter-spacing: 0.04em;
+}
+
+/* ─── Reservation list ─── */
+.cv2-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.cv2-row {
+    display: grid;
+    grid-template-columns: clamp(120px, 16vw, 180px) 1fr clamp(64px, 8vw, 90px) clamp(48px, 5vw, 64px);
+    align-items: center;
+    gap: 12px;
+    padding: clamp(8px, 1.1vh, 12px) 0;
+    border-bottom: 1px solid rgba(36, 36, 36, 0.07);
+    cursor: pointer;
+    border-radius: 8px;
+    transition:
+        background 300ms cubic-bezier(0.22, 1, 0.36, 1),
+        padding 300ms cubic-bezier(0.22, 1, 0.36, 1),
+        margin 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cv2-row:last-child { border-bottom: none; }
+
+.cv2-row:hover,
+.cv2-row:focus-visible {
+    background: rgba(36, 36, 36, 0.035);
+    margin: 0 clamp(-16px, -2.5vw, -28px);
+    padding: clamp(8px, 1.1vh, 12px) clamp(16px, 2.5vw, 28px);
+    outline: none;
+}
+
+.cv2-row:active { transform: scale(0.99); transition: transform 80ms var(--ease-out-expo); }
+.cv2-row:focus-visible { box-shadow: inset 0 0 0 1.5px rgba(36, 36, 36, 0.20); }
+
+.cv2-row--owner { background: rgba(201, 184, 160, 0.04); }
+
+/* Dates column */
+.cv2-row__dates {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cv2-row__date-range {
+    font-family: var(--font-ui);
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(36, 36, 36, 0.78);
+    line-height: 1;
+}
+
+.cv2-row__countdown {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(36, 36, 36, 0.38);
+    line-height: 1;
+}
+
+/* Guest column */
+.cv2-row__guest-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.cv2-row__guest {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.125rem;
+    color: var(--color-ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cv2-row__chip {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.cv2-row__chip--owner { color: var(--status-owner); }
+
+/* Status column */
+.cv2-row__status {
+    font-family: var(--font-ui);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.cv2-row__status--confirmed { color: var(--status-positive); }
+.cv2-row__status--pending   { color: var(--status-pending); }
+.cv2-row__status--cancelled { color: var(--status-cancelled); text-decoration: line-through; }
+
+/* Nights column */
+.cv2-row__nights {
+    font-family: var(--font-ui);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--status-positive);
+    text-align: right;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 2px;
+    justify-content: flex-end;
+}
+
+.cv2-row__nights-val   { font-size: 1rem; }
+.cv2-row__nights-label { font-size: 0.6875rem; font-weight: 400; color: rgba(36, 36, 36, 0.48); letter-spacing: 0.10em; text-transform: uppercase; }
+
+/* ─── Mobile ─── */
+@media (max-width: 640px) {
+    .cv2-glance {
+        grid-template-columns: 1fr;
+        gap: 16px 0;
+    }
+    .cv2-glance__stats {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        grid-column: 1;
+        grid-row: 1;
+    }
+    .cv2-glance__divider {
+        width: 100%;
+        height: 1px;
+    }
+    .cv2-glance__actions {
+        grid-column: 1;
+        grid-row: 2;
+        justify-content: flex-start;
+    }
+    .cv2-row {
+        grid-template-columns: 1fr auto auto;
+        grid-template-rows: auto auto;
+    }
+    .cv2-row__dates {
+        grid-column: 1;
+        grid-row: 1;
+    }
+    .cv2-row__guest-cell {
+        grid-column: 1;
+        grid-row: 2;
+    }
+    .cv2-row__status {
+        grid-column: 2;
+        grid-row: 1;
+    }
+    .cv2-row__nights {
+        grid-column: 3;
+        grid-row: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cv2-row,
+    .cv2-btn-primary,
+    .cv2-btn-owner {
+        transition: none;
+    }
+}
