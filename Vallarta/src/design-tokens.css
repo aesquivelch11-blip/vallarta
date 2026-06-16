@@ -116,7 +116,7 @@
     --color-dark-surface: #1e3340; /* Banderas Midnight lightened */
     --color-dark-ink: #faf8f5; /* Bleached Bone */
     --color-dark-ink-secondary: #d1dfe2; /* Horizon Wash */
-    --color-dark-ink-muted: #7e7a74; /* Weathered Timber */
+    --color-dark-ink-muted: #a8a29c; /* Weathered Timber lightened — WCAG AA on dark canvas */
     --color-dark-border: rgba(255, 255, 255, 0.12);
     --color-dark-accent: #d49a55; /* Sunset Ochre */
 
