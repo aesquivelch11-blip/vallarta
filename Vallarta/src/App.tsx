@@ -107,7 +107,7 @@ export default function App() {
     switch (currentScreen) {
       case 'login':
         return (
-          <div key="login" className="w-full min-h-screen relative bg-[#0c0c0c]">
+          <div key="login" className="w-full min-h-screen relative" style={{ background: 'var(--color-dark-canvas)' }}>
             <AnimatePresence mode="wait">
               {!hasLoaded ? (
                 <motion.div
